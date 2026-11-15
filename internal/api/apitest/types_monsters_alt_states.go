@@ -8,15 +8,15 @@ import (
 )
 
 type testAppliedState struct {
-	condition     string
-	isTemporary   bool
-	appliedStatus *int32
+	Condition     string
+	IsTemporary   bool
+	AppliedStatus *int32
 }
 
 func (e testAppliedState) Compare(test Test, _ string, got apitypes.AppliedState) {
-	test.compare("applied state condition", e.condition, got.Condition)
-	test.compare("applied state isTemporary", e.isTemporary, got.IsTemporary)
-	test.compIDAPIResourcePtrs("applied status", apilookups.E.StatusConditions.Endpoint, e.appliedStatus, got.AppliedStatus)
+	test.compare("applied state condition", e.Condition, got.Condition)
+	test.compare("applied state isTemporary", e.IsTemporary, got.IsTemporary)
+	test.compIDAPIResourcePtrs("applied status", apilookups.E.StatusConditions.Endpoint, e.AppliedStatus, got.AppliedStatus)
 }
 
 type testDefaultState struct {

@@ -165,50 +165,50 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(27, "yellow element", 0),
-			agility: &testAgilityParams{
-				agilityTier: 6,
-				tickSpeed:   16,
-				minICV:      h.GetInt32Ptr(48),
-				maxICV:      h.GetInt32Ptr(53),
+			Agility: &testAgilityParams{
+				AgilityTier: 6,
+				TickSpeed:   16,
+				MinICV:      h.GetInt32Ptr(48),
+				MaxICV:      h.GetInt32Ptr(53),
 			},
-			species:       database.MonsterSpeciesElemental,
-			ctbIconType:   database.CtbIconTypeMonster,
-			distance:      1,
-			properties:    []int32{2},
-			autoAbilities: []int32{},
-			areas:         []int32{53},
-			formations:    []int32{30, 31, 32},
-			baseStats: map[string]int32{
+			Species:       database.MonsterSpeciesElemental,
+			CtbIconType:   database.CtbIconTypeMonster,
+			Distance:      1,
+			Properties:    []int32{2},
+			AutoAbilities: []int32{},
+			Areas:         []int32{53},
+			Formations:    []int32{30, 31, 32},
+			BaseStats: map[string]int32{
 				"hp":      300,
 				"defense": 120,
 				"magic":   18,
 				"evasion": 0,
 			},
-			regenAmounts: []testRegenAmount{
+			RegenAmounts: []testRegenAmount{
 				{
-					index:    0,
-					ticks:    0,
-					healedHP: 100,
+					Index:    0,
+					Ticks:    0,
+					HealedHP: 100,
 				},
 				{
-					index:    3,
-					ticks:    3,
-					healedHP: 103,
+					Index:    3,
+					Ticks:    3,
+					HealedHP: 103,
 				},
 				{
-					index:    7,
-					ticks:    15,
-					healedHP: 117,
+					Index:    7,
+					Ticks:    15,
+					HealedHP: 117,
 				},
 				{
-					index:    9,
-					ticks:    30,
-					healedHP: 135,
+					Index:    9,
+					Ticks:    30,
+					HealedHP: 135,
 				},
 			},
-			items: &testMonItems{
-				itemDropChance: 255,
-				items: map[string]*testResAmount[apiresource.Typed]{
+			Items: &testMonItems{
+				ItemDropChance: 255,
+				Items: map[string]*testResAmount[apiresource.Typed]{
 					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](27, 1)),
 					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](28, 1)),
 					"drop common":  h.GetStructPtr(newTestResAmount[apiresource.Typed](71, 1)),
@@ -216,7 +216,7 @@ func TestGetMonster(t *testing.T) {
 					"bribe":        h.GetStructPtr(newTestResAmount[apiresource.Typed](28, 6)),
 				},
 			},
-			bribeChances: []apitypes.BribeChance{
+			BribeChances: []apitypes.BribeChance{
 				{
 					Gil:    3000,
 					Chance: 25,
@@ -234,8 +234,8 @@ func TestGetMonster(t *testing.T) {
 					Chance: 100,
 				},
 			},
-			equipment: &testMonEquipment{
-				abilitySlots: apitypes.MonsterEquipmentSlots{
+			Equipment: &testMonEquipment{
+				AbilitySlots: apitypes.MonsterEquipmentSlots{
 					MinAmount: 1,
 					MaxAmount: 2,
 					Chances: []apitypes.EquipmentSlotsChance{
@@ -249,7 +249,7 @@ func TestGetMonster(t *testing.T) {
 						},
 					},
 				},
-				attachedAbilities: apitypes.MonsterEquipmentSlots{
+				AttachedAbilities: apitypes.MonsterEquipmentSlots{
 					MinAmount: 0,
 					MaxAmount: 2,
 					Chances: []apitypes.EquipmentSlotsChance{
@@ -263,21 +263,21 @@ func TestGetMonster(t *testing.T) {
 						},
 					},
 				},
-				weaponAbilities: []int32{2, 6, 26},
-				armorAbilities:  []int32{58},
+				WeaponAbilities: []int32{2, 6, 26},
+				ArmorAbilities:  []int32{58},
 			},
-			elemResists: []testElemResist{
-				{element: 1, affinity: database.ElementalAffinityHalved},
-				{element: 2, affinity: database.ElementalAffinityAbsorb},
-				{element: 3, affinity: database.ElementalAffinityWeak},
-				{element: 4, affinity: database.ElementalAffinityHalved},
-				{element: 5, affinity: database.ElementalAffinityNeutral},
+			ElemResists: []testElemResist{
+				{Element: 1, Affinity: database.ElementalAffinityHalved},
+				{Element: 2, Affinity: database.ElementalAffinityAbsorb},
+				{Element: 3, Affinity: database.ElementalAffinityWeak},
+				{Element: 4, Affinity: database.ElementalAffinityHalved},
+				{Element: 5, Affinity: database.ElementalAffinityNeutral},
 			},
-			statusImmunities: []int32{1, 4, 13},
-			statusResists: map[string]int32{
+			StatusImmunities: []int32{1, 4, 13},
+			StatusResists: map[string]int32{
 				"silence": 20,
 			},
-			abilities: []int32{70},
+			Abilities: []int32{70},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -301,15 +301,15 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer:      newExpNameVer(156, "magic urn", 1),
-			agility:      nil,
-			regenAmounts: nil,
-			items: &testMonItems{
-				itemDropChance: 0,
-				items: map[string]*testResAmount[apiresource.Typed]{
+			Agility:      nil,
+			RegenAmounts: nil,
+			Items: &testMonItems{
+				ItemDropChance: 0,
+				Items: map[string]*testResAmount[apiresource.Typed]{
 					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](1, 1)),
 					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](1, 1)),
 				},
-				otherItems: []testPossibleItem{
+				OtherItems: []testPossibleItem{
 					newTestPossibleItem(0, 9, 1, 60),
 					newTestPossibleItem(1, 64, 1, 20),
 					newTestPossibleItem(2, 7, 1, 20),
@@ -345,22 +345,22 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(86, "spherimorph", 0),
-			agility: &testAgilityParams{
-				agilityTier: 10,
-				tickSpeed:   12,
-				minICV:      h.GetInt32Ptr(36),
-				maxICV:      h.GetInt32Ptr(40),
+			Agility: &testAgilityParams{
+				AgilityTier: 10,
+				TickSpeed:   12,
+				MinICV:      h.GetInt32Ptr(36),
+				MaxICV:      h.GetInt32Ptr(40),
 			},
-			appliedState: &testAppliedState{
-				condition:   "Fire-elemental.",
-				isTemporary: false,
+			AppliedState: &testAppliedState{
+				Condition:   "Fire-elemental.",
+				IsTemporary: false,
 			},
-			properties: []int32{1},
-			areas:      []int32{148},
-			formations: []int32{126},
-			items: &testMonItems{
-				itemDropChance: 255,
-				items: map[string]*testResAmount[apiresource.Typed]{
+			Properties: []int32{1},
+			Areas:      []int32{148},
+			Formations: []int32{126},
+			Items: &testMonItems{
+				ItemDropChance: 255,
+				Items: map[string]*testResAmount[apiresource.Typed]{
 					"steal common": h.GetStructPtr(newTestResAmount[apiresource.Typed](5, 1)),
 					"steal rare":   h.GetStructPtr(newTestResAmount[apiresource.Typed](6, 1)),
 					"drop common":  h.GetStructPtr(newTestResAmount[apiresource.Typed](82, 1)),
@@ -368,8 +368,8 @@ func TestGetMonster(t *testing.T) {
 					"bribe":        nil,
 				},
 			},
-			equipment: &testMonEquipment{
-				abilitySlots: apitypes.MonsterEquipmentSlots{
+			Equipment: &testMonEquipment{
+				AbilitySlots: apitypes.MonsterEquipmentSlots{
 					MinAmount: 2,
 					MaxAmount: 3,
 					Chances: []apitypes.EquipmentSlotsChance{
@@ -383,7 +383,7 @@ func TestGetMonster(t *testing.T) {
 						},
 					},
 				},
-				attachedAbilities: apitypes.MonsterEquipmentSlots{
+				AttachedAbilities: apitypes.MonsterEquipmentSlots{
 					MinAmount: 1,
 					MaxAmount: 3,
 					Chances: []apitypes.EquipmentSlotsChance{
@@ -397,29 +397,29 @@ func TestGetMonster(t *testing.T) {
 						},
 					},
 				},
-				weaponAbilities: []int32{2, 5, 6},
-				armorAbilities:  []int32{55, 58, 61, 64},
+				WeaponAbilities: []int32{2, 5, 6},
+				ArmorAbilities:  []int32{55, 58, 61, 64},
 			},
-			elemResists: []testElemResist{
-				{element: 1, affinity: database.ElementalAffinityAbsorb},
-				{element: 2, affinity: database.ElementalAffinityAbsorb},
-				{element: 3, affinity: database.ElementalAffinityAbsorb},
-				{element: 4, affinity: database.ElementalAffinityWeak},
-				{element: 5, affinity: database.ElementalAffinityAbsorb},
+			ElemResists: []testElemResist{
+				{Element: 1, Affinity: database.ElementalAffinityAbsorb},
+				{Element: 2, Affinity: database.ElementalAffinityAbsorb},
+				{Element: 3, Affinity: database.ElementalAffinityAbsorb},
+				{Element: 4, Affinity: database.ElementalAffinityWeak},
+				{Element: 5, Affinity: database.ElementalAffinityAbsorb},
 			},
-			statusImmunities: []int32{2, 7, 12, 14, 32, 42, 45},
-			statusResists: map[string]int32{
+			StatusImmunities: []int32{2, 7, 12, 14, 32, 42, 45},
+			StatusResists: map[string]int32{
 				"poison": 90,
 			},
-			abilities: []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
-			defaultState: &testDefaultState{
+			Abilities: []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
+			DefaultState: &testDefaultState{
 				IsTemporary: false,
 				Change: &testAltStateChange{
 					ElemResists: []testElemResist{
-						{element: 1, affinity: database.ElementalAffinityVaries},
-						{element: 2, affinity: database.ElementalAffinityVaries},
-						{element: 3, affinity: database.ElementalAffinityVaries},
-						{element: 4, affinity: database.ElementalAffinityVaries},
+						{Element: 1, Affinity: database.ElementalAffinityVaries},
+						{Element: 2, Affinity: database.ElementalAffinityVaries},
+						{Element: 3, Affinity: database.ElementalAffinityVaries},
+						{Element: 4, Affinity: database.ElementalAffinityVaries},
 					},
 				},
 			},
@@ -452,17 +452,17 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(105, "sand worm", 0),
-			appliedState: &testAppliedState{
-				condition:   "While 'Readying Quake'.",
-				isTemporary: true,
+			AppliedState: &testAppliedState{
+				Condition:   "While 'Readying Quake'.",
+				IsTemporary: true,
 			},
-			bribeChances:     nil,
-			statusImmunities: []int32{1, 2, 5, 9, 13, 32},
-			statusResists: map[string]int32{
+			BribeChances:     nil,
+			StatusImmunities: []int32{1, 2, 5, 9, 13, 32},
+			StatusResists: map[string]int32{
 				"darkness":    50,
 				"power break": 50,
 			},
-			defaultState: &testDefaultState{
+			DefaultState: &testDefaultState{
 				IsTemporary: false,
 				Gain: &testAltStateGain{
 					StatusResists: map[string]int32{
@@ -500,35 +500,35 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(287, "neslug", 0),
-			appliedState: &testAppliedState{
-				condition:   "While hidden in its shell.",
-				isTemporary: true,
+			AppliedState: &testAppliedState{
+				Condition:   "While hidden in its shell.",
+				IsTemporary: true,
 			},
-			regenAmounts: []testRegenAmount{
+			RegenAmounts: []testRegenAmount{
 				{
-					index:    0,
-					ticks:    0,
-					healedHP: 100,
+					Index:    0,
+					Ticks:    0,
+					HealedHP: 100,
 				},
 				{
-					index:    1,
-					ticks:    1,
-					healedHP: 15725,
+					Index:    1,
+					Ticks:    1,
+					HealedHP: 15725,
 				},
 				{
-					index:    2,
-					ticks:    2,
-					healedHP: 31350,
+					Index:    2,
+					Ticks:    2,
+					HealedHP: 31350,
 				},
 				{
-					index:    3,
-					ticks:    3,
-					healedHP: 46975,
+					Index:    3,
+					Ticks:    3,
+					HealedHP: 46975,
 				},
 			},
-			properties:    []int32{6, 8},
-			autoAbilities: []int32{102},
-			defaultState: &testDefaultState{
+			Properties:    []int32{6, 8},
+			AutoAbilities: []int32{102},
+			DefaultState: &testDefaultState{
 				IsTemporary: false,
 				Loss: &testAltStateLoss{
 					Properties:    []int32{6},
@@ -562,22 +562,22 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(287, "neslug", 0),
-			appliedState: &testAppliedState{
-				condition:   "Without its shell.",
-				isTemporary: false,
+			AppliedState: &testAppliedState{
+				Condition:   "Without its shell.",
+				IsTemporary: false,
 			},
-			agility: &testAgilityParams{
-				agilityTier: 18,
-				tickSpeed:   4,
-				minICV:      h.GetInt32Ptr(12),
-				maxICV:      h.GetInt32Ptr(13),
+			Agility: &testAgilityParams{
+				AgilityTier: 18,
+				TickSpeed:   4,
+				MinICV:      h.GetInt32Ptr(12),
+				MaxICV:      h.GetInt32Ptr(13),
 			},
-			properties:    []int32{8},
-			autoAbilities: []int32{},
-			baseStats: map[string]int32{
+			Properties:    []int32{8},
+			AutoAbilities: []int32{},
+			BaseStats: map[string]int32{
 				"agility": 120,
 			},
-			defaultState: &testDefaultState{
+			DefaultState: &testDefaultState{
 				IsTemporary: false,
 				Change: &testAltStateChange{
 					BaseStats: map[string]int32{
@@ -612,12 +612,12 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(114, "evrae", 0),
-			appliedState: &testAppliedState{
-				condition:   "When the Airship is far away.",
-				isTemporary: false,
+			AppliedState: &testAppliedState{
+				Condition:   "When the Airship is far away.",
+				IsTemporary: false,
 			},
-			distance: 4,
-			defaultState: &testDefaultState{
+			Distance: 4,
+			DefaultState: &testDefaultState{
 				IsTemporary: false,
 				Change: &testAltStateChange{
 					Distance: h.GetInt32Ptr(1),
@@ -650,18 +650,18 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(305, "penance", 0),
-			appliedState: &testAppliedState{
-				condition:     "When HP falls below 9000000.",
-				isTemporary:   false,
-				appliedStatus: h.GetInt32Ptr(21),
+			AppliedState: &testAppliedState{
+				Condition:     "When HP falls below 9000000.",
+				IsTemporary:   false,
+				AppliedStatus: h.GetInt32Ptr(21),
 			},
-			agility: &testAgilityParams{
-				agilityTier: 19,
-				tickSpeed:   1,
-				minICV:      h.GetInt32Ptr(9),
-				maxICV:      h.GetInt32Ptr(10),
+			Agility: &testAgilityParams{
+				AgilityTier: 19,
+				TickSpeed:   1,
+				MinICV:      h.GetInt32Ptr(9),
+				MaxICV:      h.GetInt32Ptr(10),
 			},
-			defaultState: &testDefaultState{
+			DefaultState: &testDefaultState{
 				IsTemporary: false,
 				Gain: &testAltStateGain{
 					AutoAbilities: []int32{99},
@@ -696,26 +696,26 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(211, "seymour omnis", 0),
-			elemResists: []testElemResist{
+			ElemResists: []testElemResist{
 				{
-					element:  1,
-					affinity: database.ElementalAffinityHalved,
+					Element:  1,
+					Affinity: database.ElementalAffinityHalved,
 				},
 				{
-					element:  2,
-					affinity: database.ElementalAffinityHalved,
+					Element:  2,
+					Affinity: database.ElementalAffinityHalved,
 				},
 				{
-					element:  3,
-					affinity: database.ElementalAffinityHalved,
+					Element:  3,
+					Affinity: database.ElementalAffinityHalved,
 				},
 				{
-					element:  4,
-					affinity: database.ElementalAffinityHalved,
+					Element:  4,
+					Affinity: database.ElementalAffinityHalved,
 				},
 				{
-					element:  5,
-					affinity: database.ElementalAffinityNeutral,
+					Element:  5,
+					Affinity: database.ElementalAffinityNeutral,
 				},
 			},
 		},
@@ -744,26 +744,26 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(211, "seymour omnis", 0),
-			elemResists: []testElemResist{
+			ElemResists: []testElemResist{
 				{
-					element:  1,
-					affinity: database.ElementalAffinityImmune,
+					Element:  1,
+					Affinity: database.ElementalAffinityImmune,
 				},
 				{
-					element:  2,
-					affinity: database.ElementalAffinityNeutral,
+					Element:  2,
+					Affinity: database.ElementalAffinityNeutral,
 				},
 				{
-					element:  3,
-					affinity: database.ElementalAffinityNeutral,
+					Element:  3,
+					Affinity: database.ElementalAffinityNeutral,
 				},
 				{
-					element:  4,
-					affinity: database.ElementalAffinityImmune,
+					Element:  4,
+					Affinity: database.ElementalAffinityImmune,
 				},
 				{
-					element:  5,
-					affinity: database.ElementalAffinityNeutral,
+					Element:  5,
+					Affinity: database.ElementalAffinityNeutral,
 				},
 			},
 		},
@@ -792,26 +792,26 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(211, "seymour omnis", 0),
-			elemResists: []testElemResist{
+			ElemResists: []testElemResist{
 				{
-					element:  1,
-					affinity: database.ElementalAffinityWeak,
+					Element:  1,
+					Affinity: database.ElementalAffinityWeak,
 				},
 				{
-					element:  2,
-					affinity: database.ElementalAffinityNeutral,
+					Element:  2,
+					Affinity: database.ElementalAffinityNeutral,
 				},
 				{
-					element:  3,
-					affinity: database.ElementalAffinityNeutral,
+					Element:  3,
+					Affinity: database.ElementalAffinityNeutral,
 				},
 				{
-					element:  4,
-					affinity: database.ElementalAffinityAbsorb,
+					Element:  4,
+					Affinity: database.ElementalAffinityAbsorb,
 				},
 				{
-					element:  5,
-					affinity: database.ElementalAffinityNeutral,
+					Element:  5,
+					Affinity: database.ElementalAffinityNeutral,
 				},
 			},
 		},
@@ -841,14 +841,14 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(167, "biran ronso", 0),
-			agility: &testAgilityParams{
-				agilityTier: 19,
-				tickSpeed:   3,
-				minICV:      h.GetInt32Ptr(9),
-				maxICV:      h.GetInt32Ptr(10),
+			Agility: &testAgilityParams{
+				AgilityTier: 19,
+				TickSpeed:   3,
+				MinICV:      h.GetInt32Ptr(9),
+				MaxICV:      h.GetInt32Ptr(10),
 			},
-			ronsoRages: []int32{4, 5, 8, 11},
-			baseStats: map[string]int32{
+			RonsoRages: []int32{4, 5, 8, 11},
+			BaseStats: map[string]int32{
 				"hp":       3549656,
 				"strength": 12,
 				"magic":    4,
@@ -881,14 +881,14 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer: newExpNameVer(168, "yenke ronso", 0),
-			agility: &testAgilityParams{
-				agilityTier: 12,
-				tickSpeed:   10,
-				minICV:      h.GetInt32Ptr(30),
-				maxICV:      h.GetInt32Ptr(33),
+			Agility: &testAgilityParams{
+				AgilityTier: 12,
+				TickSpeed:   10,
+				MinICV:      h.GetInt32Ptr(30),
+				MaxICV:      h.GetInt32Ptr(33),
 			},
-			ronsoRages: []int32{2, 6, 7, 9},
-			baseStats: map[string]int32{
+			RonsoRages: []int32{2, 6, 7, 9},
+			BaseStats: map[string]int32{
 				"hp":       10896,
 				"strength": 13,
 				"magic":    22,
@@ -920,13 +920,13 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(168, "yenke ronso", 0),
-			agility: &testAgilityParams{
-				agilityTier: 2,
-				tickSpeed:   26,
-				minICV:      h.GetInt32Ptr(84),
-				maxICV:      h.GetInt32Ptr(93),
+			Agility: &testAgilityParams{
+				AgilityTier: 2,
+				TickSpeed:   26,
+				MinICV:      h.GetInt32Ptr(84),
+				MaxICV:      h.GetInt32Ptr(93),
 			},
-			baseStats: map[string]int32{
+			BaseStats: map[string]int32{
 				"hp":       864,
 				"strength": 8,
 				"magic":    12,
@@ -960,31 +960,31 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(273, "vidatu", 0),
-			regenAmounts: []testRegenAmount{
+			RegenAmounts: []testRegenAmount{
 				{
-					index:    0,
-					ticks:    0,
-					healedHP: 100,
+					Index:    0,
+					Ticks:    0,
+					HealedHP: 100,
 				},
 				{
-					index:    5,
-					ticks:    5,
-					healedHP: 1955,
+					Index:    5,
+					Ticks:    5,
+					HealedHP: 1955,
 				},
 				{
-					index:    6,
-					ticks:    10,
-					healedHP: 3810,
+					Index:    6,
+					Ticks:    10,
+					HealedHP: 3810,
 				},
 				{
-					index:    8,
-					ticks:    20,
-					healedHP: 7521,
+					Index:    8,
+					Ticks:    20,
+					HealedHP: 7521,
 				},
 				{
-					index:    10,
-					ticks:    50,
-					healedHP: 18654,
+					Index:    10,
+					Ticks:    50,
+					HealedHP: 18654,
 				},
 			},
 		},
@@ -1013,13 +1013,13 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(216, "valefor", 1),
-			agility: &testAgilityParams{
-				agilityTier: 15,
-				tickSpeed:   7,
-				minICV:      h.GetInt32Ptr(-1),
-				maxICV:      h.GetInt32Ptr(-1),
+			Agility: &testAgilityParams{
+				AgilityTier: 15,
+				TickSpeed:   7,
+				MinICV:      h.GetInt32Ptr(-1),
+				MaxICV:      h.GetInt32Ptr(-1),
 			},
-			baseStats: map[string]int32{
+			BaseStats: map[string]int32{
 				"hp":            2146,
 				"mp":            1,
 				"strength":      47,
@@ -1057,13 +1057,13 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(216, "valefor", 1),
-			agility: &testAgilityParams{
-				agilityTier: 14,
-				tickSpeed:   8,
-				minICV:      h.GetInt32Ptr(-1),
-				maxICV:      h.GetInt32Ptr(-1),
+			Agility: &testAgilityParams{
+				AgilityTier: 14,
+				TickSpeed:   8,
+				MinICV:      h.GetInt32Ptr(-1),
+				MaxICV:      h.GetInt32Ptr(-1),
 			},
-			baseStats: map[string]int32{
+			BaseStats: map[string]int32{
 				"hp":            2225,
 				"mp":            1,
 				"strength":      45,
@@ -1101,13 +1101,13 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(216, "valefor", 1),
-			agility: &testAgilityParams{
-				agilityTier: 15,
-				tickSpeed:   7,
-				minICV:      h.GetInt32Ptr(-1),
-				maxICV:      h.GetInt32Ptr(-1),
+			Agility: &testAgilityParams{
+				AgilityTier: 15,
+				TickSpeed:   7,
+				MinICV:      h.GetInt32Ptr(-1),
+				MaxICV:      h.GetInt32Ptr(-1),
 			},
-			baseStats: map[string]int32{
+			BaseStats: map[string]int32{
 				"hp":            2225,
 				"mp":            1,
 				"strength":      47,
@@ -1149,8 +1149,8 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer:    newExpNameVer(87, "evil eye", 1),
-			areas:      []int32{159},
-			formations: []int32{134},
+			Areas:      []int32{159},
+			Formations: []int32{134},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -1181,8 +1181,8 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer:    newExpNameVer(87, "evil eye", 1),
-			areas:      []int32{159},
-			formations: []int32{128, 132},
+			Areas:      []int32{159},
+			Formations: []int32{128, 132},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -1213,8 +1213,8 @@ func TestGetMonster(t *testing.T) {
 				},
 			},
 			NameVer:    newExpNameVer(87, "evil eye", 1),
-			areas:      []int32{154, 157},
-			formations: []int32{128, 132},
+			Areas:      []int32{154, 157},
+			Formations: []int32{128, 132},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -1241,13 +1241,13 @@ func TestGetMonster(t *testing.T) {
 				ExpLengths: map[string]int{},
 			},
 			NameVer: newExpNameVer(93, "seymour", 0),
-			agility: &testAgilityParams{
-				agilityTier: 12,
-				tickSpeed:   10,
-				minICV:      h.GetInt32Ptr(-1),
-				maxICV:      h.GetInt32Ptr(-1),
+			Agility: &testAgilityParams{
+				AgilityTier: 12,
+				TickSpeed:   10,
+				MinICV:      h.GetInt32Ptr(-1),
+				MaxICV:      h.GetInt32Ptr(-1),
 			},
-			autoAbilities: []int32{3},
+			AutoAbilities: []int32{3},
 		},
 	}
 

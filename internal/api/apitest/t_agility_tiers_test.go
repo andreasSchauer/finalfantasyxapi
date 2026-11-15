@@ -30,13 +30,13 @@ func TestGetAgilityTier(t *testing.T) {
 				},
 			},
 			IDOnly:      newExpIDOnly(15),
-			fromAgility: 35,
-			toAgility:   43,
-			tickSpeed:   7,
-			monMaxICV:   h.GetInt32Ptr(23),
-			monMinICV:   h.GetInt32Ptr(21),
-			charMaxICV:  h.GetInt32Ptr(21),
-			charMinICVs: []apitypes.AgilitySubtier{
+			FromAgility: 35,
+			ToAgility:   43,
+			TickSpeed:   7,
+			MonMaxICV:   h.GetInt32Ptr(23),
+			MonMinICV:   h.GetInt32Ptr(21),
+			CharMaxICV:  h.GetInt32Ptr(21),
+			CharMinICVs: []apitypes.AgilitySubtier{
 				{
 					FromAgility: 35,
 					ToAgility:   35,

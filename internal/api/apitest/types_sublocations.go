@@ -8,9 +8,9 @@ import (
 type Sublocation struct {
 	TestGeneral
 	Unique
-	parentLocation        int32
-	connectedSublocations []int32
-	areas                 []int32
+	ParentLocation        int32
+	ConnectedSublocations []int32
+	Areas                 []int32
 	LocRel
 }
 
@@ -21,9 +21,9 @@ func (e Sublocation) GetTestGeneral() TestGeneral {
 func (e Sublocation) Compare(test Test, got apitypes.Sublocation) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compIDAPIResource("location", apilookups.E.Locations.Endpoint, e.parentLocation, got.ParentLocation)
-	test.compTestStructPtrs("music", e.music, got.Music)
-	test.checkResIDsInSlice("connected sublocations", apilookups.E.Sublocations.Endpoint, e.connectedSublocations, got.ConnectedSublocations)
-	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
+	test.compIDAPIResource("location", apilookups.E.Locations.Endpoint, e.ParentLocation, got.ParentLocation)
+	test.compTestStructPtrs("music", e.Music, got.Music)
+	test.checkResIDsInSlice("connected sublocations", apilookups.E.Sublocations.Endpoint, e.ConnectedSublocations, got.ConnectedSublocations)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.Areas, got.Areas)
 	e.LocRel.Compare(test, got.LocRel)
 }

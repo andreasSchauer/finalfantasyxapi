@@ -29,9 +29,9 @@ func TestGetPrimer(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(1, "al bhed primer i"),
-			keyItem:   35,
-			areas:     []int32{15, 167},
-			treasures: []int32{13, 215},
+			KeyItem:   35,
+			Areas:     []int32{15, 167},
+			Treasures: []int32{13, 215},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -44,9 +44,9 @@ func TestGetPrimer(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(22, "al bhed primer xxii"),
-			keyItem:   56,
-			areas:     []int32{195},
-			treasures: []int32{252},
+			KeyItem:   56,
+			Areas:     []int32{195},
+			Treasures: []int32{252},
 		},
 	}
 

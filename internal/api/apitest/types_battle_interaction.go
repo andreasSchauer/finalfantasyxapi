@@ -7,122 +7,122 @@ import (
 )
 
 type BattleInteraction struct {
-	target                    string
-	abilityRange              *int32
-	hitAmount                 int32
-	shatterRate               int32
-	specialAction             *string
-	basedOnUserAtk            bool
-	darkable                  bool
-	silenceable               bool
-	reflectable               bool
-	accuracy                  Accuracy
-	damage                    *Damage
-	inflictedDelay            *InflictedDelay
-	inflictedStatusConditions []int32
-	removedStatusConditions   []int32
-	copiedStatusConditions    []int32
-	statChanges               []StatChange
-	modifierChanges           []ModChange
+	Target                    string
+	AbilityRange              *int32
+	HitAmount                 int32
+	ShatterRate               int32
+	SpecialAction             *string
+	BasedOnUserAtk            bool
+	Darkable                  bool
+	Silenceable               bool
+	Reflectable               bool
+	Accuracy                  Accuracy
+	Damage                    *Damage
+	InflictedDelay            *InflictedDelay
+	InflictedStatusConditions []int32
+	RemovedStatusConditions   []int32
+	CopiedStatusConditions    []int32
+	StatChanges               []StatChange
+	ModifierChanges           []ModChange
 }
 
 func (e BattleInteraction) Compare(test Test, fieldName string, got apitypes.BattleInteraction) {
 	test.T.Helper()
-	test.compare(fieldName+" target", e.target, got.Target)
-	test.compare(fieldName+" range", e.abilityRange, got.Range)
-	test.compare(fieldName+" hit amount", e.hitAmount, got.HitAmount)
-	test.compare(fieldName+" shatter rate", e.shatterRate, got.ShatterRate)
-	test.compare(fieldName+" special action", e.specialAction, got.SpecialAction)
-	test.compare(fieldName+" based on phys atk", e.basedOnUserAtk, got.BasedOnUserAttack)
-	test.compare(fieldName+" darkable", e.darkable, got.Darkable)
-	test.compare(fieldName+" silenceable", e.silenceable, got.Silenceable)
-	test.compare(fieldName+" reflectable", e.reflectable, got.Reflectable)
-	e.accuracy.Compare(test, fieldName+" accuracy", got.Accuracy)
-	test.compTestStructPtrs(fieldName+" damage", e.damage, got.Damage)
-	test.compTestStructPtrs(fieldName+" inflicted delay", e.inflictedDelay, got.InflictedDelay)
-	test.checkResIDsInSlice(fieldName+" inflicted status conditions", apilookups.E.StatusConditions.Endpoint, e.inflictedStatusConditions, got.InflictedStatusConditions)
-	test.checkResIDsInSlice(fieldName+" removed status conditions", apilookups.E.StatusConditions.Endpoint, e.removedStatusConditions, got.RemovedStatusConditions)
-	test.checkResIDsInSlice(fieldName+" copied status conditions", apilookups.E.StatusConditions.Endpoint, e.copiedStatusConditions, got.CopiedStatusConditions)
-	test.compTestStructSlices(fieldName+" stat changes", e.statChanges, got.StatChanges)
-	test.compTestStructSlices(fieldName+" mod changes", e.modifierChanges, got.ModifierChanges)
+	test.compare(fieldName+" target", e.Target, got.Target)
+	test.compare(fieldName+" range", e.AbilityRange, got.Range)
+	test.compare(fieldName+" hit amount", e.HitAmount, got.HitAmount)
+	test.compare(fieldName+" shatter rate", e.ShatterRate, got.ShatterRate)
+	test.compare(fieldName+" special action", e.SpecialAction, got.SpecialAction)
+	test.compare(fieldName+" based on phys atk", e.BasedOnUserAtk, got.BasedOnUserAttack)
+	test.compare(fieldName+" darkable", e.Darkable, got.Darkable)
+	test.compare(fieldName+" silenceable", e.Silenceable, got.Silenceable)
+	test.compare(fieldName+" reflectable", e.Reflectable, got.Reflectable)
+	e.Accuracy.Compare(test, fieldName+" accuracy", got.Accuracy)
+	test.compTestStructPtrs(fieldName+" damage", e.Damage, got.Damage)
+	test.compTestStructPtrs(fieldName+" inflicted delay", e.InflictedDelay, got.InflictedDelay)
+	test.checkResIDsInSlice(fieldName+" inflicted status conditions", apilookups.E.StatusConditions.Endpoint, e.InflictedStatusConditions, got.InflictedStatusConditions)
+	test.checkResIDsInSlice(fieldName+" removed status conditions", apilookups.E.StatusConditions.Endpoint, e.RemovedStatusConditions, got.RemovedStatusConditions)
+	test.checkResIDsInSlice(fieldName+" copied status conditions", apilookups.E.StatusConditions.Endpoint, e.CopiedStatusConditions, got.CopiedStatusConditions)
+	test.compTestStructSlices(fieldName+" stat changes", e.StatChanges, got.StatChanges)
+	test.compTestStructSlices(fieldName+" mod changes", e.ModifierChanges, got.ModifierChanges)
 }
 
 type Accuracy struct {
-	accSource   string
-	hitChance   *int32
-	accModifier *float32
+	AccSource   string
+	HitChance   *int32
+	AccModifier *float32
 }
 
 func (e Accuracy) Compare(test Test, fieldName string, got apitypes.Accuracy) {
-	test.compare(fieldName+" acc source", e.accSource, got.AccSource)
-	test.compare(fieldName+" hit chance", e.hitChance, got.HitChance)
-	test.compare(fieldName+" acc modifier", e.accModifier, got.AccModifier)
+	test.compare(fieldName+" acc source", e.AccSource, got.AccSource)
+	test.compare(fieldName+" hit chance", e.HitChance, got.HitChance)
+	test.compare(fieldName+" acc modifier", e.AccModifier, got.AccModifier)
 }
 
 type Damage struct {
-	attackType      database.AttackType
-	damageType      database.DamageType
-	hp              *ClassDamage
-	mp              *ClassDamage
-	ctb             *ClassDamage
-	critical        *string
-	criticalPlusVal *int32
-	isPiercing      bool
-	breakDmgLmt     *string
-	element         *int32
+	AttackType      database.AttackType
+	DamageType      database.DamageType
+	Hp              *ClassDamage
+	Mp              *ClassDamage
+	Ctb             *ClassDamage
+	Critical        *string
+	CriticalPlusVal *int32
+	IsPiercing      bool
+	BreakDmgLmt     *string
+	Element         *int32
 }
 
 func (e Damage) Compare(test Test, fieldName string, got apitypes.Damage) {
-	test.compare(fieldName+" attack type", string(e.attackType), got.AttackType)
-	test.compare(fieldName+" damage type", string(e.damageType), got.DamageType)
-	test.compTestStructPtrs(fieldName+" hp", e.hp, got.HP)
-	test.compTestStructPtrs(fieldName+" mp", e.mp, got.MP)
-	test.compTestStructPtrs(fieldName+" ctb", e.ctb, got.CTB)
-	test.compare(fieldName+" critical", e.critical, got.Critical)
-	test.compare(fieldName+" criticalPlusVal", e.criticalPlusVal, got.CriticalPlusVal)
-	test.compare(fieldName+" is piercing", e.isPiercing, got.IsPiercing)
-	test.compare(fieldName+" break dmg lmt", e.breakDmgLmt, got.BreakDmgLimit)
-	test.compIDAPIResourcePtrs(fieldName+" element", apilookups.E.Elements.Endpoint, e.element, got.Element)
+	test.compare(fieldName+" attack type", string(e.AttackType), got.AttackType)
+	test.compare(fieldName+" damage type", string(e.DamageType), got.DamageType)
+	test.compTestStructPtrs(fieldName+" hp", e.Hp, got.HP)
+	test.compTestStructPtrs(fieldName+" mp", e.Mp, got.MP)
+	test.compTestStructPtrs(fieldName+" ctb", e.Ctb, got.CTB)
+	test.compare(fieldName+" critical", e.Critical, got.Critical)
+	test.compare(fieldName+" criticalPlusVal", e.CriticalPlusVal, got.CriticalPlusVal)
+	test.compare(fieldName+" is piercing", e.IsPiercing, got.IsPiercing)
+	test.compare(fieldName+" break dmg lmt", e.BreakDmgLmt, got.BreakDmgLimit)
+	test.compIDAPIResourcePtrs(fieldName+" element", apilookups.E.Elements.Endpoint, e.Element, got.Element)
 }
 
 type ClassDamage struct {
-	damageFormula  database.DamageFormula
-	damageConstant int32
+	DamageFormula  database.DamageFormula
+	DamageConstant int32
 }
 
 func (e ClassDamage) Compare(test Test, fieldName string, got apitypes.ClassDamage) {
-	test.compare(fieldName+" - damage formula", string(e.damageFormula), got.DamageFormula)
-	test.compare(fieldName+" - damage constant", e.damageConstant, got.DamageConstant)
+	test.compare(fieldName+" - damage formula", string(e.DamageFormula), got.DamageFormula)
+	test.compare(fieldName+" - damage constant", e.DamageConstant, got.DamageConstant)
 }
 
 type InflictedDelay struct {
-	delayStrength string
+	DelayStrength string
 }
 
 func (e InflictedDelay) Compare(test Test, fieldName string, got apitypes.InflictedDelay) {
-	test.compare(fieldName+" delay strength", e.delayStrength, got.DelayStrength)
+	test.compare(fieldName+" delay strength", e.DelayStrength, got.DelayStrength)
 }
 
 type StatChange struct {
-	stat            int32
-	calculationType string
-	value           float32
+	Stat            int32
+	CalculationType string
+	Value           float32
 }
 
 func (e StatChange) Compare(test Test, fieldName string, got apitypes.StatChange) {
-	test.compIDAPIResource(fieldName+" - sc stat", apilookups.E.Stats.Endpoint, e.stat, got.Stat)
-	test.compare(fieldName+" - calculation type", e.calculationType, got.CalculationType)
-	test.compare(fieldName+" - value", e.value, got.Value)
+	test.compIDAPIResource(fieldName+" - sc stat", apilookups.E.Stats.Endpoint, e.Stat, got.Stat)
+	test.compare(fieldName+" - calculation type", e.CalculationType, got.CalculationType)
+	test.compare(fieldName+" - value", e.Value, got.Value)
 }
 
 type ModChange struct {
-	modifier        int32
-	calculationType string
-	value           float32
+	Modifier        int32
+	CalculationType string
+	Value           float32
 }
 
 func (e ModChange) Compare(test Test, fieldName string, got apitypes.ModifierChange) {
-	test.compIDAPIResource(fieldName+" - mc modifier", apilookups.E.Modifiers.Endpoint, e.modifier, got.Modifier)
-	test.compare(fieldName+" - calculation type", e.calculationType, got.CalculationType)
-	test.compare(fieldName+" - value", e.value, got.Value)
+	test.compIDAPIResource(fieldName+" - mc modifier", apilookups.E.Modifiers.Endpoint, e.Modifier, got.Modifier)
+	test.compare(fieldName+" - calculation type", e.CalculationType, got.CalculationType)
+	test.compare(fieldName+" - value", e.Value, got.Value)
 }

@@ -9,10 +9,10 @@ import (
 type Shop struct {
 	TestGeneral
 	IDOnly
-	area        int32
-	category    database.ShopCategory
-	preAirship  *testSubShop
-	postAirship *testSubShop
+	Area        int32
+	Category    database.ShopCategory
+	PreAirship  *testSubShop
+	PostAirship *testSubShop
 }
 
 func (e Shop) GetTestGeneral() TestGeneral {
@@ -22,59 +22,59 @@ func (e Shop) GetTestGeneral() TestGeneral {
 func (e Shop) Compare(test Test, got apitypes.Shop) {
 	test.T.Helper()
 	test.compareExpIDOnly(e.IDOnly, got.ID)
-	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
-	test.compare("category", string(e.category), got.Category)
-	test.compTestStructPtrs("pre airship", e.preAirship, got.PreAirship)
-	test.compTestStructPtrs("post airship", e.postAirship, got.PostAirship)
+	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.Area, got.Area)
+	test.compare("category", string(e.Category), got.Category)
+	test.compTestStructPtrs("pre airship", e.PreAirship, got.PreAirship)
+	test.compTestStructPtrs("post airship", e.PostAirship, got.PostAirship)
 }
 
 type testSubShop struct {
-	items     []testShopItem
-	equipment []testShopEquipment
+	Items     []testShopItem
+	Equipment []testShopEquipment
 }
 
 func (e testSubShop) Compare(test Test, fieldName string, got apitypes.SubShop) {
 	test.T.Helper()
-	test.checkTestStructsInSlice(fieldName+" - items", e.items, got.Items)
-	test.checkTestStructsInSlice(fieldName+" - equipment", e.equipment, got.Equipment)
+	test.checkTestStructsInSlice(fieldName+" - items", e.Items, got.Items)
+	test.checkTestStructsInSlice(fieldName+" - equipment", e.Equipment, got.Equipment)
 }
 
 type testShopItem struct {
-	index int
-	item  int32
-	price int32
+	Index int
+	Item  int32
+	Price int32
 }
 
 func newTestShopItem(idx int, itemID, price int32) testShopItem {
 	return testShopItem{
-		index: idx,
-		item:  itemID,
-		price: price,
+		Index: idx,
+		Item:  itemID,
+		Price: price,
 	}
 }
 
 func (e testShopItem) GetIndex() int {
-	return e.index
+	return e.Index
 }
 
 func (e testShopItem) Compare(test Test, fieldName string, got apitypes.ShopItem) {
 	test.T.Helper()
-	test.compIDAPIResource(fieldName+" - item", apilookups.E.Items.Endpoint, e.item, got.Item)
-	test.compare(fieldName+" - price", e.price, got.Price)
+	test.compIDAPIResource(fieldName+" - item", apilookups.E.Items.Endpoint, e.Item, got.Item)
+	test.compare(fieldName+" - price", e.Price, got.Price)
 }
 
 type testShopEquipment struct {
-	index     int
-	equipment testFoundEquipment
-	price     int32
+	Index     int
+	Equipment testFoundEquipment
+	Price     int32
 }
 
 func (e testShopEquipment) GetIndex() int {
-	return e.index
+	return e.Index
 }
 
 func (e testShopEquipment) Compare(test Test, fieldName string, got apitypes.ShopEquipment) {
 	test.T.Helper()
-	e.equipment.Compare(test, fieldName+" - found equipment", got.Equipment)
-	test.compare(fieldName+" - price", e.price, got.Price)
+	e.Equipment.Compare(test, fieldName+" - found equipment", got.Equipment)
+	test.compare(fieldName+" - price", e.Price, got.Price)
 }

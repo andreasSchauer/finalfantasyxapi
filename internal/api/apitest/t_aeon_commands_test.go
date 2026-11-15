@@ -29,13 +29,13 @@ func TestGetAeonCommand(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(1, "pay"),
-			user:        19,
-			topmenu:     h.GetInt32Ptr(1),
-			openSubmenu: h.GetInt32Ptr(12),
-			possibleAbilities: []PossibleAbilityList{
+			User:        19,
+			Topmenu:     h.GetInt32Ptr(1),
+			OpenSubmenu: h.GetInt32Ptr(12),
+			PossibleAbilities: []PossibleAbilityList{
 				{
-					user:      19,
-					abilities: []int32{94, 95, 96, 97, 98, 382},
+					User:      19,
+					Abilities: []int32{94, 95, 96, 97, 98, 382},
 				},
 			},
 		},
@@ -51,21 +51,21 @@ func TestGetAeonCommand(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(2, "do as you will."),
-			user:        4,
-			topmenu:     h.GetInt32Ptr(1),
-			openSubmenu: nil,
-			possibleAbilities: []PossibleAbilityList{
+			User:        4,
+			Topmenu:     h.GetInt32Ptr(1),
+			OpenSubmenu: nil,
+			PossibleAbilities: []PossibleAbilityList{
 				{
-					user:      20,
-					abilities: []int32{375, 54, 55, 66, 80, 102},
+					User:      20,
+					Abilities: []int32{375, 54, 55, 66, 80, 102},
 				},
 				{
-					user:      21,
-					abilities: []int32{375, 100, 62},
+					User:      21,
+					Abilities: []int32{375, 100, 62},
 				},
 				{
-					user:      22,
-					abilities: []int32{375, 101, 78, 84, 81, 102},
+					User:      22,
+					Abilities: []int32{375, 101, 78, 84, 81, 102},
 				},
 			},
 		},
@@ -79,13 +79,13 @@ func TestGetAeonCommand(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(7, "defense!"),
-			user:        21,
-			topmenu:     h.GetInt32Ptr(1),
-			openSubmenu: nil,
-			possibleAbilities: []PossibleAbilityList{
+			User:        21,
+			Topmenu:     h.GetInt32Ptr(1),
+			OpenSubmenu: nil,
+			PossibleAbilities: []PossibleAbilityList{
 				{
-					user:      21,
-					abilities: []int32{375, 100, 45, 46, 61, 68, 102},
+					User:      21,
+					Abilities: []int32{375, 100, 45, 46, 61, 68, 102},
 				},
 			},
 		},

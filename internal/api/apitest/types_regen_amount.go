@@ -5,17 +5,17 @@ import (
 )
 
 type testRegenAmount struct {
-	index    int
-	ticks    int32
-	healedHP int32
+	Index    int
+	Ticks    int32
+	HealedHP int32
 }
 
 func (e testRegenAmount) GetIndex() int {
-	return e.index
+	return e.Index
 }
 
 func (e testRegenAmount) Compare(test Test, fieldName string, got apitypes.RegenAmount) {
 	test.T.Helper()
-	test.compare(fieldName+" - ticks", e.ticks, got.Ticks)
-	test.compare(fieldName+" - healed hp", e.healedHP, got.HealedHP)
+	test.compare(fieldName+" - ticks", e.Ticks, got.Ticks)
+	test.compare(fieldName+" - healed hp", e.HealedHP, got.HealedHP)
 }

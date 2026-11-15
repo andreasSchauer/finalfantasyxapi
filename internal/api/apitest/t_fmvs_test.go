@@ -39,8 +39,8 @@ func TestGetFMV(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 			},
 			Unique: newExpUnique(9, "fear on the sea"),
-			area:   42,
-			song:   h.GetInt32Ptr(16),
+			Area:   42,
+			Song:   h.GetInt32Ptr(16),
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -48,8 +48,8 @@ func TestGetFMV(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 			},
 			Unique: newExpUnique(38, "the last chapter"),
-			area:   218,
-			song:   h.GetInt32Ptr(77),
+			Area:   218,
+			Song:   h.GetInt32Ptr(77),
 		},
 	}
 

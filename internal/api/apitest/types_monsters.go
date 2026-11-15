@@ -10,26 +10,26 @@ import (
 type Monster struct {
 	TestGeneral
 	NameVer
-	appliedState     *testAppliedState
-	agility          *testAgilityParams
-	species          database.MonsterSpecies
-	ctbIconType      database.CtbIconType
-	distance         int32
-	properties       []int32
-	autoAbilities    []int32
-	ronsoRages       []int32
-	areas            []int32
-	formations       []int32
-	baseStats        map[string]int32
-	regenAmounts     []testRegenAmount
-	items            *testMonItems
-	bribeChances     []apitypes.BribeChance
-	equipment        *testMonEquipment
-	elemResists      []testElemResist
-	statusImmunities []int32
-	statusResists    map[string]int32
-	defaultState     *testDefaultState
-	abilities        []int32
+	AppliedState     *testAppliedState
+	Agility          *testAgilityParams
+	Species          database.MonsterSpecies
+	CtbIconType      database.CtbIconType
+	Distance         int32
+	Properties       []int32
+	AutoAbilities    []int32
+	RonsoRages       []int32
+	Areas            []int32
+	Formations       []int32
+	BaseStats        map[string]int32
+	RegenAmounts     []testRegenAmount
+	Items            *testMonItems
+	BribeChances     []apitypes.BribeChance
+	Equipment        *testMonEquipment
+	ElemResists      []testElemResist
+	StatusImmunities []int32
+	StatusResists    map[string]int32
+	DefaultState     *testDefaultState
+	Abilities        []int32
 }
 
 func (e Monster) GetTestGeneral() TestGeneral {
@@ -39,39 +39,39 @@ func (e Monster) GetTestGeneral() TestGeneral {
 func (e Monster) Compare(test Test, got apitypes.Monster) {
 	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
-	test.compare("species", string(e.species), got.Species)
-	test.compare("ctb icon type", string(e.ctbIconType), got.CTBIconType)
-	test.compare("distance", e.distance, got.Distance)
-	test.checkResAmtTypes("base stats", e.baseStats, got.BaseStats)
-	test.checkTestStructsInSlice("regen amounts", e.regenAmounts, got.RegenAmounts)
-	test.checkResAmtTypes("status resists", e.statusResists, got.StatusResists)
-	test.compTestStructPtrs("agility params", e.agility, got.AgilityParameters)
-	test.compStructSlices("bribe chances", e.bribeChances, got.BribeChances)
-	test.compTestStructSlices("elemental resists", e.elemResists, got.ElemResists)
-	test.compTestStructPtrs("applied state", e.appliedState, got.AppliedState)
-	testMonsterDefaultState(test, e.defaultState, got.AlteredStates)
-	test.compTestStructPtrs("items", e.items, got.Items)
-	test.compTestStructPtrs("equipment", e.equipment, got.Equipment)
-	test.checkResIDsInSlice("properties", apilookups.E.Properties.Endpoint, e.properties, got.Properties)
-	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("ronso rages", apilookups.E.RonsoRages.Endpoint, e.ronsoRages, got.RonsoRages)
-	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
-	test.checkResIDsInSlice("formations", apilookups.E.MonsterFormations.Endpoint, e.formations, got.Formations)
-	test.checkResIDsInSlice("status immunities", apilookups.E.StatusConditions.Endpoint, e.statusImmunities, got.StatusImmunities)
-	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, e.abilities, got.Abilities)
+	test.compare("species", string(e.Species), got.Species)
+	test.compare("ctb icon type", string(e.CtbIconType), got.CTBIconType)
+	test.compare("distance", e.Distance, got.Distance)
+	test.checkResAmtTypes("base stats", e.BaseStats, got.BaseStats)
+	test.checkTestStructsInSlice("regen amounts", e.RegenAmounts, got.RegenAmounts)
+	test.checkResAmtTypes("status resists", e.StatusResists, got.StatusResists)
+	test.compTestStructPtrs("agility params", e.Agility, got.AgilityParameters)
+	test.compStructSlices("bribe chances", e.BribeChances, got.BribeChances)
+	test.compTestStructSlices("elemental resists", e.ElemResists, got.ElemResists)
+	test.compTestStructPtrs("applied state", e.AppliedState, got.AppliedState)
+	testMonsterDefaultState(test, e.DefaultState, got.AlteredStates)
+	test.compTestStructPtrs("items", e.Items, got.Items)
+	test.compTestStructPtrs("equipment", e.Equipment, got.Equipment)
+	test.checkResIDsInSlice("properties", apilookups.E.Properties.Endpoint, e.Properties, got.Properties)
+	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("ronso rages", apilookups.E.RonsoRages.Endpoint, e.RonsoRages, got.RonsoRages)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.Areas, got.Areas)
+	test.checkResIDsInSlice("formations", apilookups.E.MonsterFormations.Endpoint, e.Formations, got.Formations)
+	test.checkResIDsInSlice("status immunities", apilookups.E.StatusConditions.Endpoint, e.StatusImmunities, got.StatusImmunities)
+	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, e.Abilities, got.Abilities)
 }
 
 type testMonItems struct {
-	itemDropChance int32
-	items          map[string]*testResAmount[apiresource.Typed]
-	otherItems     []testPossibleItem
+	ItemDropChance int32
+	Items          map[string]*testResAmount[apiresource.Typed]
+	OtherItems     []testPossibleItem
 }
 
 func (e testMonItems) Compare(test Test, fieldName string, got apitypes.MonsterItems) {
 	test.T.Helper()
-	itemMap := e.items
+	itemMap := e.Items
 
-	test.compare("item drop chance", e.itemDropChance, got.DropChance)
+	test.compare("item drop chance", e.ItemDropChance, got.DropChance)
 	test.compTestStructPtrs("steal common", itemMap["steal common"], got.StealCommon)
 	test.compTestStructPtrs("steal rare", itemMap["steal rare"], got.StealRare)
 	test.compTestStructPtrs("drop common", itemMap["drop common"], got.DropCommon)
@@ -79,20 +79,20 @@ func (e testMonItems) Compare(test Test, fieldName string, got apitypes.MonsterI
 	test.compTestStructPtrs("sec drop common", itemMap["sec drop common"], got.SecondaryDropCommon)
 	test.compTestStructPtrs("sec drop rare", itemMap["sec drop rare"], got.SecondaryDropRare)
 	test.compTestStructPtrs("bribe", itemMap["bribe"], got.Bribe)
-	test.compTestStructSlices("other items", e.otherItems, got.OtherItems)
+	test.compTestStructSlices("other items", e.OtherItems, got.OtherItems)
 }
 
 type testMonEquipment struct {
-	abilitySlots      apitypes.MonsterEquipmentSlots
-	attachedAbilities apitypes.MonsterEquipmentSlots
-	weaponAbilities   []int32
-	armorAbilities    []int32
+	AbilitySlots      apitypes.MonsterEquipmentSlots
+	AttachedAbilities apitypes.MonsterEquipmentSlots
+	WeaponAbilities   []int32
+	ArmorAbilities    []int32
 }
 
 func (e testMonEquipment) Compare(test Test, _ string, got apitypes.MonsterEquipment) {
 	test.T.Helper()
-	test.compStructs("ability slots", e.abilitySlots, got.AbilitySlots)
-	test.compStructs("attached abilities", e.attachedAbilities, got.AttachedAbilities)
-	test.checkResIDsInSlice("weapon abilities", apilookups.E.AutoAbilities.Endpoint, e.weaponAbilities, got.WeaponAbilities)
-	test.checkResIDsInSlice("armor abilities", apilookups.E.AutoAbilities.Endpoint, e.armorAbilities, got.ArmorAbilities)
+	test.compStructs("ability slots", e.AbilitySlots, got.AbilitySlots)
+	test.compStructs("attached abilities", e.AttachedAbilities, got.AttachedAbilities)
+	test.checkResIDsInSlice("weapon abilities", apilookups.E.AutoAbilities.Endpoint, e.WeaponAbilities, got.WeaponAbilities)
+	test.checkResIDsInSlice("armor abilities", apilookups.E.AutoAbilities.Endpoint, e.ArmorAbilities, got.ArmorAbilities)
 }

@@ -37,42 +37,42 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(69, "three stars"),
-			untypedItem: 69,
-			category:    database.ItemCategorySupport,
-			monsters: []testMonItemAmts{
+			UntypedItem: 69,
+			Category:    database.ItemCategorySupport,
+			Monsters: []testMonItemAmts{
 				{
-					index:   0,
-					monster: 203,
-					bribe:   14,
+					Index:   0,
+					Monster: 203,
+					Bribe:   14,
 				},
 				{
-					index:      2,
-					monster:    266,
-					dropCommon: 1,
+					Index:      2,
+					Monster:    266,
+					DropCommon: 1,
 				},
 				{
-					index:       4,
-					monster:     301,
-					stealCommon: 2,
+					Index:       4,
+					Monster:     301,
+					StealCommon: 2,
 				},
 			},
-			treasures: nil,
-			shops:     []int32{},
-			quests: map[int32]int32{
+			Treasures: nil,
+			Shops:     []int32{},
+			Quests: map[int32]int32{
 				38: 60,
 				68: 60,
 			},
-			blitzballPrizes: map[int32]int32{
+			BlitzballPrizes: map[int32]int32{
 				1: 1,
 			},
-			aeonLearnAbilities: map[int32]int32{
+			AeonLearnAbilities: map[int32]int32{
 				43: 5,
 			},
-			autoAbilities: map[string]int32{
+			AutoAbilities: map[string]int32{
 				"one mp cost":    20,
 				"break mp limit": 30,
 			},
-			mixes: []int32{6, 12, 26, 49, 62, 64},
+			Mixes: []int32{6, 12, 26, 49, 62, 64},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -94,24 +94,24 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(69, "three stars"),
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:   0,
-					monster: 203,
-					bribe:   14,
+					Index:   0,
+					Monster: 203,
+					Bribe:   14,
 				},
 				{
-					index:      2,
-					monster:    266,
-					dropCommon: 1,
+					Index:      2,
+					Monster:    266,
+					DropCommon: 1,
 				},
 				{
-					index:     3,
-					monster:   291,
-					stealRare: 1,
+					Index:     3,
+					Monster:   291,
+					StealRare: 1,
 				},
 			},
-			quests: nil,
+			Quests: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -130,33 +130,33 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(26, "fire gem"),
-			untypedItem: 26,
-			category:    database.ItemCategoryOffensive,
-			monsters: []testMonItemAmts{
+			UntypedItem: 26,
+			Category:    database.ItemCategoryOffensive,
+			Monsters: []testMonItemAmts{
 				{
-					index:   0,
-					monster: 109,
-					bribe:   14,
+					Index:   0,
+					Monster: 109,
+					Bribe:   14,
 				},
 				{
-					index:       1,
-					monster:     141,
-					stealCommon: 1,
-					stealRare:   2,
-					bribe:       10,
+					Index:       1,
+					Monster:     141,
+					StealCommon: 1,
+					StealRare:   2,
+					Bribe:       10,
 				},
 			},
-			treasures:       nil,
-			shops:           []int32{},
-			quests:          nil,
-			blitzballPrizes: nil,
-			aeonLearnAbilities: map[int32]int32{
+			Treasures:       nil,
+			Shops:           []int32{},
+			Quests:          nil,
+			BlitzballPrizes: nil,
+			AeonLearnAbilities: map[int32]int32{
 				77: 4,
 			},
-			autoAbilities: map[string]int32{
+			AutoAbilities: map[string]int32{
 				"fire eater": 20,
 			},
-			mixes: []int32{1, 6, 15, 31, 55, 63},
+			Mixes: []int32{1, 6, 15, 31, 55, 63},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -175,22 +175,22 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(2, "hi-potion"),
-			untypedItem: 2,
-			category:    database.ItemCategoryHealing,
-			monsters: []testMonItemAmts{
+			UntypedItem: 2,
+			Category:    database.ItemCategoryHealing,
+			Monsters: []testMonItemAmts{
 				{
-					index:     1,
-					monster:   39,
-					stealRare: 1,
-					bribe:     60,
+					Index:     1,
+					Monster:   39,
+					StealRare: 1,
+					Bribe:     60,
 				},
 				{
-					index:       36,
-					monster:     242,
-					stealCommon: 2,
+					Index:       36,
+					Monster:     242,
+					StealCommon: 2,
 				},
 			},
-			treasures: map[int32]int32{
+			Treasures: map[int32]int32{
 				4:   1,
 				33:  1,
 				73:  2,
@@ -198,17 +198,17 @@ func TestGetItem(t *testing.T) {
 				219: 4,
 				232: 8,
 			},
-			shops:  []int32{1, 7, 12, 20, 25, 28, 32, 36},
-			quests: nil,
-			blitzballPrizes: map[int32]int32{
+			Shops:  []int32{1, 7, 12, 20, 25, 28, 32, 36},
+			Quests: nil,
+			BlitzballPrizes: map[int32]int32{
 				2: 2,
 				5: 1,
 			},
-			aeonLearnAbilities: map[int32]int32{
+			AeonLearnAbilities: map[int32]int32{
 				45: 99,
 			},
-			autoAbilities: nil,
-			mixes:         []int32{34, 40, 51, 56, 61},
+			AutoAbilities: nil,
+			Mixes:         []int32{34, 40, 51, 56, 61},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -227,32 +227,32 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(64, "stamina tablet"),
-			untypedItem: 64,
-			category:    database.ItemCategorySupport,
-			monsters: []testMonItemAmts{
+			UntypedItem: 64,
+			Category:    database.ItemCategorySupport,
+			Monsters: []testMonItemAmts{
 				{
-					index:   0,
-					monster: 69,
-					other:   1,
+					Index:   0,
+					Monster: 69,
+					Other:   1,
 				},
 				{
-					index:   2,
-					monster: 156,
-					other:   1,
+					Index:   2,
+					Monster: 156,
+					Other:   1,
 				},
 			},
-			treasures: nil,
-			shops:     []int32{},
-			quests: map[int32]int32{
+			Treasures: nil,
+			Shops:     []int32{},
+			Quests: map[int32]int32{
 				29: 60,
 			},
-			blitzballPrizes:    nil,
-			aeonLearnAbilities: nil,
-			autoAbilities: map[string]int32{
+			BlitzballPrizes:    nil,
+			AeonLearnAbilities: nil,
+			AutoAbilities: map[string]int32{
 				"auto-potion": 4,
 				"hp stroll":   2,
 			},
-			mixes: []int32{42, 56, 60, 63, 64},
+			Mixes: []int32{42, 56, 60, 63, 64},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -271,25 +271,25 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(64, "stamina tablet"),
-			untypedItem: 64,
-			category:    database.ItemCategorySupport,
-			monsters: []testMonItemAmts{
+			UntypedItem: 64,
+			Category:    database.ItemCategorySupport,
+			Monsters: []testMonItemAmts{
 				{
-					index:       0,
-					monster:     195,
-					stealCommon: 1,
+					Index:       0,
+					Monster:     195,
+					StealCommon: 1,
 				},
 			},
-			treasures:          nil,
-			shops:              []int32{},
-			quests:             nil,
-			blitzballPrizes:    nil,
-			aeonLearnAbilities: nil,
-			autoAbilities: map[string]int32{
+			Treasures:          nil,
+			Shops:              []int32{},
+			Quests:             nil,
+			BlitzballPrizes:    nil,
+			AeonLearnAbilities: nil,
+			AutoAbilities: map[string]int32{
 				"auto-potion": 4,
 				"hp stroll":   2,
 			},
-			mixes: []int32{42, 56, 60, 63, 64},
+			Mixes: []int32{42, 56, 60, 63, 64},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -311,27 +311,27 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:   0,
-					monster: 242,
-					bribe:   60,
+					Index:   0,
+					Monster: 242,
+					Bribe:   60,
 				},
 				{
-					index:     1,
-					monster:   269,
-					stealRare: 1,
+					Index:     1,
+					Monster:   269,
+					StealRare: 1,
 				},
 				{
-					index:     2,
-					monster:   270,
-					stealRare: 1,
+					Index:     2,
+					Monster:   270,
+					StealRare: 1,
 				},
 			},
-			treasures:       nil,
-			shops:           []int32{},
-			quests:          nil,
-			blitzballPrizes: nil,
+			Treasures:       nil,
+			Shops:           []int32{},
+			Quests:          nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -353,24 +353,24 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:     0,
-					monster:   100,
-					stealRare: 1,
+					Index:     0,
+					Monster:   100,
+					StealRare: 1,
 				},
 				{
-					index:       1,
-					monster:     261,
-					stealCommon: 2,
+					Index:       1,
+					Monster:     261,
+					StealCommon: 2,
 				},
 			},
-			treasures: nil,
-			shops:     []int32{},
-			quests: map[int32]int32{
+			Treasures: nil,
+			Shops:     []int32{},
+			Quests: map[int32]int32{
 				16: 99,
 			},
-			blitzballPrizes: nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -392,13 +392,13 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
-			monsters:  []testMonItemAmts{},
-			treasures: nil,
-			shops:     []int32{},
-			quests: map[int32]int32{
+			Monsters:  []testMonItemAmts{},
+			Treasures: nil,
+			Shops:     []int32{},
+			Quests: map[int32]int32{
 				16: 99,
 			},
-			blitzballPrizes: nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -420,22 +420,22 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(55, "chocobo wing"),
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:     0,
-					monster:   100,
-					stealRare: 1,
+					Index:     0,
+					Monster:   100,
+					StealRare: 1,
 				},
 				{
-					index:       1,
-					monster:     261,
-					stealCommon: 2,
+					Index:       1,
+					Monster:     261,
+					StealCommon: 2,
 				},
 			},
-			treasures:       nil,
-			shops:           []int32{},
-			quests:          nil,
-			blitzballPrizes: nil,
+			Treasures:       nil,
+			Shops:           []int32{},
+			Quests:          nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -457,35 +457,35 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:     0,
-					monster:   39,
-					stealRare: 1,
-					bribe:     60,
+					Index:     0,
+					Monster:   39,
+					StealRare: 1,
+					Bribe:     60,
 				},
 				{
-					index:       8,
-					monster:     87,
-					stealCommon: 1,
+					Index:       8,
+					Monster:     87,
+					StealCommon: 1,
 				},
 				{
-					index:       18,
-					monster:     162,
-					stealCommon: 1,
-					stealRare:   2,
+					Index:       18,
+					Monster:     162,
+					StealCommon: 1,
+					StealRare:   2,
 				},
 			},
-			treasures: map[int32]int32{
+			Treasures: map[int32]int32{
 				4:   1,
 				103: 2,
 				219: 4,
 				224: 4,
 				232: 8,
 			},
-			shops:  []int32{24, 32, 33, 34},
-			quests: nil,
-			blitzballPrizes: map[int32]int32{
+			Shops:  []int32{24, 32, 33, 34},
+			Quests: nil,
+			BlitzballPrizes: map[int32]int32{
 				2: 2,
 				5: 1,
 			},
@@ -510,29 +510,29 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:     0,
-					monster:   39,
-					stealRare: 1,
-					bribe:     60,
+					Index:     0,
+					Monster:   39,
+					StealRare: 1,
+					Bribe:     60,
 				},
 				{
-					index:       8,
-					monster:     87,
-					stealCommon: 1,
+					Index:       8,
+					Monster:     87,
+					StealCommon: 1,
 				},
 				{
-					index:       18,
-					monster:     162,
-					stealCommon: 1,
-					stealRare:   2,
+					Index:       18,
+					Monster:     162,
+					StealCommon: 1,
+					StealRare:   2,
 				},
 			},
-			treasures: nil,
-			shops:     []int32{24, 32, 33, 34},
-			quests:    nil,
-			blitzballPrizes: map[int32]int32{
+			Treasures: nil,
+			Shops:     []int32{24, 32, 33, 34},
+			Quests:    nil,
+			BlitzballPrizes: map[int32]int32{
 				2: 2,
 				5: 1,
 			},
@@ -557,24 +557,24 @@ func TestGetItem(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(2, "hi-potion"),
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:       0,
-					monster:     239,
-					stealCommon: 1,
+					Index:       0,
+					Monster:     239,
+					StealCommon: 1,
 				},
 				{
-					index:       1,
-					monster:     242,
-					stealCommon: 2,
+					Index:       1,
+					Monster:     242,
+					StealCommon: 2,
 				},
 			},
-			treasures: map[int32]int32{
+			Treasures: map[int32]int32{
 				44: 1,
 			},
-			shops:           []int32{1, 5, 6, 7, 12, 20, 21, 27, 36},
-			quests:          nil,
-			blitzballPrizes: nil,
+			Shops:           []int32{1, 5, 6, 7, 12, 20, 21, 27, 36},
+			Quests:          nil,
+			BlitzballPrizes: nil,
 		},
 	}
 

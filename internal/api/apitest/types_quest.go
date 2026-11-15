@@ -8,8 +8,8 @@ import (
 type Quest struct {
 	TestGeneral
 	Unique
-	questType  database.QuestType
-	typedQuest string
+	QuestType  database.QuestType
+	TypedQuest string
 }
 
 func (e Quest) GetTestGeneral() TestGeneral {
@@ -19,6 +19,6 @@ func (e Quest) GetTestGeneral() TestGeneral {
 func (e Quest) Compare(test Test, got apitypes.Quest) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compare("quest type", string(e.questType), string(got.Type))
-	test.compPathAPIResource("typed quest", e.typedQuest, got.TypedQuest)
+	test.compare("quest type", string(e.QuestType), string(got.Type))
+	test.compPathAPIResource("typed quest", e.TypedQuest, got.TypedQuest)
 }

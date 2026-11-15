@@ -8,8 +8,8 @@ import (
 type RonsoRage struct {
 	TestGeneral
 	Unique
-	overdrive int32
-	monsters  []int32
+	Overdrive int32
+	Monsters  []int32
 }
 
 func (e RonsoRage) GetTestGeneral() TestGeneral {
@@ -19,6 +19,6 @@ func (e RonsoRage) GetTestGeneral() TestGeneral {
 func (e RonsoRage) Compare(test Test, got apitypes.RonsoRage) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, e.overdrive, got.Overdrive)
-	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.monsters, got.Monsters)
+	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, e.Overdrive, got.Overdrive)
+	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.Monsters, got.Monsters)
 }

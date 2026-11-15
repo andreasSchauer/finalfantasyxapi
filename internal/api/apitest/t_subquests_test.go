@@ -44,13 +44,13 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			Unique:          newExpUnique(5, "jormungand"),
-			untypedQuest:    15,
-			parentSidequest: 1,
-			completion: testQuestCompletion{
-				areas:  []int32{203},
-				reward: newTestResAmount[apiresource.Typed](50, 99),
+			UntypedQuest:    15,
+			ParentSidequest: 1,
+			Completion: testQuestCompletion{
+				Areas:  []int32{203},
+				Reward: newTestResAmount[apiresource.Typed](50, 99),
 			},
-			arenaCreation: h.GetInt32Ptr(5),
+			ArenaCreation: h.GetInt32Ptr(5),
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -62,13 +62,13 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			Unique:          newExpUnique(39, "ifrit - first win"),
-			untypedQuest:    49,
-			parentSidequest: 2,
-			completion: testQuestCompletion{
-				areas:  []int32{207},
-				reward: newTestResAmount[apiresource.Typed](3, 30),
+			UntypedQuest:    49,
+			ParentSidequest: 2,
+			Completion: testQuestCompletion{
+				Areas:  []int32{207},
+				Reward: newTestResAmount[apiresource.Typed](3, 30),
 			},
-			arenaCreation: nil,
+			ArenaCreation: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -80,13 +80,13 @@ func TestGetSubquest(t *testing.T) {
 				},
 			},
 			Unique:          newExpUnique(76, "first hunt after acquiring the airship"),
-			untypedQuest:    86,
-			parentSidequest: 6,
-			completion: testQuestCompletion{
-				areas:  []int32{142, 143},
-				reward: newTestResAmount[apiresource.Typed](98, 1),
+			UntypedQuest:    86,
+			ParentSidequest: 6,
+			Completion: testQuestCompletion{
+				Areas:  []int32{142, 143},
+				Reward: newTestResAmount[apiresource.Typed](98, 1),
 			},
-			arenaCreation: nil,
+			ArenaCreation: nil,
 		},
 	}
 

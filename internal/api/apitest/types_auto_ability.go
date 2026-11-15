@@ -8,12 +8,12 @@ import (
 type AutoAbility struct {
 	TestGeneral
 	Unique
-	monstersDrop     []int32
-	monstersItems    []testMonItemAmts
-	shopsPreAirship  []int32
-	shopsPostAirship []int32
-	treasures        []int32
-	equipmentTables  []int32
+	MonstersDrop     []int32
+	MonstersItems    []testMonItemAmts
+	ShopsPreAirship  []int32
+	ShopsPostAirship []int32
+	Treasures        []int32
+	EquipmentTables  []int32
 }
 
 func (e AutoAbility) GetTestGeneral() TestGeneral {
@@ -23,10 +23,10 @@ func (e AutoAbility) GetTestGeneral() TestGeneral {
 func (e AutoAbility) Compare(test Test, got apitypes.AutoAbility) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.checkResIDsInSlice("monsters drop", apilookups.E.Monsters.Endpoint, e.monstersDrop, got.MonstersDrop)
-	test.checkTestStructsInSlice("monsters items", e.monstersItems, got.MonstersItems)
-	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, e.treasures, got.Treasures)
-	test.checkResIDsInSlice("shops pre airship", apilookups.E.Shops.Endpoint, e.shopsPreAirship, got.ShopsPreAirship)
-	test.checkResIDsInSlice("shops post airship", apilookups.E.Shops.Endpoint, e.shopsPostAirship, got.ShopsPostAirship)
-	test.checkResIDsInSlice("equipment tables", apilookups.E.EquipmentTables.Endpoint, e.equipmentTables, got.EquipmentTables)
+	test.checkResIDsInSlice("monsters drop", apilookups.E.Monsters.Endpoint, e.MonstersDrop, got.MonstersDrop)
+	test.checkTestStructsInSlice("monsters items", e.MonstersItems, got.MonstersItems)
+	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, e.Treasures, got.Treasures)
+	test.checkResIDsInSlice("shops pre airship", apilookups.E.Shops.Endpoint, e.ShopsPreAirship, got.ShopsPreAirship)
+	test.checkResIDsInSlice("shops post airship", apilookups.E.Shops.Endpoint, e.ShopsPostAirship, got.ShopsPostAirship)
+	test.checkResIDsInSlice("equipment tables", apilookups.E.EquipmentTables.Endpoint, e.EquipmentTables, got.EquipmentTables)
 }

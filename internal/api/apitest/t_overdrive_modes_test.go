@@ -45,10 +45,10 @@ func TestGetOverdriveMode(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(14, "ally"),
-			description: "Charges on character's turn.",
-			modeType:    "per-action",
-			fillRate:    h.GetFloat32Ptr(0.03),
-			actionsAmount: map[string]int32{
+			Description: "Charges on character's turn.",
+			ModeType:    "per-action",
+			FillRate:    h.GetFloat32Ptr(0.03),
+			ActionsAmount: map[string]int32{
 				"tidus":   600,
 				"yuna":    500,
 				"wakka":   350,
@@ -67,10 +67,10 @@ func TestGetOverdriveMode(t *testing.T) {
 				},
 			},
 			Unique:   newExpUnique(3, "comrade"),
-			effect:   "The gauge fills when an ally takes damage.",
-			modeType: "formula",
-			fillRate: nil,
-			actionsAmount: map[string]int32{
+			Effect:   "The gauge fills when an ally takes damage.",
+			ModeType: "formula",
+			FillRate: nil,
+			ActionsAmount: map[string]int32{
 				"tidus": 300,
 				"wakka": 100,
 				"rikku": 100,
@@ -90,7 +90,7 @@ func TestGetOverdriveMode(t *testing.T) {
 				},
 			},
 			Unique:   newExpUnique(1, "stoic"),
-			modeType: "formula",
+			ModeType: "formula",
 		},
 	}
 

@@ -30,13 +30,13 @@ func TestGetSubmenu(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(1, "summon"),
-			topmenu:   h.GetInt32Ptr(1),
-			users:     []int32{6},
-			abilities: []int32{390, 391, 392, 393, 394, 395, 396, 397},
-			openedBy: &MenuOpen{
-				ability:           nil,
-				aeonCommand:       nil,
-				overdriveCommands: []int32{2},
+			Topmenu:   h.GetInt32Ptr(1),
+			Users:     []int32{6},
+			Abilities: []int32{390, 391, 392, 393, 394, 395, 396, 397},
+			OpenedBy: &MenuOpen{
+				Ability:           nil,
+				AeonCommand:       nil,
+				OverdriveCommands: []int32{2},
 			},
 		},
 		{
@@ -49,10 +49,10 @@ func TestGetSubmenu(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(3, "special"),
-			topmenu:   h.GetInt32Ptr(1),
-			users:     []int32{1, 3},
-			abilities: []int32{23, 27, 32, 33, 38, 41, 44},
-			openedBy:  nil,
+			Topmenu:   h.GetInt32Ptr(1),
+			Users:     []int32{1, 3},
+			Abilities: []int32{23, 27, 32, 33, 38, 41, 44},
+			OpenedBy:  nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -64,13 +64,13 @@ func TestGetSubmenu(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(9, "use"),
-			topmenu:   nil,
-			users:     []int32{1},
-			abilities: []int32{},
-			openedBy: &MenuOpen{
-				ability:           h.GetInt32Ptr(24),
-				aeonCommand:       nil,
-				overdriveCommands: nil,
+			Topmenu:   nil,
+			Users:     []int32{1},
+			Abilities: []int32{},
+			OpenedBy: &MenuOpen{
+				Ability:           h.GetInt32Ptr(24),
+				AeonCommand:       nil,
+				OverdriveCommands: nil,
 			},
 		},
 		{
@@ -83,13 +83,13 @@ func TestGetSubmenu(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(12, "gil yojimbo"),
-			topmenu:   h.GetInt32Ptr(1),
-			users:     []int32{19},
-			abilities: []int32{},
-			openedBy: &MenuOpen{
-				ability:           nil,
-				aeonCommand:       h.GetInt32Ptr(1),
-				overdriveCommands: nil,
+			Topmenu:   h.GetInt32Ptr(1),
+			Users:     []int32{19},
+			Abilities: []int32{},
+			OpenedBy: &MenuOpen{
+				Ability:           nil,
+				AeonCommand:       h.GetInt32Ptr(1),
+				OverdriveCommands: nil,
 			},
 		},
 	}

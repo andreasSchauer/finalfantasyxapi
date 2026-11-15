@@ -50,12 +50,12 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			Unique:       newExpUnique(2, "remiem temple"),
-			untypedQuest: 2,
-			completion: &testQuestCompletion{
-				areas:  []int32{207},
-				reward: newTestResAmount[apiresource.Typed](126, 1),
+			UntypedQuest: 2,
+			Completion: &testQuestCompletion{
+				Areas:  []int32{207},
+				Reward: newTestResAmount[apiresource.Typed](126, 1),
 			},
-			subquests: []int32{37, 39, 42, 44, 45, 49, 52},
+			Subquests: []int32{37, 39, 42, 44, 45, 49, 52},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -67,9 +67,9 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			Unique:       newExpUnique(4, "chocobo training"),
-			untypedQuest: 4,
-			completion:   nil,
-			subquests:    []int32{59, 62, 64, 65, 67},
+			UntypedQuest: 4,
+			Completion:   nil,
+			Subquests:    []int32{59, 62, 64, 65, 67},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -82,12 +82,12 @@ func TestGetSidequest(t *testing.T) {
 				},
 			},
 			Unique:       newExpUnique(9, "al bhed primers"),
-			untypedQuest: 9,
-			completion: &testQuestCompletion{
-				areas:  []int32{183, 180},
-				reward: newTestResAmount[apiresource.Typed](111, 99),
+			UntypedQuest: 9,
+			Completion: &testQuestCompletion{
+				Areas:  []int32{183, 180},
+				Reward: newTestResAmount[apiresource.Typed](111, 99),
 			},
-			subquests: []int32{},
+			Subquests: []int32{},
 		},
 	}
 

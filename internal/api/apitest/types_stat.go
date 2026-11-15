@@ -8,14 +8,14 @@ import (
 type Stat struct {
 	TestGeneral
 	Unique
-	spheres            []int32
-	autoAbilities      []int32
-	playerAbilities    []int32
-	overdriveAbilities []int32
-	itemAbilities      []int32
-	triggerCommands    []int32
-	statusConditions   []int32
-	properties         []int32
+	Spheres            []int32
+	AutoAbilities      []int32
+	PlayerAbilities    []int32
+	OverdriveAbilities []int32
+	ItemAbilities      []int32
+	TriggerCommands    []int32
+	StatusConditions   []int32
+	Properties         []int32
 }
 
 func (e Stat) GetTestGeneral() TestGeneral {
@@ -25,12 +25,12 @@ func (e Stat) GetTestGeneral() TestGeneral {
 func (e Stat) Compare(test Test, got apitypes.Stat) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.checkResIDsInSlice("spheres", apilookups.E.Spheres.Endpoint, e.spheres, got.Spheres)
-	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)
-	test.checkResIDsInSlice("overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.overdriveAbilities, got.OverdriveAbilities)
-	test.checkResIDsInSlice("item abilities", apilookups.E.ItemAbilities.Endpoint, e.itemAbilities, got.ItemAbilities)
-	test.checkResIDsInSlice("trigger commands", apilookups.E.TriggerCommands.Endpoint, e.triggerCommands, got.TriggerCommands)
-	test.checkResIDsInSlice("status conditions", apilookups.E.StatusConditions.Endpoint, e.statusConditions, got.StatusConditions)
-	test.checkResIDsInSlice("properties", apilookups.E.Properties.Endpoint, e.properties, got.Properties)
+	test.checkResIDsInSlice("spheres", apilookups.E.Spheres.Endpoint, e.Spheres, got.Spheres)
+	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice("overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice("item abilities", apilookups.E.ItemAbilities.Endpoint, e.ItemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice("trigger commands", apilookups.E.TriggerCommands.Endpoint, e.TriggerCommands, got.TriggerCommands)
+	test.checkResIDsInSlice("status conditions", apilookups.E.StatusConditions.Endpoint, e.StatusConditions, got.StatusConditions)
+	test.checkResIDsInSlice("properties", apilookups.E.Properties.Endpoint, e.Properties, got.Properties)
 }

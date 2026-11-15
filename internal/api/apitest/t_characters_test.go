@@ -36,20 +36,20 @@ func TestGetCharacter(t *testing.T) {
 				ID:   1,
 				Name: "tidus",
 			},
-			untypedUnit: 1,
-			area:        1,
-			agility: testAgilityParams{
-				agilityTier: 16,
-				tickSpeed:   6,
-				minICV:      h.GetInt32Ptr(17),
-				maxICV:      h.GetInt32Ptr(18),
+			UntypedUnit: 1,
+			Area:        1,
+			Agility: testAgilityParams{
+				AgilityTier: 16,
+				TickSpeed:   6,
+				MinICV:      h.GetInt32Ptr(17),
+				MaxICV:      h.GetInt32Ptr(18),
 			},
-			weaponType:       "sword",
-			celestialWeapon:  h.GetInt32Ptr(1),
-			celestialFormula: h.GetStrPtr(string(database.CelestialFormulaHpHigh)),
-			overdriveCommand: h.GetInt32Ptr(1),
-			characterClasses: []int32{1, 5},
-			baseStats: map[string]int32{
+			WeaponType:       "sword",
+			CelestialWeapon:  h.GetInt32Ptr(1),
+			CelestialFormula: h.GetStrPtr(string(database.CelestialFormulaHpHigh)),
+			OverdriveCommand: h.GetInt32Ptr(1),
+			CharacterClasses: []int32{1, 5},
+			BaseStats: map[string]int32{
 				"hp":            3120,
 				"mp":            152,
 				"strength":      54,
@@ -61,36 +61,36 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       29,
 				"accuracy":      29,
 			},
-			regenAmounts: []testRegenAmount{
+			RegenAmounts: []testRegenAmount{
 				{
-					index:    0,
-					ticks:    0,
-					healedHP: 100,
+					Index:    0,
+					Ticks:    0,
+					HealedHP: 100,
 				},
 				{
-					index:    4,
-					ticks:    4,
-					healedHP: 148,
+					Index:    4,
+					Ticks:    4,
+					HealedHP: 148,
 				},
 				{
-					index:    5,
-					ticks:    5,
-					healedHP: 160,
+					Index:    5,
+					Ticks:    5,
+					HealedHP: 160,
 				},
 				{
-					index:    7,
-					ticks:    15,
-					healedHP: 282,
+					Index:    7,
+					Ticks:    15,
+					HealedHP: 282,
 				},
 			},
-			defaultPlayerAbilities: []int32{},
-			stdSphereGrid: &SphereGrid{
-				playerAbilities: []int32{9, 10, 13, 22, 27, 38, 56, 59},
+			DefaultPlayerAbilities: []int32{},
+			StdSphereGrid: &SphereGrid{
+				PlayerAbilities: []int32{9, 10, 13, 22, 27, 38, 56, 59},
 			},
-			expSphereGrid: &SphereGrid{
-				playerAbilities: []int32{10, 22, 25, 57, 58, 59},
+			ExpSphereGrid: &SphereGrid{
+				PlayerAbilities: []int32{10, 22, 25, 57, 58, 59},
 			},
-			overdriveModes: map[string]int32{
+			OverdriveModes: map[string]int32{
 				"warrior":   150,
 				"victim":    120,
 				"coward":    600,
@@ -114,20 +114,20 @@ func TestGetCharacter(t *testing.T) {
 				ID:   5,
 				Name: "kimahri",
 			},
-			untypedUnit: 5,
-			area:        42,
-			agility: testAgilityParams{
-				agilityTier: 6,
-				tickSpeed:   16,
-				minICV:      h.GetInt32Ptr(46),
-				maxICV:      h.GetInt32Ptr(48),
+			UntypedUnit: 5,
+			Area:        42,
+			Agility: testAgilityParams{
+				AgilityTier: 6,
+				TickSpeed:   16,
+				MinICV:      h.GetInt32Ptr(46),
+				MaxICV:      h.GetInt32Ptr(48),
 			},
-			weaponType:       "spear",
-			celestialWeapon:  h.GetInt32Ptr(5),
-			celestialFormula: h.GetStrPtr(string(database.CelestialFormulaHpHigh)),
-			overdriveCommand: h.GetInt32Ptr(5),
-			characterClasses: []int32{1, 9},
-			baseStats: map[string]int32{
+			WeaponType:       "spear",
+			CelestialWeapon:  h.GetInt32Ptr(5),
+			CelestialFormula: h.GetStrPtr(string(database.CelestialFormulaHpHigh)),
+			OverdriveCommand: h.GetInt32Ptr(5),
+			CharacterClasses: []int32{1, 9},
+			BaseStats: map[string]int32{
 				"hp":            644,
 				"mp":            78,
 				"strength":      16,
@@ -139,36 +139,36 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       5,
 				"accuracy":      5,
 			},
-			regenAmounts: []testRegenAmount{
+			RegenAmounts: []testRegenAmount{
 				{
-					index:    0,
-					ticks:    0,
-					healedHP: 100,
+					Index:    0,
+					Ticks:    0,
+					HealedHP: 100,
 				},
 				{
-					index:    1,
-					ticks:    1,
-					healedHP: 102,
+					Index:    1,
+					Ticks:    1,
+					HealedHP: 102,
 				},
 				{
-					index:    3,
-					ticks:    3,
-					healedHP: 107,
+					Index:    3,
+					Ticks:    3,
+					HealedHP: 107,
 				},
 				{
-					index:    9,
-					ticks:    30,
-					healedHP: 175,
+					Index:    9,
+					Ticks:    30,
+					HealedHP: 175,
 				},
 			},
-			defaultPlayerAbilities: []int32{33},
-			stdSphereGrid: &SphereGrid{
-				playerAbilities: []int32{12, 32, 33, 52, 87},
+			DefaultPlayerAbilities: []int32{33},
+			StdSphereGrid: &SphereGrid{
+				PlayerAbilities: []int32{12, 32, 33, 52, 87},
 			},
-			expSphereGrid: &SphereGrid{
-				playerAbilities: []int32{12, 32, 33, 52},
+			ExpSphereGrid: &SphereGrid{
+				PlayerAbilities: []int32{12, 32, 33, 52},
 			},
-			overdriveModes: map[string]int32{
+			OverdriveModes: map[string]int32{
 				"comrade":   100,
 				"healer":    100,
 				"tactician": 60,
@@ -194,20 +194,20 @@ func TestGetCharacter(t *testing.T) {
 				ID:   4,
 				Name: "lulu",
 			},
-			untypedUnit: 4,
-			area:        36,
-			agility: testAgilityParams{
-				agilityTier: 12,
-				tickSpeed:   10,
-				minICV:      h.GetInt32Ptr(26),
-				maxICV:      h.GetInt32Ptr(30),
+			UntypedUnit: 4,
+			Area:        36,
+			Agility: testAgilityParams{
+				AgilityTier: 12,
+				TickSpeed:   10,
+				MinICV:      h.GetInt32Ptr(26),
+				MaxICV:      h.GetInt32Ptr(30),
 			},
-			weaponType:       "doll",
-			celestialWeapon:  h.GetInt32Ptr(4),
-			celestialFormula: h.GetStrPtr(string(database.CelestialFormulaMpHigh)),
-			overdriveCommand: h.GetInt32Ptr(4),
-			characterClasses: []int32{1, 8},
-			baseStats: map[string]int32{
+			WeaponType:       "doll",
+			CelestialWeapon:  h.GetInt32Ptr(4),
+			CelestialFormula: h.GetStrPtr(string(database.CelestialFormulaMpHigh)),
+			OverdriveCommand: h.GetInt32Ptr(4),
+			CharacterClasses: []int32{1, 8},
+			BaseStats: map[string]int32{
 				"hp":            2580,
 				"mp":            332,
 				"strength":      15,
@@ -219,14 +219,14 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       83,
 				"accuracy":      13,
 			},
-			defaultPlayerAbilities: []int32{69, 70, 71, 72},
-			stdSphereGrid: &SphereGrid{
-				playerAbilities: []int32{21, 29, 43, 69, 74, 78, 83, 86},
+			DefaultPlayerAbilities: []int32{69, 70, 71, 72},
+			StdSphereGrid: &SphereGrid{
+				PlayerAbilities: []int32{21, 29, 43, 69, 74, 78, 83, 86},
 			},
-			expSphereGrid: &SphereGrid{
-				playerAbilities: []int32{29, 30, 43, 70, 74, 75, 79, 81, 87},
+			ExpSphereGrid: &SphereGrid{
+				PlayerAbilities: []int32{29, 30, 43, 70, 74, 75, 79, 81, 87},
 			},
-			overdriveModes: map[string]int32{
+			OverdriveModes: map[string]int32{
 				"comrade":   100,
 				"victim":    130,
 				"tactician": 75,
@@ -250,20 +250,20 @@ func TestGetCharacter(t *testing.T) {
 				ID:   8,
 				Name: "seymour",
 			},
-			untypedUnit: 8,
-			area:        102,
-			agility: testAgilityParams{
-				agilityTier: 12,
-				tickSpeed:   10,
-				minICV:      h.GetInt32Ptr(28),
-				maxICV:      h.GetInt32Ptr(30),
+			UntypedUnit: 8,
+			Area:        102,
+			Agility: testAgilityParams{
+				AgilityTier: 12,
+				TickSpeed:   10,
+				MinICV:      h.GetInt32Ptr(28),
+				MaxICV:      h.GetInt32Ptr(30),
 			},
-			weaponType:       "seymour-staff",
-			celestialWeapon:  nil,
-			celestialFormula: nil,
-			overdriveCommand: nil,
-			characterClasses: []int32{12},
-			baseStats: map[string]int32{
+			WeaponType:       "seymour-staff",
+			CelestialWeapon:  nil,
+			CelestialFormula: nil,
+			OverdriveCommand: nil,
+			CharacterClasses: []int32{12},
+			BaseStats: map[string]int32{
 				"hp":            1200,
 				"mp":            999,
 				"strength":      20,
@@ -275,10 +275,10 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       10,
 				"accuracy":      10,
 			},
-			defaultPlayerAbilities: []int32{45, 46, 48, 69, 71, 74, 75, 76},
-			stdSphereGrid:          nil,
-			expSphereGrid:          nil,
-			overdriveModes:         nil,
+			DefaultPlayerAbilities: []int32{45, 46, 48, 69, 71, 74, 75, 76},
+			StdSphereGrid:          nil,
+			ExpSphereGrid:          nil,
+			OverdriveModes:         nil,
 		},
 	}
 

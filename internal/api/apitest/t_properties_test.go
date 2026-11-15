@@ -29,8 +29,8 @@ func TestGetProperty(t *testing.T) {
 				},
 			},
 			Unique:        newExpUnique(1, "armored"),
-			autoAbilities: []int32{},
-			monsters:      []int32{5, 29, 79, 107, 197, 277, 292},
+			AutoAbilities: []int32{},
+			Monsters:      []int32{5, 29, 79, 107, 197, 277, 292},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -43,8 +43,8 @@ func TestGetProperty(t *testing.T) {
 				},
 			},
 			Unique:        newExpUnique(4, "piercing"),
-			autoAbilities: []int32{2},
-			monsters:      []int32{},
+			AutoAbilities: []int32{2},
+			Monsters:      []int32{},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -57,8 +57,8 @@ func TestGetProperty(t *testing.T) {
 				},
 			},
 			Unique:        newExpUnique(11, "delayproof"),
-			autoAbilities: []int32{54},
-			monsters:      []int32{5, 33, 70, 136, 193, 235, 262, 282, 307},
+			AutoAbilities: []int32{54},
+			Monsters:      []int32{5, 33, 70, 136, 193, 235, 262, 282, 307},
 		},
 	}
 

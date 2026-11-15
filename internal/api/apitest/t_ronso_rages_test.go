@@ -27,8 +27,8 @@ func TestGetRonsoRage(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(4, "self destruct"),
-			overdrive: 39,
-			monsters:  []int32{38, 109, 167, 176, 245},
+			Overdrive: 39,
+			Monsters:  []int32{38, 109, 167, 176, 245},
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -39,8 +39,8 @@ func TestGetRonsoRage(t *testing.T) {
 				},
 			},
 			Unique:    newExpUnique(8, "doom"),
-			overdrive: 43,
-			monsters:  []int32{154, 167, 210},
+			Overdrive: 43,
+			Monsters:  []int32{154, 167, 210},
 		},
 	}
 

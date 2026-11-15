@@ -8,16 +8,16 @@ import (
 type Element struct {
 	TestGeneral
 	Unique
-	statusProtection   *int32
-	autoAbilities      []int32
-	playerAbilities    []int32
-	overdriveAbilities []int32
-	itemAbilities      []int32
-	enemyAbilities     []int32
-	monstersWeak       []int32
-	monstersHalved     []int32
-	monstersImmune     []int32
-	monstersAbsorb     []int32
+	StatusProtection   *int32
+	AutoAbilities      []int32
+	PlayerAbilities    []int32
+	OverdriveAbilities []int32
+	ItemAbilities      []int32
+	EnemyAbilities     []int32
+	MonstersWeak       []int32
+	MonstersHalved     []int32
+	MonstersImmune     []int32
+	MonstersAbsorb     []int32
 }
 
 func (e Element) GetTestGeneral() TestGeneral {
@@ -27,14 +27,14 @@ func (e Element) GetTestGeneral() TestGeneral {
 func (e Element) Compare(test Test, got apitypes.Element) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compIDAPIResourcePtrs("status protection", apilookups.E.StatusConditions.Endpoint, e.statusProtection, got.StatusProtection)
-	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)
-	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)
-	test.checkResIDsInSlice("overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.overdriveAbilities, got.OverdriveAbilities)
-	test.checkResIDsInSlice("item abilities", apilookups.E.ItemAbilities.Endpoint, e.itemAbilities, got.ItemAbilities)
-	test.checkResIDsInSlice("enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.enemyAbilities, got.EnemyAbilities)
-	test.checkResIDsInSlice("monsters weak", apilookups.E.Monsters.Endpoint, e.monstersWeak, got.MonstersWeak)
-	test.checkResIDsInSlice("monsters halved", apilookups.E.Monsters.Endpoint, e.monstersHalved, got.MonstersHalved)
-	test.checkResIDsInSlice("monsters immune", apilookups.E.Monsters.Endpoint, e.monstersImmune, got.MonstersImmune)
-	test.checkResIDsInSlice("monsters absorb", apilookups.E.Monsters.Endpoint, e.monstersAbsorb, got.MonstersAbsorb)
+	test.compIDAPIResourcePtrs("status protection", apilookups.E.StatusConditions.Endpoint, e.StatusProtection, got.StatusProtection)
+	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
+	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice("overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice("item abilities", apilookups.E.ItemAbilities.Endpoint, e.ItemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice("enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.EnemyAbilities, got.EnemyAbilities)
+	test.checkResIDsInSlice("monsters weak", apilookups.E.Monsters.Endpoint, e.MonstersWeak, got.MonstersWeak)
+	test.checkResIDsInSlice("monsters halved", apilookups.E.Monsters.Endpoint, e.MonstersHalved, got.MonstersHalved)
+	test.checkResIDsInSlice("monsters immune", apilookups.E.Monsters.Endpoint, e.MonstersImmune, got.MonstersImmune)
+	test.checkResIDsInSlice("monsters absorb", apilookups.E.Monsters.Endpoint, e.MonstersAbsorb, got.MonstersAbsorb)
 }

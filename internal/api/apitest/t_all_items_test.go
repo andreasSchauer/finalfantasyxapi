@@ -27,9 +27,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(4, "mega-potion"),
-			typedItem: "/items/4",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/4",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        true,
 				Treasures:       true,
 				Shops:           false,
@@ -44,9 +44,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(111, "underdog's secret"),
-			typedItem: "/items/111",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/111",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        true,
 				Treasures:       false,
 				Shops:           false,
@@ -61,9 +61,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(130, "saturn sigil"),
-			typedItem: "/key-items/18",
-			itemType:  database.ItemTypeKeyItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/key-items/18",
+			ItemType:  database.ItemTypeKeyItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        false,
 				Treasures:       false,
 				Shops:           false,
@@ -78,9 +78,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(2, "hi-potion"),
-			typedItem: "/items/2",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/2",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        true,
 				Treasures:       true,
 				Shops:           true,
@@ -95,9 +95,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(2, "hi-potion"),
-			typedItem: "/items/2",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/2",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        true,
 				Treasures:       false,
 				Shops:           true,
@@ -112,9 +112,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(2, "hi-potion"),
-			typedItem: "/items/2",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/2",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        true,
 				Treasures:       true,
 				Shops:           true,
@@ -129,9 +129,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
-			typedItem: "/items/55",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/55",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        true,
 				Treasures:       false,
 				Shops:           false,
@@ -146,9 +146,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
-			typedItem: "/items/55",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/55",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        true,
 				Treasures:       false,
 				Shops:           false,
@@ -163,9 +163,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
-			typedItem: "/items/55",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/55",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        true,
 				Treasures:       false,
 				Shops:           false,
@@ -180,9 +180,9 @@ func TestGetAllItem(t *testing.T) {
 				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
-			typedItem: "/items/55",
-			itemType:  database.ItemTypeItem,
-			obtainableFrom: apitypes.ObtainableFrom{
+			TypedItem: "/items/55",
+			ItemType:  database.ItemTypeItem,
+			ObtainableFrom: apitypes.ObtainableFrom{
 				Monsters:        false,
 				Treasures:       false,
 				Shops:           false,

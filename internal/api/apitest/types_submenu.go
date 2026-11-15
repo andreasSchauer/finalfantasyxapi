@@ -8,10 +8,10 @@ import (
 type Submenu struct {
 	TestGeneral
 	Unique
-	topmenu   *int32
-	users     []int32
-	abilities []int32
-	openedBy  *MenuOpen
+	Topmenu   *int32
+	Users     []int32
+	Abilities []int32
+	OpenedBy  *MenuOpen
 }
 
 func (e Submenu) GetTestGeneral() TestGeneral {
@@ -21,21 +21,21 @@ func (e Submenu) GetTestGeneral() TestGeneral {
 func (e Submenu) Compare(test Test, got apitypes.Submenu) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.topmenu, got.Topmenu)
-	test.checkResIDsInSlice("users", apilookups.E.CharacterClasses.Endpoint, e.users, got.Users)
-	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, e.abilities, got.Abilities)
-	test.compTestStructPtrs("opened by", e.openedBy, got.OpenedBy)
+	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.Topmenu, got.Topmenu)
+	test.checkResIDsInSlice("users", apilookups.E.CharacterClasses.Endpoint, e.Users, got.Users)
+	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, e.Abilities, got.Abilities)
+	test.compTestStructPtrs("opened by", e.OpenedBy, got.OpenedBy)
 }
 
 type MenuOpen struct {
-	ability           *int32
-	aeonCommand       *int32
-	overdriveCommands []int32
+	Ability           *int32
+	AeonCommand       *int32
+	OverdriveCommands []int32
 }
 
 func (e MenuOpen) Compare(test Test, fieldName string, got apitypes.MenuOpen) {
 	test.T.Helper()
-	test.compIDAPIResourcePtrs(fieldName+" - ability", apilookups.E.Abilities.Endpoint, e.ability, got.Ability)
-	test.compIDAPIResourcePtrs(fieldName+" - aeon command", apilookups.E.AeonCommands.Endpoint, e.aeonCommand, got.AeonCommand)
-	test.checkResIDsInSlice(fieldName+" - overdrive commands", apilookups.E.OverdriveCommands.Endpoint, e.overdriveCommands, got.OverdriveCommands)
+	test.compIDAPIResourcePtrs(fieldName+" - ability", apilookups.E.Abilities.Endpoint, e.Ability, got.Ability)
+	test.compIDAPIResourcePtrs(fieldName+" - aeon command", apilookups.E.AeonCommands.Endpoint, e.AeonCommand, got.AeonCommand)
+	test.checkResIDsInSlice(fieldName+" - overdrive commands", apilookups.E.OverdriveCommands.Endpoint, e.OverdriveCommands, got.OverdriveCommands)
 }

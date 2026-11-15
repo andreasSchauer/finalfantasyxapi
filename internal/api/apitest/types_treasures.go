@@ -10,14 +10,14 @@ import (
 type Treasure struct {
 	TestGeneral
 	IDOnly
-	area            int32
-	availability    database.AvailabilityType
-	isAnimaTreasure bool
-	treasureType    database.TreasureType
-	lootType        database.LootType
-	gilAmount       *int32
-	items           []testResAmount[apiresource.Typed]
-	equipment       *testFoundEquipment
+	Area            int32
+	Availability    database.AvailabilityType
+	IsAnimaTreasure bool
+	TreasureType    database.TreasureType
+	LootType        database.LootType
+	GilAmount       *int32
+	Items           []testResAmount[apiresource.Typed]
+	Equipment       *testFoundEquipment
 }
 
 func (e Treasure) GetTestGeneral() TestGeneral {
@@ -27,20 +27,20 @@ func (e Treasure) GetTestGeneral() TestGeneral {
 func (e Treasure) Compare(test Test, got apitypes.Treasure) {
 	test.T.Helper()
 	test.compareExpIDOnly(e.IDOnly, got.ID)
-	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
-	test.compare("availability", string(e.availability), got.Availability)
-	test.compare("is anima treasure", e.isAnimaTreasure, got.IsAnimaTreasure)
-	test.compare("treasure type", string(e.treasureType), got.TreasureType)
-	test.compare("loot type", string(e.lootType), got.LootType)
-	test.compare("gil amount", e.gilAmount, got.GilAmount)
-	test.compTestStructSlices("items", e.items, got.Items)
-	test.compTestStructPtrs("equipment", e.equipment, got.Equipment)
+	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.Area, got.Area)
+	test.compare("availability", string(e.Availability), got.Availability)
+	test.compare("is anima treasure", e.IsAnimaTreasure, got.IsAnimaTreasure)
+	test.compare("treasure type", string(e.TreasureType), got.TreasureType)
+	test.compare("loot type", string(e.LootType), got.LootType)
+	test.compare("gil amount", e.GilAmount, got.GilAmount)
+	test.compTestStructSlices("items", e.Items, got.Items)
+	test.compTestStructPtrs("equipment", e.Equipment, got.Equipment)
 }
 
 type testFoundEquipment struct {
-	equipmentName    int32
-	abilities        []int32
-	emptySlotsAmount int32
+	EquipmentName    int32
+	Abilities        []int32
+	EmptySlotsAmount int32
 }
 
 func (e testFoundEquipment) Compare(test Test, fieldName string, got apitypes.FoundEquipment) {
@@ -48,7 +48,7 @@ func (e testFoundEquipment) Compare(test Test, fieldName string, got apitypes.Fo
 	enEndpoint := apilookups.E.Equipment.Endpoint
 	aaEndpoint := apilookups.E.AutoAbilities.Endpoint
 
-	test.compIDAPIResource(fieldName+" - equipment name", enEndpoint, e.equipmentName, got.EquipmentName)
-	test.checkResIDsInSlice(fieldName+" - abilities", aaEndpoint, e.abilities, got.Abilities)
-	test.compare(fieldName+" - empty slots amount", e.emptySlotsAmount, got.EmptySlotsAmount)
+	test.compIDAPIResource(fieldName+" - equipment name", enEndpoint, e.EquipmentName, got.EquipmentName)
+	test.checkResIDsInSlice(fieldName+" - abilities", aaEndpoint, e.Abilities, got.Abilities)
+	test.compare(fieldName+" - empty slots amount", e.EmptySlotsAmount, got.EmptySlotsAmount)
 }

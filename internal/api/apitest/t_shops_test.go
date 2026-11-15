@@ -48,69 +48,69 @@ func TestGetShop(t *testing.T) {
 				},
 			},
 			IDOnly:   newExpIDOnly(2),
-			area:     47,
-			category: database.ShopCategoryStandard,
-			preAirship: &testSubShop{
-				items: []testShopItem{},
-				equipment: []testShopEquipment{
+			Area:     47,
+			Category: database.ShopCategoryStandard,
+			PreAirship: &testSubShop{
+				Items: []testShopItem{},
+				Equipment: []testShopEquipment{
 					{
-						index: 1,
-						equipment: testFoundEquipment{
-							equipmentName:    332,
-							abilities:        []int32{1},
-							emptySlotsAmount: 0,
+						Index: 1,
+						Equipment: testFoundEquipment{
+							EquipmentName:    332,
+							Abilities:        []int32{1},
+							EmptySlotsAmount: 0,
 						},
-						price: 250,
+						Price: 250,
 					},
 					{
-						index: 4,
-						equipment: testFoundEquipment{
-							equipmentName:    335,
-							abilities:        []int32{2, 1},
-							emptySlotsAmount: 0,
+						Index: 4,
+						Equipment: testFoundEquipment{
+							EquipmentName:    335,
+							Abilities:        []int32{2, 1},
+							EmptySlotsAmount: 0,
 						},
-						price: 375,
+						Price: 375,
 					},
 					{
-						index: 8,
-						equipment: testFoundEquipment{
-							equipmentName:    1034,
-							abilities:        []int32{111},
-							emptySlotsAmount: 0,
+						Index: 8,
+						Equipment: testFoundEquipment{
+							EquipmentName:    1034,
+							Abilities:        []int32{111},
+							EmptySlotsAmount: 0,
 						},
-						price: 150,
+						Price: 150,
 					},
 				},
 			},
-			postAirship: &testSubShop{
-				items: []testShopItem{},
-				equipment: []testShopEquipment{
+			PostAirship: &testSubShop{
+				Items: []testShopItem{},
+				Equipment: []testShopEquipment{
 					{
-						index: 5,
-						equipment: testFoundEquipment{
-							equipmentName:    336,
-							abilities:        []int32{2, 1},
-							emptySlotsAmount: 2,
+						Index: 5,
+						Equipment: testFoundEquipment{
+							EquipmentName:    336,
+							Abilities:        []int32{2, 1},
+							EmptySlotsAmount: 2,
 						},
-						price: 1875,
+						Price: 1875,
 					},
 					{
-						index: 6,
-						equipment: testFoundEquipment{
-							equipmentName:    337,
-							abilities:        []int32{2, 1},
-							emptySlotsAmount: 2,
+						Index: 6,
+						Equipment: testFoundEquipment{
+							EquipmentName:    337,
+							Abilities:        []int32{2, 1},
+							EmptySlotsAmount: 2,
 						},
-						price: 1875,
+						Price: 1875,
 					},
 					{
-						index: 11,
-						equipment: testFoundEquipment{
-							equipmentName:    940,
-							abilities:        []int32{111},
-							emptySlotsAmount: 3,
+						Index: 11,
+						Equipment: testFoundEquipment{
+							EquipmentName:    940,
+							Abilities:        []int32{111},
+							EmptySlotsAmount: 3,
 						},
-						price: 2250,
+						Price: 2250,
 					},
 				},
 			},
@@ -128,60 +128,60 @@ func TestGetShop(t *testing.T) {
 				},
 			},
 			IDOnly:   newExpIDOnly(16),
-			area:     121,
-			category: database.ShopCategoryStandard,
-			preAirship: &testSubShop{
-				items: []testShopItem{
+			Area:     121,
+			Category: database.ShopCategoryStandard,
+			PreAirship: &testSubShop{
+				Items: []testShopItem{
 					newTestShopItem(0, 1, 100),
 					newTestShopItem(1, 9, 200),
 					newTestShopItem(3, 13, 100),
 					newTestShopItem(4, 14, 100),
 				},
-				equipment: []testShopEquipment{
+				Equipment: []testShopEquipment{
 					{
-						index: 0,
-						equipment: testFoundEquipment{
-							equipmentName:    331,
-							abilities:        []int32{30, 1},
-							emptySlotsAmount: 0,
+						Index: 0,
+						Equipment: testFoundEquipment{
+							EquipmentName:    331,
+							Abilities:        []int32{30, 1},
+							EmptySlotsAmount: 0,
 						},
-						price: 2250,
+						Price: 2250,
 					},
 					{
-						index: 3,
-						equipment: testFoundEquipment{
-							equipmentName:    272,
-							abilities:        []int32{2, 5, 8},
-							emptySlotsAmount: 0,
+						Index: 3,
+						Equipment: testFoundEquipment{
+							EquipmentName:    272,
+							Abilities:        []int32{2, 5, 8},
+							EmptySlotsAmount: 0,
 						},
-						price: 8700,
+						Price: 8700,
 					},
 				},
 			},
-			postAirship: &testSubShop{
-				items: []testShopItem{
+			PostAirship: &testSubShop{
+				Items: []testShopItem{
 					newTestShopItem(1, 9, 115),
 					newTestShopItem(4, 14, 57),
 					newTestShopItem(5, 12, 57),
 				},
-				equipment: []testShopEquipment{
+				Equipment: []testShopEquipment{
 					{
-						index: 2,
-						equipment: testFoundEquipment{
-							equipmentName:    347,
-							abilities:        []int32{30, 8},
-							emptySlotsAmount: 0,
+						Index: 2,
+						Equipment: testFoundEquipment{
+							EquipmentName:    347,
+							Abilities:        []int32{30, 8},
+							EmptySlotsAmount: 0,
 						},
-						price: 2156,
+						Price: 2156,
 					},
 					{
-						index: 4,
-						equipment: testFoundEquipment{
-							equipmentName:    329,
-							abilities:        []int32{2, 9},
-							emptySlotsAmount: 0,
+						Index: 4,
+						Equipment: testFoundEquipment{
+							EquipmentName:    329,
+							Abilities:        []int32{2, 9},
+							EmptySlotsAmount: 0,
 						},
-						price: 3536,
+						Price: 3536,
 					},
 				},
 			},
@@ -199,36 +199,36 @@ func TestGetShop(t *testing.T) {
 				},
 			},
 			IDOnly:   newExpIDOnly(31),
-			area:     200,
-			category: database.ShopCategoryTravelAgency,
-			preAirship: &testSubShop{
-				items: []testShopItem{
+			Area:     200,
+			Category: database.ShopCategoryTravelAgency,
+			PreAirship: &testSubShop{
+				Items: []testShopItem{
 					newTestShopItem(1, 2, 500),
 					newTestShopItem(4, 13, 50),
 					newTestShopItem(9, 19, 100),
 				},
-				equipment: []testShopEquipment{
+				Equipment: []testShopEquipment{
 					{
-						index: 0,
-						equipment: testFoundEquipment{
-							equipmentName:    395,
-							abilities:        []int32{35, 33},
-							emptySlotsAmount: 2,
+						Index: 0,
+						Equipment: testFoundEquipment{
+							EquipmentName:    395,
+							Abilities:        []int32{35, 33},
+							EmptySlotsAmount: 2,
 						},
-						price: 38625,
+						Price: 38625,
 					},
 					{
-						index: 4,
-						equipment: testFoundEquipment{
-							equipmentName:    765,
-							abilities:        []int32{76, 70},
-							emptySlotsAmount: 0,
+						Index: 4,
+						Equipment: testFoundEquipment{
+							EquipmentName:    765,
+							Abilities:        []int32{76, 70},
+							EmptySlotsAmount: 0,
 						},
-						price: 6825,
+						Price: 6825,
 					},
 				},
 			},
-			postAirship: nil,
+			PostAirship: nil,
 		},
 	}
 

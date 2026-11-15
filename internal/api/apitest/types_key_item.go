@@ -9,13 +9,13 @@ import (
 type KeyItem struct {
 	TestGeneral
 	Unique
-	untypedItem     int32
-	category        database.KeyItemCategory
-	celestialWeapon *int32
-	primer          *int32
-	areas           []int32
-	treasures       []int32
-	quests          []int32
+	UntypedItem     int32
+	Category        database.KeyItemCategory
+	CelestialWeapon *int32
+	Primer          *int32
+	Areas           []int32
+	Treasures       []int32
+	Quests          []int32
 }
 
 func (e KeyItem) GetTestGeneral() TestGeneral {
@@ -25,11 +25,11 @@ func (e KeyItem) GetTestGeneral() TestGeneral {
 func (e KeyItem) Compare(test Test, got apitypes.KeyItem) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, e.untypedItem, got.UntypedItem)
-	test.compare("category", string(e.category), got.Category)
-	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, e.celestialWeapon, got.CelestialWeapon)
-	test.compIDAPIResourcePtrs("primer", apilookups.E.Primers.Endpoint, e.primer, got.Primer)
-	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
-	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, e.treasures, got.Treasures)
-	test.checkResIDsInSlice("quests", apilookups.E.Quests.Endpoint, e.quests, got.Quests)
+	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, e.UntypedItem, got.UntypedItem)
+	test.compare("category", string(e.Category), got.Category)
+	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, e.CelestialWeapon, got.CelestialWeapon)
+	test.compIDAPIResourcePtrs("primer", apilookups.E.Primers.Endpoint, e.Primer, got.Primer)
+	test.checkResIDsInSlice("areas", apilookups.E.Areas.Endpoint, e.Areas, got.Areas)
+	test.checkResIDsInSlice("treasures", apilookups.E.Treasures.Endpoint, e.Treasures, got.Treasures)
+	test.checkResIDsInSlice("quests", apilookups.E.Quests.Endpoint, e.Quests, got.Quests)
 }

@@ -9,13 +9,13 @@ import (
 type Ability struct {
 	TestGeneral
 	NameVer
-	rank               *int32
-	appearsInHelpBar   bool
-	canCopyCat         bool
-	abilityType        database.AbilityType
-	typedAbility       string
-	monsters           []int32
-	battleInteractions []BattleInteraction
+	Rank               *int32
+	AppearsInHelpBar   bool
+	CanCopyCat         bool
+	AbilityType        database.AbilityType
+	TypedAbility       string
+	Monsters           []int32
+	BattleInteractions []BattleInteraction
 }
 
 func (e Ability) GetTestGeneral() TestGeneral {
@@ -25,25 +25,25 @@ func (e Ability) GetTestGeneral() TestGeneral {
 func (e Ability) Compare(test Test, got apitypes.Ability) {
 	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
-	test.compare("ability type", string(e.abilityType), string(got.Type))
-	test.compare("rank", e.rank, got.Rank)
-	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
-	test.compare("can copycat", e.canCopyCat, got.CanCopycat)
+	test.compare("ability type", string(e.AbilityType), string(got.Type))
+	test.compare("rank", e.Rank, got.Rank)
+	test.compare("appears in help bar", e.AppearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", e.CanCopyCat, got.CanCopycat)
 
-	test.compPathAPIResource("typed ability", e.typedAbility, got.TypedAbility)
-	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.monsters, got.Monsters)
-	test.compTestStructSlices("battle interactions", e.battleInteractions, got.BattleInteractions)
+	test.compPathAPIResource("typed ability", e.TypedAbility, got.TypedAbility)
+	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.Monsters, got.Monsters)
+	test.compTestStructSlices("battle interactions", e.BattleInteractions, got.BattleInteractions)
 }
 
 type EnemyAbility struct {
 	TestGeneral
 	NameVer
-	rank               *int32
-	appearsInHelpBar   bool
-	canCopyCat         bool
-	untypedAbility     int32
-	monsters           []int32
-	battleInteractions []BattleInteraction
+	Rank               *int32
+	AppearsInHelpBar   bool
+	CanCopyCat         bool
+	UntypedAbility     int32
+	Monsters           []int32
+	BattleInteractions []BattleInteraction
 }
 
 func (e EnemyAbility) GetTestGeneral() TestGeneral {
@@ -53,25 +53,25 @@ func (e EnemyAbility) GetTestGeneral() TestGeneral {
 func (e EnemyAbility) Compare(test Test, got apitypes.EnemyAbility) {
 	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
-	test.compare("rank", e.rank, got.Rank)
-	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
-	test.compare("can copycat", e.canCopyCat, got.CanCopycat)
-	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.untypedAbility, got.UntypedAbility)
-	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.monsters, got.Monsters)
-	test.compTestStructSlices("battle interactions", e.battleInteractions, got.BattleInteractions)
+	test.compare("rank", e.Rank, got.Rank)
+	test.compare("appears in help bar", e.AppearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", e.CanCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.UntypedAbility, got.UntypedAbility)
+	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.Monsters, got.Monsters)
+	test.compTestStructSlices("battle interactions", e.BattleInteractions, got.BattleInteractions)
 }
 
 type ItemAbility struct {
 	TestGeneral
 	Unique
-	rank                *int32
-	appearsInHelpBar    bool
-	canCopyCat          bool
-	untypedAbility      int32
-	item                int32
-	category            database.ItemCategory
+	Rank                *int32
+	AppearsInHelpBar    bool
+	CanCopyCat          bool
+	UntypedAbility      int32
+	Item                int32
+	Category            database.ItemCategory
 	CanUseOutsideBattle bool
-	battleInteractions  []BattleInteraction
+	BattleInteractions  []BattleInteraction
 }
 
 func (e ItemAbility) GetTestGeneral() TestGeneral {
@@ -81,30 +81,30 @@ func (e ItemAbility) GetTestGeneral() TestGeneral {
 func (e ItemAbility) Compare(test Test, got apitypes.ItemAbility) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compare("rank", e.rank, got.Rank)
-	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
-	test.compare("can copycat", e.canCopyCat, got.CanCopycat)
-	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.untypedAbility, got.UntypedAbility)
-	test.compIDAPIResource("item", apilookups.E.Items.Endpoint, e.item, got.Item)
-	test.compare("category", string(e.category), got.Category)
+	test.compare("rank", e.Rank, got.Rank)
+	test.compare("appears in help bar", e.AppearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", e.CanCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.UntypedAbility, got.UntypedAbility)
+	test.compIDAPIResource("item", apilookups.E.Items.Endpoint, e.Item, got.Item)
+	test.compare("category", string(e.Category), got.Category)
 	test.compare("can use outside battle", e.CanUseOutsideBattle, got.CanUseOutsideBattle)
-	test.compTestStructSlices("battle interactions", e.battleInteractions, got.BattleInteractions)
+	test.compTestStructSlices("battle interactions", e.BattleInteractions, got.BattleInteractions)
 }
 
 type PlayerAbility struct {
 	TestGeneral
 	NameVer
-	rank               *int32
-	appearsInHelpBar   bool
-	canCopyCat         bool
-	untypedAbility     int32
-	topmenu            *int32
-	submenu            *int32
-	openSubmenu        *int32
-	stdChar            *int32
-	expChar            *int32
-	monsters           []int32
-	battleInteractions []BattleInteraction
+	Rank               *int32
+	AppearsInHelpBar   bool
+	CanCopyCat         bool
+	UntypedAbility     int32
+	Topmenu            *int32
+	Submenu            *int32
+	OpenSubmenu        *int32
+	StdChar            *int32
+	ExpChar            *int32
+	Monsters           []int32
+	BattleInteractions []BattleInteraction
 }
 
 func (e PlayerAbility) GetTestGeneral() TestGeneral {
@@ -114,27 +114,27 @@ func (e PlayerAbility) GetTestGeneral() TestGeneral {
 func (e PlayerAbility) Compare(test Test, got apitypes.PlayerAbility) {
 	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
-	test.compare("rank", e.rank, got.Rank)
-	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
-	test.compare("can copycat", e.canCopyCat, got.CanCopycat)
-	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.untypedAbility, got.UntypedAbility)
-	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.topmenu, got.Topmenu)
-	test.compIDAPIResourcePtrs("submenu", apilookups.E.Submenus.Endpoint, e.submenu, got.Submenu)
-	test.compIDAPIResourcePtrs("open submenu", apilookups.E.Submenus.Endpoint, e.openSubmenu, got.OpenSubmenu)
-	test.compIDAPIResourcePtrs("std sg char", apilookups.E.Characters.Endpoint, e.stdChar, got.StandardGridCharacter)
-	test.compIDAPIResourcePtrs("exp sg char", apilookups.E.Characters.Endpoint, e.expChar, got.ExpertGridCharacter)
-	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.monsters, got.Monsters)
-	test.compTestStructSlices("battle interactions", e.battleInteractions, got.BattleInteractions)
+	test.compare("rank", e.Rank, got.Rank)
+	test.compare("appears in help bar", e.AppearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", e.CanCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.UntypedAbility, got.UntypedAbility)
+	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.Topmenu, got.Topmenu)
+	test.compIDAPIResourcePtrs("submenu", apilookups.E.Submenus.Endpoint, e.Submenu, got.Submenu)
+	test.compIDAPIResourcePtrs("open submenu", apilookups.E.Submenus.Endpoint, e.OpenSubmenu, got.OpenSubmenu)
+	test.compIDAPIResourcePtrs("std sg char", apilookups.E.Characters.Endpoint, e.StdChar, got.StandardGridCharacter)
+	test.compIDAPIResourcePtrs("exp sg char", apilookups.E.Characters.Endpoint, e.ExpChar, got.ExpertGridCharacter)
+	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.Monsters, got.Monsters)
+	test.compTestStructSlices("battle interactions", e.BattleInteractions, got.BattleInteractions)
 }
 
 type OverdriveAbility struct {
 	TestGeneral
 	NameVer
-	rank               *int32
-	untypedAbility     int32
-	overdriveCommand   *int32
-	overdrives         []int32
-	battleInteractions []BattleInteraction
+	Rank               *int32
+	UntypedAbility     int32
+	OverdriveCommand   *int32
+	Overdrives         []int32
+	BattleInteractions []BattleInteraction
 }
 
 func (e OverdriveAbility) GetTestGeneral() TestGeneral {
@@ -144,24 +144,24 @@ func (e OverdriveAbility) GetTestGeneral() TestGeneral {
 func (e OverdriveAbility) Compare(test Test, got apitypes.OverdriveAbility) {
 	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
-	test.compare("rank", e.rank, got.Rank)
-	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.untypedAbility, got.UntypedAbility)
-	test.compIDAPIResourcePtrs("overdrive command", apilookups.E.OverdriveCommands.Endpoint, e.overdriveCommand, got.OverdriveCommand)
-	test.checkResIDsInSlice("overdrives", apilookups.E.Overdrives.Endpoint, e.overdrives, got.Overdrives)
-	test.compTestStructSlices("battle interactions", e.battleInteractions, got.BattleInteractions)
+	test.compare("rank", e.Rank, got.Rank)
+	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.UntypedAbility, got.UntypedAbility)
+	test.compIDAPIResourcePtrs("overdrive command", apilookups.E.OverdriveCommands.Endpoint, e.OverdriveCommand, got.OverdriveCommand)
+	test.checkResIDsInSlice("overdrives", apilookups.E.Overdrives.Endpoint, e.Overdrives, got.Overdrives)
+	test.compTestStructSlices("battle interactions", e.BattleInteractions, got.BattleInteractions)
 }
 
 type MiscAbility struct {
 	TestGeneral
 	NameVer
-	rank               *int32
-	appearsInHelpBar   bool
-	canCopyCat         bool
-	untypedAbility     int32
-	topmenu            *int32
-	submenu            *int32
-	openSubmenu        *int32
-	battleInteractions []BattleInteraction
+	Rank               *int32
+	AppearsInHelpBar   bool
+	CanCopyCat         bool
+	UntypedAbility     int32
+	Topmenu            *int32
+	Submenu            *int32
+	OpenSubmenu        *int32
+	BattleInteractions []BattleInteraction
 }
 
 func (e MiscAbility) GetTestGeneral() TestGeneral {
@@ -171,27 +171,27 @@ func (e MiscAbility) GetTestGeneral() TestGeneral {
 func (e MiscAbility) Compare(test Test, got apitypes.MiscAbility) {
 	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
-	test.compare("rank", e.rank, got.Rank)
-	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
-	test.compare("can copycat", e.canCopyCat, got.CanCopycat)
-	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.untypedAbility, got.UntypedAbility)
-	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.topmenu, got.Topmenu)
-	test.compIDAPIResourcePtrs("submenu", apilookups.E.Submenus.Endpoint, e.submenu, got.Submenu)
-	test.compIDAPIResourcePtrs("open submenu", apilookups.E.Submenus.Endpoint, e.openSubmenu, got.OpenSubmenu)
-	test.compTestStructSlices("battle interactions", e.battleInteractions, got.BattleInteractions)
+	test.compare("rank", e.Rank, got.Rank)
+	test.compare("appears in help bar", e.AppearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", e.CanCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.UntypedAbility, got.UntypedAbility)
+	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.Topmenu, got.Topmenu)
+	test.compIDAPIResourcePtrs("submenu", apilookups.E.Submenus.Endpoint, e.Submenu, got.Submenu)
+	test.compIDAPIResourcePtrs("open submenu", apilookups.E.Submenus.Endpoint, e.OpenSubmenu, got.OpenSubmenu)
+	test.compTestStructSlices("battle interactions", e.BattleInteractions, got.BattleInteractions)
 }
 
 type TriggerCommand struct {
 	TestGeneral
 	NameVer
-	rank               *int32
-	appearsInHelpBar   bool
-	canCopyCat         bool
-	untypedAbility     int32
-	topmenu            *int32
-	usedBy             []int32
-	monsterFormations  []int32
-	battleInteractions []BattleInteraction
+	Rank               *int32
+	AppearsInHelpBar   bool
+	CanCopyCat         bool
+	UntypedAbility     int32
+	Topmenu            *int32
+	UsedBy             []int32
+	MonsterFormations  []int32
+	BattleInteractions []BattleInteraction
 }
 
 func (e TriggerCommand) GetTestGeneral() TestGeneral {
@@ -201,12 +201,12 @@ func (e TriggerCommand) GetTestGeneral() TestGeneral {
 func (e TriggerCommand) Compare(test Test, got apitypes.TriggerCommand) {
 	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
-	test.compare("rank", e.rank, got.Rank)
-	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
-	test.compare("can copycat", e.canCopyCat, got.CanCopycat)
-	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.untypedAbility, got.UntypedAbility)
-	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.topmenu, got.Topmenu)
-	test.checkResIDsInSlice("used by", apilookups.E.CharacterClasses.Endpoint, e.usedBy, got.UsedBy)
-	test.checkResIDsInSlice("monster-formations", apilookups.E.MonsterFormations.Endpoint, e.monsterFormations, got.MonsterFormations)
-	test.compTestStructSlices("battle interactions", e.battleInteractions, got.BattleInteractions)
+	test.compare("rank", e.Rank, got.Rank)
+	test.compare("appears in help bar", e.AppearsInHelpBar, got.AppearsInHelpBar)
+	test.compare("can copycat", e.CanCopyCat, got.CanCopycat)
+	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.UntypedAbility, got.UntypedAbility)
+	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.Topmenu, got.Topmenu)
+	test.checkResIDsInSlice("used by", apilookups.E.CharacterClasses.Endpoint, e.UsedBy, got.UsedBy)
+	test.checkResIDsInSlice("monster-formations", apilookups.E.MonsterFormations.Endpoint, e.MonsterFormations, got.MonsterFormations)
+	test.compTestStructSlices("battle interactions", e.BattleInteractions, got.BattleInteractions)
 }

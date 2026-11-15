@@ -7,11 +7,11 @@ import (
 type OverdriveMode struct {
 	TestGeneral
 	Unique
-	description   string
-	effect        string
-	modeType      string
-	fillRate      *float32
-	actionsAmount map[string]int32
+	Description   string
+	Effect        string
+	ModeType      string
+	FillRate      *float32
+	ActionsAmount map[string]int32
 }
 
 func (e OverdriveMode) GetTestGeneral() TestGeneral {
@@ -21,9 +21,9 @@ func (e OverdriveMode) GetTestGeneral() TestGeneral {
 func (e OverdriveMode) Compare(test Test, got apitypes.OverdriveMode) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compare("description", e.description, got.Description)
-	test.compare("effect", e.effect, got.Effect)
-	test.compare("type", e.modeType, got.Type)
-	test.compare("fill rate", e.fillRate, got.FillRate)
-	test.checkResAmts("actions", e.actionsAmount, got.Actions)
+	test.compare("description", e.Description, got.Description)
+	test.compare("effect", e.Effect, got.Effect)
+	test.compare("type", e.ModeType, got.Type)
+	test.compare("fill rate", e.FillRate, got.FillRate)
+	test.checkResAmts("actions", e.ActionsAmount, got.Actions)
 }

@@ -8,13 +8,13 @@ import (
 type Sphere struct {
 	TestGeneral
 	Unique
-	item            int32
-	createdNode     *apitypes.CreatedNode
-	monsters        []testMonItemAmts
-	treasures       map[int32]int32
-	shops           []int32
-	quests          map[int32]int32
-	blitzballPrizes map[int32]int32
+	Item            int32
+	CreatedNode     *apitypes.CreatedNode
+	Monsters        []testMonItemAmts
+	Treasures       map[int32]int32
+	Shops           []int32
+	Quests          map[int32]int32
+	BlitzballPrizes map[int32]int32
 }
 
 func (e Sphere) GetTestGeneral() TestGeneral {
@@ -24,11 +24,11 @@ func (e Sphere) GetTestGeneral() TestGeneral {
 func (e Sphere) Compare(test Test, got apitypes.Sphere) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compIDAPIResource("item", apilookups.E.Items.Endpoint, e.item, got.Item)
-	test.compStructPtrs("created node", e.createdNode, got.CreatedNode)
-	test.checkTestStructsInSlice("monsters", e.monsters, got.Monsters)
-	test.checkResAmtsID("treasures", e.treasures, got.Treasures)
-	test.checkResIDsInSlice("shops", apilookups.E.Shops.Endpoint, e.shops, got.Shops)
-	test.checkResAmtsID("quests", e.quests, got.Quests)
-	test.checkResAmtsID("blitzball prizes", e.blitzballPrizes, got.BlitzballPrizes)
+	test.compIDAPIResource("item", apilookups.E.Items.Endpoint, e.Item, got.Item)
+	test.compStructPtrs("created node", e.CreatedNode, got.CreatedNode)
+	test.checkTestStructsInSlice("monsters", e.Monsters, got.Monsters)
+	test.checkResAmtsID("treasures", e.Treasures, got.Treasures)
+	test.checkResIDsInSlice("shops", apilookups.E.Shops.Endpoint, e.Shops, got.Shops)
+	test.checkResAmtsID("quests", e.Quests, got.Quests)
+	test.checkResAmtsID("blitzball prizes", e.BlitzballPrizes, got.BlitzballPrizes)
 }

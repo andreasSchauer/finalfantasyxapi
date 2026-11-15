@@ -30,8 +30,8 @@ func TestGetQuest(t *testing.T) {
 				ID:   1,
 				Name: "monster arena",
 			},
-			questType:  database.QuestTypeSidequest,
-			typedQuest: "/sidequests/1",
+			QuestType:  database.QuestTypeSidequest,
+			TypedQuest: "/sidequests/1",
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -44,8 +44,8 @@ func TestGetQuest(t *testing.T) {
 				ID:   47,
 				Name: "valefor - first win",
 			},
-			questType:  database.QuestTypeSubquest,
-			typedQuest: "/subquests/37",
+			QuestType:  database.QuestTypeSubquest,
+			TypedQuest: "/subquests/37",
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -60,8 +60,8 @@ func TestGetQuest(t *testing.T) {
 				ID:   80,
 				Name: "6 or 7 guardian spheres",
 			},
-			questType:  database.QuestTypeSubquest,
-			typedQuest: "/subquests/70",
+			QuestType:  database.QuestTypeSubquest,
+			TypedQuest: "/subquests/70",
 		},
 	}
 

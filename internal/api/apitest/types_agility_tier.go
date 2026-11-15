@@ -7,13 +7,13 @@ import (
 type AgilityTier struct {
 	TestGeneral
 	IDOnly
-	fromAgility int32
-	toAgility   int32
-	tickSpeed   int32
-	monMaxICV   *int32
-	monMinICV   *int32
-	charMaxICV  *int32
-	charMinICVs []apitypes.AgilitySubtier
+	FromAgility int32
+	ToAgility   int32
+	TickSpeed   int32
+	MonMaxICV   *int32
+	MonMinICV   *int32
+	CharMaxICV  *int32
+	CharMinICVs []apitypes.AgilitySubtier
 }
 
 func (e AgilityTier) GetTestGeneral() TestGeneral {
@@ -23,11 +23,11 @@ func (e AgilityTier) GetTestGeneral() TestGeneral {
 func (e AgilityTier) Compare(test Test, got apitypes.AgilityTier) {
 	test.T.Helper()
 	test.compareExpIDOnly(e.IDOnly, got.ID)
-	test.compare("from agility", e.fromAgility, got.FromAgility)
-	test.compare("to agility", e.toAgility, got.ToAgility)
-	test.compare("tick speed", e.tickSpeed, got.TickSpeed)
-	test.compare("mon max icv", e.monMaxICV, got.MonMaxICV)
-	test.compare("mon min icv", e.monMinICV, got.MonMinICV)
-	test.compare("char max icv", e.charMaxICV, got.CharMaxICV)
-	test.compStructSlices("char min icvs", e.charMinICVs, got.CharMinICVs)
+	test.compare("from agility", e.FromAgility, got.FromAgility)
+	test.compare("to agility", e.ToAgility, got.ToAgility)
+	test.compare("tick speed", e.TickSpeed, got.TickSpeed)
+	test.compare("mon max icv", e.MonMaxICV, got.MonMaxICV)
+	test.compare("mon min icv", e.MonMinICV, got.MonMinICV)
+	test.compare("char max icv", e.CharMaxICV, got.CharMaxICV)
+	test.compStructSlices("char min icvs", e.CharMinICVs, got.CharMinICVs)
 }

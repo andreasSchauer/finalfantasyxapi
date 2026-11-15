@@ -8,13 +8,13 @@ import (
 type CelestialWeapon struct {
 	TestGeneral
 	Unique
-	equipment     int32
-	autoAbilities []int32
-	crest         int32
-	sigil         int32
-	wpnTreasure   int32
-	crestTreasure int32
-	sigilQuest    int32
+	Equipment     int32
+	AutoAbilities []int32
+	Crest         int32
+	Sigil         int32
+	WpnTreasure   int32
+	CrestTreasure int32
+	SigilQuest    int32
 }
 
 func (e CelestialWeapon) GetTestGeneral() TestGeneral {
@@ -24,11 +24,11 @@ func (e CelestialWeapon) GetTestGeneral() TestGeneral {
 func (e CelestialWeapon) Compare(test Test, got apitypes.CelestialWeapon) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compIDAPIResource("equipment", apilookups.E.Equipment.Endpoint, e.equipment, got.Equipment)
-	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)
-	test.compIDAPIResource("crest", apilookups.E.KeyItems.Endpoint, e.crest, got.Crest)
-	test.compIDAPIResource("sigil", apilookups.E.KeyItems.Endpoint, e.sigil, got.Sigil)
-	test.compIDAPIResource("weapon treasure", apilookups.E.Treasures.Endpoint, e.wpnTreasure, got.WpnTreasure)
-	test.compIDAPIResource("crest treasure", apilookups.E.Treasures.Endpoint, e.crestTreasure, got.CrestTreasure)
-	test.compIDAPIResource("sigil quest", apilookups.E.Quests.Endpoint, e.sigilQuest, got.SigilQuest)
+	test.compIDAPIResource("equipment", apilookups.E.Equipment.Endpoint, e.Equipment, got.Equipment)
+	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
+	test.compIDAPIResource("crest", apilookups.E.KeyItems.Endpoint, e.Crest, got.Crest)
+	test.compIDAPIResource("sigil", apilookups.E.KeyItems.Endpoint, e.Sigil, got.Sigil)
+	test.compIDAPIResource("weapon treasure", apilookups.E.Treasures.Endpoint, e.WpnTreasure, got.WpnTreasure)
+	test.compIDAPIResource("crest treasure", apilookups.E.Treasures.Endpoint, e.CrestTreasure, got.CrestTreasure)
+	test.compIDAPIResource("sigil quest", apilookups.E.Quests.Endpoint, e.SigilQuest, got.SigilQuest)
 }

@@ -33,26 +33,26 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(4, "ability sphere"),
-			item:        73,
-			createdNode: nil,
-			monsters: []testMonItemAmts{
+			Item:        73,
+			CreatedNode: nil,
+			Monsters: []testMonItemAmts{
 				{
-					index:      3,
-					monster:    96,
-					dropCommon: 1,
-					dropRare:   1,
+					Index:      3,
+					Monster:    96,
+					DropCommon: 1,
+					DropRare:   1,
 				},
 				{
-					index:      9,
-					monster:    123,
-					dropCommon: 1,
-					dropRare:   1,
+					Index:      9,
+					Monster:    123,
+					DropCommon: 1,
+					DropRare:   1,
 				},
 			},
-			treasures:       nil,
-			shops:           []int32{},
-			quests:          nil,
-			blitzballPrizes: nil,
+			Treasures:       nil,
+			Shops:           []int32{},
+			Quests:          nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -68,40 +68,40 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(16, "hp sphere"),
-			item:   85,
-			createdNode: &apitypes.CreatedNode{
+			Item:   85,
+			CreatedNode: &apitypes.CreatedNode{
 				Node:  "hp",
 				Value: 300,
 			},
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:    0,
-					monster:  28,
-					dropRare: 1,
+					Index:    0,
+					Monster:  28,
+					DropRare: 1,
 				},
 				{
-					index:      1,
-					monster:    196,
-					dropCommon: 1,
-					dropRare:   1,
+					Index:      1,
+					Monster:    196,
+					DropCommon: 1,
+					DropRare:   1,
 				},
 				{
-					index:      2,
-					monster:    282,
-					dropCommon: 1,
+					Index:      2,
+					Monster:    282,
+					DropCommon: 1,
 				},
 			},
-			treasures: map[int32]int32{
+			Treasures: map[int32]int32{
 				78:  1,
 				253: 1,
 				288: 1,
 				313: 1,
 			},
-			shops: []int32{},
-			quests: map[int32]int32{
+			Shops: []int32{},
+			Quests: map[int32]int32{
 				92: 3,
 			},
-			blitzballPrizes: nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -117,28 +117,28 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique: newExpUnique(16, "hp sphere"),
-			item:   85,
-			createdNode: &apitypes.CreatedNode{
+			Item:   85,
+			CreatedNode: &apitypes.CreatedNode{
 				Node:  "hp",
 				Value: 300,
 			},
-			monsters: []testMonItemAmts{
+			Monsters: []testMonItemAmts{
 				{
-					index:    0,
-					monster:  28,
-					dropRare: 1,
+					Index:    0,
+					Monster:  28,
+					DropRare: 1,
 				},
 			},
-			treasures: map[int32]int32{
+			Treasures: map[int32]int32{
 				78:  1,
 				288: 1,
 				313: 1,
 			},
-			shops: []int32{},
-			quests: map[int32]int32{
+			Shops: []int32{},
+			Quests: map[int32]int32{
 				92: 3,
 			},
-			blitzballPrizes: nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -154,13 +154,13 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique:          newExpUnique(26, "clear sphere"),
-			item:            95,
-			createdNode:     nil,
-			monsters:        []testMonItemAmts{},
-			treasures:       nil,
-			shops:           []int32{33},
-			quests:          nil,
-			blitzballPrizes: nil,
+			Item:            95,
+			CreatedNode:     nil,
+			Monsters:        []testMonItemAmts{},
+			Treasures:       nil,
+			Shops:           []int32{33},
+			Quests:          nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -176,13 +176,13 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique:          newExpUnique(26, "clear sphere"),
-			item:            95,
-			createdNode:     nil,
-			monsters:        []testMonItemAmts{},
-			treasures:       nil,
-			shops:           []int32{33},
-			quests:          nil,
-			blitzballPrizes: nil,
+			Item:            95,
+			CreatedNode:     nil,
+			Monsters:        []testMonItemAmts{},
+			Treasures:       nil,
+			Shops:           []int32{33},
+			Quests:          nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -198,22 +198,22 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(2, "mana sphere"),
-			item:        71,
-			createdNode: nil,
-			monsters: []testMonItemAmts{
+			Item:        71,
+			CreatedNode: nil,
+			Monsters: []testMonItemAmts{
 				{
-					index:      0,
-					monster:    107,
-					dropCommon: 1,
-					dropRare:   1,
+					Index:      0,
+					Monster:    107,
+					DropCommon: 1,
+					DropRare:   1,
 				},
 			},
-			treasures: map[int32]int32{
+			Treasures: map[int32]int32{
 				53: 2,
 			},
-			shops:           []int32{},
-			quests:          nil,
-			blitzballPrizes: nil,
+			Shops:           []int32{},
+			Quests:          nil,
+			BlitzballPrizes: nil,
 		},
 		{
 			TestGeneral: TestGeneral{
@@ -229,28 +229,28 @@ func TestGetSphere(t *testing.T) {
 				},
 			},
 			Unique:      newExpUnique(2, "mana sphere"),
-			item:        71,
-			createdNode: nil,
-			monsters: []testMonItemAmts{
+			Item:        71,
+			CreatedNode: nil,
+			Monsters: []testMonItemAmts{
 				{
-					index:      1,
-					monster:    205,
-					dropCommon: 1,
-					dropRare:   1,
+					Index:      1,
+					Monster:    205,
+					DropCommon: 1,
+					DropRare:   1,
 				},
 				{
-					index:      5,
-					monster:    240,
-					dropCommon: 2,
-					dropRare:   3,
+					Index:      5,
+					Monster:    240,
+					DropCommon: 2,
+					DropRare:   3,
 				},
 			},
-			treasures: nil,
-			shops:     []int32{},
-			quests: map[int32]int32{
+			Treasures: nil,
+			Shops:     []int32{},
+			Quests: map[int32]int32{
 				58: 10,
 			},
-			blitzballPrizes: nil,
+			BlitzballPrizes: nil,
 		},
 	}
 

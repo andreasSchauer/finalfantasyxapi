@@ -7,7 +7,7 @@ import (
 type TurnOrderResponse struct {
 	TestGeneral
 	servicetypes.TurnOrderResponse
-	testTurnOrder []testBattleTurn
+	TestTurnOrder []testBattleTurn
 }
 
 func (e TurnOrderResponse) GetTestGeneral() TestGeneral {
@@ -23,25 +23,25 @@ func (e TurnOrderResponse) Compare(test Test, got servicetypes.TurnOrderResponse
 	test.compare("rng", e.RNG, got.RNG)
 	test.compStructSlices("player party", e.PlayerParty, got.PlayerParty)
 	test.compStructSlices("opponent party", got.OpponentParty, got.OpponentParty)
-	test.checkTestStructsInSlice("turn order", e.testTurnOrder, got.TurnOrder)
+	test.checkTestStructsInSlice("turn order", e.TestTurnOrder, got.TurnOrder)
 }
 
 type testBattleTurn struct {
-	index       int
-	turn        int32
-	currentTick int32
-	name        string
-	party       servicetypes.BattleParty
+	Index       int
+	Turn        int32
+	CurrentTick int32
+	Name        string
+	Party       servicetypes.BattleParty
 }
 
 func (e testBattleTurn) GetIndex() int {
-	return e.index
+	return e.Index
 }
 
 func (e testBattleTurn) Compare(test Test, fieldName string, got servicetypes.BattleTurn) {
 	test.T.Helper()
-	test.compare(fieldName+" turn", e.turn, got.Turn)
-	test.compare(fieldName+" current tick", e.currentTick, got.CurrentTick)
-	test.compare(fieldName+" name", e.name, got.Name)
-	test.compare(fieldName+" party", string(e.party), string(got.Party))
+	test.compare(fieldName+" turn", e.Turn, got.Turn)
+	test.compare(fieldName+" current tick", e.CurrentTick, got.CurrentTick)
+	test.compare(fieldName+" name", e.Name, got.Name)
+	test.compare(fieldName+" party", string(e.Party), string(got.Party))
 }

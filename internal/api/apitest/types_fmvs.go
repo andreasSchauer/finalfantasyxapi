@@ -8,8 +8,8 @@ import (
 type FMV struct {
 	TestGeneral
 	Unique
-	area int32
-	song *int32
+	Area int32
+	Song *int32
 }
 
 func (e FMV) GetTestGeneral() TestGeneral {
@@ -19,6 +19,6 @@ func (e FMV) GetTestGeneral() TestGeneral {
 func (e FMV) Compare(test Test, got apitypes.FMV) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
-	test.compIDAPIResourcePtrs("song", apilookups.E.Songs.Endpoint, e.song, got.Song)
+	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.Area, got.Area)
+	test.compIDAPIResourcePtrs("song", apilookups.E.Songs.Endpoint, e.Song, got.Song)
 }

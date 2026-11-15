@@ -7,13 +7,13 @@ import (
 )
 
 type testElemResist struct {
-	element  int32
-	affinity database.ElementalAffinity
+	Element  int32
+	Affinity database.ElementalAffinity
 }
 
 func (e testElemResist) Compare(test Test, fieldName string, got apitypes.ElementalResist) {
 	test.T.Helper()
 
-	test.compIDAPIResource(fieldName+" - elements", apilookups.E.Elements.Endpoint, e.element, got.Element)
-	test.compare(fieldName+" - affinities", string(e.affinity), got.Affinity)
+	test.compIDAPIResource(fieldName+" - elements", apilookups.E.Elements.Endpoint, e.Element, got.Element)
+	test.compare(fieldName+" - affinities", string(e.Affinity), got.Affinity)
 }

@@ -8,10 +8,10 @@ import (
 type StatusCondition struct {
 	TestGeneral
 	Unique
-	autoAbilities      []int32
-	inflictedBy        *testStatusInfliction
-	removedBy          *testStatusRemoval
-	monstersResistance []int32
+	AutoAbilities      []int32
+	InflictedBy        *testStatusInfliction
+	RemovedBy          *testStatusRemoval
+	MonstersResistance []int32
 }
 
 func (e StatusCondition) GetTestGeneral() TestGeneral {
@@ -21,42 +21,42 @@ func (e StatusCondition) GetTestGeneral() TestGeneral {
 func (e StatusCondition) Compare(test Test, got apitypes.StatusCondition) {
 	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
-	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)
-	test.compTestStructPtrs("inflicted by", e.inflictedBy, got.InflictedBy)
-	test.compTestStructPtrs("removed by", e.removedBy, got.RemovedBy)
-	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.monstersResistance, got.MonstersResistance)
+	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
+	test.compTestStructPtrs("inflicted by", e.InflictedBy, got.InflictedBy)
+	test.compTestStructPtrs("removed by", e.RemovedBy, got.RemovedBy)
+	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.MonstersResistance, got.MonstersResistance)
 }
 
 type testStatusInfliction struct {
-	playerAbilities    []int32
-	overdriveAbilities []int32
-	itemAbilities      []int32
-	miscAbilities      []int32
-	enemyAbilities     []int32
+	PlayerAbilities    []int32
+	OverdriveAbilities []int32
+	ItemAbilities      []int32
+	MiscAbilities      []int32
+	EnemyAbilities     []int32
 }
 
 func (e testStatusInfliction) Compare(test Test, fieldName string, got apitypes.StatusInfliction) {
 	test.T.Helper()
-	test.checkResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)
-	test.checkResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.overdriveAbilities, got.OverdriveAbilities)
-	test.checkResIDsInSlice(fieldName+" - item abilities", apilookups.E.ItemAbilities.Endpoint, e.itemAbilities, got.ItemAbilities)
-	test.checkResIDsInSlice(fieldName+" - misc abilities", apilookups.E.MiscAbilities.Endpoint, e.miscAbilities, got.MiscAbilities)
-	test.checkResIDsInSlice(fieldName+" - enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.enemyAbilities, got.EnemyAbilities)
+	test.checkResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice(fieldName+" - item abilities", apilookups.E.ItemAbilities.Endpoint, e.ItemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice(fieldName+" - misc abilities", apilookups.E.MiscAbilities.Endpoint, e.MiscAbilities, got.MiscAbilities)
+	test.checkResIDsInSlice(fieldName+" - enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.EnemyAbilities, got.EnemyAbilities)
 }
 
 type testStatusRemoval struct {
-	playerAbilities    []int32
-	overdriveAbilities []int32
-	itemAbilities      []int32
-	enemyAbilities     []int32
-	statusConditions   []int32
+	PlayerAbilities    []int32
+	OverdriveAbilities []int32
+	ItemAbilities      []int32
+	EnemyAbilities     []int32
+	StatusConditions   []int32
 }
 
 func (e testStatusRemoval) Compare(test Test, fieldName string, got apitypes.StatusRemoval) {
 	test.T.Helper()
-	test.checkResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)
-	test.checkResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.overdriveAbilities, got.OverdriveAbilities)
-	test.checkResIDsInSlice(fieldName+" - item abilities", apilookups.E.ItemAbilities.Endpoint, e.itemAbilities, got.ItemAbilities)
-	test.checkResIDsInSlice(fieldName+" - enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.enemyAbilities, got.EnemyAbilities)
-	test.checkResIDsInSlice(fieldName+" - status conditions", apilookups.E.StatusConditions.Endpoint, e.statusConditions, got.StatusConditions)
+	test.checkResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
+	test.checkResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
+	test.checkResIDsInSlice(fieldName+" - item abilities", apilookups.E.ItemAbilities.Endpoint, e.ItemAbilities, got.ItemAbilities)
+	test.checkResIDsInSlice(fieldName+" - enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.EnemyAbilities, got.EnemyAbilities)
+	test.checkResIDsInSlice(fieldName+" - status conditions", apilookups.E.StatusConditions.Endpoint, e.StatusConditions, got.StatusConditions)
 }
