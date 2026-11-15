@@ -1,0 +1,71 @@
+package apitest
+
+import (
+	"net/http"
+	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/tests/apitesttypes"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+)
+
+func TestGetElement(t *testing.T) {
+	t.Parallel()
+	tests := []apitesttypes.Element{
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/elements/6",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "element with provided id '6' doesn't exist. max id: 5",
+			},
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/elements/2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
+					"auto-abilities":      4,
+					"player abilities":    3,
+					"overdrive abilities": 17,
+					"item abilities":      3,
+					"enemy abilities":     7,
+					"monsters weak":       39,
+					"monsters halved":     24,
+					"monsters immune":     7,
+					"monsters absorb":     19,
+				},
+			},
+			Unique:             apitesttypes.NewExpUnique(2, "lightning"),
+			StatusProtection:   h.GetInt32Ptr(23),
+			AutoAbilities:      []int32{6, 58, 59, 60},
+			PlayerAbilities:    []int32{70, 74, 78},
+			OverdriveAbilities: []int32{20, 57, 69, 135, 186},
+			ItemAbilities:      []int32{27, 28, 29},
+			EnemyAbilities:     []int32{90, 269, 401, 416},
+			MonstersWeak:       []int32{4, 18, 102, 132, 180, 227},
+			MonstersHalved:     []int32{30, 65, 140, 163, 247, 293},
+			MonstersImmune:     []int32{243, 274, 294, 297},
+			MonstersAbsorb:     []int32{27, 54, 77, 138, 205, 255, 295, 301},
+		},
+	}
+
+	testSingleResources(t, tests, "GetElement", testSrv.HandleElements)
+}
+
+func TestRetrieveElements(t *testing.T) {
+	t.Parallel()
+	tests := []apitesttypes.ListIDs{
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/elements",
+				ExpectedStatus: http.StatusOK,
+			},
+			Count:   5,
+			Results: []int32{1, 2, 3, 4, 5},
+		},
+	}
+
+	testIDList(t, tests, apilookups.E.Elements.Endpoint, "RetrieveElements", testSrv.HandleElements, compareAPIResourceLists[apiresource.Named])
+}

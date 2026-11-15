@@ -1,0 +1,90 @@
+package apitest
+
+import (
+	"net/http"
+	"testing"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/tests/apitesttypes"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+)
+
+func TestGetFMV(t *testing.T) {
+	t.Parallel()
+	tests := []apitesttypes.FMV{
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/fmvs/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "fmv not found: 'a'",
+			},
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/fmvs/53",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "fmv with provided id '53' doesn't exist. max id: 52",
+			},
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/fmvs/2/2",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/fmvs/sections for valid subsections",
+			},
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/fmvs/9",
+				ExpectedStatus: http.StatusOK,
+			},
+			Unique: apitesttypes.NewExpUnique(9, "fear on the sea"),
+			Area:   42,
+			Song:   h.GetInt32Ptr(16),
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/fmvs/38",
+				ExpectedStatus: http.StatusOK,
+			},
+			Unique: apitesttypes.NewExpUnique(38, "the last chapter"),
+			Area:   218,
+			Song:   h.GetInt32Ptr(77),
+		},
+	}
+
+	testSingleResources(t, tests, "GetFMV", testSrv.HandleFMVs)
+}
+
+func TestRetrieveFMVs(t *testing.T) {
+	t.Parallel()
+	tests := []apitesttypes.ListIDs{
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/fmvs?limit=max",
+				ExpectedStatus: http.StatusOK,
+			},
+			Count:   52,
+			Results: []int32{1, 13, 27, 34, 45, 46, 52},
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/fmvs?location=15",
+				ExpectedStatus: http.StatusOK,
+			},
+			Count:   2,
+			Results: []int32{27, 36},
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     "/api/fmvs?location=5",
+				ExpectedStatus: http.StatusOK,
+			},
+			Count:   6,
+			Results: []int32{9, 10, 11, 12, 13, 14},
+		},
+	}
+
+	testIDList(t, tests, apilookups.E.FMVs.Endpoint, "RetrieveFMVs", testSrv.HandleFMVs, compareAPIResourceLists[apiresource.Named])
+}
