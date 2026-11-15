@@ -1,0 +1,37 @@
+package seeding
+
+import (
+	"context"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+)
+
+func seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {
+	const desc string = "cues + included areas"
+	jParams, err := processJunctions(desc, getCues(), getCueIncludedAreas)
+	if err != nil {
+		return err
+	}
+
+	return qtx.CreateCuesIncludedAreasJunctionBulk(ctx, database.CreateCuesIncludedAreasJunctionBulkParams{
+		DataHash:       jParams.DataHashes,
+		CueID:          jParams.ParentIDs,
+		IncludedAreaID: jParams.ChildIDs,
+	})
+}
+
+func getCues() []seedtypes.Cue {
+	cues := []seedtypes.Cue{}
+
+	for _, song := range rawJSON.songs {
+		cues = append(cues, song.Cues...)
+	}
+
+	return cues
+}
+
+func getCueIncludedAreas(c seedtypes.Cue) ([]seedtypes.Area, error) {
+	return lookup.GetResources(c.IncludedAreas, lookup.L.Areas)
+}

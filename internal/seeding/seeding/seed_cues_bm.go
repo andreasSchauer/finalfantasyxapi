@@ -110,31 +110,3 @@ func extractCues() ([]seedtypes.Cue, error) {
 
 	return dedupeRows(cues, hashes), nil
 }
-
-func getCues() []seedtypes.Cue {
-	cues := []seedtypes.Cue{}
-
-	for _, song := range rawJSON.songs {
-		cues = append(cues, song.Cues...)
-	}
-
-	return cues
-}
-
-func getCueIncludedAreas(c seedtypes.Cue) ([]seedtypes.Area, error) {
-	return lookup.GetResources(c.IncludedAreas, lookup.L.Areas)
-}
-
-func seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "cues + included areas"
-	jParams, err := processJunctions(desc, getCues(), getCueIncludedAreas)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreateCuesIncludedAreasJunctionBulk(ctx, database.CreateCuesIncludedAreasJunctionBulkParams{
-		DataHash:       jParams.DataHashes,
-		CueID:          jParams.ParentIDs,
-		IncludedAreaID: jParams.ChildIDs,
-	})
-}

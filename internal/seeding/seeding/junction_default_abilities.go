@@ -8,10 +8,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
+
 type DefaultAbilitiesEntry struct {
 	Name             string                       `json:"name"`
 	DefaultAbilities []seedtypes.AbilityReference `json:"default_abilities"`
 }
+
 
 func seedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "default abilities"

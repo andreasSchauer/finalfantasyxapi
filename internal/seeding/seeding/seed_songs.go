@@ -149,26 +149,3 @@ func extractSongCredits() []seedtypes.SongCredits {
 
 	return dedupeRows(credits, hashes)
 }
-
-func getSongBackgroundMusic(s seedtypes.Song) ([]seedtypes.BackgroundMusic, error) {
-	return s.BackgroundMusic, nil
-}
-
-func getBackgroundMusicAreas(bm seedtypes.BackgroundMusic) ([]seedtypes.Area, error) {
-	return lookup.GetResources(bm.LocationAreas, lookup.L.Areas)
-}
-
-func seedJuncSongsBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "songs + background music"
-	jParams, err := processThreewayJunctions(desc, rawJSON.songs, getSongBackgroundMusic, getBackgroundMusicAreas)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreateSongsBackgroundMusicJunctionBulk(ctx, database.CreateSongsBackgroundMusicJunctionBulkParams{
-		DataHash: jParams.DataHashes,
-		SongID:   jParams.GrandParentIDs,
-		BmID:     jParams.ParentIDs,
-		AreaID:   jParams.ChildIDs,
-	})
-}

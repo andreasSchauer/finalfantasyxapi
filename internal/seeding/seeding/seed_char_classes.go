@@ -39,21 +39,3 @@ func loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error
 
 	return nil
 }
-
-func getCharacterClassPlayerUnits(c seedtypes.CharacterClass) ([]seedtypes.PlayerUnit, error) {
-	return lookup.GetResources(c.Members, lookup.L.PlayerUnits)
-}
-
-func seedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "character classes + player units"
-	jParams, err := processJunctions(desc, rawJSON.characterClasses, getCharacterClassPlayerUnits)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreateCharacterClassPlayerUnitsJunctionBulk(ctx, database.CreateCharacterClassPlayerUnitsJunctionBulkParams{
-		DataHash: jParams.DataHashes,
-		ClassID:  jParams.ParentIDs,
-		UnitID:   jParams.ChildIDs,
-	})
-}

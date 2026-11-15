@@ -57,9 +57,10 @@ func seedJuncEquipmentTablesNames(qtx *database.Queries, ctx context.Context) er
 
 	for _, table := range rawJSON.equipment {
 		for _, name := range table.EquipmentNames {
-			j := EquipmentTableNameJunction{}
-			j.ParentID = table.ID
-			j.ChildID = name.ID
+			j := EquipmentTableNameJunction{
+				ParentID: table.ID,
+				ChildID: name.ID,
+			}
 
 			if table.Classification == string(database.EquipClassCelestialWeapon) {
 				var err error

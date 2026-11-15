@@ -67,21 +67,3 @@ func extractSubmenus() ([]seedtypes.Submenu, error) {
 
 	return dedupeRows(submenus, hashes), nil
 }
-
-func getSubmenuUsers(s seedtypes.Submenu) ([]seedtypes.CharacterClass, error) {
-	return lookup.GetResources(s.Users, lookup.L.CharClasses)
-}
-
-func seedJuncSubmenusUsers(qtx *database.Queries, ctx context.Context) error {
-	const desc string = "submenus + users"
-	jParams, err := processJunctions(desc, rawJSON.submenus, getSubmenuUsers)
-	if err != nil {
-		return err
-	}
-
-	return qtx.CreateSubmenusUsersJunctionBulk(ctx, database.CreateSubmenusUsersJunctionBulkParams{
-		DataHash:         jParams.DataHashes,
-		SubmenuID:        jParams.ParentIDs,
-		CharacterClassID: jParams.ChildIDs,
-	})
-}

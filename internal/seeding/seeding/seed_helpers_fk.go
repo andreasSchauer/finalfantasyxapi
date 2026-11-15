@@ -30,27 +30,3 @@ func assignFKPtr[T any, R seedtypes.Lookupable](key *T, l map[string]R) (*int32,
 	id := result.GetID()
 	return &id, nil
 }
-
-func assignID(obj needsID) error {
-	id, ok := hashes[generateDataHash(obj)]
-	if !ok {
-		return fmt.Errorf("no id found for %s", obj)
-	}
-
-	obj.SetID(id)
-	return nil
-}
-
-func assignIDs[T any, P interface {
-	*T
-	needsID
-}](items []T) error {
-	for i := range items {
-		err := assignID(P(&items[i]))
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
