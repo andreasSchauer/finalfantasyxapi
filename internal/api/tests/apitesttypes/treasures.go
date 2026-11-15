@@ -43,12 +43,12 @@ type TestFoundEquipment struct {
 	EmptySlotsAmount int32
 }
 
-func (e TestFoundEquipment) Compare(test Test, fieldName string, got apitypes.FoundEquipment) {
+func (e TestFoundEquipment) Compare(test Test, fn string, got apitypes.FoundEquipment) {
 	test.T.Helper()
 	enEndpoint := apilookups.E.Equipment.Endpoint
 	aaEndpoint := apilookups.E.AutoAbilities.Endpoint
 
-	test.compIDAPIResource(fieldName+" - equipment name", enEndpoint, e.EquipmentName, got.EquipmentName)
-	test.CheckResIDsInSlice(fieldName+" - abilities", aaEndpoint, e.Abilities, got.Abilities)
-	test.compare(fieldName+" - empty slots amount", e.EmptySlotsAmount, got.EmptySlotsAmount)
+	test.compIDAPIResource(childFn(fn, "equipment name"), enEndpoint, e.EquipmentName, got.EquipmentName)
+	test.CheckResIDsInSlice(childFn(fn, "abilities"), aaEndpoint, e.Abilities, got.Abilities)
+	test.compare(childFn(fn, "empty slots amount"), e.EmptySlotsAmount, got.EmptySlotsAmount)
 }

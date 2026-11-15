@@ -67,7 +67,7 @@ type TestMonItems struct {
 	OtherItems     []TestPossibleItem
 }
 
-func (e TestMonItems) Compare(test Test, fieldName string, got apitypes.MonsterItems) {
+func (e TestMonItems) Compare(test Test, fn string, got apitypes.MonsterItems) {
 	test.T.Helper()
 	itemMap := e.Items
 

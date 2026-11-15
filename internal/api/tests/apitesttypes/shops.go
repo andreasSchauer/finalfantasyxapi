@@ -33,10 +33,10 @@ type TestSubShop struct {
 	Equipment []TestShopEquipment
 }
 
-func (e TestSubShop) Compare(test Test, fieldName string, got apitypes.SubShop) {
+func (e TestSubShop) Compare(test Test, fn string, got apitypes.SubShop) {
 	test.T.Helper()
-	test.checkTestStructsInSlice(fieldName+" - items", e.Items, got.Items)
-	test.checkTestStructsInSlice(fieldName+" - equipment", e.Equipment, got.Equipment)
+	test.checkTestStructsInSlice(childFn(fn, "items"), e.Items, got.Items)
+	test.checkTestStructsInSlice(childFn(fn, "equipment"), e.Equipment, got.Equipment)
 }
 
 type TestShopItem struct {
@@ -57,10 +57,10 @@ func (e TestShopItem) GetIndex() int {
 	return e.Index
 }
 
-func (e TestShopItem) Compare(test Test, fieldName string, got apitypes.ShopItem) {
+func (e TestShopItem) Compare(test Test, fn string, got apitypes.ShopItem) {
 	test.T.Helper()
-	test.compIDAPIResource(fieldName+" - item", apilookups.E.Items.Endpoint, e.Item, got.Item)
-	test.compare(fieldName+" - price", e.Price, got.Price)
+	test.compIDAPIResource(childFn(fn, "item"), apilookups.E.Items.Endpoint, e.Item, got.Item)
+	test.compare(childFn(fn, "price"), e.Price, got.Price)
 }
 
 type TestShopEquipment struct {
@@ -73,8 +73,8 @@ func (e TestShopEquipment) GetIndex() int {
 	return e.Index
 }
 
-func (e TestShopEquipment) Compare(test Test, fieldName string, got apitypes.ShopEquipment) {
+func (e TestShopEquipment) Compare(test Test, fn string, got apitypes.ShopEquipment) {
 	test.T.Helper()
-	e.Equipment.Compare(test, fieldName+" - found equipment", got.Equipment)
-	test.compare(fieldName+" - price", e.Price, got.Price)
+	e.Equipment.Compare(test, childFn(fn, "found equipment"), got.Equipment)
+	test.compare(childFn(fn, "price"), e.Price, got.Price)
 }

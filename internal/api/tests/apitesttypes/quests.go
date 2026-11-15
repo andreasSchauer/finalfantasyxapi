@@ -53,8 +53,8 @@ type TestQuestCompletion struct {
 	Reward TestResAmount[apiresource.Typed]
 }
 
-func (e TestQuestCompletion) Compare(test Test, fieldName string, got apitypes.QuestCompletion) {
+func (e TestQuestCompletion) Compare(test Test, fn string, got apitypes.QuestCompletion) {
 	test.T.Helper()
-	test.CheckResIDsInSlice(fieldName+" - areas", apilookups.E.Areas.Endpoint, e.Areas, got.Areas)
-	e.Reward.Compare(test, fieldName+" - rewards", got.Reward)
+	test.CheckResIDsInSlice(childFn(fn, "areas"), apilookups.E.Areas.Endpoint, e.Areas, got.Areas)
+	e.Reward.Compare(test, childFn(fn, "rewards"), got.Reward)
 }

@@ -5,12 +5,12 @@ import (
 )
 
 // checks if two standard-type values or pointers of a field are equal
-func (test Test) compare(fieldName string, exp, got any) {
+func (test Test) compare(fn string, exp, got any) {
 	t := test.T
 	dontCheck := test.DontCheck
 	t.Helper()
 
-	if dontCheck != nil && dontCheck[fieldName] {
+	if dontCheck != nil && dontCheck[fn] {
 		return
 	}
 
@@ -18,162 +18,162 @@ func (test Test) compare(fieldName string, exp, got any) {
 	case int:
 		g, ok := got.(int)
 		if !ok {
-			t.Errorf("%s type mismatch: expected int, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected int, got %T\n\n", fn, got)
 		}
-		test.compInt(fieldName, e, g)
+		test.compInt(fn, e, g)
 
 	case int32:
 		g, ok := got.(int32)
 		if !ok {
-			t.Errorf("%s type mismatch: expected int32, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected int32, got %T\n\n", fn, got)
 		}
-		test.compInt32(fieldName, e, g)
+		test.compInt32(fn, e, g)
 
 	case float32:
 		g, ok := got.(float32)
 		if !ok {
-			t.Errorf("%s type mismatch: expected float32, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected float32, got %T\n\n", fn, got)
 		}
-		test.compFloat32(fieldName, e, g)
+		test.compFloat32(fn, e, g)
 
 	case float64:
 		g, ok := got.(float64)
 		if !ok {
-			t.Errorf("%s type mismatch: expected float64, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected float64, got %T\n\n", fn, got)
 		}
-		test.compFloat64(fieldName, e, g)
+		test.compFloat64(fn, e, g)
 
 	case string:
 		g, ok := got.(string)
 		if !ok {
-			t.Errorf("%s type mismatch: expected string, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected string, got %T\n\n", fn, got)
 		}
-		test.compString(fieldName, e, g)
+		test.compString(fn, e, g)
 
 	case bool:
 		g, ok := got.(bool)
 		if !ok {
-			t.Errorf("%s type mismatch: expected bool, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected bool, got %T\n\n", fn, got)
 		}
-		test.compBool(fieldName, e, g)
+		test.compBool(fn, e, g)
 
 	case *int32:
 		g, ok := got.(*int32)
 		if !ok {
-			t.Errorf("%s type mismatch: expected *int32, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected *int32, got %T\n\n", fn, got)
 		}
-		test.compInt32Ptr(fieldName, e, g)
+		test.compInt32Ptr(fn, e, g)
 
 	case *float32:
 		g, ok := got.(*float32)
 		if !ok {
-			t.Errorf("%s type mismatch: expected *float32, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected *float32, got %T\n\n", fn, got)
 		}
-		test.compFloat32Ptr(fieldName, e, g)
+		test.compFloat32Ptr(fn, e, g)
 
 	case *float64:
 		g, ok := got.(*float64)
 		if !ok {
-			t.Errorf("%s type mismatch: expected *float64, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected *float64, got %T\n\n", fn, got)
 		}
-		test.compFloat64Ptr(fieldName, e, g)
+		test.compFloat64Ptr(fn, e, g)
 
 	case *string:
 		g, ok := got.(*string)
 		if !ok {
-			t.Errorf("%s type mismatch: expected *string, got %T\n\n", fieldName, got)
+			t.Errorf("%s type mismatch: expected *string, got %T\n\n", fn, got)
 		}
-		test.compStringPtr(fieldName, e, g)
+		test.compStringPtr(fn, e, g)
 
 	default:
-		t.Errorf("unsupported type for %s: %T", fieldName, exp)
+		t.Errorf("unsupported type for %s: %T", fn, exp)
 	}
 }
 
-func (test Test) compInt(fieldName string, exp, got int) {
+func (test Test) compInt(fn string, exp, got int) {
 	test.T.Helper()
 	if exp != got {
-		test.T.Errorf("expected %s %d, got %d\n\n", fieldName, exp, got)
+		test.T.Errorf("expected %s %d, got %d\n\n", fn, exp, got)
 	}
 }
 
-func (test Test) compInt32(fieldName string, exp, got int32) {
+func (test Test) compInt32(fn string, exp, got int32) {
 	test.T.Helper()
 	if exp != got {
-		test.T.Errorf("expected %s %d, got %d\n\n", fieldName, exp, got)
+		test.T.Errorf("expected %s %d, got %d\n\n", fn, exp, got)
 	}
 }
 
-func (test Test) compFloat32(fieldName string, exp, got float32) {
+func (test Test) compFloat32(fn string, exp, got float32) {
 	test.T.Helper()
 	if exp != got {
-		test.T.Errorf("expected %s %.2f, got %.2f\n\n", fieldName, exp, got)
+		test.T.Errorf("expected %s %.2f, got %.2f\n\n", fn, exp, got)
 	}
 }
 
-func (test Test) compFloat64(fieldName string, exp, got float64) {
+func (test Test) compFloat64(fn string, exp, got float64) {
 	test.T.Helper()
 	if exp != got {
-		test.T.Errorf("expected %s %f, got %f\n\n", fieldName, exp, got)
+		test.T.Errorf("expected %s %f, got %f\n\n", fn, exp, got)
 	}
 }
 
-func (test Test) compString(fieldName, exp, got string) {
+func (test Test) compString(fn, exp, got string) {
 	test.T.Helper()
 	if exp != "" && exp != got {
-		test.T.Errorf("expected %s %s, got %s\n\n", fieldName, exp, got)
+		test.T.Errorf("expected %s %s, got %s\n\n", fn, exp, got)
 	}
 }
 
-func (test Test) compBool(fieldName string, exp, got bool) {
+func (test Test) compBool(fn string, exp, got bool) {
 	test.T.Helper()
 	if exp != got {
-		test.T.Errorf("expected %s %t, got %t\n\n", fieldName, exp, got)
+		test.T.Errorf("expected %s %t, got %t\n\n", fn, exp, got)
 	}
 }
 
 // can be used for any direct pointer comparisons
-func (test Test) compPtr[T any](fieldName string, exp, got *T, compFn compFnVals[T]) {
+func (test Test) compPtr[T any](fn string, exp, got *T, compFn compFnVals[T]) {
 	test.T.Helper()
-	if !test.presencePtrs(fieldName, exp, got) {
+	if !test.presencePtrs(fn, exp, got) {
 		return
 	}
-	compFn(fieldName, *exp, *got)
+	compFn(fn, *exp, *got)
 }
 
-func (test Test) compInt32Ptr(fieldName string, exp, got *int32) {
+func (test Test) compInt32Ptr(fn string, exp, got *int32) {
 	test.T.Helper()
-	test.compPtr(fieldName, exp, got, test.compInt32)
+	test.compPtr(fn, exp, got, test.compInt32)
 }
 
-func (test Test) compFloat32Ptr(fieldName string, exp, got *float32) {
+func (test Test) compFloat32Ptr(fn string, exp, got *float32) {
 	test.T.Helper()
-	test.compPtr(fieldName, exp, got, test.compFloat32)
+	test.compPtr(fn, exp, got, test.compFloat32)
 }
 
-func (test Test) compFloat64Ptr(fieldName string, exp, got *float64) {
+func (test Test) compFloat64Ptr(fn string, exp, got *float64) {
 	test.T.Helper()
-	test.compPtr(fieldName, exp, got, test.compFloat64)
+	test.compPtr(fn, exp, got, test.compFloat64)
 }
 
-func (test Test) compStringPtr(fieldName string, exp, got *string) {
+func (test Test) compStringPtr(fn string, exp, got *string) {
 	test.T.Helper()
-	test.compPtr(fieldName, exp, got, test.compString)
+	test.compPtr(fn, exp, got, test.compString)
 }
 
-// compares the length of the gotSlice with the length found in expLengths[fieldName], if given
-func (test Test) compLength(fieldName string, got int) {
+// compares the length of the gotSlice with the length found in expLengths[fn], if given
+func (test Test) compLength(fn string, got int) {
 	test.T.Helper()
-	exp, ok := test.ExpLengths[fieldName]
+	exp, ok := test.ExpLengths[fn]
 	if ok {
-		test.compare(fieldName+" length", exp, got)
+		test.compare(childFn(fn, "length"), exp, got)
 	}
 }
 
 // CompPageURL compares the expected pagination path with the got url
-func (test Test) CompPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
+func (test Test) CompPageURL(fn string, expPathPtr, gotURLPtr *string) {
 	test.T.Helper()
-	if test.DontCheck != nil && test.DontCheck[fieldName] {
+	if test.DontCheck != nil && test.DontCheck[fn] {
 		return
 	}
 
@@ -185,5 +185,5 @@ func (test Test) CompPageURL(fieldName string, expPathPtr, gotURLPtr *string) {
 		expURLPtr = &expURL
 	}
 
-	test.compare(fieldName, expURLPtr, gotURLPtr)
+	test.compare(fn, expURLPtr, gotURLPtr)
 }

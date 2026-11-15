@@ -6,7 +6,7 @@ import (
 )
 
 // checks presence of two pointers
-func (test Test) presencePtrs[E, G any](fieldName string, exp *E, got *G) bool {
+func (test Test) presencePtrs[E, G any](fn string, exp *E, got *G) bool {
 	test.T.Helper()
 
 	switch {
@@ -14,11 +14,11 @@ func (test Test) presencePtrs[E, G any](fieldName string, exp *E, got *G) bool {
 		return false
 
 	case exp == nil && got != nil:
-		test.T.Errorf("expected %s nil, got %v\n\n", fieldName, *got)
+		test.T.Errorf("expected %s nil, got %v\n\n", fn, *got)
 		return false
 
 	case exp != nil && got == nil:
-		test.T.Errorf("expected %s %v, got nil\n\n", fieldName, *exp)
+		test.T.Errorf("expected %s %v, got nil\n\n", fn, *exp)
 		return false
 
 	default:
@@ -27,7 +27,7 @@ func (test Test) presencePtrs[E, G any](fieldName string, exp *E, got *G) bool {
 }
 
 // checks presence of two pointers, where one of them is or has an api resource
-func (test Test) presenceResPtrs[T apiresource.HasAPIResource](fieldName string, expPathPtr *string, gotResPtr *T) bool {
+func (test Test) presenceResPtrs[T apiresource.HasAPIResource](fn string, expPathPtr *string, gotResPtr *T) bool {
 	test.T.Helper()
 
 	switch {
@@ -37,11 +37,11 @@ func (test Test) presenceResPtrs[T apiresource.HasAPIResource](fieldName string,
 	case expPathPtr == nil && gotResPtr != nil:
 		res := *gotResPtr
 		gotURL := res.GetAPIResource().GetURL()
-		test.T.Errorf("expected nil for %s, but got %s\n\n", fieldName, gotURL)
+		test.T.Errorf("expected nil for %s, but got %s\n\n", fn, gotURL)
 		return false
 
 	case expPathPtr != nil && gotResPtr == nil:
-		test.T.Errorf("expected %s %v, got nil\n\n", fieldName, *expPathPtr)
+		test.T.Errorf("expected %s %v, got nil\n\n", fn, *expPathPtr)
 		return false
 
 	default:
@@ -50,7 +50,7 @@ func (test Test) presenceResPtrs[T apiresource.HasAPIResource](fieldName string,
 }
 
 // checks presence of two struct slices
-func (test Test) presenceSlices[E, G any](fieldName string, exp []E, got []G) bool {
+func (test Test) presenceSlices[E, G any](fn string, exp []E, got []G) bool {
 	test.T.Helper()
 
 	switch {
@@ -58,11 +58,11 @@ func (test Test) presenceSlices[E, G any](fieldName string, exp []E, got []G) bo
 		return false
 
 	case exp == nil && got != nil:
-		test.T.Errorf("expected %s nil, got %v\n\n", fieldName, got)
+		test.T.Errorf("expected %s nil, got %v\n\n", fn, got)
 		return false
 
 	case exp != nil && got == nil:
-		test.T.Errorf("expected %s %v, got nil\n\n", fieldName, exp)
+		test.T.Errorf("expected %s %v, got nil\n\n", fn, exp)
 		return false
 
 	default:

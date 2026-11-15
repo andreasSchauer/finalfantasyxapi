@@ -32,8 +32,8 @@ type PossibleAbilityList struct {
 	Abilities []int32
 }
 
-func (e PossibleAbilityList) Compare(test Test, fieldName string, got apitypes.PossibleAbilityList) {
+func (e PossibleAbilityList) Compare(test Test, fn string, got apitypes.PossibleAbilityList) {
 	test.T.Helper()
-	test.compIDAPIResource(fieldName+" - user", apilookups.E.CharacterClasses.Endpoint, e.User, got.User)
-	test.CheckResIDsInSlice(fieldName+" - abilities", apilookups.E.Abilities.Endpoint, e.Abilities, got.Abilities)
+	test.compIDAPIResource(childFn(fn, "user"), apilookups.E.CharacterClasses.Endpoint, e.User, got.User)
+	test.CheckResIDsInSlice(childFn(fn, "abilities"), apilookups.E.Abilities.Endpoint, e.Abilities, got.Abilities)
 }

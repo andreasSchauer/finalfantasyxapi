@@ -35,13 +35,13 @@ type TestStatusInfliction struct {
 	EnemyAbilities     []int32
 }
 
-func (e TestStatusInfliction) Compare(test Test, fieldName string, got apitypes.StatusInfliction) {
+func (e TestStatusInfliction) Compare(test Test, fn string, got apitypes.StatusInfliction) {
 	test.T.Helper()
-	test.CheckResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
-	test.CheckResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
-	test.CheckResIDsInSlice(fieldName+" - item abilities", apilookups.E.ItemAbilities.Endpoint, e.ItemAbilities, got.ItemAbilities)
-	test.CheckResIDsInSlice(fieldName+" - misc abilities", apilookups.E.MiscAbilities.Endpoint, e.MiscAbilities, got.MiscAbilities)
-	test.CheckResIDsInSlice(fieldName+" - enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.EnemyAbilities, got.EnemyAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "player abilities"), apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "overdrive abilities"), apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "item abilities"), apilookups.E.ItemAbilities.Endpoint, e.ItemAbilities, got.ItemAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "misc abilities"), apilookups.E.MiscAbilities.Endpoint, e.MiscAbilities, got.MiscAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "enemy abilities"), apilookups.E.EnemyAbilities.Endpoint, e.EnemyAbilities, got.EnemyAbilities)
 }
 
 type TestStatusRemoval struct {
@@ -52,11 +52,11 @@ type TestStatusRemoval struct {
 	StatusConditions   []int32
 }
 
-func (e TestStatusRemoval) Compare(test Test, fieldName string, got apitypes.StatusRemoval) {
+func (e TestStatusRemoval) Compare(test Test, fn string, got apitypes.StatusRemoval) {
 	test.T.Helper()
-	test.CheckResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
-	test.CheckResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
-	test.CheckResIDsInSlice(fieldName+" - item abilities", apilookups.E.ItemAbilities.Endpoint, e.ItemAbilities, got.ItemAbilities)
-	test.CheckResIDsInSlice(fieldName+" - enemy abilities", apilookups.E.EnemyAbilities.Endpoint, e.EnemyAbilities, got.EnemyAbilities)
-	test.CheckResIDsInSlice(fieldName+" - status conditions", apilookups.E.StatusConditions.Endpoint, e.StatusConditions, got.StatusConditions)
+	test.CheckResIDsInSlice(childFn(fn, "player abilities"), apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "overdrive abilities"), apilookups.E.OverdriveAbilities.Endpoint, e.OverdriveAbilities, got.OverdriveAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "item abilities"), apilookups.E.ItemAbilities.Endpoint, e.ItemAbilities, got.ItemAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "enemy abilities"), apilookups.E.EnemyAbilities.Endpoint, e.EnemyAbilities, got.EnemyAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "status conditions"), apilookups.E.StatusConditions.Endpoint, e.StatusConditions, got.StatusConditions)
 }

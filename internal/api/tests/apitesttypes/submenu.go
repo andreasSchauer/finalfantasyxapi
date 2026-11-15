@@ -33,9 +33,9 @@ type MenuOpen struct {
 	OverdriveCommands []int32
 }
 
-func (e MenuOpen) Compare(test Test, fieldName string, got apitypes.MenuOpen) {
+func (e MenuOpen) Compare(test Test, fn string, got apitypes.MenuOpen) {
 	test.T.Helper()
-	test.compIDAPIResourcePtrs(fieldName+" - ability", apilookups.E.Abilities.Endpoint, e.Ability, got.Ability)
-	test.compIDAPIResourcePtrs(fieldName+" - aeon command", apilookups.E.AeonCommands.Endpoint, e.AeonCommand, got.AeonCommand)
-	test.CheckResIDsInSlice(fieldName+" - overdrive commands", apilookups.E.OverdriveCommands.Endpoint, e.OverdriveCommands, got.OverdriveCommands)
+	test.compIDAPIResourcePtrs(childFn(fn, "ability"), apilookups.E.Abilities.Endpoint, e.Ability, got.Ability)
+	test.compIDAPIResourcePtrs(childFn(fn, "aeon command"), apilookups.E.AeonCommands.Endpoint, e.AeonCommand, got.AeonCommand)
+	test.CheckResIDsInSlice(childFn(fn, "overdrive commands"), apilookups.E.OverdriveCommands.Endpoint, e.OverdriveCommands, got.OverdriveCommands)
 }

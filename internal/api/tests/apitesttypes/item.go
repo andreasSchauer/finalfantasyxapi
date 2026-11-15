@@ -57,15 +57,15 @@ func (e TestMonItemAmts) GetIndex() int {
 	return e.Index
 }
 
-func (e TestMonItemAmts) Compare(test Test, fieldName string, got apitypes.MonItemAmts) {
+func (e TestMonItemAmts) Compare(test Test, fn string, got apitypes.MonItemAmts) {
 	test.T.Helper()
-	test.compIDAPIResource(fieldName+" - monster", apilookups.E.Monsters.Endpoint, e.Monster, got.Monster)
-	test.compare(fieldName+" - steal common", e.StealCommon, got.StealCommon)
-	test.compare(fieldName+" - steal rare", e.StealRare, got.StealRare)
-	test.compare(fieldName+" - drop common", e.DropCommon, got.DropCommon)
-	test.compare(fieldName+" - drop rare", e.DropRare, got.DropRare)
-	test.compare(fieldName+" - secondary drop common", e.SecondaryDropCommon, got.SecondaryDropCommon)
-	test.compare(fieldName+" - secondary drop rare", e.SecondaryDropRare, got.SecondaryDropRare)
-	test.compare(fieldName+" - bribe", e.Bribe, got.Bribe)
-	test.compare(fieldName+" - other", e.Other, got.Other)
+	test.compIDAPIResource(childFn(fn, "monster"), apilookups.E.Monsters.Endpoint, e.Monster, got.Monster)
+	test.compare(childFn(fn, "steal common"), e.StealCommon, got.StealCommon)
+	test.compare(childFn(fn, "steal rare"), e.StealRare, got.StealRare)
+	test.compare(childFn(fn, "drop common"), e.DropCommon, got.DropCommon)
+	test.compare(childFn(fn, "drop rare"), e.DropRare, got.DropRare)
+	test.compare(childFn(fn, "secondary drop common"), e.SecondaryDropCommon, got.SecondaryDropCommon)
+	test.compare(childFn(fn, "secondary drop rare"), e.SecondaryDropRare, got.SecondaryDropRare)
+	test.compare(childFn(fn, "bribe"), e.Bribe, got.Bribe)
+	test.compare(childFn(fn, "other"), e.Other, got.Other)
 }

@@ -51,7 +51,7 @@ type SphereGrid struct {
 	PlayerAbilities []int32
 }
 
-func (e SphereGrid) Compare(test Test, fieldName string, got apitypes.SphereGrid) {
+func (e SphereGrid) Compare(test Test, fn string, got apitypes.SphereGrid) {
 	test.T.Helper()
-	test.CheckResIDsInSlice(fieldName+" abilities", apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
+	test.CheckResIDsInSlice(childFn(fn, "abilities"), apilookups.E.PlayerAbilities.Endpoint, e.PlayerAbilities, got.PlayerAbilities)
 }

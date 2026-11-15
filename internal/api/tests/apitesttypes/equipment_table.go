@@ -37,8 +37,8 @@ type TestAbilityPool struct {
 	ReqAmount     int32
 }
 
-func (e TestAbilityPool) Compare(test Test, fieldName string, got apitypes.AbilityPool) {
+func (e TestAbilityPool) Compare(test Test, fn string, got apitypes.AbilityPool) {
 	test.T.Helper()
-	test.CheckResIDsInSlice(fieldName+" - auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
-	test.compare(fieldName+" - required amount", e.ReqAmount, got.ReqAmount)
+	test.CheckResIDsInSlice(childFn(fn, "auto-abilities"), apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
+	test.compare(childFn(fn, "required amount"), e.ReqAmount, got.ReqAmount)
 }

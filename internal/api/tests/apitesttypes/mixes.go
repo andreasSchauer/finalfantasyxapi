@@ -36,8 +36,8 @@ func (e TestMixCombination) GetIndex() int {
 	return e.Index
 }
 
-func (e TestMixCombination) Compare(test Test, fieldName string, got apitypes.MixCombination) {
+func (e TestMixCombination) Compare(test Test, fn string, got apitypes.MixCombination) {
 	test.T.Helper()
-	test.compIDAPIResource(fieldName+" - first item", apilookups.E.Items.Endpoint, e.FirstItem, got.FirstItem)
-	test.compIDAPIResource(fieldName+" - second item", apilookups.E.Items.Endpoint, e.SecondItem, got.SecondItem)
+	test.compIDAPIResource(childFn(fn, "first item"), apilookups.E.Items.Endpoint, e.FirstItem, got.FirstItem)
+	test.compIDAPIResource(childFn(fn, "second item"), apilookups.E.Items.Endpoint, e.SecondItem, got.SecondItem)
 }

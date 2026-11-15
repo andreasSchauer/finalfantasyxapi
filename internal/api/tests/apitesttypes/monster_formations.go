@@ -44,11 +44,11 @@ type TestFormationTC struct {
 	Users   []int32
 }
 
-func (e TestFormationTC) Compare(test Test, fieldName string, got apitypes.FormationTriggerCommand) {
+func (e TestFormationTC) Compare(test Test, fn string, got apitypes.FormationTriggerCommand) {
 	test.T.Helper()
 	tcEndpoint := apilookups.E.TriggerCommands.Endpoint
 	charClassesEndpoint := apilookups.E.CharacterClasses.Endpoint
 
-	test.compIDAPIResource(fieldName+" - tc ability", tcEndpoint, e.Ability, got.Ability)
-	test.CheckResIDsInSlice(fieldName+" - tc users", charClassesEndpoint, e.Users, got.Users)
+	test.compIDAPIResource(childFn(fn, "tc ability"), tcEndpoint, e.Ability, got.Ability)
+	test.CheckResIDsInSlice(childFn(fn, "tc users"), charClassesEndpoint, e.Users, got.Users)
 }

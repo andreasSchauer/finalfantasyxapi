@@ -8,39 +8,39 @@ import (
 )
 
 // expects a map[res.GetKey()]Amount and checks, if all stated resources are present and their respective amounts match. Used for pure ResourceAmount fields.
-func (test Test) checkResAmts[A apiresource.APIResource](fieldName string, exp map[string]int32, got []apiresource.ResourceAmount[A]) {
+func (test Test) checkResAmts[A apiresource.APIResource](fn string, exp map[string]int32, got []apiresource.ResourceAmount[A]) {
 	test.T.Helper()
-	test.compLength(fieldName, len(got))
+	test.compLength(fn, len(got))
 
 	gotMap := handlerinput.GetResAmtMap(got)
 
 	for key, expVal := range exp {
 		gotVal, ok := gotMap[key]
 		if !ok {
-			test.T.Errorf("%s doesn't contain resource with key '%s'.\n\n", fieldName, key)
+			test.T.Errorf("%s doesn't contain resource with key '%s'.\n\n", fn, key)
 		}
 		test.compare(key, expVal, gotVal)
 	}
 }
 
-func (test Test) checkResAmtsID[A apiresource.APIResource](fieldName string, exp map[int32]int32, got []apiresource.ResourceAmount[A]) {
+func (test Test) checkResAmtsID[A apiresource.APIResource](fn string, exp map[int32]int32, got []apiresource.ResourceAmount[A]) {
 	test.T.Helper()
-	test.compLength(fieldName, len(got))
+	test.compLength(fn, len(got))
 
 	gotMap := handlerinput.GetResAmtIDMap(got)
 
 	for id, expVal := range exp {
 		gotVal, ok := gotMap[id]
 		if !ok {
-			test.T.Errorf("%s doesn't contain resource with id '%d'.\n\n", fieldName, id)
+			test.T.Errorf("%s doesn't contain resource with id '%d'.\n\n", fn, id)
 		}
 		test.compare(fmt.Sprintf("id: '%d'", id), expVal, gotVal)
 	}
 }
 
 // expects a map[res.GetKey()]Amount and checks, if all stated resources are present and their respective amounts match. Used for ResourceAmount-ish types with different field names.
-func (test Test) checkResAmtTypes[T apiresource.ResourceAmountType[A], A apiresource.APIResource](fieldName string, exp map[string]int32, got []T) {
+func (test Test) checkResAmtTypes[T apiresource.ResourceAmountType[A], A apiresource.APIResource](fn string, exp map[string]int32, got []T) {
 	test.T.Helper()
 	gotResAmts := handlerinput.ResAmtTypesToStructs(got)
-	test.checkResAmts(fieldName, exp, gotResAmts)
+	test.checkResAmts(fn, exp, gotResAmts)
 }

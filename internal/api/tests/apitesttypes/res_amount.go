@@ -11,10 +11,10 @@ type TestResAmount[A apiresource.APIResource] struct {
 	Amount int32
 }
 
-func (e TestResAmount[A]) Compare(test Test, fieldName string, got apiresource.ResourceAmount[A]) {
+func (e TestResAmount[A]) Compare(test Test, fn string, got apiresource.ResourceAmount[A]) {
 	test.T.Helper()
-	test.compIDAPIResource(fieldName+" - resource", apilookups.E.AllItems.Endpoint, e.Item, got)
-	test.compare(fieldName+" - amount", e.Amount, got.Amount)
+	test.compIDAPIResource(childFn(fn, "resource"), apilookups.E.AllItems.Endpoint, e.Item, got)
+	test.compare(childFn(fn, "amount"), e.Amount, got.Amount)
 }
 
 func NewTestResAmount[A apiresource.APIResource](itemID int32, amount int32) TestResAmount[A] {
@@ -42,8 +42,8 @@ func (e TestPossibleItem) GetIndex() int {
 	return e.Index
 }
 
-func (e TestPossibleItem) Compare(test Test, fieldName string, got apitypes.PossibleItem) {
+func (e TestPossibleItem) Compare(test Test, fn string, got apitypes.PossibleItem) {
 	test.T.Helper()
-	e.TestResAmount.Compare(test, fieldName+" - itemAmount", got.ResourceAmount)
-	test.compare(fieldName+" - chance", e.Chance, got.Chance)
+	e.TestResAmount.Compare(test, childFn(fn, "itemAmount"), got.ResourceAmount)
+	test.compare(childFn(fn, "chance"), e.Chance, got.Chance)
 }

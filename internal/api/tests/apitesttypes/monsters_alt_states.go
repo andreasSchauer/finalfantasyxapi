@@ -54,8 +54,8 @@ type TestAltStateChange struct {
 	ElemResists []TestElemResist
 }
 
-func (e TestAltStateChange) Compare(test Test, fieldName string, got apitypes.AltStateChange) {
-	desc := fmt.Sprintf("%s -", fieldName)
+func (e TestAltStateChange) Compare(test Test, fn string, got apitypes.AltStateChange) {
+	desc := fmt.Sprintf("%s -", fn)
 
 	test.compare(desc+"distance", e.Distance, got.Distance)
 	test.checkResAmtTypes(desc+"base stats", e.BaseStats, got.BaseStats)
@@ -70,8 +70,8 @@ type TestAltStateGain struct {
 	Status           *apitypes.InflictedStatus
 }
 
-func (e TestAltStateGain) Compare(test Test, fieldName string, got apitypes.AltStateGain) {
-	desc := fmt.Sprintf("%s -", fieldName)
+func (e TestAltStateGain) Compare(test Test, fn string, got apitypes.AltStateGain) {
+	desc := fmt.Sprintf("%s -", fn)
 
 	test.CheckResIDsInSlice(desc+"properties", apilookups.E.Properties.Endpoint, e.Properties, got.Properties)
 	test.CheckResIDsInSlice(desc+"auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)
@@ -87,8 +87,8 @@ type TestAltStateLoss struct {
 	Status           *int32
 }
 
-func (e TestAltStateLoss) Compare(test Test, fieldName string, got apitypes.AltStateLoss) {
-	desc := fmt.Sprintf("%s -", fieldName)
+func (e TestAltStateLoss) Compare(test Test, fn string, got apitypes.AltStateLoss) {
+	desc := fmt.Sprintf("%s -", fn)
 
 	test.CheckResIDsInSlice(desc+"properties", apilookups.E.Properties.Endpoint, e.Properties, got.Properties)
 	test.CheckResIDsInSlice(desc+"auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.AutoAbilities, got.AutoAbilities)

@@ -63,10 +63,10 @@ func (e TestCue) GetIndex() int {
 	return e.Index
 }
 
-func (e TestCue) Compare(test Test, fieldName string, got apitypes.Cue) {
+func (e TestCue) Compare(test Test, fn string, got apitypes.Cue) {
 	test.T.Helper()
-	test.compIDAPIResourcePtrs(fieldName+" - trigger area", apilookups.E.Areas.Endpoint, e.TriggerArea, got.TriggerArea)
-	test.CheckResIDsInSlice(fieldName+" - included areas", apilookups.E.Areas.Endpoint, e.IncludedAreas, got.IncludedAreas)
-	test.compare(fieldName+" - replaces encounter music", e.ReplacesEncounterMusic, got.ReplacesEncounterMusic)
-	test.compare(fieldName+" - replaces bg music", e.ReplacesBGMusic, got.ReplacesBGMusic)
+	test.compIDAPIResourcePtrs(childFn(fn, "trigger area"), apilookups.E.Areas.Endpoint, e.TriggerArea, got.TriggerArea)
+	test.CheckResIDsInSlice(childFn(fn, "included areas"), apilookups.E.Areas.Endpoint, e.IncludedAreas, got.IncludedAreas)
+	test.compare(childFn(fn, "replaces encounter music"), e.ReplacesEncounterMusic, got.ReplacesEncounterMusic)
+	test.compare(childFn(fn, "replaces bg music"), e.ReplacesBGMusic, got.ReplacesBGMusic)
 }

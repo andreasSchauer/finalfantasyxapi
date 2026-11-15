@@ -12,10 +12,10 @@ type TestAgilityParams struct {
 	MaxICV      *int32
 }
 
-func (e TestAgilityParams) Compare(test Test, fieldName string, got apitypes.AgilityParams) {
+func (e TestAgilityParams) Compare(test Test, fn string, got apitypes.AgilityParams) {
 	test.T.Helper()
-	test.compIDAPIResource(fieldName+" - agility tier", apilookups.E.AgilityTiers.Endpoint, e.AgilityTier, got.AgilityTier)
-	test.compare(fieldName+" - tick speed", e.TickSpeed, got.TickSpeed)
-	test.compare(fieldName+" - min icv", e.MinICV, got.MinICV)
-	test.compare(fieldName+" - max icv", e.MaxICV, got.MaxICV)
+	test.compIDAPIResource(childFn(fn, "agility tier"), apilookups.E.AgilityTiers.Endpoint, e.AgilityTier, got.AgilityTier)
+	test.compare(childFn(fn, "tick speed"), e.TickSpeed, got.TickSpeed)
+	test.compare(childFn(fn, "min icv"), e.MinICV, got.MinICV)
+	test.compare(childFn(fn, "max icv"), e.MaxICV, got.MaxICV)
 }

@@ -38,10 +38,10 @@ func (e TestBattleTurn) GetIndex() int {
 	return e.Index
 }
 
-func (e TestBattleTurn) Compare(test Test, fieldName string, got servicetypes.BattleTurn) {
+func (e TestBattleTurn) Compare(test Test, fn string, got servicetypes.BattleTurn) {
 	test.T.Helper()
-	test.compare(fieldName+" turn", e.Turn, got.Turn)
-	test.compare(fieldName+" current tick", e.CurrentTick, got.CurrentTick)
-	test.compare(fieldName+" name", e.Name, got.Name)
-	test.compare(fieldName+" party", string(e.Party), string(got.Party))
+	test.compare(childFn(fn, "turn"), e.Turn, got.Turn)
+	test.compare(childFn(fn, "current tick"), e.CurrentTick, got.CurrentTick)
+	test.compare(childFn(fn, "name"), e.Name, got.Name)
+	test.compare(childFn(fn, "party"), string(e.Party), string(got.Party))
 }

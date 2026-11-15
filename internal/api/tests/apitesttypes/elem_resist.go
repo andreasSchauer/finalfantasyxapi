@@ -11,9 +11,9 @@ type TestElemResist struct {
 	Affinity database.ElementalAffinity
 }
 
-func (e TestElemResist) Compare(test Test, fieldName string, got apitypes.ElementalResist) {
+func (e TestElemResist) Compare(test Test, fn string, got apitypes.ElementalResist) {
 	test.T.Helper()
 
-	test.compIDAPIResource(fieldName+" - elements", apilookups.E.Elements.Endpoint, e.Element, got.Element)
-	test.compare(fieldName+" - affinities", string(e.Affinity), got.Affinity)
+	test.compIDAPIResource(childFn(fn, "elements"), apilookups.E.Elements.Endpoint, e.Element, got.Element)
+	test.compare(childFn(fn, "affinities"), string(e.Affinity), got.Affinity)
 }
