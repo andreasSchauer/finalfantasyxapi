@@ -1,0 +1,92 @@
+package seedhandlers
+
+import (
+	"context"
+	"database/sql"
+	"fmt"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+)
+
+func Loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error {
+	commands, err := extractTriggerCommands()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateTriggerCommandBulkParams{
+		DataHash:    make([]string, len(commands)),
+		AbilityID:   make([]int32, len(commands)),
+		Description: make([]string, len(commands)),
+		Effect:      make([]string, len(commands)),
+		Cursor:      make([]database.TargetType, len(commands)),
+		TopmenuID:   make([]sql.NullInt32, len(commands)),
+	}
+
+	for i, c := range commands {
+		params.DataHash[i] = sh.GenerateDataHash(c)
+		params.AbilityID[i] = c.Ability.ID
+		params.Description[i] = c.Description
+		params.Effect[i] = c.Effect
+		params.Cursor[i] = database.TargetType(c.Cursor)
+		params.TopmenuID[i] = h.GetNullInt32(c.TopmenuID)
+	}
+
+	dbRows, err := qtx.CreateTriggerCommandBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create trigger command: %v", err)
+	}
+
+	for i, row := range dbRows {
+		commands[i].ID = row.ID
+		sh.RawJSON.TriggerCommands[i].ID = row.ID
+		lookup.L.TriggerCommands[seedtypes.Key(commands[i])] = commands[i]
+		lookup.L.TriggerCommandsID[row.ID] = commands[i]
+		sh.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func extractTriggerCommands() ([]seedtypes.TriggerCommand, error) {
+	commands := []seedtypes.TriggerCommand{}
+	var err error
+
+	for i := range sh.RawJSON.TriggerCommands {
+		command := &sh.RawJSON.TriggerCommands[i]
+
+		command.Ability.ID, err = sh.GetHashID(command.Ability)
+		if err != nil {
+			return nil, err
+		}
+
+		command.TopmenuID, err = sh.AssignFKPtr(command.Topmenu, lookup.L.Topmenus)
+		if err != nil {
+			return nil, err
+		}
+
+		commands = append(commands, *command)
+	}
+
+	return sh.DedupeRows(commands, sh.Hashes), nil
+}
+
+func CompleteTriggerCommands() error {
+	for i := range sh.RawJSON.TriggerCommands {
+		ability := &sh.RawJSON.TriggerCommands[i]
+
+		err := completeBattleInteractions(ability.BattleInteractions)
+		if err != nil {
+			return err
+		}
+
+		lookup.L.TriggerCommands[seedtypes.Key(ability)] = *ability
+		lookup.L.TriggerCommandsID[ability.ID] = *ability
+	}
+
+	return nil
+}

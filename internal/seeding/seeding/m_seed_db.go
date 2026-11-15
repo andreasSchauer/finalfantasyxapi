@@ -9,8 +9,8 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhandlers"
 	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 	"github.com/pressly/goose/v3"
 )
 
@@ -163,29 +163,29 @@ func completeLookups() error {
 	defer h.MeasureTime("lookup completion")()
 
 	fns := []func() error{
-		completeEnemyAbilities,
-		completeItems,
-		completeOverdriveAbilities,
-		completePlayerAbilities,
-		completeTriggerCommands,
-		completeMiscAbilities,
-		completeAeons,
-		completeAeonStats,
-		completeAgilityTiers,
-		completeAutoAbilities,
-		completeBlitzballPositions,
-		completeCharacters,
-		completeEquipment,
-		completeLocations,
-		completeMixes,
-		completeMonsterFormations,
-		completeMonsters,
-		completeOverdriveModes,
-		completeShops,
-		completeSidequests,
-		completeSongs,
-		completeStatusConditions,
-		completeTreasureLists,
+		seedhandlers.CompleteEnemyAbilities,
+		seedhandlers.CompleteItems,
+		seedhandlers.CompleteOverdriveAbilities,
+		seedhandlers.CompletePlayerAbilities,
+		seedhandlers.CompleteTriggerCommands,
+		seedhandlers.CompleteMiscAbilities,
+		seedhandlers.CompleteAeons,
+		seedhandlers.CompleteAeonStats,
+		seedhandlers.CompleteAgilityTiers,
+		seedhandlers.CompleteAutoAbilities,
+		seedhandlers.CompleteBlitzballPositions,
+		seedhandlers.CompleteCharacters,
+		seedhandlers.CompleteEquipment,
+		seedhandlers.CompleteLocations,
+		seedhandlers.CompleteMixes,
+		seedhandlers.CompleteMonsterFormations,
+		seedhandlers.CompleteMonsters,
+		seedhandlers.CompleteOverdriveModes,
+		seedhandlers.CompleteShops,
+		seedhandlers.CompleteSidequests,
+		seedhandlers.CompleteSongs,
+		seedhandlers.CompleteStatusConditions,
+		seedhandlers.CompleteTreasureLists,
 	}
 
 	for _, fn := range fns {
@@ -198,23 +198,6 @@ func completeLookups() error {
 	return nil
 }
 
-func dedupeRows[T seedtypes.Hashable](rows []T, hashes map[string]int32) []T {
-	seen := make(map[string]bool)
-	new := []T{}
-
-	for _, row := range rows {
-		hash := sh.GenerateDataHash(row)
-
-		_, ok := hashes[hash]
-		if ok || seen[hash] {
-			continue
-		}
-
-		seen[hash] = true
-		new = append(new, row)
-	}
-	return new
-}
 
 func refreshViews(db *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("refreshing views")()

@@ -5,6 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhandlers"
 )
 
 type seedFunc func(*database.Queries, context.Context) error
@@ -23,137 +24,137 @@ func seedLoop(qtx *database.Queries, ctx context.Context, fns []seedFunc) error 
 func seedLoop1(qtx *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("- seed loop 1")()
 	return seedLoop(qtx, ctx, []seedFunc{
-		Loop1SeedAgilityTiers,
-		Loop1SeedElements,
-		Loop1SeedOverdriveModes,
-		Loop1SeedModifiers,
-		Loop1SeedPlayerUnits,
-		Loop1SeedCharacterClasses,
-		Loop1SeedBlitzballPositions,
-		Loop1SeedTopmenus,
-		Loop1SeedAbilityAttributes,
-		Loop1SeedMasterItems,
-		Loop1SeedCreatedNodes,
-		Loop1SeedLocations,
-		Loop1SeedBackgroundMusic,
-		Loop1SeedSongCredits,
-		Loop1SeedAccuracies,
-		Loop1SeedInflictedDelays,
-		Loop1SeedMonsters,
-		Loop1SeedMonsterSelections,
-		Loop1SeedEquipmentSlotsChances,
-		Loop1SeedQuests,
-		Loop1SeedSphereGrids,
-		Loop1SeedClassDamages,
+		seedhandlers.Loop1SeedAgilityTiers,
+		seedhandlers.Loop1SeedElements,
+		seedhandlers.Loop1SeedOverdriveModes,
+		seedhandlers.Loop1SeedModifiers,
+		seedhandlers.Loop1SeedPlayerUnits,
+		seedhandlers.Loop1SeedCharacterClasses,
+		seedhandlers.Loop1SeedBlitzballPositions,
+		seedhandlers.Loop1SeedTopmenus,
+		seedhandlers.Loop1SeedAbilityAttributes,
+		seedhandlers.Loop1SeedMasterItems,
+		seedhandlers.Loop1SeedCreatedNodes,
+		seedhandlers.Loop1SeedLocations,
+		seedhandlers.Loop1SeedBackgroundMusic,
+		seedhandlers.Loop1SeedSongCredits,
+		seedhandlers.Loop1SeedAccuracies,
+		seedhandlers.Loop1SeedInflictedDelays,
+		seedhandlers.Loop1SeedMonsters,
+		seedhandlers.Loop1SeedMonsterSelections,
+		seedhandlers.Loop1SeedEquipmentSlotsChances,
+		seedhandlers.Loop1SeedQuests,
+		seedhandlers.Loop1SeedSphereGrids,
+		seedhandlers.Loop1SeedClassDamages,
 	})
 }
 
 func seedLoop2(qtx *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("- seed loop 2")()
 	return seedLoop(qtx, ctx, []seedFunc{
-		Loop2SeedAgilitySubtiers,
-		loop2UpdateElements,
-		Loop2SeedElementalResists,
-		Loop2SeedSubmenus,
-		Loop2SeedAbilities,
-		Loop2SeedItems,
-		Loop2SeedKeyItems,
-		Loop2SeedItemAmounts,
-		Loop2SeedSublocations,
-		Loop2SeedSongs,
-		Loop2SeedDamages,
-		Loop2SeedModifierChanges,
-		Loop2SeedMonsterAmounts,
-		Loop2SeedMonsterEquipment,
-		Loop2SeedAlteredStates,
+		seedhandlers.Loop2SeedAgilitySubtiers,
+		seedhandlers.Loop2UpdateElements,
+		seedhandlers.Loop2SeedElementalResists,
+		seedhandlers.Loop2SeedSubmenus,
+		seedhandlers.Loop2SeedAbilities,
+		seedhandlers.Loop2SeedItems,
+		seedhandlers.Loop2SeedKeyItems,
+		seedhandlers.Loop2SeedItemAmounts,
+		seedhandlers.Loop2SeedSublocations,
+		seedhandlers.Loop2SeedSongs,
+		seedhandlers.Loop2SeedDamages,
+		seedhandlers.Loop2SeedModifierChanges,
+		seedhandlers.Loop2SeedMonsterAmounts,
+		seedhandlers.Loop2SeedMonsterEquipment,
+		seedhandlers.Loop2SeedAlteredStates,
 	})
 }
 
 func seedLoop3(qtx *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("- seed loop 3")()
 	return seedLoop(qtx, ctx, []seedFunc{
-		Loop3SeedProperties,
-		Loop3SeedStatusConditions,
-		Loop3SeedQuestCompletions,
-		Loop3SeedAeonCommands,
-		Loop3SeedOverdriveCommands,
-		Loop3SeedMiscAbilities,
-		Loop3SeedEnemyAbilities,
-		Loop3SeedOverdriveAbilities,
-		Loop3SeedTriggerCommands,
-		Loop3SeedItemAbilities,
-		Loop3SeedSpheres,
-		Loop3SeedPrimers,
-		Loop3SeedAreas,
-		Loop3SeedPossibleItems,
-		Loop3SeedShopItems,
-		Loop3SeedBattleInteractions,
-		Loop3SeedFormationBossSongs,
-		Loop3SeedMonsterItems,
-		Loop3SeedMonsterAbilities,
-		Loop3SeedMonsterEquipmentSlots,
+		seedhandlers.Loop3SeedProperties,
+		seedhandlers.Loop3SeedStatusConditions,
+		seedhandlers.Loop3SeedQuestCompletions,
+		seedhandlers.Loop3SeedAeonCommands,
+		seedhandlers.Loop3SeedOverdriveCommands,
+		seedhandlers.Loop3SeedMiscAbilities,
+		seedhandlers.Loop3SeedEnemyAbilities,
+		seedhandlers.Loop3SeedOverdriveAbilities,
+		seedhandlers.Loop3SeedTriggerCommands,
+		seedhandlers.Loop3SeedItemAbilities,
+		seedhandlers.Loop3SeedSpheres,
+		seedhandlers.Loop3SeedPrimers,
+		seedhandlers.Loop3SeedAreas,
+		seedhandlers.Loop3SeedPossibleItems,
+		seedhandlers.Loop3SeedShopItems,
+		seedhandlers.Loop3SeedBattleInteractions,
+		seedhandlers.Loop3SeedFormationBossSongs,
+		seedhandlers.Loop3SeedMonsterItems,
+		seedhandlers.Loop3SeedMonsterAbilities,
+		seedhandlers.Loop3SeedMonsterEquipmentSlots,
 	})
 }
 
 func seedLoop4(qtx *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("- seed loop 4")()
 	return seedLoop(qtx, ctx, []seedFunc{
-		Loop4SeedStats,
-		Loop4SeedStatusResists,
-		Loop4SeedCharacters,
-		Loop4SeedAeons,
-		Loop4SeedBlitzballItems,
-		Loop4SeedCompletionAreas,
-		Loop4SeedOverdrives,
-		Loop4SeedTargetableNodes,
-		Loop4SeedTreasures,
-		Loop4SeedShops,
-		Loop4SeedAreaConnections,
-		Loop4SeedFMVs,
-		Loop4SeedCues,
-		Loop4SeedInflictedStatusses,
-		Loop4SeedFormationData,
-		Loop4SeedEncounterAreas,
-		Loop4SeedFormationTriggerCommands,
+		seedhandlers.Loop4SeedStats,
+		seedhandlers.Loop4SeedStatusResists,
+		seedhandlers.Loop4SeedCharacters,
+		seedhandlers.Loop4SeedAeons,
+		seedhandlers.Loop4SeedBlitzballItems,
+		seedhandlers.Loop4SeedCompletionAreas,
+		seedhandlers.Loop4SeedOverdrives,
+		seedhandlers.Loop4SeedTargetableNodes,
+		seedhandlers.Loop4SeedTreasures,
+		seedhandlers.Loop4SeedShops,
+		seedhandlers.Loop4SeedAreaConnections,
+		seedhandlers.Loop4SeedFMVs,
+		seedhandlers.Loop4SeedCues,
+		seedhandlers.Loop4SeedInflictedStatusses,
+		seedhandlers.Loop4SeedFormationData,
+		seedhandlers.Loop4SeedEncounterAreas,
+		seedhandlers.Loop4SeedFormationTriggerCommands,
 	})
 }
 
 func seedLoop5(qtx *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("- seed loop 5")()
 	return seedLoop(qtx, ctx, []seedFunc{
-		Loop5SeedBaseStats,
-		Loop5SeedOdModeActions,
-		Loop5SeedSidequests,
-		Loop5SeedPlayerAbilities,
-		Loop5SeedRonsoRages,
-		Loop5SeedMixes,
-		Loop5SeedCelestialWeapons,
-		Loop5SeedAutoAbilities,
-		Loop5SeedEquipmentTables,
-		Loop5SeedEquipmentNames,
-		Loop5SeedMonsterFormations,
-		Loop5SeedStatChanges,
-		Loop5SeedAlts,
+		seedhandlers.Loop5SeedBaseStats,
+		seedhandlers.Loop5SeedOdModeActions,
+		seedhandlers.Loop5SeedSidequests,
+		seedhandlers.Loop5SeedPlayerAbilities,
+		seedhandlers.Loop5SeedRonsoRages,
+		seedhandlers.Loop5SeedMixes,
+		seedhandlers.Loop5SeedCelestialWeapons,
+		seedhandlers.Loop5SeedAutoAbilities,
+		seedhandlers.Loop5SeedEquipmentTables,
+		seedhandlers.Loop5SeedEquipmentNames,
+		seedhandlers.Loop5SeedMonsterFormations,
+		seedhandlers.Loop5SeedStatChanges,
+		seedhandlers.Loop5SeedAlts,
 	})
 }
 
 func seedLoop6(qtx *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("- seed loop 6")()
 	return seedLoop(qtx, ctx, []seedFunc{
-		Loop6SeedAeonEquipment,
-		Loop6SeedSubquests,
-		Loop6SeedMixCombinations,
-		Loop6SeedAbilityPools,
-		Loop6SeedTreasureEquipment,
-		Loop6SeedShopEquipment,
-		Loop6SeedEquipmentDrops,
+		seedhandlers.Loop6SeedAeonEquipment,
+		seedhandlers.Loop6SeedSubquests,
+		seedhandlers.Loop6SeedMixCombinations,
+		seedhandlers.Loop6SeedAbilityPools,
+		seedhandlers.Loop6SeedTreasureEquipment,
+		seedhandlers.Loop6SeedShopEquipment,
+		seedhandlers.Loop6SeedEquipmentDrops,
 	})
 }
 
 func seedLoop7(qtx *database.Queries, ctx context.Context) error {
 	defer h.MeasureTime("- seed loop 7")()
 	return seedLoop(qtx, ctx, []seedFunc{
-		Loop7SeedArenaCreations,
+		seedhandlers.Loop7SeedArenaCreations,
 	})
 }
 

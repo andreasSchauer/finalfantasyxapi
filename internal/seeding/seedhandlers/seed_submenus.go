@@ -1,0 +1,70 @@
+package seedhandlers
+
+import (
+	"context"
+	"database/sql"
+	"fmt"
+
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
+)
+
+func Loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
+	submenus, err := extractSubmenus()
+	if err != nil {
+		return err
+	}
+
+	params := database.CreateSubmenuBulkParams{
+		DataHash:    make([]string, len(submenus)),
+		Name:        make([]string, len(submenus)),
+		TopmenuID:   make([]sql.NullInt32, len(submenus)),
+		Description: make([]sql.NullString, len(submenus)),
+		Effect:      make([]string, len(submenus)),
+	}
+
+	for i, s := range submenus {
+		params.DataHash[i] = sh.GenerateDataHash(s)
+		params.Name[i] = s.Name
+		params.TopmenuID[i] = h.GetNullInt32(s.TopmenuID)
+		params.Description[i] = h.GetNullString(s.Description)
+		params.Effect[i] = s.Effect
+	}
+
+	dbRows, err := qtx.CreateSubmenuBulk(ctx, params)
+	if err != nil {
+		return fmt.Errorf("couldn't create submenus: %v", err)
+	}
+
+	for i, row := range dbRows {
+		submenus[i].ID = row.ID
+		sh.RawJSON.Submenus[i].ID = row.ID
+		lookup.L.Submenus[seedtypes.Key(submenus[i])] = submenus[i]
+		lookup.L.SubmenusID[row.ID] = submenus[i]
+		sh.Hashes[row.DataHash] = row.ID
+	}
+
+	return nil
+}
+
+func extractSubmenus() ([]seedtypes.Submenu, error) {
+	submenus := []seedtypes.Submenu{}
+	var err error
+
+	for i := range sh.RawJSON.Submenus {
+		submenu := &sh.RawJSON.Submenus[i]
+
+		if submenu.Topmenu != nil {
+			submenu.TopmenuID, err = sh.AssignFKPtr(submenu.Topmenu, lookup.L.Topmenus)
+			if err != nil {
+				return nil, err
+			}
+		}
+		submenus = append(submenus, *submenu)
+	}
+
+	return sh.DedupeRows(submenus, sh.Hashes), nil
+}
