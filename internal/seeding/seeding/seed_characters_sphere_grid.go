@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -33,7 +33,7 @@ func Loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, g := range grids {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(g)
+		params.DataHash[i] = sh.GenerateDataHash(g)
 		params.Type[i] = g.Type
 		params.Hp[i] = g.HP
 		params.Mp[i] = g.MP
@@ -58,7 +58,7 @@ func Loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -67,8 +67,8 @@ func Loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context) error {
 func extractSphereGrids() []seedtypes.SphereGrid {
 	grids := []seedtypes.SphereGrid{}
 
-	for i := range seedhelpers.RawJSON.Characters {
-		char := &seedhelpers.RawJSON.Characters[i]
+	for i := range sh.RawJSON.Characters {
+		char := &sh.RawJSON.Characters[i]
 
 		if char.IsStoryBased {
 			continue
@@ -80,5 +80,5 @@ func extractSphereGrids() []seedtypes.SphereGrid {
 		grids = append(grids, *char.ExpSphereGrid)
 	}
 
-	return dedupeRows(grids, seedhelpers.Hashes)
+	return dedupeRows(grids, sh.Hashes)
 }

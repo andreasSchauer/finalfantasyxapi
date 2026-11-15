@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -30,7 +30,7 @@ func Loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range abilities {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.AbilityID[i] = a.Ability.ID
 		params.Description[i] = a.Description
 		params.Effect[i] = a.Effect
@@ -47,10 +47,10 @@ func Loop3SeedMiscAbilities(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		seedhelpers.RawJSON.MiscAbilities[i].ID = row.ID
+		sh.RawJSON.MiscAbilities[i].ID = row.ID
 		lookup.L.MiscAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		lookup.L.MiscAbilitiesID[row.ID] = abilities[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -60,25 +60,25 @@ func extractMiscAbilities() ([]seedtypes.MiscAbility, error) {
 	abilities := []seedtypes.MiscAbility{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.MiscAbilities {
-		ability := &seedhelpers.RawJSON.MiscAbilities[i]
+	for i := range sh.RawJSON.MiscAbilities {
+		ability := &sh.RawJSON.MiscAbilities[i]
 
-		ability.Ability.ID, err = seedhelpers.GetHashID(ability.Ability)
+		ability.Ability.ID, err = sh.GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.TopmenuID, err = seedhelpers.AssignFKPtr(ability.Topmenu, lookup.L.Topmenus)
+		ability.TopmenuID, err = sh.AssignFKPtr(ability.Topmenu, lookup.L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.SubmenuID, err = seedhelpers.AssignFKPtr(ability.Submenu, lookup.L.Submenus)
+		ability.SubmenuID, err = sh.AssignFKPtr(ability.Submenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.OpenSubmenuID, err = seedhelpers.AssignFKPtr(ability.OpenSubmenu, lookup.L.Submenus)
+		ability.OpenSubmenuID, err = sh.AssignFKPtr(ability.OpenSubmenu, lookup.L.Submenus)
 		if err != nil {
 			return nil, err
 		}
@@ -86,12 +86,12 @@ func extractMiscAbilities() ([]seedtypes.MiscAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, seedhelpers.Hashes), nil
+	return dedupeRows(abilities, sh.Hashes), nil
 }
 
 func completeMiscAbilities() error {
-	for i := range seedhelpers.RawJSON.MiscAbilities {
-		ability := &seedhelpers.RawJSON.MiscAbilities[i]
+	for i := range sh.RawJSON.MiscAbilities {
+		ability := &sh.RawJSON.MiscAbilities[i]
 
 		err := completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {

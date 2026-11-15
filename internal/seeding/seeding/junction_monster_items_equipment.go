@@ -6,14 +6,14 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func getMonsterItems() []seedtypes.MonsterItems {
 	monsterItems := []seedtypes.MonsterItems{}
 
-	for _, mon := range seedhelpers.RawJSON.Monsters {
+	for _, mon := range sh.RawJSON.Monsters {
 		if mon.Items != nil {
 			monsterItems = append(monsterItems, *mon.Items)
 		}
@@ -43,7 +43,7 @@ func SeedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx context.Context) 
 func getMonsterEquipment() []seedtypes.MonsterEquipment {
 	monsterEquipment := []seedtypes.MonsterEquipment{}
 
-	for _, mon := range seedhelpers.RawJSON.Monsters {
+	for _, mon := range sh.RawJSON.Monsters {
 		if mon.Equipment != nil {
 			monsterEquipment = append(monsterEquipment, *mon.Equipment)
 		}

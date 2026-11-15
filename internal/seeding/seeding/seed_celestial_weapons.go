@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -28,7 +28,7 @@ func Loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for i, cw := range wpns {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(cw)
+		params.DataHash[i] = sh.GenerateDataHash(cw)
 		params.Name[i] = cw.Name
 		params.KeyItemBase[i] = database.KeyItemBase(cw.KeyItemBase)
 		params.Formula[i] = database.CelestialFormula(cw.Formula)
@@ -43,10 +43,10 @@ func Loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Context) error
 
 	for i, row := range dbRows {
 		wpns[i].ID = row.ID
-		seedhelpers.RawJSON.CelestialWeapons[i].ID = row.ID
+		sh.RawJSON.CelestialWeapons[i].ID = row.ID
 		lookup.L.CelestialWeapons[seedtypes.Key(wpns[i])] = wpns[i]
 		lookup.L.CelestialWeaponsID[row.ID] = wpns[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -56,15 +56,15 @@ func extractCelestialWeapons() ([]seedtypes.CelestialWeapon, error) {
 	wpns := []seedtypes.CelestialWeapon{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.CelestialWeapons {
-		wpn := &seedhelpers.RawJSON.CelestialWeapons[i]
+	for i := range sh.RawJSON.CelestialWeapons {
+		wpn := &sh.RawJSON.CelestialWeapons[i]
 
-		wpn.CharacterID, err = seedhelpers.AssignFKPtr(&wpn.Character, lookup.L.Characters)
+		wpn.CharacterID, err = sh.AssignFKPtr(&wpn.Character, lookup.L.Characters)
 		if err != nil {
 			return nil, err
 		}
 
-		wpn.AeonID, err = seedhelpers.AssignFKPtr(wpn.Aeon, lookup.L.Aeons)
+		wpn.AeonID, err = sh.AssignFKPtr(wpn.Aeon, lookup.L.Aeons)
 		if err != nil {
 			return nil, err
 		}
@@ -72,5 +72,5 @@ func extractCelestialWeapons() ([]seedtypes.CelestialWeapon, error) {
 		wpns = append(wpns, *wpn)
 	}
 
-	return dedupeRows(wpns, seedhelpers.Hashes), nil
+	return dedupeRows(wpns, sh.Hashes), nil
 }

@@ -6,12 +6,12 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func Loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
-	locations := dedupeRows(seedhelpers.RawJSON.Locations, seedhelpers.Hashes)
+	locations := dedupeRows(sh.RawJSON.Locations, sh.Hashes)
 
 	params := database.CreateLocationBulkParams{
 		DataHash:     make([]string, len(locations)),
@@ -20,7 +20,7 @@ func Loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, l := range locations {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(l)
+		params.DataHash[i] = sh.GenerateDataHash(l)
 		params.Name[i] = l.Name
 		params.Availability[i] = database.AvailabilityType(l.Availability)
 	}
@@ -32,18 +32,18 @@ func Loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		locations[i].ID = row.ID
-		seedhelpers.RawJSON.Locations[i].ID = row.ID
+		sh.RawJSON.Locations[i].ID = row.ID
 		lookup.L.Locations[seedtypes.Key(locations[i])] = locations[i]
 		lookup.L.LocationsID[row.ID] = locations[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
 }
 
 func completeLocations() error {
-	for i := range seedhelpers.RawJSON.Locations {
-		location := &seedhelpers.RawJSON.Locations[i]
+	for i := range sh.RawJSON.Locations {
+		location := &sh.RawJSON.Locations[i]
 
 		err := completeSublocations(location.Sublocations)
 		if err != nil {

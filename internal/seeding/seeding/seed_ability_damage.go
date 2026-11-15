@@ -7,7 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -25,7 +25,7 @@ func Loop1SeedClassDamages(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, d := range damages {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(d)
+		params.DataHash[i] = sh.GenerateDataHash(d)
 		params.Condition[i] = h.GetNullString(d.Condition)
 		params.DamageFormula[i] = database.DamageFormula(d.DamageFormula)
 		params.DamageConstant[i] = d.DamageConstant
@@ -37,7 +37,7 @@ func Loop1SeedClassDamages(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -46,8 +46,8 @@ func Loop1SeedClassDamages(qtx *database.Queries, ctx context.Context) error {
 func extractClassDamages() ([]seedtypes.ClassDamage, error) {
 	damages := []seedtypes.ClassDamage{}
 
-	for i := range seedhelpers.RawJSON.PlayerAbilities {
-		ability := &seedhelpers.RawJSON.PlayerAbilities[i]
+	for i := range sh.RawJSON.PlayerAbilities {
+		ability := &sh.RawJSON.PlayerAbilities[i]
 
 		newDamages, err := getClassDamages(ability.BattleInteractions)
 		if err != nil {
@@ -56,8 +56,8 @@ func extractClassDamages() ([]seedtypes.ClassDamage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range seedhelpers.RawJSON.OverdriveAbilities {
-		ability := &seedhelpers.RawJSON.OverdriveAbilities[i]
+	for i := range sh.RawJSON.OverdriveAbilities {
+		ability := &sh.RawJSON.OverdriveAbilities[i]
 
 		newDamages, err := getClassDamages(ability.BattleInteractions)
 		if err != nil {
@@ -67,8 +67,8 @@ func extractClassDamages() ([]seedtypes.ClassDamage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range seedhelpers.RawJSON.Items {
-		item := &seedhelpers.RawJSON.Items[i]
+	for i := range sh.RawJSON.Items {
+		item := &sh.RawJSON.Items[i]
 
 		newDamages, err := getClassDamages(item.BattleInteractions)
 		if err != nil {
@@ -78,8 +78,8 @@ func extractClassDamages() ([]seedtypes.ClassDamage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range seedhelpers.RawJSON.TriggerCommands {
-		command := &seedhelpers.RawJSON.TriggerCommands[i]
+	for i := range sh.RawJSON.TriggerCommands {
+		command := &sh.RawJSON.TriggerCommands[i]
 
 		newDamages, err := getClassDamages(command.BattleInteractions)
 		if err != nil {
@@ -89,8 +89,8 @@ func extractClassDamages() ([]seedtypes.ClassDamage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range seedhelpers.RawJSON.MiscAbilities {
-		ability := &seedhelpers.RawJSON.MiscAbilities[i]
+	for i := range sh.RawJSON.MiscAbilities {
+		ability := &sh.RawJSON.MiscAbilities[i]
 
 		newDamages, err := getClassDamages(ability.BattleInteractions)
 		if err != nil {
@@ -100,8 +100,8 @@ func extractClassDamages() ([]seedtypes.ClassDamage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	for i := range seedhelpers.RawJSON.EnemyAbilities {
-		ability := &seedhelpers.RawJSON.EnemyAbilities[i]
+	for i := range sh.RawJSON.EnemyAbilities {
+		ability := &sh.RawJSON.EnemyAbilities[i]
 
 		newDamages, err := getClassDamages(ability.BattleInteractions)
 		if err != nil {
@@ -111,7 +111,7 @@ func extractClassDamages() ([]seedtypes.ClassDamage, error) {
 		damages = append(damages, newDamages...)
 	}
 
-	return dedupeRows(damages, seedhelpers.Hashes), nil
+	return dedupeRows(damages, sh.Hashes), nil
 }
 
 func getClassDamages(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.ClassDamage, error) {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -26,7 +26,7 @@ func Loop6SeedShopEquipment(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, se := range equipment {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(se)
+		params.DataHash[i] = sh.GenerateDataHash(se)
 		params.ShopID[i] = se.ShopID
 		params.EquipmentNameID[i] = se.EquipmentNameID
 		params.ShopType[i] = se.ShopType
@@ -40,7 +40,7 @@ func Loop6SeedShopEquipment(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -50,8 +50,8 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 	shopEquipment := []seedtypes.ShopEquipment{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Shops {
-		shop := &seedhelpers.RawJSON.Shops[i]
+	for i := range sh.RawJSON.Shops {
+		shop := &sh.RawJSON.Shops[i]
 
 		if shop.PreAirship != nil {
 			for j := range shop.PreAirship.Equipment {
@@ -60,7 +60,7 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 				equipment.ShopID = shop.ID
 				equipment.ShopType = database.ShopTypePreAirship
 
-				equipment.EquipmentNameID, err = seedhelpers.AssignFK(equipment.Name, lookup.L.EquipmentNames)
+				equipment.EquipmentNameID, err = sh.AssignFK(equipment.Name, lookup.L.EquipmentNames)
 				if err != nil {
 					return nil, err
 				}
@@ -76,7 +76,7 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 				equipment.ShopID = shop.ID
 				equipment.ShopType = database.ShopTypePostAirship
 
-				equipment.EquipmentNameID, err = seedhelpers.AssignFK(equipment.Name, lookup.L.EquipmentNames)
+				equipment.EquipmentNameID, err = sh.AssignFK(equipment.Name, lookup.L.EquipmentNames)
 				if err != nil {
 					return nil, err
 				}
@@ -86,5 +86,5 @@ func extractShopEquipment() ([]seedtypes.ShopEquipment, error) {
 		}
 	}
 
-	return dedupeRows(shopEquipment, seedhelpers.Hashes), nil
+	return dedupeRows(shopEquipment, sh.Hashes), nil
 }

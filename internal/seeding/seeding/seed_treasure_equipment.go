@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -24,7 +24,7 @@ func Loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	for i, e := range equipment {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(e)
+		params.DataHash[i] = sh.GenerateDataHash(e)
 		params.TreasureID[i] = e.TreasureID
 		params.EquipmentNameID[i] = e.EquipmentNameID
 		params.EmptySlotsAmount[i] = e.EmptySlotsAmount
@@ -36,7 +36,7 @@ func Loop6SeedTreasureEquipment(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -46,8 +46,8 @@ func extractTreasureEquipment() ([]seedtypes.TreasureEquipment, error) {
 	equipment := []seedtypes.TreasureEquipment{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.TreasureLists {
-		list := &seedhelpers.RawJSON.TreasureLists[i]
+	for i := range sh.RawJSON.TreasureLists {
+		list := &sh.RawJSON.TreasureLists[i]
 
 		for j := range list.Treasures {
 			treasure := &list.Treasures[j]
@@ -56,12 +56,12 @@ func extractTreasureEquipment() ([]seedtypes.TreasureEquipment, error) {
 				continue
 			}
 
-			treasure.Equipment.TreasureID, err = seedhelpers.GetHashID(treasure)
+			treasure.Equipment.TreasureID, err = sh.GetHashID(treasure)
 			if err != nil {
 				return nil, err
 			}
 
-			treasure.Equipment.EquipmentNameID, err = seedhelpers.AssignFK(treasure.Equipment.Name, lookup.L.EquipmentNames)
+			treasure.Equipment.EquipmentNameID, err = sh.AssignFK(treasure.Equipment.Name, lookup.L.EquipmentNames)
 			if err != nil {
 				return nil, err
 			}
@@ -70,5 +70,5 @@ func extractTreasureEquipment() ([]seedtypes.TreasureEquipment, error) {
 		}
 	}
 
-	return dedupeRows(equipment, seedhelpers.Hashes), nil
+	return dedupeRows(equipment, sh.Hashes), nil
 }

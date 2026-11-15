@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -24,7 +24,7 @@ func Loop3SeedMonsterAbilities(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for i, a := range abilities {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.AbilityID[i] = a.AbilityID
 		params.IsForced[i] = a.IsForced
 		params.IsUnused[i] = a.IsUnused
@@ -36,7 +36,7 @@ func Loop3SeedMonsterAbilities(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -46,13 +46,13 @@ func extractMonsterAbilities() ([]seedtypes.MonsterAbility, error) {
 	abilities := []seedtypes.MonsterAbility{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Monsters {
-		mon := &seedhelpers.RawJSON.Monsters[i]
+	for i := range sh.RawJSON.Monsters {
+		mon := &sh.RawJSON.Monsters[i]
 
 		for j := range mon.Abilities {
 			ability := &mon.Abilities[j]
 
-			ability.AbilityID, err = seedhelpers.AssignFK(ability.AbilityReference, lookup.L.Abilities)
+			ability.AbilityID, err = sh.AssignFK(ability.AbilityReference, lookup.L.Abilities)
 			if err != nil {
 				return nil, err
 			}
@@ -61,5 +61,5 @@ func extractMonsterAbilities() ([]seedtypes.MonsterAbility, error) {
 		}
 	}
 
-	return dedupeRows(abilities, seedhelpers.Hashes), nil
+	return dedupeRows(abilities, sh.Hashes), nil
 }

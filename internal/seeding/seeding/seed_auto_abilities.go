@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -39,7 +39,7 @@ func Loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range abilities {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.Name[i] = a.Name
 		params.Description[i] = h.GetNullString(a.Description)
 		params.Effect[i] = a.Effect
@@ -65,10 +65,10 @@ func Loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		seedhelpers.RawJSON.AutoAbilities[i].ID = row.ID
+		sh.RawJSON.AutoAbilities[i].ID = row.ID
 		lookup.L.AutoAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		lookup.L.AutoAbilitiesID[row.ID] = abilities[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -78,50 +78,50 @@ func extractAutoAbilities() ([]seedtypes.AutoAbility, error) {
 	abilities := []seedtypes.AutoAbility{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.AutoAbilities {
-		ability := &seedhelpers.RawJSON.AutoAbilities[i]
+	for i := range sh.RawJSON.AutoAbilities {
+		ability := &sh.RawJSON.AutoAbilities[i]
 
-		ability.GradRecoveryStatID, err = seedhelpers.AssignFKPtr(ability.GradualRecovery, lookup.L.Stats)
+		ability.GradRecoveryStatID, err = sh.AssignFKPtr(ability.GradualRecovery, lookup.L.Stats)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.OnHitElementID, err = seedhelpers.AssignFKPtr(ability.OnHitElement, lookup.L.Elements)
+		ability.OnHitElementID, err = sh.AssignFKPtr(ability.OnHitElement, lookup.L.Elements)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.AddedPropertyID, err = seedhelpers.AssignFKPtr(ability.AddedProperty, lookup.L.Properties)
+		ability.AddedPropertyID, err = sh.AssignFKPtr(ability.AddedProperty, lookup.L.Properties)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.CnvrsnFromModID, err = seedhelpers.AssignFKPtr(ability.ConversionFrom, lookup.L.Modifiers)
+		ability.CnvrsnFromModID, err = sh.AssignFKPtr(ability.ConversionFrom, lookup.L.Modifiers)
 		if err != nil {
 			return nil, err
 		}
 
-		ability.CnvrsnToModID, err = seedhelpers.AssignFKPtr(ability.ConversionTo, lookup.L.Modifiers)
+		ability.CnvrsnToModID, err = sh.AssignFKPtr(ability.ConversionTo, lookup.L.Modifiers)
 		if err != nil {
 			return nil, err
 		}
 
 		if ability.RequiredItem != nil {
-			ability.RequiredItem.ID, err = seedhelpers.GetHashID(ability.RequiredItem)
+			ability.RequiredItem.ID, err = sh.GetHashID(ability.RequiredItem)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if ability.AddedElemResist != nil {
-			ability.AddedElemResist.ID, err = seedhelpers.GetHashID(ability.AddedElemResist)
+			ability.AddedElemResist.ID, err = sh.GetHashID(ability.AddedElemResist)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 		if ability.OnHitStatus != nil {
-			ability.OnHitStatus.ID, err = seedhelpers.GetHashID(ability.OnHitStatus)
+			ability.OnHitStatus.ID, err = sh.GetHashID(ability.OnHitStatus)
 			if err != nil {
 				return nil, err
 			}
@@ -130,12 +130,12 @@ func extractAutoAbilities() ([]seedtypes.AutoAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, seedhelpers.Hashes), nil
+	return dedupeRows(abilities, sh.Hashes), nil
 }
 
 func completeAutoAbilities() error {
-	for i := range seedhelpers.RawJSON.AutoAbilities {
-		autoAbility := &seedhelpers.RawJSON.AutoAbilities[i]
+	for i := range sh.RawJSON.AutoAbilities {
+		autoAbility := &sh.RawJSON.AutoAbilities[i]
 
 		err := assignIDs(autoAbility.AddedStatusResists)
 		if err != nil {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -15,7 +15,7 @@ func getStatusConditionModifierChanges(sc seedtypes.StatusCondition) ([]seedtype
 
 func SeedJuncStatusConditionModifierChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + modifier changes"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.StatusConditions, getStatusConditionModifierChanges)
+	jParams, err := processJunctions(desc, sh.RawJSON.StatusConditions, getStatusConditionModifierChanges)
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func getStatusConditionRelatedStats(sc seedtypes.StatusCondition) ([]seedtypes.S
 
 func SeedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + related stats"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.StatusConditions, getStatusConditionRelatedStats)
+	jParams, err := processJunctions(desc, sh.RawJSON.StatusConditions, getStatusConditionRelatedStats)
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func getStatusConditionRemovedConditions(sc seedtypes.StatusCondition) ([]seedty
 
 func SeedJuncStatusConditionRemovedConditions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + removed conditions"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.StatusConditions, getStatusConditionRemovedConditions)
+	jParams, err := processJunctions(desc, sh.RawJSON.StatusConditions, getStatusConditionRemovedConditions)
 	if err != nil {
 		return err
 	}
@@ -69,7 +69,7 @@ func getStatusConditionStatChanges(sc seedtypes.StatusCondition) ([]seedtypes.St
 
 func SeedJuncStatusConditionStatChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + stat changes"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.StatusConditions, getStatusConditionStatChanges)
+	jParams, err := processJunctions(desc, sh.RawJSON.StatusConditions, getStatusConditionStatChanges)
 	if err != nil {
 		return err
 	}

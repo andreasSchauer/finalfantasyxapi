@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -19,7 +19,7 @@ func getBackgroundMusicAreas(bm seedtypes.BackgroundMusic) ([]seedtypes.Area, er
 
 func SeedJuncSongsBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "songs + background music"
-	jParams, err := processThreewayJunctions(desc, seedhelpers.RawJSON.Songs, getSongBackgroundMusic, getBackgroundMusicAreas)
+	jParams, err := processThreewayJunctions(desc, sh.RawJSON.Songs, getSongBackgroundMusic, getBackgroundMusicAreas)
 	if err != nil {
 		return err
 	}

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -14,7 +14,7 @@ func getMonsterFormationEncounterAreas(mf seedtypes.MonsterFormation) ([]seedtyp
 
 func SeedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster-formations + encounter areas"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.MonsterFormations, getMonsterFormationEncounterAreas)
+	jParams, err := processJunctions(desc, sh.RawJSON.MonsterFormations, getMonsterFormationEncounterAreas)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func getMonsterFormationTriggerCommands(mf seedtypes.MonsterFormation) ([]seedty
 
 func SeedJuncMonsterFormationsTriggerCommands(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster-formations + trigger commands"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.MonsterFormations, getMonsterFormationTriggerCommands)
+	jParams, err := processJunctions(desc, sh.RawJSON.MonsterFormations, getMonsterFormationTriggerCommands)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func SeedJuncMonsterFormationsTriggerCommands(qtx *database.Queries, ctx context
 func getMonsterSelections() []seedtypes.MonsterSelection {
 	selections := []seedtypes.MonsterSelection{}
 
-	for _, formation := range seedhelpers.RawJSON.MonsterFormations {
+	for _, formation := range sh.RawJSON.MonsterFormations {
 		selections = append(selections, formation.MonsterSelection)
 	}
 

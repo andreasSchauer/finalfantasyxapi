@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -24,7 +24,7 @@ func Loop3SeedItemAbilities(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range abilities {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.AbilityID[i] = a.Ability.ID
 		params.ItemID[i] = a.ItemID
 		params.Cursor[i] = database.TargetType(a.Cursor)
@@ -39,7 +39,7 @@ func Loop3SeedItemAbilities(qtx *database.Queries, ctx context.Context) error {
 		abilities[i].ID = row.ID
 		lookup.L.ItemAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		lookup.L.ItemAbilitiesID[row.ID] = abilities[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -49,8 +49,8 @@ func extractItemAbilities() ([]seedtypes.ItemAbility, error) {
 	abilities := []seedtypes.ItemAbility{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Items {
-		item := &seedhelpers.RawJSON.Items[i]
+	for i := range sh.RawJSON.Items {
+		item := &sh.RawJSON.Items[i]
 
 		if len(item.BattleInteractions) == 0 {
 			continue
@@ -61,7 +61,7 @@ func extractItemAbilities() ([]seedtypes.ItemAbility, error) {
 		ability.Type = database.AbilityTypeItemAbility
 		ability.ItemID = item.ID
 
-		ability.Ability.ID, err = seedhelpers.GetHashID(ability.Ability)
+		ability.Ability.ID, err = sh.GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
@@ -69,5 +69,5 @@ func extractItemAbilities() ([]seedtypes.ItemAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, seedhelpers.Hashes), nil
+	return dedupeRows(abilities, sh.Hashes), nil
 }

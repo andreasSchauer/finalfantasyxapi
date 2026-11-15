@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -26,7 +26,7 @@ func Loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for i, qc := range completions {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(qc)
+		params.DataHash[i] = sh.GenerateDataHash(qc)
 		params.QuestID[i] = qc.QuestID
 		params.Condition[i] = h.GetNullString(qc.Condition)
 		params.ItemAmountID[i] = qc.Reward.ID
@@ -39,7 +39,7 @@ func Loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -49,17 +49,17 @@ func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 	completions := []seedtypes.QuestCompletion{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Sidequests {
-		sidequest := &seedhelpers.RawJSON.Sidequests[i]
+	for i := range sh.RawJSON.Sidequests {
+		sidequest := &sh.RawJSON.Sidequests[i]
 
 		if sidequest.Completion != nil {
 			completion := sidequest.Completion
-			completion.Reward.ID, err = seedhelpers.GetHashID(completion.Reward)
+			completion.Reward.ID, err = sh.GetHashID(completion.Reward)
 			if err != nil {
 				return nil, err
 			}
 
-			completion.QuestID, err = seedhelpers.AssignFK(sidequest.Quest, lookup.L.Quests)
+			completion.QuestID, err = sh.AssignFK(sidequest.Quest, lookup.L.Quests)
 			if err != nil {
 				return nil, err
 			}
@@ -72,12 +72,12 @@ func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 
 			if subquest.Completion != nil {
 				completion := subquest.Completion
-				completion.Reward.ID, err = seedhelpers.GetHashID(completion.Reward)
+				completion.Reward.ID, err = sh.GetHashID(completion.Reward)
 				if err != nil {
 					return nil, err
 				}
 
-				completion.QuestID, err = seedhelpers.AssignFK(subquest.Quest, lookup.L.Quests)
+				completion.QuestID, err = sh.AssignFK(subquest.Quest, lookup.L.Quests)
 				if err != nil {
 					return nil, err
 				}
@@ -87,7 +87,7 @@ func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 		}
 	}
 
-	return dedupeRows(completions, seedhelpers.Hashes), nil
+	return dedupeRows(completions, sh.Hashes), nil
 }
 
 func Loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Context) error {
@@ -104,7 +104,7 @@ func Loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, a := range areas {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.CompletionID[i] = a.CompletionID
 		params.AreaID[i] = a.AreaID
 		params.Notes[i] = h.GetNullString(a.Notes)
@@ -116,7 +116,7 @@ func Loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -126,11 +126,11 @@ func extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
 	areas := []seedtypes.CompletionArea{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Sidequests {
-		sidequest := &seedhelpers.RawJSON.Sidequests[i]
+	for i := range sh.RawJSON.Sidequests {
+		sidequest := &sh.RawJSON.Sidequests[i]
 
 		if sidequest.Completion != nil {
-			sidequest.Completion.ID, err = seedhelpers.GetHashID(sidequest.Completion)
+			sidequest.Completion.ID, err = sh.GetHashID(sidequest.Completion)
 			if err != nil {
 				return nil, err
 			}
@@ -147,7 +147,7 @@ func extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
 			subquest := &sidequest.Subquests[j]
 
 			if subquest.Completion != nil {
-				subquest.Completion.ID, err = seedhelpers.GetHashID(subquest.Completion)
+				subquest.Completion.ID, err = sh.GetHashID(subquest.Completion)
 				if err != nil {
 					return nil, err
 				}
@@ -162,7 +162,7 @@ func extractCompletionAreas() ([]seedtypes.CompletionArea, error) {
 		}
 	}
 
-	return dedupeRows(areas, seedhelpers.Hashes), nil
+	return dedupeRows(areas, sh.Hashes), nil
 }
 
 func prepareCompletionAreas(areas []seedtypes.CompletionArea, completionID int32) ([]seedtypes.CompletionArea, error) {
@@ -173,7 +173,7 @@ func prepareCompletionAreas(areas []seedtypes.CompletionArea, completionID int32
 		area := &areas[i]
 		area.CompletionID = completionID
 
-		area.AreaID, err = seedhelpers.AssignFK(area.LocationArea, lookup.L.Areas)
+		area.AreaID, err = sh.AssignFK(area.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}

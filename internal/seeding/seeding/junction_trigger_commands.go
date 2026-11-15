@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -15,7 +15,7 @@ func getTriggerCommandRelatedStats(tc seedtypes.TriggerCommand) ([]seedtypes.Sta
 
 func SeedJuncTriggerCommandsRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "trigger commands + related stats"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.TriggerCommands, getTriggerCommandRelatedStats)
+	jParams, err := processJunctions(desc, sh.RawJSON.TriggerCommands, getTriggerCommandRelatedStats)
 	if err != nil {
 		return err
 	}

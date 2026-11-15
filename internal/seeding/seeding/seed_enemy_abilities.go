@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -25,7 +25,7 @@ func Loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range abilities {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.AbilityID[i] = a.Ability.ID
 		params.Effect[i] = h.GetNullString(a.Effect)
 	}
@@ -37,10 +37,10 @@ func Loop3SeedEnemyAbilities(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		abilities[i].ID = row.ID
-		seedhelpers.RawJSON.EnemyAbilities[i].ID = row.ID
+		sh.RawJSON.EnemyAbilities[i].ID = row.ID
 		lookup.L.EnemyAbilities[seedtypes.Key(abilities[i])] = abilities[i]
 		lookup.L.EnemyAbilitiesID[row.ID] = abilities[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -50,10 +50,10 @@ func extractEnemyAbilities() ([]seedtypes.EnemyAbility, error) {
 	abilities := []seedtypes.EnemyAbility{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.EnemyAbilities {
-		ability := &seedhelpers.RawJSON.EnemyAbilities[i]
+	for i := range sh.RawJSON.EnemyAbilities {
+		ability := &sh.RawJSON.EnemyAbilities[i]
 
-		ability.Ability.ID, err = seedhelpers.GetHashID(ability.Ability)
+		ability.Ability.ID, err = sh.GetHashID(ability.Ability)
 		if err != nil {
 			return nil, err
 		}
@@ -61,12 +61,12 @@ func extractEnemyAbilities() ([]seedtypes.EnemyAbility, error) {
 		abilities = append(abilities, *ability)
 	}
 
-	return dedupeRows(abilities, seedhelpers.Hashes), nil
+	return dedupeRows(abilities, sh.Hashes), nil
 }
 
 func completeEnemyAbilities() error {
-	for i := range seedhelpers.RawJSON.EnemyAbilities {
-		ability := &seedhelpers.RawJSON.EnemyAbilities[i]
+	for i := range sh.RawJSON.EnemyAbilities {
+		ability := &sh.RawJSON.EnemyAbilities[i]
 
 		err := completeBattleInteractions(ability.BattleInteractions)
 		if err != nil {

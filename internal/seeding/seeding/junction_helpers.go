@@ -1,7 +1,7 @@
 package seeding
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -21,7 +21,7 @@ func processJunctions[P, C seedtypes.Hashable](desc string, parents []P, getChil
 	}
 
 	for _, p := range parents {
-		pID, err := seedhelpers.GetHashID(p)
+		pID, err := sh.GetHashID(p)
 		if err != nil {
 			return JunctionParams{}, err
 		}
@@ -32,7 +32,7 @@ func processJunctions[P, C seedtypes.Hashable](desc string, parents []P, getChil
 		}
 
 		for _, c := range children {
-			cID, err := seedhelpers.GetHashID(c)
+			cID, err := sh.GetHashID(c)
 			if err != nil {
 				return JunctionParams{}, err
 			}
@@ -60,7 +60,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](desc string, grandPar
 		ChildIDs:       make([]int32, 0),
 	}
 	for _, gp := range grandParents {
-		gpID, err := seedhelpers.GetHashID(gp)
+		gpID, err := sh.GetHashID(gp)
 		if err != nil {
 			return JunctionParams{}, err
 		}
@@ -71,7 +71,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](desc string, grandPar
 		}
 
 		for _, p := range parents {
-			pID, err := seedhelpers.GetHashID(p)
+			pID, err := sh.GetHashID(p)
 			if err != nil {
 				return JunctionParams{}, err
 			}
@@ -82,7 +82,7 @@ func processThreewayJunctions[GP, P, C seedtypes.Hashable](desc string, grandPar
 			}
 
 			for _, c := range children {
-				cID, err := seedhelpers.GetHashID(c)
+				cID, err := sh.GetHashID(c)
 				if err != nil {
 					return JunctionParams{}, err
 				}

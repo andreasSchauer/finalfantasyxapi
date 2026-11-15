@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -32,7 +32,7 @@ func Loop4SeedAeons(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range aeons {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.UnitID[i] = a.PlayerUnit.ID
 		params.UnlockCondition[i] = a.UnlockCondition
 		params.IsOptional[i] = a.IsOptional
@@ -51,10 +51,10 @@ func Loop4SeedAeons(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		aeons[i].ID = row.ID
-		seedhelpers.RawJSON.Aeons[i].ID = row.ID
+		sh.RawJSON.Aeons[i].ID = row.ID
 		lookup.L.Aeons[seedtypes.Key(aeons[i])] = aeons[i]
 		lookup.L.AeonsID[row.ID] = aeons[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -64,21 +64,21 @@ func extractAeons() ([]seedtypes.Aeon, error) {
 	aeons := []seedtypes.Aeon{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Aeons {
-		aeon := &seedhelpers.RawJSON.Aeons[i]
+	for i := range sh.RawJSON.Aeons {
+		aeon := &sh.RawJSON.Aeons[i]
 
-		aeon.PlayerUnit.ID, err = seedhelpers.GetHashID(aeon.PlayerUnit)
+		aeon.PlayerUnit.ID, err = sh.GetHashID(aeon.PlayerUnit)
 		if err != nil {
 			return nil, err
 		}
 
-		aeon.AreaID, err = seedhelpers.AssignFKPtr(&aeon.LocationArea, lookup.L.Areas)
+		aeon.AreaID, err = sh.AssignFKPtr(&aeon.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}
 
 		if aeon.PhysAtkAccuracy != nil {
-			aeon.PhysAtkAccuracy.ID, err = seedhelpers.GetHashID(aeon.PhysAtkAccuracy)
+			aeon.PhysAtkAccuracy.ID, err = sh.GetHashID(aeon.PhysAtkAccuracy)
 			if err != nil {
 				return nil, err
 			}
@@ -87,12 +87,12 @@ func extractAeons() ([]seedtypes.Aeon, error) {
 		aeons = append(aeons, *aeon)
 	}
 
-	return dedupeRows(aeons, seedhelpers.Hashes), nil
+	return dedupeRows(aeons, sh.Hashes), nil
 }
 
 func completeAeons() error {
-	for i := range seedhelpers.RawJSON.Aeons {
-		aeon := &seedhelpers.RawJSON.Aeons[i]
+	for i := range sh.RawJSON.Aeons {
+		aeon := &sh.RawJSON.Aeons[i]
 		err := assignIDs(aeon.Weapon)
 		if err != nil {
 			return err

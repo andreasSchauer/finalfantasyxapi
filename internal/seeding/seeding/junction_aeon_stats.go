@@ -5,7 +5,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -32,7 +32,7 @@ func getAeonBaseStatsA(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 
 func SeedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats a"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Aeons, getAeonBaseStatsA)
+	jParams, err := processJunctions(desc, sh.RawJSON.Aeons, getAeonBaseStatsA)
 	if err != nil {
 		return err
 	}
@@ -50,7 +50,7 @@ func getAeonBaseStatsB(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 
 func SeedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats b"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Aeons, getAeonBaseStatsB)
+	jParams, err := processJunctions(desc, sh.RawJSON.Aeons, getAeonBaseStatsB)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func SeedJuncAeonBaseStatsX(qtx *database.Queries, ctx context.Context) error {
 		Battles:    make([]int32, 0),
 	}
 
-	for _, aeon := range seedhelpers.RawJSON.Aeons {
+	for _, aeon := range sh.RawJSON.Aeons {
 		for _, xVal := range aeon.BaseStats.XVals {
 			for _, baseStat := range xVal.BaseStats {
 				j := AeonXStatJunction{}

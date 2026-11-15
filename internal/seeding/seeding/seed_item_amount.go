@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -23,7 +23,7 @@ func Loop2SeedItemAmounts(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, ia := range itemAmts {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(ia)
+		params.DataHash[i] = sh.GenerateDataHash(ia)
 		params.MasterItemID[i] = ia.MasterItem.ID
 		params.Amount[i] = ia.Amount
 	}
@@ -34,7 +34,7 @@ func Loop2SeedItemAmounts(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -44,8 +44,8 @@ func extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 	itemAmounts := []seedtypes.ItemAmount{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.AutoAbilities {
-		autoAbility := &seedhelpers.RawJSON.AutoAbilities[i]
+	for i := range sh.RawJSON.AutoAbilities {
+		autoAbility := &sh.RawJSON.AutoAbilities[i]
 
 		if autoAbility.RequiredItem != nil {
 			itemAmt, err := prepareItemAmt(autoAbility.RequiredItem)
@@ -57,8 +57,8 @@ func extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	for i := range seedhelpers.RawJSON.BlitzballPositions {
-		position := &seedhelpers.RawJSON.BlitzballPositions[i]
+	for i := range sh.RawJSON.BlitzballPositions {
+		position := &sh.RawJSON.BlitzballPositions[i]
 
 		for j := range position.Items {
 			itemAmt, err := prepareItemAmt(&position.Items[j].ItemAmount)
@@ -76,8 +76,8 @@ func extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 	}
 	itemAmounts = append(itemAmounts, monsterItems...)
 
-	for i := range seedhelpers.RawJSON.PlayerAbilities {
-		playerAbility := &seedhelpers.RawJSON.PlayerAbilities[i]
+	for i := range sh.RawJSON.PlayerAbilities {
+		playerAbility := &sh.RawJSON.PlayerAbilities[i]
 
 		if playerAbility.AeonLearnItem != nil {
 			itemAmt, err := prepareItemAmt(playerAbility.AeonLearnItem)
@@ -89,8 +89,8 @@ func extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	for i := range seedhelpers.RawJSON.Sidequests {
-		sidequest := &seedhelpers.RawJSON.Sidequests[i]
+	for i := range sh.RawJSON.Sidequests {
+		sidequest := &sh.RawJSON.Sidequests[i]
 
 		if sidequest.Completion != nil {
 			itemAmt, err := prepareItemAmt(&sidequest.Completion.Reward)
@@ -115,8 +115,8 @@ func extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	for i := range seedhelpers.RawJSON.TreasureLists {
-		treasureList := &seedhelpers.RawJSON.TreasureLists[i]
+	for i := range sh.RawJSON.TreasureLists {
+		treasureList := &sh.RawJSON.TreasureLists[i]
 		for j := range treasureList.Treasures {
 			treasure := &treasureList.Treasures[j]
 
@@ -131,15 +131,15 @@ func extractItemAmounts() ([]seedtypes.ItemAmount, error) {
 		}
 	}
 
-	return dedupeRows(itemAmounts, seedhelpers.Hashes), nil
+	return dedupeRows(itemAmounts, sh.Hashes), nil
 }
 
 func extractItemAmtsMonsters() ([]seedtypes.ItemAmount, error) {
 	itemAmounts := []seedtypes.ItemAmount{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Monsters {
-		monster := seedhelpers.RawJSON.Monsters[i]
+	for i := range sh.RawJSON.Monsters {
+		monster := sh.RawJSON.Monsters[i]
 
 		if monster.Items != nil {
 			items := monster.Items
@@ -225,7 +225,7 @@ func prepareItemAmt(ia *seedtypes.ItemAmount) (*seedtypes.ItemAmount, error) {
 	var err error
 	ia.MasterItem.Name = ia.ItemName
 
-	ia.MasterItem.ID, err = seedhelpers.AssignFK(ia.MasterItem.Name, lookup.L.MasterItems)
+	ia.MasterItem.ID, err = sh.AssignFK(ia.MasterItem.Name, lookup.L.MasterItems)
 	if err != nil {
 		return nil, err
 	}

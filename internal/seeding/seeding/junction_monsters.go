@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -15,7 +15,7 @@ func getMonsterMonsterAbilities(m seedtypes.Monster) ([]seedtypes.MonsterAbility
 
 func SeedJuncMonstersMonsterAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monsters + monster abilities"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Monsters, getMonsterMonsterAbilities)
+	jParams, err := processJunctions(desc, sh.RawJSON.Monsters, getMonsterMonsterAbilities)
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func getMonsterAutoAbilities(m seedtypes.Monster) ([]seedtypes.AutoAbility, erro
 
 func SeedJuncMonstersAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monsters + auto-abilities"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Monsters, getMonsterAutoAbilities)
+	jParams, err := processJunctions(desc, sh.RawJSON.Monsters, getMonsterAutoAbilities)
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func getMonsterBaseStats(m seedtypes.Monster) ([]seedtypes.BaseStat, error) {
 
 func SeedJuncMonstersBaseStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monsters + base stats"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Monsters, getMonsterBaseStats)
+	jParams, err := processJunctions(desc, sh.RawJSON.Monsters, getMonsterBaseStats)
 	if err != nil {
 		return err
 	}
@@ -69,7 +69,7 @@ func getMonsterElementalResists(m seedtypes.Monster) ([]seedtypes.ElementalResis
 
 func SeedJuncMonstersElementalResists(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monsters + elemental resists"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Monsters, getMonsterElementalResists)
+	jParams, err := processJunctions(desc, sh.RawJSON.Monsters, getMonsterElementalResists)
 	if err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func getMonsterStatusImmunities(m seedtypes.Monster) ([]seedtypes.StatusConditio
 
 func SeedJuncMonstersStatusImmunities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monsters + status immunities"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Monsters, getMonsterStatusImmunities)
+	jParams, err := processJunctions(desc, sh.RawJSON.Monsters, getMonsterStatusImmunities)
 	if err != nil {
 		return err
 	}
@@ -105,7 +105,7 @@ func getMonsterProperties(m seedtypes.Monster) ([]seedtypes.Property, error) {
 
 func SeedJuncMonstersProperties(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monsters + properties"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Monsters, getMonsterProperties)
+	jParams, err := processJunctions(desc, sh.RawJSON.Monsters, getMonsterProperties)
 	if err != nil {
 		return err
 	}
@@ -123,7 +123,7 @@ func getMonsterRonsoRages(m seedtypes.Monster) ([]seedtypes.RonsoRage, error) {
 
 func SeedJuncMonstersRonsoRages(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monsters + ronso rages"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Monsters, getMonsterRonsoRages)
+	jParams, err := processJunctions(desc, sh.RawJSON.Monsters, getMonsterRonsoRages)
 	if err != nil {
 		return err
 	}
@@ -141,7 +141,7 @@ func getMonsterStatusResists(m seedtypes.Monster) ([]seedtypes.StatusResist, err
 
 func SeedJuncMonstersStatusResists(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monsters + status resists"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Monsters, getMonsterStatusResists)
+	jParams, err := processJunctions(desc, sh.RawJSON.Monsters, getMonsterStatusResists)
 	if err != nil {
 		return err
 	}

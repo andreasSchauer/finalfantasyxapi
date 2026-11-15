@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -23,7 +23,7 @@ func Loop3SeedShopItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, si := range items {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(si)
+		params.DataHash[i] = sh.GenerateDataHash(si)
 		params.ItemID[i] = si.ItemID
 		params.Price[i] = si.Price
 	}
@@ -34,7 +34,7 @@ func Loop3SeedShopItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -44,14 +44,14 @@ func extractShopItems() ([]seedtypes.ShopItem, error) {
 	items := []seedtypes.ShopItem{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Shops {
-		shop := &seedhelpers.RawJSON.Shops[i]
+	for i := range sh.RawJSON.Shops {
+		shop := &sh.RawJSON.Shops[i]
 
 		if shop.PreAirship != nil {
 			for j := range shop.PreAirship.Items {
 				item := &shop.PreAirship.Items[j]
 
-				item.ItemID, err = seedhelpers.AssignFK(item.Name, lookup.L.Items)
+				item.ItemID, err = sh.AssignFK(item.Name, lookup.L.Items)
 				if err != nil {
 					return nil, err
 				}
@@ -64,7 +64,7 @@ func extractShopItems() ([]seedtypes.ShopItem, error) {
 			for j := range shop.PostAirship.Items {
 				item := &shop.PostAirship.Items[j]
 
-				item.ItemID, err = seedhelpers.AssignFK(item.Name, lookup.L.Items)
+				item.ItemID, err = sh.AssignFK(item.Name, lookup.L.Items)
 				if err != nil {
 					return nil, err
 				}
@@ -74,5 +74,5 @@ func extractShopItems() ([]seedtypes.ShopItem, error) {
 		}
 	}
 
-	return dedupeRows(items, seedhelpers.Hashes), nil
+	return dedupeRows(items, sh.Hashes), nil
 }

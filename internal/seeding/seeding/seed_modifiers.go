@@ -8,12 +8,12 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func Loop1SeedModifiers(qtx *database.Queries, ctx context.Context) error {
-	modifiers := dedupeRows(seedhelpers.RawJSON.Modifiers, seedhelpers.Hashes)
+	modifiers := dedupeRows(sh.RawJSON.Modifiers, sh.Hashes)
 
 	params := database.CreateModifierBulkParams{
 		DataHash:     make([]string, len(modifiers)),
@@ -24,7 +24,7 @@ func Loop1SeedModifiers(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, m := range modifiers {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(m)
+		params.DataHash[i] = sh.GenerateDataHash(m)
 		params.Name[i] = m.Name
 		params.Effect[i] = m.Effect
 		params.Category[i] = database.ModifierCategory(m.Category)
@@ -38,10 +38,10 @@ func Loop1SeedModifiers(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		modifiers[i].ID = row.ID
-		seedhelpers.RawJSON.Modifiers[i].ID = row.ID
+		sh.RawJSON.Modifiers[i].ID = row.ID
 		lookup.L.Modifiers[seedtypes.Key(modifiers[i])] = modifiers[i]
 		lookup.L.ModifiersID[row.ID] = modifiers[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil

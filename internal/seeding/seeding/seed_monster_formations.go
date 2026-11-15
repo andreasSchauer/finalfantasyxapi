@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -26,7 +26,7 @@ func Loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	for i, mf := range formations {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(mf)
+		params.DataHash[i] = sh.GenerateDataHash(mf)
 		params.Version[i] = h.GetNullInt32(mf.Version)
 		params.MonsterSelectionID[i] = mf.MonsterSelection.ID
 		params.FormationDataID[i] = mf.FormationData.ID
@@ -39,10 +39,10 @@ func Loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) erro
 
 	for i, row := range dbRows {
 		formations[i].ID = row.ID
-		seedhelpers.RawJSON.MonsterFormations[i].ID = row.ID
+		sh.RawJSON.MonsterFormations[i].ID = row.ID
 		lookup.L.MonsterFormations[seedtypes.Key(formations[i])] = formations[i]
 		lookup.L.MonsterFormationsID[row.ID] = formations[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -52,15 +52,15 @@ func extractMonsterFormations() ([]seedtypes.MonsterFormation, error) {
 	formations := []seedtypes.MonsterFormation{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.MonsterFormations {
-		mf := &seedhelpers.RawJSON.MonsterFormations[i]
+	for i := range sh.RawJSON.MonsterFormations {
+		mf := &sh.RawJSON.MonsterFormations[i]
 
-		mf.FormationData.ID, err = seedhelpers.GetHashID(mf.FormationData)
+		mf.FormationData.ID, err = sh.GetHashID(mf.FormationData)
 		if err != nil {
 			return nil, err
 		}
 
-		mf.MonsterSelection.ID, err = seedhelpers.GetHashID(mf.MonsterSelection)
+		mf.MonsterSelection.ID, err = sh.GetHashID(mf.MonsterSelection)
 		if err != nil {
 			return nil, err
 		}
@@ -68,12 +68,12 @@ func extractMonsterFormations() ([]seedtypes.MonsterFormation, error) {
 		formations = append(formations, *mf)
 	}
 
-	return dedupeRows(formations, seedhelpers.Hashes), nil
+	return dedupeRows(formations, sh.Hashes), nil
 }
 
 func completeMonsterFormations() error {
-	for i := range seedhelpers.RawJSON.MonsterFormations {
-		formation := &seedhelpers.RawJSON.MonsterFormations[i]
+	for i := range sh.RawJSON.MonsterFormations {
+		formation := &sh.RawJSON.MonsterFormations[i]
 
 		err := assignIDs(formation.Monsters)
 		if err != nil {
@@ -106,7 +106,7 @@ func Loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) erro
 	dataHashes := make([]string, len(selections))
 
 	for i, s := range selections {
-		dataHashes[i] = seedhelpers.GenerateDataHash(s)
+		dataHashes[i] = sh.GenerateDataHash(s)
 	}
 
 	dbRows, err := qtx.CreateMonsterSelectionBulk(ctx, dataHashes)
@@ -115,7 +115,7 @@ func Loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -125,14 +125,14 @@ func extractMonsterSelections() ([]seedtypes.MonsterSelection, error) {
 	selections := []seedtypes.MonsterSelection{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.MonsterFormations {
-		mf := &seedhelpers.RawJSON.MonsterFormations[i]
+	for i := range sh.RawJSON.MonsterFormations {
+		mf := &sh.RawJSON.MonsterFormations[i]
 
 		for j := range mf.MonsterSelection.Monsters {
 			ma := &mf.MonsterSelection.Monsters[j]
 
 			key := seedtypes.Key(*ma)
-			ma.MonsterID, err = seedhelpers.AssignFK(key, lookup.L.Monsters)
+			ma.MonsterID, err = sh.AssignFK(key, lookup.L.Monsters)
 			if err != nil {
 				return nil, err
 			}
@@ -141,5 +141,5 @@ func extractMonsterSelections() ([]seedtypes.MonsterSelection, error) {
 		selections = append(selections, mf.MonsterSelection)
 	}
 
-	return dedupeRows(selections, seedhelpers.Hashes), nil
+	return dedupeRows(selections, sh.Hashes), nil
 }

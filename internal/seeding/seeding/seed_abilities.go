@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -28,7 +28,7 @@ func Loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range abilities {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.Name[i] = a.Name
 		params.Version[i] = h.GetNullInt32(a.Version)
 		params.Specification[i] = h.GetNullString(a.Specification)
@@ -45,7 +45,7 @@ func Loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
 		abilities[i].ID = row.ID
 		lookup.L.Abilities[seedtypes.Key(abilities[i])] = abilities[i]
 		lookup.L.AbilitiesID[row.ID] = abilities[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -55,9 +55,9 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 	abilities := []seedtypes.Ability{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.PlayerAbilities {
-		ability := &seedhelpers.RawJSON.PlayerAbilities[i]
-		ability.Attributes.ID, err = seedhelpers.GetHashID(ability.Attributes)
+	for i := range sh.RawJSON.PlayerAbilities {
+		ability := &sh.RawJSON.PlayerAbilities[i]
+		ability.Attributes.ID, err = sh.GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -66,9 +66,9 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for i := range seedhelpers.RawJSON.OverdriveAbilities {
-		ability := &seedhelpers.RawJSON.OverdriveAbilities[i]
-		ability.Attributes.ID, err = seedhelpers.GetHashID(ability.Attributes)
+	for i := range sh.RawJSON.OverdriveAbilities {
+		ability := &sh.RawJSON.OverdriveAbilities[i]
+		ability.Attributes.ID, err = sh.GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -77,14 +77,14 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for i := range seedhelpers.RawJSON.Items {
-		item := &seedhelpers.RawJSON.Items[i]
+	for i := range sh.RawJSON.Items {
+		item := &sh.RawJSON.Items[i]
 
 		if len(item.BattleInteractions) == 0 {
 			continue
 		}
 
-		item.Attributes.ID, err = seedhelpers.GetHashID(item.Attributes)
+		item.Attributes.ID, err = sh.GetHashID(item.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -93,9 +93,9 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, item.Ability)
 	}
 
-	for i := range seedhelpers.RawJSON.TriggerCommands {
-		command := &seedhelpers.RawJSON.TriggerCommands[i]
-		command.Attributes.ID, err = seedhelpers.GetHashID(command.Attributes)
+	for i := range sh.RawJSON.TriggerCommands {
+		command := &sh.RawJSON.TriggerCommands[i]
+		command.Attributes.ID, err = sh.GetHashID(command.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -104,9 +104,9 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, command.Ability)
 	}
 
-	for i := range seedhelpers.RawJSON.MiscAbilities {
-		ability := &seedhelpers.RawJSON.MiscAbilities[i]
-		ability.Attributes.ID, err = seedhelpers.GetHashID(ability.Attributes)
+	for i := range sh.RawJSON.MiscAbilities {
+		ability := &sh.RawJSON.MiscAbilities[i]
+		ability.Attributes.ID, err = sh.GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -115,9 +115,9 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	for i := range seedhelpers.RawJSON.EnemyAbilities {
-		ability := &seedhelpers.RawJSON.EnemyAbilities[i]
-		ability.Attributes.ID, err = seedhelpers.GetHashID(ability.Attributes)
+	for i := range sh.RawJSON.EnemyAbilities {
+		ability := &sh.RawJSON.EnemyAbilities[i]
+		ability.Attributes.ID, err = sh.GetHashID(ability.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -126,7 +126,7 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 		abilities = append(abilities, ability.Ability)
 	}
 
-	return dedupeRows(abilities, seedhelpers.Hashes), nil
+	return dedupeRows(abilities, sh.Hashes), nil
 }
 
 func Loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) error {
@@ -140,7 +140,7 @@ func Loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	for i, a := range attributes {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.Rank[i] = h.GetNullInt32(a.Rank)
 		params.AppearsInHelpBar[i] = a.AppearsInHelpBar
 		params.CanCopycat[i] = a.CanCopycat
@@ -152,7 +152,7 @@ func Loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) erro
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -161,36 +161,36 @@ func Loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) erro
 func extractAbilityAttributes() []seedtypes.Attributes {
 	attributes := []seedtypes.Attributes{}
 
-	for _, ability := range seedhelpers.RawJSON.EnemyAbilities {
+	for _, ability := range sh.RawJSON.EnemyAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range seedhelpers.RawJSON.Items {
+	for _, ability := range sh.RawJSON.Items {
 		if len(ability.BattleInteractions) == 0 {
 			continue
 		}
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range seedhelpers.RawJSON.Overdrives {
+	for _, ability := range sh.RawJSON.Overdrives {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range seedhelpers.RawJSON.OverdriveAbilities {
+	for _, ability := range sh.RawJSON.OverdriveAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range seedhelpers.RawJSON.PlayerAbilities {
+	for _, ability := range sh.RawJSON.PlayerAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range seedhelpers.RawJSON.TriggerCommands {
+	for _, ability := range sh.RawJSON.TriggerCommands {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	for _, ability := range seedhelpers.RawJSON.MiscAbilities {
+	for _, ability := range sh.RawJSON.MiscAbilities {
 		attributes = append(attributes, ability.Attributes)
 	}
 
-	return dedupeRows(attributes, seedhelpers.Hashes)
+	return dedupeRows(attributes, sh.Hashes)
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -35,7 +35,7 @@ func getEquipmentReqAutoAbilities(et seedtypes.EquipmentTable) ([]seedtypes.Auto
 
 func SeedJuncEquipmentReqAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "equipment table + required auto-abilities"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Equipment, getEquipmentReqAutoAbilities)
+	jParams, err := processJunctions(desc, sh.RawJSON.Equipment, getEquipmentReqAutoAbilities)
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func SeedJuncEquipmentTablesNames(qtx *database.Queries, ctx context.Context) er
 		CelestialWeaponID: make([]sql.NullInt32, 0),
 	}
 
-	for _, table := range seedhelpers.RawJSON.Equipment {
+	for _, table := range sh.RawJSON.Equipment {
 		for _, name := range table.EquipmentNames {
 			j := EquipmentTableNameJunction{
 				ParentID: table.ID,
@@ -65,7 +65,7 @@ func SeedJuncEquipmentTablesNames(qtx *database.Queries, ctx context.Context) er
 
 			if table.Classification == string(database.EquipClassCelestialWeapon) {
 				var err error
-				j.CelestialWeaponID, err = seedhelpers.AssignFKPtr(&name.Name, lookup.L.CelestialWeapons)
+				j.CelestialWeaponID, err = sh.AssignFKPtr(&name.Name, lookup.L.CelestialWeapons)
 				if err != nil {
 					return err
 				}
@@ -86,7 +86,7 @@ func SeedJuncEquipmentTablesNames(qtx *database.Queries, ctx context.Context) er
 func getAbilityPools() []seedtypes.AbilityPool {
 	pools := []seedtypes.AbilityPool{}
 
-	for _, table := range seedhelpers.RawJSON.Equipment {
+	for _, table := range sh.RawJSON.Equipment {
 		pools = append(pools, table.SelectableAutoAbilities...)
 	}
 

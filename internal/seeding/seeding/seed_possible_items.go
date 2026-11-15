@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -22,7 +22,7 @@ func Loop3SeedPossibleItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, pi := range items {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(pi)
+		params.DataHash[i] = sh.GenerateDataHash(pi)
 		params.ItemAmountID[i] = pi.ItemAmount.ID
 		params.Chance[i] = pi.Chance
 	}
@@ -33,7 +33,7 @@ func Loop3SeedPossibleItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -43,13 +43,13 @@ func extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 	items := []seedtypes.PossibleItem{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.BlitzballPositions {
-		pos := &seedhelpers.RawJSON.BlitzballPositions[i]
+	for i := range sh.RawJSON.BlitzballPositions {
+		pos := &sh.RawJSON.BlitzballPositions[i]
 
 		for j := range pos.Items {
 			item := &pos.Items[j]
 
-			item.ItemAmount.ID, err = seedhelpers.GetHashID(item.ItemAmount)
+			item.ItemAmount.ID, err = sh.GetHashID(item.ItemAmount)
 			if err != nil {
 				return nil, err
 			}
@@ -58,8 +58,8 @@ func extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 		}
 	}
 
-	for i := range seedhelpers.RawJSON.Monsters {
-		mon := &seedhelpers.RawJSON.Monsters[i]
+	for i := range sh.RawJSON.Monsters {
+		mon := &sh.RawJSON.Monsters[i]
 
 		if mon.Items == nil {
 			continue
@@ -68,7 +68,7 @@ func extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 		for j := range mon.Items.OtherItems {
 			item := &mon.Items.OtherItems[j]
 
-			item.ItemAmount.ID, err = seedhelpers.GetHashID(item.ItemAmount)
+			item.ItemAmount.ID, err = sh.GetHashID(item.ItemAmount)
 			if err != nil {
 				return nil, err
 			}
@@ -77,5 +77,5 @@ func extractPossibleItems() ([]seedtypes.PossibleItem, error) {
 		}
 	}
 
-	return dedupeRows(items, seedhelpers.Hashes), nil
+	return dedupeRows(items, sh.Hashes), nil
 }

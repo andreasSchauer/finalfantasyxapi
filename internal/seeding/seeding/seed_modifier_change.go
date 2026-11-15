@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -24,7 +24,7 @@ func Loop2SeedModifierChanges(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, c := range changes {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
+		params.DataHash[i] = sh.GenerateDataHash(c)
 		params.ModifierID[i] = c.ModifierID
 		params.CalculationType[i] = database.CalculationType(c.CalculationType)
 		params.Value[i] = c.Value
@@ -36,7 +36,7 @@ func Loop2SeedModifierChanges(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -45,8 +45,8 @@ func Loop2SeedModifierChanges(qtx *database.Queries, ctx context.Context) error 
 func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 	changes := []seedtypes.ModifierChange{}
 
-	for i := range seedhelpers.RawJSON.PlayerAbilities {
-		ability := &seedhelpers.RawJSON.PlayerAbilities[i]
+	for i := range sh.RawJSON.PlayerAbilities {
+		ability := &sh.RawJSON.PlayerAbilities[i]
 
 		newChanges, err := prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
@@ -56,8 +56,8 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range seedhelpers.RawJSON.OverdriveAbilities {
-		ability := &seedhelpers.RawJSON.OverdriveAbilities[i]
+	for i := range sh.RawJSON.OverdriveAbilities {
+		ability := &sh.RawJSON.OverdriveAbilities[i]
 
 		newChanges, err := prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
@@ -67,8 +67,8 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range seedhelpers.RawJSON.Items {
-		item := &seedhelpers.RawJSON.Items[i]
+	for i := range sh.RawJSON.Items {
+		item := &sh.RawJSON.Items[i]
 
 		newChanges, err := prepareAbilityModifierChanges(item.BattleInteractions)
 		if err != nil {
@@ -78,8 +78,8 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range seedhelpers.RawJSON.TriggerCommands {
-		command := &seedhelpers.RawJSON.TriggerCommands[i]
+	for i := range sh.RawJSON.TriggerCommands {
+		command := &sh.RawJSON.TriggerCommands[i]
 
 		newChanges, err := prepareAbilityModifierChanges(command.BattleInteractions)
 		if err != nil {
@@ -89,8 +89,8 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range seedhelpers.RawJSON.MiscAbilities {
-		ability := &seedhelpers.RawJSON.MiscAbilities[i]
+	for i := range sh.RawJSON.MiscAbilities {
+		ability := &sh.RawJSON.MiscAbilities[i]
 
 		newChanges, err := prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
@@ -100,8 +100,8 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range seedhelpers.RawJSON.EnemyAbilities {
-		ability := &seedhelpers.RawJSON.EnemyAbilities[i]
+	for i := range sh.RawJSON.EnemyAbilities {
+		ability := &sh.RawJSON.EnemyAbilities[i]
 
 		newChanges, err := prepareAbilityModifierChanges(ability.BattleInteractions)
 		if err != nil {
@@ -111,8 +111,8 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range seedhelpers.RawJSON.AutoAbilities {
-		autoAbility := &seedhelpers.RawJSON.AutoAbilities[i]
+	for i := range sh.RawJSON.AutoAbilities {
+		autoAbility := &sh.RawJSON.AutoAbilities[i]
 
 		newChanges, err := prepareModifierChanges(autoAbility.ModifierChanges)
 		if err != nil {
@@ -122,8 +122,8 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	for i := range seedhelpers.RawJSON.Properties {
-		property := &seedhelpers.RawJSON.Properties[i]
+	for i := range sh.RawJSON.Properties {
+		property := &sh.RawJSON.Properties[i]
 
 		if property.ModifierChange == nil {
 			continue
@@ -137,8 +137,8 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, *change)
 	}
 
-	for i := range seedhelpers.RawJSON.StatusConditions {
-		status := &seedhelpers.RawJSON.StatusConditions[i]
+	for i := range sh.RawJSON.StatusConditions {
+		status := &sh.RawJSON.StatusConditions[i]
 
 		newChanges, err := prepareModifierChanges(status.ModifierChanges)
 		if err != nil {
@@ -148,7 +148,7 @@ func extractModifierChanges() ([]seedtypes.ModifierChange, error) {
 		changes = append(changes, newChanges...)
 	}
 
-	return dedupeRows(changes, seedhelpers.Hashes), nil
+	return dedupeRows(changes, sh.Hashes), nil
 }
 
 func prepareAbilityModifierChanges(battleInteractions []seedtypes.BattleInteraction) ([]seedtypes.ModifierChange, error) {
@@ -189,7 +189,7 @@ func prepareModifierChange(mc *seedtypes.ModifierChange) (*seedtypes.ModifierCha
 		return nil, nil
 	}
 
-	mc.ModifierID, err = seedhelpers.AssignFK(mc.ModifierName, lookup.L.Modifiers)
+	mc.ModifierID, err = sh.AssignFK(mc.ModifierName, lookup.L.Modifiers)
 	if err != nil {
 		return nil, err
 	}

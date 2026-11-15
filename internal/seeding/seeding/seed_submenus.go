@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -27,7 +27,7 @@ func Loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, s := range submenus {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
+		params.DataHash[i] = sh.GenerateDataHash(s)
 		params.Name[i] = s.Name
 		params.TopmenuID[i] = h.GetNullInt32(s.TopmenuID)
 		params.Description[i] = h.GetNullString(s.Description)
@@ -41,10 +41,10 @@ func Loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		submenus[i].ID = row.ID
-		seedhelpers.RawJSON.Submenus[i].ID = row.ID
+		sh.RawJSON.Submenus[i].ID = row.ID
 		lookup.L.Submenus[seedtypes.Key(submenus[i])] = submenus[i]
 		lookup.L.SubmenusID[row.ID] = submenus[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -54,11 +54,11 @@ func extractSubmenus() ([]seedtypes.Submenu, error) {
 	submenus := []seedtypes.Submenu{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Submenus {
-		submenu := &seedhelpers.RawJSON.Submenus[i]
+	for i := range sh.RawJSON.Submenus {
+		submenu := &sh.RawJSON.Submenus[i]
 
 		if submenu.Topmenu != nil {
-			submenu.TopmenuID, err = seedhelpers.AssignFKPtr(submenu.Topmenu, lookup.L.Topmenus)
+			submenu.TopmenuID, err = sh.AssignFKPtr(submenu.Topmenu, lookup.L.Topmenus)
 			if err != nil {
 				return nil, err
 			}
@@ -66,5 +66,5 @@ func extractSubmenus() ([]seedtypes.Submenu, error) {
 		submenus = append(submenus, *submenu)
 	}
 
-	return dedupeRows(submenus, seedhelpers.Hashes), nil
+	return dedupeRows(submenus, sh.Hashes), nil
 }

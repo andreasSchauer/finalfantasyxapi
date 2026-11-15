@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -15,7 +15,7 @@ func getSubmenuUsers(s seedtypes.Submenu) ([]seedtypes.CharacterClass, error) {
 
 func SeedJuncSubmenusUsers(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "submenus + users"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Submenus, getSubmenuUsers)
+	jParams, err := processJunctions(desc, sh.RawJSON.Submenus, getSubmenuUsers)
 	if err != nil {
 		return err
 	}

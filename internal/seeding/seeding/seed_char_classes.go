@@ -6,12 +6,12 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func Loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error {
-	classes := dedupeRows(seedhelpers.RawJSON.CharacterClasses, seedhelpers.Hashes)
+	classes := dedupeRows(sh.RawJSON.CharacterClasses, sh.Hashes)
 
 	params := database.CreateCharacterClassBulkParams{
 		DataHash: make([]string, len(classes)),
@@ -20,7 +20,7 @@ func Loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for i, c := range classes {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
+		params.DataHash[i] = sh.GenerateDataHash(c)
 		params.Name[i] = c.Name
 		params.Category[i] = database.CharacterClassCategory(c.Category)
 	}
@@ -32,10 +32,10 @@ func Loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error
 
 	for i, row := range dbRows {
 		classes[i].ID = row.ID
-		seedhelpers.RawJSON.CharacterClasses[i].ID = row.ID
+		sh.RawJSON.CharacterClasses[i].ID = row.ID
 		lookup.L.CharClasses[seedtypes.Key(classes[i])] = classes[i]
 		lookup.L.CharClassesID[row.ID] = classes[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil

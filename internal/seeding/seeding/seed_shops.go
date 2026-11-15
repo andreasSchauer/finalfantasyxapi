@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -28,7 +28,7 @@ func Loop4SeedShops(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, s := range shops {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
+		params.DataHash[i] = sh.GenerateDataHash(s)
 		params.Version[i] = h.GetNullInt32(s.Version)
 		params.AreaID[i] = s.AreaID
 		params.Notes[i] = h.GetNullString(s.Notes)
@@ -43,10 +43,10 @@ func Loop4SeedShops(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		shops[i].ID = row.ID
-		seedhelpers.RawJSON.Shops[i].ID = row.ID
+		sh.RawJSON.Shops[i].ID = row.ID
 		lookup.L.Shops[seedtypes.Key(shops[i])] = shops[i]
 		lookup.L.ShopsID[row.ID] = shops[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -56,8 +56,8 @@ func extractShops() ([]seedtypes.Shop, error) {
 	shops := []seedtypes.Shop{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Shops {
-		shop := &seedhelpers.RawJSON.Shops[i]
+	for i := range sh.RawJSON.Shops {
+		shop := &sh.RawJSON.Shops[i]
 
 		if shop.PreAirship != nil {
 			shop.PreAirship.Type = database.ShopTypePreAirship
@@ -67,7 +67,7 @@ func extractShops() ([]seedtypes.Shop, error) {
 			shop.PostAirship.Type = database.ShopTypePostAirship
 		}
 
-		shop.AreaID, err = seedhelpers.AssignFK(shop.LocationArea, lookup.L.Areas)
+		shop.AreaID, err = sh.AssignFK(shop.LocationArea, lookup.L.Areas)
 		if err != nil {
 			return nil, err
 		}
@@ -75,12 +75,12 @@ func extractShops() ([]seedtypes.Shop, error) {
 		shops = append(shops, *shop)
 	}
 
-	return dedupeRows(shops, seedhelpers.Hashes), nil
+	return dedupeRows(shops, sh.Hashes), nil
 }
 
 func completeShops() error {
-	for i := range seedhelpers.RawJSON.Shops {
-		shop := &seedhelpers.RawJSON.Shops[i]
+	for i := range sh.RawJSON.Shops {
+		shop := &sh.RawJSON.Shops[i]
 
 		err := completeSubShop(shop.PreAirship)
 		if err != nil {

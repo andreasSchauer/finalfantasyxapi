@@ -5,13 +5,13 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func SeedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "character classes + player units"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.CharacterClasses, getCharacterClassPlayerUnits)
+	jParams, err := processJunctions(desc, sh.RawJSON.CharacterClasses, getCharacterClassPlayerUnits)
 	if err != nil {
 		return err
 	}

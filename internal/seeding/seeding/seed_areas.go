@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -32,7 +32,7 @@ func Loop3SeedAreas(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range areas {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.SublocationID[i] = a.SublocationID
 		params.Name[i] = a.Name
 		params.Version[i] = h.GetNullInt32(a.Version)
@@ -53,7 +53,7 @@ func Loop3SeedAreas(qtx *database.Queries, ctx context.Context) error {
 		areas[i].ID = row.ID
 		lookup.L.Areas[seedtypes.Key(areas[i])] = areas[i]
 		lookup.L.AreasID[row.ID] = areas[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -63,13 +63,13 @@ func extractAreas() ([]seedtypes.Area, error) {
 	areas := []seedtypes.Area{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Locations {
-		location := &seedhelpers.RawJSON.Locations[i]
+	for i := range sh.RawJSON.Locations {
+		location := &sh.RawJSON.Locations[i]
 
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
 
-			sublocation.ID, err = seedhelpers.GetHashID(sublocation)
+			sublocation.ID, err = sh.GetHashID(sublocation)
 			if err != nil {
 				return nil, err
 			}
@@ -85,7 +85,7 @@ func extractAreas() ([]seedtypes.Area, error) {
 		}
 	}
 
-	return dedupeRows(areas, seedhelpers.Hashes), nil
+	return dedupeRows(areas, sh.Hashes), nil
 }
 
 func completeAreas(areas []seedtypes.Area) error {
@@ -97,7 +97,7 @@ func completeAreas(areas []seedtypes.Area) error {
 			return err
 		}
 
-		area.ID, err = seedhelpers.GetHashID(area)
+		area.ID, err = sh.GetHashID(area)
 		if err != nil {
 			return err
 		}
@@ -124,7 +124,7 @@ func Loop4SeedAreaConnections(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, a := range areas {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.AreaID[i] = a.AreaID
 		params.ConnectionType[i] = database.AreaConnectionType(a.ConnectionType)
 		params.IsStoryBased[i] = a.IsStoryBased
@@ -137,7 +137,7 @@ func Loop4SeedAreaConnections(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -146,8 +146,8 @@ func Loop4SeedAreaConnections(qtx *database.Queries, ctx context.Context) error 
 func extractAreaConnections() ([]seedtypes.AreaConnection, error) {
 	areas := []seedtypes.AreaConnection{}
 
-	for i := range seedhelpers.RawJSON.Locations {
-		location := &seedhelpers.RawJSON.Locations[i]
+	for i := range sh.RawJSON.Locations {
+		location := &sh.RawJSON.Locations[i]
 
 		for j := range location.Sublocations {
 			sublocation := &location.Sublocations[j]
@@ -161,7 +161,7 @@ func extractAreaConnections() ([]seedtypes.AreaConnection, error) {
 		}
 	}
 
-	return dedupeRows(areas, seedhelpers.Hashes), nil
+	return dedupeRows(areas, sh.Hashes), nil
 }
 
 func prepareAreaConnections(areas []seedtypes.Area) ([]seedtypes.AreaConnection, error) {
@@ -174,7 +174,7 @@ func prepareAreaConnections(areas []seedtypes.Area) ([]seedtypes.AreaConnection,
 		for j := range area.ConnectedAreas {
 			connArea := &area.ConnectedAreas[j]
 
-			connArea.AreaID, err = seedhelpers.AssignFK(connArea.LocationArea, lookup.L.Areas)
+			connArea.AreaID, err = sh.AssignFK(connArea.LocationArea, lookup.L.Areas)
 			if err != nil {
 				return nil, err
 			}

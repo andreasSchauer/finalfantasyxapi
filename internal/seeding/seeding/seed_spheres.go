@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -30,7 +30,7 @@ func Loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, s := range spheres {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
+		params.DataHash[i] = sh.GenerateDataHash(s)
 		params.ItemID[i] = s.ItemID
 		params.SphereGridDescription[i] = s.SgDescription
 		params.SphereColor[i] = database.SphereColor(s.SphereColor)
@@ -47,10 +47,10 @@ func Loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		spheres[i].ID = row.ID
-		seedhelpers.RawJSON.Spheres[i].ID = row.ID
+		sh.RawJSON.Spheres[i].ID = row.ID
 		lookup.L.Spheres[seedtypes.Key(spheres[i])] = spheres[i]
 		lookup.L.SpheresID[row.ID] = spheres[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -60,16 +60,16 @@ func extractSpheres() ([]seedtypes.Sphere, error) {
 	spheres := []seedtypes.Sphere{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Spheres {
-		sphere := &seedhelpers.RawJSON.Spheres[i]
+	for i := range sh.RawJSON.Spheres {
+		sphere := &sh.RawJSON.Spheres[i]
 
-		sphere.ItemID, err = seedhelpers.AssignFK(sphere.Name, lookup.L.Items)
+		sphere.ItemID, err = sh.AssignFK(sphere.Name, lookup.L.Items)
 		if err != nil {
 			return nil, err
 		}
 
 		if sphere.CreatedNode != nil {
-			sphere.CreatedNode.ID, err = seedhelpers.GetHashID(*sphere.CreatedNode)
+			sphere.CreatedNode.ID, err = sh.GetHashID(*sphere.CreatedNode)
 			if err != nil {
 				return nil, err
 			}
@@ -78,7 +78,7 @@ func extractSpheres() ([]seedtypes.Sphere, error) {
 		spheres = append(spheres, *sphere)
 	}
 
-	return dedupeRows(spheres, seedhelpers.Hashes), nil
+	return dedupeRows(spheres, sh.Hashes), nil
 }
 
 func Loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
@@ -91,7 +91,7 @@ func Loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, mi := range nodes {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(mi)
+		params.DataHash[i] = sh.GenerateDataHash(mi)
 		params.Node[i] = database.NodeType(mi.Node)
 		params.Value[i] = mi.Value
 	}
@@ -102,7 +102,7 @@ func Loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -111,13 +111,13 @@ func Loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
 func extractCreatedNodes() []seedtypes.CreatedNode {
 	createdNodes := []seedtypes.CreatedNode{}
 
-	for _, sphere := range seedhelpers.RawJSON.Spheres {
+	for _, sphere := range sh.RawJSON.Spheres {
 		if sphere.CreatedNode != nil {
 			createdNodes = append(createdNodes, *sphere.CreatedNode)
 		}
 	}
 
-	return dedupeRows(createdNodes, seedhelpers.Hashes)
+	return dedupeRows(createdNodes, sh.Hashes)
 }
 
 func Loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error {
@@ -130,7 +130,7 @@ func Loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for i, s := range nodes {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
+		params.DataHash[i] = sh.GenerateDataHash(s)
 		params.SphereID[i] = s.SphereID
 		params.Node[i] = database.NodeType(s.Node)
 	}
@@ -141,7 +141,7 @@ func Loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error 
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -150,8 +150,8 @@ func Loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error 
 func extractTargetableNodes() []seedtypes.TargetableNode {
 	nodes := []seedtypes.TargetableNode{}
 
-	for i := range seedhelpers.RawJSON.Spheres {
-		sphere := &seedhelpers.RawJSON.Spheres[i]
+	for i := range sh.RawJSON.Spheres {
+		sphere := &sh.RawJSON.Spheres[i]
 
 		for j := range sphere.TargetableNodes {
 			nodeString := sphere.TargetableNodes[j]
@@ -165,5 +165,5 @@ func extractTargetableNodes() []seedtypes.TargetableNode {
 		}
 	}
 
-	return dedupeRows(nodes, seedhelpers.Hashes)
+	return dedupeRows(nodes, sh.Hashes)
 }

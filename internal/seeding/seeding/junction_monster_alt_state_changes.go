@@ -5,14 +5,14 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func getAlts() []seedtypes.Alt {
 	changes := []seedtypes.Alt{}
 
-	for _, mon := range seedhelpers.RawJSON.Monsters {
+	for _, mon := range sh.RawJSON.Monsters {
 		for _, state := range mon.AlteredStates {
 			changes = append(changes, state.Changes...)
 		}

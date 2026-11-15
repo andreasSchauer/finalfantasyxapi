@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -36,7 +36,7 @@ func SeedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 		ShopType:   make([]database.ShopType, 0),
 	}
 
-	for _, shop := range seedhelpers.RawJSON.Shops {
+	for _, shop := range sh.RawJSON.Shops {
 		if shop.PreAirship != nil {
 			for _, item := range shop.PreAirship.Items {
 				j := ShopJunction{
@@ -76,7 +76,7 @@ func SeedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 func getShopEquipment() []seedtypes.ShopEquipment {
 	shopEquipment := []seedtypes.ShopEquipment{}
 
-	for _, shop := range seedhelpers.RawJSON.Shops {
+	for _, shop := range sh.RawJSON.Shops {
 		if shop.PreAirship != nil {
 			shopEquipment = append(shopEquipment, shop.PreAirship.Equipment...)
 		}

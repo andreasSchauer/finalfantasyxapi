@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -35,7 +35,7 @@ func Loop4SeedOverdrives(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, o := range overdrives {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(o)
+		params.DataHash[i] = sh.GenerateDataHash(o)
 		params.Name[i] = o.Name
 		params.Version[i] = h.GetNullInt32(o.Version)
 		params.Specification[i] = h.GetNullString(o.Specification)
@@ -57,10 +57,10 @@ func Loop4SeedOverdrives(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		overdrives[i].ID = row.ID
-		seedhelpers.RawJSON.Overdrives[i].ID = row.ID
+		sh.RawJSON.Overdrives[i].ID = row.ID
 		lookup.L.Overdrives[seedtypes.Key(overdrives[i])] = overdrives[i]
 		lookup.L.OverdrivesID[row.ID] = overdrives[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -70,25 +70,25 @@ func extractOverdrives() ([]seedtypes.Overdrive, error) {
 	overdrives := []seedtypes.Overdrive{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Overdrives {
-		overdrive := &seedhelpers.RawJSON.Overdrives[i]
+	for i := range sh.RawJSON.Overdrives {
+		overdrive := &sh.RawJSON.Overdrives[i]
 
-		overdrive.ODCommandID, err = seedhelpers.AssignFKPtr(overdrive.OverdriveCommand, lookup.L.OverdriveCommands)
+		overdrive.ODCommandID, err = sh.AssignFKPtr(overdrive.OverdriveCommand, lookup.L.OverdriveCommands)
 		if err != nil {
 			return nil, err
 		}
 
-		overdrive.CharClassID, err = seedhelpers.AssignFKPtr(&overdrive.User, lookup.L.CharClasses)
+		overdrive.CharClassID, err = sh.AssignFKPtr(&overdrive.User, lookup.L.CharClasses)
 		if err != nil {
 			return nil, err
 		}
 
-		overdrive.TopmenuID, err = seedhelpers.AssignFKPtr(overdrive.Topmenu, lookup.L.Topmenus)
+		overdrive.TopmenuID, err = sh.AssignFKPtr(overdrive.Topmenu, lookup.L.Topmenus)
 		if err != nil {
 			return nil, err
 		}
 
-		overdrive.Attributes.ID, err = seedhelpers.GetHashID(overdrive.Attributes)
+		overdrive.Attributes.ID, err = sh.GetHashID(overdrive.Attributes)
 		if err != nil {
 			return nil, err
 		}
@@ -96,5 +96,5 @@ func extractOverdrives() ([]seedtypes.Overdrive, error) {
 		overdrives = append(overdrives, *overdrive)
 	}
 
-	return dedupeRows(overdrives, seedhelpers.Hashes), nil
+	return dedupeRows(overdrives, sh.Hashes), nil
 }

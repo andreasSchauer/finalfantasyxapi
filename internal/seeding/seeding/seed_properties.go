@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -27,7 +27,7 @@ func Loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, p := range properties {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(p)
+		params.DataHash[i] = sh.GenerateDataHash(p)
 		params.Name[i] = p.Name
 		params.Effect[i] = p.Effect
 		params.NullifyArmored[i] = database.ToNullNullifyArmored(p.NullifyArmored)
@@ -41,10 +41,10 @@ func Loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		properties[i].ID = row.ID
-		seedhelpers.RawJSON.Properties[i].ID = row.ID
+		sh.RawJSON.Properties[i].ID = row.ID
 		lookup.L.Properties[seedtypes.Key(properties[i])] = properties[i]
 		lookup.L.PropertiesID[row.ID] = properties[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -54,11 +54,11 @@ func extractProperties() ([]seedtypes.Property, error) {
 	properties := []seedtypes.Property{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Properties {
-		property := &seedhelpers.RawJSON.Properties[i]
+	for i := range sh.RawJSON.Properties {
+		property := &sh.RawJSON.Properties[i]
 
 		if property.ModifierChange != nil {
-			property.ModifierChange.ID, err = seedhelpers.GetHashID(property.ModifierChange)
+			property.ModifierChange.ID, err = sh.GetHashID(property.ModifierChange)
 			if err != nil {
 				return nil, err
 			}
@@ -67,5 +67,5 @@ func extractProperties() ([]seedtypes.Property, error) {
 		properties = append(properties, *property)
 	}
 
-	return dedupeRows(properties, seedhelpers.Hashes), nil
+	return dedupeRows(properties, sh.Hashes), nil
 }

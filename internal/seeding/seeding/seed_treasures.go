@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -31,7 +31,7 @@ func Loop4SeedTreasures(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, t := range treasures {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(t)
+		params.DataHash[i] = sh.GenerateDataHash(t)
 		params.AreaID[i] = t.AreaID
 		params.Version[i] = t.Version
 		params.TreasureType[i] = database.TreasureType(t.TreasureType)
@@ -51,7 +51,7 @@ func Loop4SeedTreasures(qtx *database.Queries, ctx context.Context) error {
 		treasures[i].ID = row.ID
 		lookup.L.Treasures[seedtypes.Key(treasures[i])] = treasures[i]
 		lookup.L.TreasuresID[row.ID] = treasures[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -61,14 +61,14 @@ func extractTreasures() ([]seedtypes.Treasure, error) {
 	treasures := []seedtypes.Treasure{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.TreasureLists {
-		list := &seedhelpers.RawJSON.TreasureLists[i]
+	for i := range sh.RawJSON.TreasureLists {
+		list := &sh.RawJSON.TreasureLists[i]
 
 		for j := range list.Treasures {
 			treasure := &list.Treasures[j]
 			treasure.Version = int32(j + 1)
 
-			treasure.AreaID, err = seedhelpers.AssignFK(list.LocationArea, lookup.L.Areas)
+			treasure.AreaID, err = sh.AssignFK(list.LocationArea, lookup.L.Areas)
 			if err != nil {
 				return nil, err
 			}
@@ -77,13 +77,13 @@ func extractTreasures() ([]seedtypes.Treasure, error) {
 		}
 	}
 
-	return dedupeRows(treasures, seedhelpers.Hashes), nil
+	return dedupeRows(treasures, sh.Hashes), nil
 }
 
 func completeTreasureLists() error {
-	for i := range seedhelpers.RawJSON.TreasureLists {
+	for i := range sh.RawJSON.TreasureLists {
 		var err error
-		list := &seedhelpers.RawJSON.TreasureLists[i]
+		list := &sh.RawJSON.TreasureLists[i]
 
 		err = completeTreasures(list.Treasures)
 		if err != nil {

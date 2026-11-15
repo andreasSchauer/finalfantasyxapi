@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -30,7 +30,7 @@ func Loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error
 	}
 
 	for i, s := range statusses {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(s)
+		params.DataHash[i] = sh.GenerateDataHash(s)
 		params.Name[i] = s.Name
 		params.Category[i] = database.StatusConditionCategory(s.Category)
 		params.IsPermanent[i] = s.IsPermanent
@@ -47,10 +47,10 @@ func Loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error
 
 	for i, row := range dbRows {
 		statusses[i].ID = row.ID
-		seedhelpers.RawJSON.StatusConditions[i].ID = row.ID
+		sh.RawJSON.StatusConditions[i].ID = row.ID
 		lookup.L.StatusConditions[seedtypes.Key(statusses[i])] = statusses[i]
 		lookup.L.StatusConditionsID[row.ID] = statusses[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -60,11 +60,11 @@ func extractStatusConditions() ([]seedtypes.StatusCondition, error) {
 	statusses := []seedtypes.StatusCondition{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.StatusConditions {
-		status := &seedhelpers.RawJSON.StatusConditions[i]
+	for i := range sh.RawJSON.StatusConditions {
+		status := &sh.RawJSON.StatusConditions[i]
 
 		if status.AddedElemResist != nil {
-			status.AddedElemResist.ID, err = seedhelpers.GetHashID(status.AddedElemResist)
+			status.AddedElemResist.ID, err = sh.GetHashID(status.AddedElemResist)
 			if err != nil {
 				return nil, err
 			}
@@ -73,12 +73,12 @@ func extractStatusConditions() ([]seedtypes.StatusCondition, error) {
 		statusses = append(statusses, *status)
 	}
 
-	return dedupeRows(statusses, seedhelpers.Hashes), nil
+	return dedupeRows(statusses, sh.Hashes), nil
 }
 
 func completeStatusConditions() error {
-	for i := range seedhelpers.RawJSON.StatusConditions {
-		status := &seedhelpers.RawJSON.StatusConditions[i]
+	for i := range sh.RawJSON.StatusConditions {
+		status := &sh.RawJSON.StatusConditions[i]
 
 		err := assignIDs(status.StatChanges)
 		if err != nil {

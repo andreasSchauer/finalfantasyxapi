@@ -5,14 +5,14 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func getTreasures() []seedtypes.Treasure {
 	treasures := []seedtypes.Treasure{}
 
-	for _, list := range seedhelpers.RawJSON.TreasureLists {
+	for _, list := range sh.RawJSON.TreasureLists {
 		treasures = append(treasures, list.Treasures...)
 	}
 
@@ -40,7 +40,7 @@ func SeedJuncTreasuresItems(qtx *database.Queries, ctx context.Context) error {
 func getTreasureEquipment() []seedtypes.TreasureEquipment {
 	treasureEquipment := []seedtypes.TreasureEquipment{}
 
-	for _, list := range seedhelpers.RawJSON.TreasureLists {
+	for _, list := range sh.RawJSON.TreasureLists {
 		for _, treasure := range list.Treasures {
 			if treasure.Equipment != nil {
 				treasureEquipment = append(treasureEquipment, *treasure.Equipment)

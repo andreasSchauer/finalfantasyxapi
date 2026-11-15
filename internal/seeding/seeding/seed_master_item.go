@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -20,7 +20,7 @@ func Loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, mi := range items {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(mi)
+		params.DataHash[i] = sh.GenerateDataHash(mi)
 		params.Name[i] = mi.Name
 		params.Type[i] = mi.Type
 	}
@@ -34,7 +34,7 @@ func Loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 		items[i].ID = row.ID
 		lookup.L.MasterItems[seedtypes.Key(items[i])] = items[i]
 		lookup.L.MasterItemsID[row.ID] = items[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -43,15 +43,15 @@ func Loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 func extractMasterItems() []seedtypes.MasterItem {
 	masterItems := []seedtypes.MasterItem{}
 
-	for _, i := range seedhelpers.RawJSON.Items {
+	for _, i := range sh.RawJSON.Items {
 		i.MasterItem.Type = database.ItemTypeItem
 		masterItems = append(masterItems, i.MasterItem)
 	}
 
-	for _, i := range seedhelpers.RawJSON.KeyItems {
+	for _, i := range sh.RawJSON.KeyItems {
 		i.MasterItem.Type = database.ItemTypeKeyItem
 		masterItems = append(masterItems, i.MasterItem)
 	}
 
-	return dedupeRows(masterItems, seedhelpers.Hashes)
+	return dedupeRows(masterItems, sh.Hashes)
 }

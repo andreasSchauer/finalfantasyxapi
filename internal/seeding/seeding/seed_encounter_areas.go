@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -26,7 +26,7 @@ func Loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, a := range areas {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(a)
+		params.DataHash[i] = sh.GenerateDataHash(a)
 		params.AreaID[i] = a.AreaID
 		params.Specification[i] = h.GetNullString(a.Specification)
 		params.Availability[i] = database.AvailabilityType(a.Availability)
@@ -38,7 +38,7 @@ func Loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -48,13 +48,13 @@ func extractEncounterAreas() ([]seedtypes.EncounterArea, error) {
 	areas := []seedtypes.EncounterArea{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.MonsterFormations {
-		mf := &seedhelpers.RawJSON.MonsterFormations[i]
+	for i := range sh.RawJSON.MonsterFormations {
+		mf := &sh.RawJSON.MonsterFormations[i]
 
 		for j := range mf.EncounterAreas {
 			area := &mf.EncounterAreas[j]
 
-			area.AreaID, err = seedhelpers.AssignFK(area.LocationArea, lookup.L.Areas)
+			area.AreaID, err = sh.AssignFK(area.LocationArea, lookup.L.Areas)
 			if err != nil {
 				return nil, err
 			}
@@ -63,5 +63,5 @@ func extractEncounterAreas() ([]seedtypes.EncounterArea, error) {
 		}
 	}
 
-	return dedupeRows(areas, seedhelpers.Hashes), nil
+	return dedupeRows(areas, sh.Hashes), nil
 }

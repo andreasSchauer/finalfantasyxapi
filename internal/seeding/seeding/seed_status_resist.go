@@ -6,7 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -23,7 +23,7 @@ func Loop4SeedStatusResists(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, r := range resists {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(r)
+		params.DataHash[i] = sh.GenerateDataHash(r)
 		params.StatusConditionID[i] = r.StatusConditionID
 		params.Resistance[i] = r.Resistance
 	}
@@ -34,7 +34,7 @@ func Loop4SeedStatusResists(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -44,12 +44,12 @@ func extractStatusResists() ([]seedtypes.StatusResist, error) {
 	resists := []seedtypes.StatusResist{}
 	var err error
 
-	for i := range seedhelpers.RawJSON.Monsters {
-		mon := &seedhelpers.RawJSON.Monsters[i]
+	for i := range sh.RawJSON.Monsters {
+		mon := &sh.RawJSON.Monsters[i]
 
 		for j := range mon.StatusResists {
 			resist := &mon.StatusResists[j]
-			resist.StatusConditionID, err = seedhelpers.AssignFK(resist.StatusCondition, lookup.L.StatusConditions)
+			resist.StatusConditionID, err = sh.AssignFK(resist.StatusCondition, lookup.L.StatusConditions)
 			if err != nil {
 				return nil, err
 			}
@@ -58,12 +58,12 @@ func extractStatusResists() ([]seedtypes.StatusResist, error) {
 		}
 	}
 
-	for i := range seedhelpers.RawJSON.AutoAbilities {
-		autoAbility := &seedhelpers.RawJSON.AutoAbilities[i]
+	for i := range sh.RawJSON.AutoAbilities {
+		autoAbility := &sh.RawJSON.AutoAbilities[i]
 
 		for j := range autoAbility.AddedStatusResists {
 			resist := &autoAbility.AddedStatusResists[j]
-			resist.StatusConditionID, err = seedhelpers.AssignFK(resist.StatusCondition, lookup.L.StatusConditions)
+			resist.StatusConditionID, err = sh.AssignFK(resist.StatusCondition, lookup.L.StatusConditions)
 			if err != nil {
 				return nil, err
 			}
@@ -72,5 +72,5 @@ func extractStatusResists() ([]seedtypes.StatusResist, error) {
 		}
 	}
 
-	return dedupeRows(resists, seedhelpers.Hashes), nil
+	return dedupeRows(resists, sh.Hashes), nil
 }

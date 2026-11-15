@@ -7,7 +7,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -30,7 +30,7 @@ func Loop3SeedBattleInteractions(qtx *database.Queries, ctx context.Context) err
 	}
 
 	for i, bi := range bis {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(bi)
+		params.DataHash[i] = sh.GenerateDataHash(bi)
 		params.Target[i] = database.TargetType(bi.Target)
 		params.BasedOnUserAttack[i] = bi.BasedOnUserAttack
 		params.Range[i] = h.GetNullInt32(bi.Range)
@@ -47,7 +47,7 @@ func Loop3SeedBattleInteractions(qtx *database.Queries, ctx context.Context) err
 	}
 
 	for _, row := range dbRows {
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
@@ -56,8 +56,8 @@ func Loop3SeedBattleInteractions(qtx *database.Queries, ctx context.Context) err
 func extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
 	bis := []seedtypes.BattleInteraction{}
 
-	for i := range seedhelpers.RawJSON.PlayerAbilities {
-		ability := &seedhelpers.RawJSON.PlayerAbilities[i]
+	for i := range sh.RawJSON.PlayerAbilities {
+		ability := &sh.RawJSON.PlayerAbilities[i]
 
 		bisNew, err := prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {
@@ -67,8 +67,8 @@ func extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range seedhelpers.RawJSON.OverdriveAbilities {
-		ability := &seedhelpers.RawJSON.OverdriveAbilities[i]
+	for i := range sh.RawJSON.OverdriveAbilities {
+		ability := &sh.RawJSON.OverdriveAbilities[i]
 
 		bisNew, err := prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {
@@ -78,8 +78,8 @@ func extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range seedhelpers.RawJSON.Items {
-		item := &seedhelpers.RawJSON.Items[i]
+	for i := range sh.RawJSON.Items {
+		item := &sh.RawJSON.Items[i]
 
 		bisNew, err := prepareBattleInteractions(item.BattleInteractions)
 		if err != nil {
@@ -89,8 +89,8 @@ func extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range seedhelpers.RawJSON.TriggerCommands {
-		command := &seedhelpers.RawJSON.TriggerCommands[i]
+	for i := range sh.RawJSON.TriggerCommands {
+		command := &sh.RawJSON.TriggerCommands[i]
 
 		bisNew, err := prepareBattleInteractions(command.BattleInteractions)
 		if err != nil {
@@ -100,8 +100,8 @@ func extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range seedhelpers.RawJSON.MiscAbilities {
-		ability := &seedhelpers.RawJSON.MiscAbilities[i]
+	for i := range sh.RawJSON.MiscAbilities {
+		ability := &sh.RawJSON.MiscAbilities[i]
 
 		bisNew, err := prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {
@@ -111,8 +111,8 @@ func extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
 		bis = append(bis, bisNew...)
 	}
 
-	for i := range seedhelpers.RawJSON.EnemyAbilities {
-		ability := &seedhelpers.RawJSON.EnemyAbilities[i]
+	for i := range sh.RawJSON.EnemyAbilities {
+		ability := &sh.RawJSON.EnemyAbilities[i]
 
 		bisNew, err := prepareBattleInteractions(ability.BattleInteractions)
 		if err != nil {
@@ -122,7 +122,7 @@ func extractBattleInteractions() ([]seedtypes.BattleInteraction, error) {
 		bis = append(bis, bisNew...)
 	}
 
-	return dedupeRows(bis, seedhelpers.Hashes), nil
+	return dedupeRows(bis, sh.Hashes), nil
 }
 
 func prepareBattleInteractions(bis []seedtypes.BattleInteraction) ([]seedtypes.BattleInteraction, error) {
@@ -132,13 +132,13 @@ func prepareBattleInteractions(bis []seedtypes.BattleInteraction) ([]seedtypes.B
 	for j := range bis {
 		bi := &bis[j]
 
-		bi.Accuracy.ID, err = seedhelpers.GetHashID(bi.Accuracy)
+		bi.Accuracy.ID, err = sh.GetHashID(bi.Accuracy)
 		if err != nil {
 			return nil, err
 		}
 
 		if bi.InflictedDelay != nil {
-			bi.InflictedDelay.ID, err = seedhelpers.GetHashID(bi.InflictedDelay)
+			bi.InflictedDelay.ID, err = sh.GetHashID(bi.InflictedDelay)
 			if err != nil {
 				return nil, err
 			}

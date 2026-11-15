@@ -2,13 +2,13 @@ package seeding
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func completeAeonStats() error {
-	for i := range seedhelpers.RawJSON.AeonStats {
-		as := &seedhelpers.RawJSON.AeonStats[i]
+	for i := range sh.RawJSON.AeonStats {
+		as := &sh.RawJSON.AeonStats[i]
 		err := assignIDs(as.AVals)
 		if err != nil {
 			return err
@@ -29,7 +29,7 @@ func completeAeonStats() error {
 		aeon.BaseStats = *as
 		lookup.L.Aeons[seedtypes.Key(aeon)] = aeon
 		lookup.L.AeonsID[as.AeonID] = aeon
-		seedhelpers.RawJSON.Aeons[i].BaseStats = *as
+		sh.RawJSON.Aeons[i].BaseStats = *as
 	}
 
 	return nil

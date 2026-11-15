@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 )
 
 func SeedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error {
@@ -16,7 +16,7 @@ func SeedJuncDefaultAbilities(qtx *database.Queries, ctx context.Context) error 
 		AbilityID: make([]int32, 0),
 	}
 
-	for _, entry := range seedhelpers.RawJSON.DefaultAbilities {
+	for _, entry := range sh.RawJSON.DefaultAbilities {
 		class, err := lookup.GetResource(entry.Name, lookup.L.CharClasses)
 		if err != nil {
 			return err

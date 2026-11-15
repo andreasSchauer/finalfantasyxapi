@@ -5,7 +5,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -15,7 +15,7 @@ func getOverdriveOverdriveAbilities(o seedtypes.Overdrive) ([]seedtypes.Overdriv
 
 func SeedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "overdrives + overdrive abilities"
-	jParams, err := processJunctions(desc, seedhelpers.RawJSON.Overdrives, getOverdriveOverdriveAbilities)
+	jParams, err := processJunctions(desc, sh.RawJSON.Overdrives, getOverdriveOverdriveAbilities)
 	if err != nil {
 		return err
 	}
@@ -35,7 +35,7 @@ func SeedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx context.Contex
 		AbilityID: make([]int32, 0),
 	}
 
-	for _, overdrive := range seedhelpers.RawJSON.Overdrives {
+	for _, overdrive := range sh.RawJSON.Overdrives {
 		if overdrive.UnlockCondition != nil {
 			continue
 		}

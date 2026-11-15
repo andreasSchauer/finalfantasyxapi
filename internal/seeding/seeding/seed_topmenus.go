@@ -6,12 +6,12 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
+	sh "github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedhelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
 func Loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
-	topmenus := dedupeRows(seedhelpers.RawJSON.Topmenus, seedhelpers.Hashes)
+	topmenus := dedupeRows(sh.RawJSON.Topmenus, sh.Hashes)
 
 	params := database.CreateTopmenuBulkParams{
 		DataHash: make([]string, len(topmenus)),
@@ -19,7 +19,7 @@ func Loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
 	}
 
 	for i, c := range topmenus {
-		params.DataHash[i] = seedhelpers.GenerateDataHash(c)
+		params.DataHash[i] = sh.GenerateDataHash(c)
 		params.Name[i] = c.Name
 	}
 
@@ -30,10 +30,10 @@ func Loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
 
 	for i, row := range dbRows {
 		topmenus[i].ID = row.ID
-		seedhelpers.RawJSON.Topmenus[i].ID = row.ID
+		sh.RawJSON.Topmenus[i].ID = row.ID
 		lookup.L.Topmenus[seedtypes.Key(topmenus[i])] = topmenus[i]
 		lookup.L.TopmenusID[row.ID] = topmenus[i]
-		seedhelpers.Hashes[row.DataHash] = row.ID
+		sh.Hashes[row.DataHash] = row.ID
 	}
 
 	return nil
