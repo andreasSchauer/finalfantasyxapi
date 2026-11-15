@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetStat(t *testing.T) {
 	t.Parallel()
-	tests := []Stat{
+	tests := []apitesttypes.Stat{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/stats/11",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "stat with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/stats/2?changes_only=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -33,7 +34,7 @@ func TestGetStat(t *testing.T) {
 					"status conditions":   0,
 				},
 			},
-			Unique:             NewExpUnique(2, "mp"),
+			Unique:             apitesttypes.NewExpUnique(2, "mp"),
 			Spheres:            []int32{2, 6, 11, 17, 26},
 			AutoAbilities:      []int32{115, 116, 117, 118},
 			PlayerAbilities:    []int32{},
@@ -43,7 +44,7 @@ func TestGetStat(t *testing.T) {
 			StatusConditions:   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/stats/3",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -58,7 +59,7 @@ func TestGetStat(t *testing.T) {
 					"properties":          0,
 				},
 			},
-			Unique:             NewExpUnique(3, "strength"),
+			Unique:             apitesttypes.NewExpUnique(3, "strength"),
 			Spheres:            []int32{1, 6, 11, 18, 26},
 			AutoAbilities:      []int32{29, 30, 31, 32, 51},
 			PlayerAbilities:    []int32{11, 27},
@@ -69,7 +70,7 @@ func TestGetStat(t *testing.T) {
 			Properties:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/stats/4",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -85,7 +86,7 @@ func TestGetStat(t *testing.T) {
 					"properties": 2,
 				},
 			},
-			Unique:     NewExpUnique(4, "defense"),
+			Unique:     apitesttypes.NewExpUnique(4, "defense"),
 			Properties: []int32{1, 4},
 		},
 	}
@@ -95,9 +96,9 @@ func TestGetStat(t *testing.T) {
 
 func TestRetrieveStats(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/stats",
 				ExpectedStatus: http.StatusOK,
 			},

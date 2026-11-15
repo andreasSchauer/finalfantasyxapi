@@ -6,22 +6,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetTriggerCommand(t *testing.T) {
 	t.Parallel()
-	tests := []TriggerCommand{
+	tests := []apitesttypes.TriggerCommand{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/trigger-commands/13",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "trigger command with provided id '13' doesn't exist. max id: 12",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/trigger-commands/4",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -32,7 +33,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":                 3,
 				},
 			},
-			NameVer:           NewExpNameVer(4, "talk", 1),
+			NameVer:           apitesttypes.NewExpNameVer(4, "talk", 1),
 			Rank:              h.GetInt32Ptr(3),
 			AppearsInHelpBar:  true,
 			CanCopyCat:        false,
@@ -40,7 +41,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			Topmenu:           h.GetInt32Ptr(3),
 			UsedBy:            []int32{5, 9, 10},
 			MonsterFormations: []int32{137, 192, 235},
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "self",
 					AbilityRange:   nil,
@@ -50,7 +51,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
@@ -60,19 +61,19 @@ func TestGetTriggerCommand(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges: []StatChange{
+					StatChanges: []apitesttypes.StatChange{
 						{
 							Stat:            3,
 							CalculationType: "added-value",
 							Value:           10,
 						},
 					},
-					ModifierChanges: []ModChange{},
+					ModifierChanges: []apitesttypes.ModChange{},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/trigger-commands/6",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -83,7 +84,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":                1,
 				},
 			},
-			NameVer:           NewExpNameVer(6, "talk", 3),
+			NameVer:           apitesttypes.NewExpNameVer(6, "talk", 3),
 			Rank:              h.GetInt32Ptr(3),
 			AppearsInHelpBar:  true,
 			CanCopyCat:        false,
@@ -91,7 +92,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			Topmenu:           h.GetInt32Ptr(3),
 			UsedBy:            []int32{5},
 			MonsterFormations: []int32{270},
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "single-enemy",
 					AbilityRange:   nil,
@@ -101,7 +102,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
@@ -111,8 +112,8 @@ func TestGetTriggerCommand(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges: []ModChange{
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges: []apitesttypes.ModChange{
 						{
 							Modifier:        18,
 							CalculationType: "set-value",
@@ -123,7 +124,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/trigger-commands/12?ability_user=wakka&celestial_weapon=false",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -133,7 +134,7 @@ func TestGetTriggerCommand(t *testing.T) {
 					"monster-formations":  1,
 				},
 			},
-			NameVer:           NewExpNameVer(12, "struggle", 0),
+			NameVer:           apitesttypes.NewExpNameVer(12, "struggle", 0),
 			Rank:              h.GetInt32Ptr(3),
 			AppearsInHelpBar:  true,
 			CanCopyCat:        false,
@@ -141,7 +142,7 @@ func TestGetTriggerCommand(t *testing.T) {
 			Topmenu:           h.GetInt32Ptr(3),
 			UsedBy:            []int32{5, 7, 11},
 			MonsterFormations: []int32{7},
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "single-enemy",
 					AbilityRange:   h.GetInt32Ptr(4),
@@ -151,15 +152,15 @@ func TestGetTriggerCommand(t *testing.T) {
 					Darkable:       true,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
 					},
-					Damage: &Damage{
+					Damage: &apitesttypes.Damage{
 						AttackType: database.AttackTypeAttack,
 						DamageType: database.DamageTypePhysical,
-						Hp: &ClassDamage{
+						Hp: &apitesttypes.ClassDamage{
 							DamageFormula:  database.DamageFormulaStrVsDef,
 							DamageConstant: 16,
 						},
@@ -173,8 +174,8 @@ func TestGetTriggerCommand(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges:           []ModChange{},
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges:           []apitesttypes.ModChange{},
 				},
 			},
 		},
@@ -185,9 +186,9 @@ func TestGetTriggerCommand(t *testing.T) {
 
 func TestGetMultipleTriggerCommands(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/trigger-commands/talk",
 				ExpectedStatus: http.StatusMultipleChoices,
 			},
@@ -201,9 +202,9 @@ func TestGetMultipleTriggerCommands(t *testing.T) {
 
 func TestRetrieveTriggerCommands(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/trigger-commands?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -213,7 +214,7 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 			Results:  []int32{1, 4, 7, 9, 11, 12},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/trigger-commands?related_stat=6",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -223,7 +224,7 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 			Results:  []int32{5},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/trigger-commands?user=7",
 				ExpectedStatus: http.StatusOK,
 			},

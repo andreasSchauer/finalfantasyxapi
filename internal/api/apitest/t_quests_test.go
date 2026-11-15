@@ -6,27 +6,28 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 func TestGetQuest(t *testing.T) {
 	t.Parallel()
-	tests := []Quest{
+	tests := []apitesttypes.Quest{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests/99",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "quest with provided id '99' doesn't exist. max id: 98",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests/1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 				ExpLengths:     map[string]int{},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   1,
 				Name: "monster arena",
 			},
@@ -34,13 +35,13 @@ func TestGetQuest(t *testing.T) {
 			TypedQuest: "/sidequests/1",
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests/47",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 				ExpLengths:     map[string]int{},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   47,
 				Name: "valefor - first win",
 			},
@@ -48,7 +49,7 @@ func TestGetQuest(t *testing.T) {
 			TypedQuest: "/subquests/37",
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests/80",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -56,7 +57,7 @@ func TestGetQuest(t *testing.T) {
 					"character classes": 2,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   80,
 				Name: "6 or 7 guardian spheres",
 			},
@@ -70,9 +71,9 @@ func TestGetQuest(t *testing.T) {
 
 func TestRetrieveQuests(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -80,7 +81,7 @@ func TestRetrieveQuests(t *testing.T) {
 			Results: []int32{1, 3, 17, 18, 25, 37, 44, 58, 65, 77, 83, 91, 98},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests?type=sidequest",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -88,7 +89,7 @@ func TestRetrieveQuests(t *testing.T) {
 			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests?repeatable=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -96,7 +97,7 @@ func TestRetrieveQuests(t *testing.T) {
 			Results: []int32{48, 54, 60, 70, 76},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests?limit=max&availability=post",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -104,7 +105,7 @@ func TestRetrieveQuests(t *testing.T) {
 			Results: []int32{1, 6, 11, 24, 34, 46, 62, 80, 87},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests?availability=post&repeatable=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -112,7 +113,7 @@ func TestRetrieveQuests(t *testing.T) {
 			Results: []int32{58, 62},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests?availability=always&repeatable=false&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -120,7 +121,7 @@ func TestRetrieveQuests(t *testing.T) {
 			Results: []int32{3, 10, 38, 59, 77, 92, 98},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests?availability=pre-story",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -128,7 +129,7 @@ func TestRetrieveQuests(t *testing.T) {
 			Results: []int32{97},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/quests?availability=always&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
@@ -12,9 +13,9 @@ func TestAlBhed(t *testing.T) {
 	t.Parallel()
 	requestURL := "/api/al-bhed"
 
-	tests := []AlBhedResponse{
+	tests := []apitesttypes.AlBhedResponse{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -23,7 +24,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -34,7 +35,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -46,7 +47,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -57,7 +58,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -68,7 +69,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -79,7 +80,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -90,7 +91,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -101,7 +102,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -116,7 +117,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -131,7 +132,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -146,7 +147,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -161,7 +162,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -177,7 +178,7 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,

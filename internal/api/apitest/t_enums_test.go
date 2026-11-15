@@ -5,11 +5,12 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetEnum(t *testing.T) {
 	t.Parallel()
-	tests := []TestGeneral{
+	tests := []apitesttypes.TestGeneral{
 		{
 			RequestURL:     "/api/enums/1/",
 			ExpectedStatus: http.StatusNotFound,
@@ -51,16 +52,16 @@ func TestGetEnum(t *testing.T) {
 
 func TestRetrieveEnums(t *testing.T) {
 	t.Parallel()
-	tests := []ListPaths{
+	tests := []apitesttypes.ListPaths{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/enums/ability_type?ass=1",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "parameter 'ass' does not exist for endpoint /enums. use /api/enums/parameters for available parameters",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/enums?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},

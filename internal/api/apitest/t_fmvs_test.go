@@ -6,48 +6,49 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetFMV(t *testing.T) {
 	t.Parallel()
-	tests := []FMV{
+	tests := []apitesttypes.FMV{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs/a",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "fmv not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs/53",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "fmv with provided id '53' doesn't exist. max id: 52",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs/2/2",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/fmvs/sections for valid subsections",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs/9",
 				ExpectedStatus: http.StatusOK,
 			},
-			Unique: NewExpUnique(9, "fear on the sea"),
+			Unique: apitesttypes.NewExpUnique(9, "fear on the sea"),
 			Area:   42,
 			Song:   h.GetInt32Ptr(16),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs/38",
 				ExpectedStatus: http.StatusOK,
 			},
-			Unique: NewExpUnique(38, "the last chapter"),
+			Unique: apitesttypes.NewExpUnique(38, "the last chapter"),
 			Area:   218,
 			Song:   h.GetInt32Ptr(77),
 		},
@@ -58,9 +59,9 @@ func TestGetFMV(t *testing.T) {
 
 func TestRetrieveFMVs(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -68,7 +69,7 @@ func TestRetrieveFMVs(t *testing.T) {
 			Results: []int32{1, 13, 27, 34, 45, 46, 52},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs?location=15",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -76,7 +77,7 @@ func TestRetrieveFMVs(t *testing.T) {
 			Results: []int32{27, 36},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs?location=5",
 				ExpectedStatus: http.StatusOK,
 			},

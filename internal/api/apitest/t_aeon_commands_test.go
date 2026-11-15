@@ -6,21 +6,22 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetAeonCommand(t *testing.T) {
 	t.Parallel()
-	tests := []AeonCommand{
+	tests := []apitesttypes.AeonCommand{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeon-commands/10",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "aeon command with provided id '10' doesn't exist. max id: 9",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeon-commands/1",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -28,11 +29,11 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 0 - abilities": 6,
 				},
 			},
-			Unique:      NewExpUnique(1, "pay"),
+			Unique:      apitesttypes.NewExpUnique(1, "pay"),
 			User:        19,
 			Topmenu:     h.GetInt32Ptr(1),
 			OpenSubmenu: h.GetInt32Ptr(12),
-			PossibleAbilities: []PossibleAbilityList{
+			PossibleAbilities: []apitesttypes.PossibleAbilityList{
 				{
 					User:      19,
 					Abilities: []int32{94, 95, 96, 97, 98, 382},
@@ -40,7 +41,7 @@ func TestGetAeonCommand(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeon-commands/2",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -50,11 +51,11 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 2 - abilities": 17,
 				},
 			},
-			Unique:      NewExpUnique(2, "do as you will."),
+			Unique:      apitesttypes.NewExpUnique(2, "do as you will."),
 			User:        4,
 			Topmenu:     h.GetInt32Ptr(1),
 			OpenSubmenu: nil,
-			PossibleAbilities: []PossibleAbilityList{
+			PossibleAbilities: []apitesttypes.PossibleAbilityList{
 				{
 					User:      20,
 					Abilities: []int32{375, 54, 55, 66, 80, 102},
@@ -70,7 +71,7 @@ func TestGetAeonCommand(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeon-commands/7",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -78,11 +79,11 @@ func TestGetAeonCommand(t *testing.T) {
 					"possible abilities 0 - abilities": 10,
 				},
 			},
-			Unique:      NewExpUnique(7, "defense!"),
+			Unique:      apitesttypes.NewExpUnique(7, "defense!"),
 			User:        21,
 			Topmenu:     h.GetInt32Ptr(1),
 			OpenSubmenu: nil,
-			PossibleAbilities: []PossibleAbilityList{
+			PossibleAbilities: []apitesttypes.PossibleAbilityList{
 				{
 					User:      21,
 					Abilities: []int32{375, 100, 45, 46, 61, 68, 102},
@@ -96,9 +97,9 @@ func TestGetAeonCommand(t *testing.T) {
 
 func TestRetrieveAeonCommands(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeon-commands",
 				ExpectedStatus: http.StatusOK,
 			},

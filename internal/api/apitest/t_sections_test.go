@@ -5,12 +5,13 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
 func TestSubsections(t *testing.T) {
 	t.Parallel()
-	tests := []TestGeneral{
+	tests := []apitesttypes.TestGeneral{
 		{
 			RequestURL:     "/api/treasures/1/simple?availability=post",
 			ExpectedStatus: http.StatusBadRequest,
@@ -122,9 +123,9 @@ func TestSubsections(t *testing.T) {
 
 func TestSections(t *testing.T) {
 	t.Parallel()
-	tests := []ListNames{
+	tests := []apitesttypes.ListNames{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/areas/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Areas.Endpoint,
@@ -141,7 +142,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/sublocations/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Sublocations.Endpoint,
@@ -160,7 +161,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/locations/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Locations.Endpoint,
@@ -180,7 +181,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Aeons.Endpoint,
@@ -195,7 +196,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Characters.Endpoint,
@@ -211,7 +212,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.CharacterClasses.Endpoint,
@@ -226,7 +227,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.ArenaCreations.Endpoint,
@@ -236,7 +237,7 @@ func TestSections(t *testing.T) {
 			Results: []ts.NamedParam{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/blitzball-prizes/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.BlitzballPrizes.Endpoint,
@@ -246,7 +247,7 @@ func TestSections(t *testing.T) {
 			Results: []ts.NamedParam{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/fmvs/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.FMVs.Endpoint,
@@ -256,7 +257,7 @@ func TestSections(t *testing.T) {
 			Results: []ts.NamedParam{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Monsters.Endpoint,
@@ -271,7 +272,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.MonsterFormations.Endpoint,
@@ -284,7 +285,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.OverdriveModes.Endpoint,
@@ -294,7 +295,7 @@ func TestSections(t *testing.T) {
 			Results: []ts.NamedParam{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/shops/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Shops.Endpoint,
@@ -306,7 +307,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Songs.Endpoint,
@@ -316,7 +317,7 @@ func TestSections(t *testing.T) {
 			Results: []ts.NamedParam{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/sidequests/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Sidequests.Endpoint,
@@ -328,7 +329,7 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/subquests/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Subquests.Endpoint,
@@ -338,7 +339,7 @@ func TestSections(t *testing.T) {
 			Results: []ts.NamedParam{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/treasures/sections",
 				ExpectedStatus: http.StatusOK,
 				Endpoint:       apilookups.E.Treasures.Endpoint,

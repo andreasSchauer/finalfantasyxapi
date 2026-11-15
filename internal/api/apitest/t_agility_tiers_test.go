@@ -6,22 +6,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetAgilityTier(t *testing.T) {
 	t.Parallel()
-	tests := []AgilityTier{
+	tests := []apitesttypes.AgilityTier{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/agility-tiers/20",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "agility tier with provided id '20' doesn't exist. max id: 19",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/agility-tiers/15",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -29,7 +30,7 @@ func TestGetAgilityTier(t *testing.T) {
 					"char min icvs": 9,
 				},
 			},
-			IDOnly:      NewExpIDOnly(15),
+			IDOnly:      apitesttypes.NewExpIDOnly(15),
 			FromAgility: 35,
 			ToAgility:   43,
 			TickSpeed:   7,
@@ -91,9 +92,9 @@ func TestGetAgilityTier(t *testing.T) {
 
 func TestRetrieveAgilityTiers(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/agility-tiers",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -101,7 +102,7 @@ func TestRetrieveAgilityTiers(t *testing.T) {
 			Results: []int32{1, 3, 7, 8, 12, 17, 19},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/agility-tiers?agility=95",
 				ExpectedStatus: http.StatusOK,
 			},

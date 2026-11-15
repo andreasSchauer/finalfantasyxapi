@@ -6,22 +6,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetItemAbility(t *testing.T) {
 	t.Parallel()
-	tests := []ItemAbility{
+	tests := []apitesttypes.ItemAbility{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities/70",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "item ability with provided id '70' doesn't exist. max id: 69",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities/2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -29,7 +30,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			Unique:              NewExpUnique(2, "hi-potion"),
+			Unique:              apitesttypes.NewExpUnique(2, "hi-potion"),
 			Rank:                h.GetInt32Ptr(2),
 			AppearsInHelpBar:    true,
 			CanCopyCat:          true,
@@ -37,7 +38,7 @@ func TestGetItemAbility(t *testing.T) {
 			Item:                2,
 			Category:            database.ItemCategoryHealing,
 			CanUseOutsideBattle: true,
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "single-target",
 					AbilityRange:   h.GetInt32Ptr(3),
@@ -47,15 +48,15 @@ func TestGetItemAbility(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
 					},
-					Damage: &Damage{
+					Damage: &apitesttypes.Damage{
 						AttackType: database.AttackTypeHeal,
 						DamageType: database.DamageTypeSpecial,
-						Hp: &ClassDamage{
+						Hp: &apitesttypes.ClassDamage{
 							DamageFormula:  database.DamageFormulaSpecialNoVar,
 							DamageConstant: 20,
 						},
@@ -69,13 +70,13 @@ func TestGetItemAbility(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges:           []ModChange{},
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges:           []apitesttypes.ModChange{},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities/48",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -84,7 +85,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions 0 inflicted status conditions": 1,
 				},
 			},
-			Unique:              NewExpUnique(48, "gold hourglass"),
+			Unique:              apitesttypes.NewExpUnique(48, "gold hourglass"),
 			Rank:                h.GetInt32Ptr(2),
 			AppearsInHelpBar:    true,
 			CanCopyCat:          true,
@@ -92,7 +93,7 @@ func TestGetItemAbility(t *testing.T) {
 			Item:                48,
 			Category:            database.ItemCategoryOffensive,
 			CanUseOutsideBattle: false,
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "target-party",
 					AbilityRange:   h.GetInt32Ptr(3),
@@ -102,15 +103,15 @@ func TestGetItemAbility(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
 					},
-					Damage: &Damage{
+					Damage: &apitesttypes.Damage{
 						AttackType: database.AttackTypeAttack,
 						DamageType: database.DamageTypeSpecial,
-						Hp: &ClassDamage{
+						Hp: &apitesttypes.ClassDamage{
 							DamageFormula:  database.DamageFormulaSpecialVar,
 							DamageConstant: 20,
 						},
@@ -120,19 +121,19 @@ func TestGetItemAbility(t *testing.T) {
 						BreakDmgLmt:     nil,
 						Element:         nil,
 					},
-					InflictedDelay: &InflictedDelay{
+					InflictedDelay: &apitesttypes.InflictedDelay{
 						DelayStrength: "weak",
 					},
 					InflictedStatusConditions: []int32{14},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges:           []ModChange{},
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges:           []apitesttypes.ModChange{},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities/62",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -140,7 +141,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			Unique:              NewExpUnique(62, "soul spring"),
+			Unique:              apitesttypes.NewExpUnique(62, "soul spring"),
 			Rank:                h.GetInt32Ptr(2),
 			AppearsInHelpBar:    true,
 			CanCopyCat:          true,
@@ -148,7 +149,7 @@ func TestGetItemAbility(t *testing.T) {
 			Item:                62,
 			Category:            database.ItemCategoryOffensive,
 			CanUseOutsideBattle: false,
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "single-target",
 					AbilityRange:   h.GetInt32Ptr(3),
@@ -158,19 +159,19 @@ func TestGetItemAbility(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
 					},
-					Damage: &Damage{
+					Damage: &apitesttypes.Damage{
 						AttackType: database.AttackTypeAbsorb,
 						DamageType: database.DamageTypeSpecial,
-						Hp: &ClassDamage{
+						Hp: &apitesttypes.ClassDamage{
 							DamageFormula:  database.DamageFormulaSpecialVar,
 							DamageConstant: 30,
 						},
-						Mp: &ClassDamage{
+						Mp: &apitesttypes.ClassDamage{
 							DamageFormula:  database.DamageFormulaSpecialVar,
 							DamageConstant: 30,
 						},
@@ -184,13 +185,13 @@ func TestGetItemAbility(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges:           []ModChange{},
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges:           []apitesttypes.ModChange{},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities/66",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -199,7 +200,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions 0 stat changes": 1,
 				},
 			},
-			Unique:              NewExpUnique(66, "stamina tonic"),
+			Unique:              apitesttypes.NewExpUnique(66, "stamina tonic"),
 			Rank:                h.GetInt32Ptr(2),
 			AppearsInHelpBar:    true,
 			CanCopyCat:          true,
@@ -207,7 +208,7 @@ func TestGetItemAbility(t *testing.T) {
 			Item:                66,
 			Category:            database.ItemCategorySupport,
 			CanUseOutsideBattle: false,
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "all-allies",
 					AbilityRange:   nil,
@@ -217,7 +218,7 @@ func TestGetItemAbility(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
@@ -227,19 +228,19 @@ func TestGetItemAbility(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges: []StatChange{
+					StatChanges: []apitesttypes.StatChange{
 						{
 							Stat:            1,
 							CalculationType: "multiply-highest",
 							Value:           2,
 						},
 					},
-					ModifierChanges: []ModChange{},
+					ModifierChanges: []apitesttypes.ModChange{},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities/69",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -248,7 +249,7 @@ func TestGetItemAbility(t *testing.T) {
 					"battle interactions 0 mod changes": 1,
 				},
 			},
-			Unique:              NewExpUnique(69, "three stars"),
+			Unique:              apitesttypes.NewExpUnique(69, "three stars"),
 			Rank:                h.GetInt32Ptr(2),
 			AppearsInHelpBar:    true,
 			CanCopyCat:          true,
@@ -256,7 +257,7 @@ func TestGetItemAbility(t *testing.T) {
 			Item:                69,
 			Category:            database.ItemCategorySupport,
 			CanUseOutsideBattle: false,
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "all-allies",
 					AbilityRange:   nil,
@@ -266,7 +267,7 @@ func TestGetItemAbility(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
@@ -276,8 +277,8 @@ func TestGetItemAbility(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges: []ModChange{
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges: []apitesttypes.ModChange{
 						{
 							Modifier:        16,
 							CalculationType: "set-value",
@@ -294,9 +295,9 @@ func TestGetItemAbility(t *testing.T) {
 
 func TestRetrieveItemAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -306,7 +307,7 @@ func TestRetrieveItemAbilities(t *testing.T) {
 			Results:  []int32{1, 13, 27, 38, 39, 42, 55, 69},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities?category=2&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -316,7 +317,7 @@ func TestRetrieveItemAbilities(t *testing.T) {
 			Results:  []int32{24, 27, 35, 43, 50, 60},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities?attack_type=heal&outside_battle=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -326,7 +327,7 @@ func TestRetrieveItemAbilities(t *testing.T) {
 			Results:  []int32{9, 10, 21, 22, 23, 54, 55},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/item-abilities?related_stat=1",
 				ExpectedStatus: http.StatusOK,
 			},

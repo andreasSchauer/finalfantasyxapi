@@ -6,39 +6,40 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetRonsoRage(t *testing.T) {
 	t.Parallel()
-	tests := []RonsoRage{
+	tests := []apitesttypes.RonsoRage{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/ronso-rages/13",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "ronso rage with provided id '13' doesn't exist. max id: 12",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/ronso-rages/4",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
 					"monsters": 5,
 				},
 			},
-			Unique:    NewExpUnique(4, "self destruct"),
+			Unique:    apitesttypes.NewExpUnique(4, "self destruct"),
 			Overdrive: 39,
 			Monsters:  []int32{38, 109, 167, 176, 245},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/ronso-rages/8",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
 					"monsters": 3,
 				},
 			},
-			Unique:    NewExpUnique(8, "doom"),
+			Unique:    apitesttypes.NewExpUnique(8, "doom"),
 			Overdrive: 43,
 			Monsters:  []int32{154, 167, 210},
 		},
@@ -49,9 +50,9 @@ func TestGetRonsoRage(t *testing.T) {
 
 func TestRetrieveRonsoRages(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/ronso-rages",
 				ExpectedStatus: http.StatusOK,
 			},

@@ -6,35 +6,36 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetArenaCreation(t *testing.T) {
 	t.Parallel()
-	tests := []ArenaCreation{
+	tests := []apitesttypes.ArenaCreation{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations/36",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "arena creation with provided id '36' doesn't exist. max id: 35",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations/a",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "arena creation not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations/a/2",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "wrong format. usage: '/api/arena-creations', '/api/arena-creations/{id}', '/api/arena-creations/{name}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations/13",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -42,16 +43,16 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 10,
 				},
 			},
-			Unique:              NewExpUnique(13, "vorban"),
+			Unique:              apitesttypes.NewExpUnique(13, "vorban"),
 			Category:            "area",
 			Monster:             268,
 			ParentSubquest:      13,
-			Reward:              NewTestResAmount[apiresource.Typed](107, 60),
+			Reward:              apitesttypes.NewTestResAmount[apiresource.Typed](107, 60),
 			RequiredCatchAmount: 1,
 			RequiredMonsters:    []int32{239, 243, 245, 248},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations/one-eye",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -59,16 +60,16 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 5,
 				},
 			},
-			Unique:              NewExpUnique(19, "one-eye"),
+			Unique:              apitesttypes.NewExpUnique(19, "one-eye"),
 			Category:            "species",
 			Monster:             274,
 			ParentSubquest:      19,
-			Reward:              NewTestResAmount[apiresource.Typed](64, 60),
+			Reward:              apitesttypes.NewTestResAmount[apiresource.Typed](64, 60),
 			RequiredCatchAmount: 4,
 			RequiredMonsters:    []int32{40, 73, 87, 170, 240},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations/31",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -76,11 +77,11 @@ func TestGetArenaCreation(t *testing.T) {
 					"required monsters": 0,
 				},
 			},
-			Unique:                    NewExpUnique(31, "th'uban"),
+			Unique:                    apitesttypes.NewExpUnique(31, "th'uban"),
 			Category:                  "original",
 			Monster:                   286,
 			ParentSubquest:            31,
-			Reward:                    NewTestResAmount[apiresource.Typed](110, 99),
+			Reward:                    apitesttypes.NewTestResAmount[apiresource.Typed](110, 99),
 			RequiredCatchAmount:       6,
 			UnlockedCreationsCategory: h.GetStrPtr("species"),
 			RequiredMonsters:          nil,
@@ -92,16 +93,16 @@ func TestGetArenaCreation(t *testing.T) {
 
 func TestRetrieveArenaCreations(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations?category=asd",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/arena-creations/parameters to see allowed values",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -109,7 +110,7 @@ func TestRetrieveArenaCreations(t *testing.T) {
 			Results: []int32{1, 11, 14, 20, 27, 31, 35},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/arena-creations?category=species&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},

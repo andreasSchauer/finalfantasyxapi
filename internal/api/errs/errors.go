@@ -15,3 +15,5 @@ var ErrNoDefaultVal = errors.New("query parameter doesn't have a default value, 
 var ErrNoSpecialInput = errors.New("query parameter doesn't have special inputs, or no special input was found")
 var ErrNoIntRange = errors.New("query parameter doesn't have integer range")
 var ErrNoVal = errors.New("param has no value")
+var ErrCorrect = errors.New("test got the expected error")
+var ErrIgnoredField = errors.New("this field of the test-struct is ignored")

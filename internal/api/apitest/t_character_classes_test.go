@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetCharacterClass(t *testing.T) {
 	t.Parallel()
-	tests := []CharacterClass{
+	tests := []apitesttypes.CharacterClass{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes/23",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "character class with provided id '23' doesn't exist. max id: 22",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes/1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -32,7 +33,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             11,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   1,
 				Name: "characters",
 			},
@@ -45,7 +46,7 @@ func TestGetCharacterClass(t *testing.T) {
 			Submenus:            []int32{2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 15},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes/3",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -58,7 +59,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             4,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   3,
 				Name: "standard-aeons",
 			},
@@ -71,7 +72,7 @@ func TestGetCharacterClass(t *testing.T) {
 			Submenus:            []int32{2, 3, 4, 5},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes/4",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -84,7 +85,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             0,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   4,
 				Name: "magus-sisters",
 			},
@@ -97,7 +98,7 @@ func TestGetCharacterClass(t *testing.T) {
 			Submenus:            []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes/6",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -110,7 +111,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             1,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   6,
 				Name: "yuna",
 			},
@@ -123,7 +124,7 @@ func TestGetCharacterClass(t *testing.T) {
 			Submenus:            []int32{1},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes/8",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -136,7 +137,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             1,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   8,
 				Name: "lulu",
 			},
@@ -149,7 +150,7 @@ func TestGetCharacterClass(t *testing.T) {
 			Submenus:            []int32{14},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes/19",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -162,7 +163,7 @@ func TestGetCharacterClass(t *testing.T) {
 					"submenus":             1,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   19,
 				Name: "yojimbo",
 			},
@@ -181,9 +182,9 @@ func TestGetCharacterClass(t *testing.T) {
 
 func TestRetrieveCharacterClasses(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -191,7 +192,7 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 			Results: []int32{1, 5, 8, 12, 13, 17, 22},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes?category=1",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -199,7 +200,7 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 			Results: []int32{1, 2, 3, 4},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes?category=character",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -207,7 +208,7 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 			Results: []int32{5, 7, 8, 9, 10, 12},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/character-classes?category=aeon",
 				ExpectedStatus: http.StatusOK,
 			},

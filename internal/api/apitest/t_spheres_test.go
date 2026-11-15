@@ -6,21 +6,22 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 )
 
 func TestGetSphere(t *testing.T) {
 	t.Parallel()
-	tests := []Sphere{
+	tests := []apitesttypes.Sphere{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres/31",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "sphere with provided id '31' doesn't exist. max id: 30",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres/4?rel_availability=pre-story&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -32,10 +33,10 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:      NewExpUnique(4, "ability sphere"),
+			Unique:      apitesttypes.NewExpUnique(4, "ability sphere"),
 			Item:        73,
 			CreatedNode: nil,
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:      3,
 					Monster:    96,
@@ -55,7 +56,7 @@ func TestGetSphere(t *testing.T) {
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres/16",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -67,13 +68,13 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: NewExpUnique(16, "hp sphere"),
+			Unique: apitesttypes.NewExpUnique(16, "hp sphere"),
 			Item:   85,
 			CreatedNode: &apitypes.CreatedNode{
 				Node:  "hp",
 				Value: 300,
 			},
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:    0,
 					Monster:  28,
@@ -104,7 +105,7 @@ func TestGetSphere(t *testing.T) {
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres/16?rel_availability=post-game&rel_repeatable=false",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -116,13 +117,13 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: NewExpUnique(16, "hp sphere"),
+			Unique: apitesttypes.NewExpUnique(16, "hp sphere"),
 			Item:   85,
 			CreatedNode: &apitypes.CreatedNode{
 				Node:  "hp",
 				Value: 300,
 			},
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:    0,
 					Monster:  28,
@@ -141,7 +142,7 @@ func TestGetSphere(t *testing.T) {
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres/26?rel_availability=post&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -153,17 +154,17 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:          NewExpUnique(26, "clear sphere"),
+			Unique:          apitesttypes.NewExpUnique(26, "clear sphere"),
 			Item:            95,
 			CreatedNode:     nil,
-			Monsters:        []TestMonItemAmts{},
+			Monsters:        []apitesttypes.TestMonItemAmts{},
 			Treasures:       nil,
 			Shops:           []int32{33},
 			Quests:          nil,
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres/26",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -175,17 +176,17 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:          NewExpUnique(26, "clear sphere"),
+			Unique:          apitesttypes.NewExpUnique(26, "clear sphere"),
 			Item:            95,
 			CreatedNode:     nil,
-			Monsters:        []TestMonItemAmts{},
+			Monsters:        []apitesttypes.TestMonItemAmts{},
 			Treasures:       nil,
 			Shops:           []int32{33},
 			Quests:          nil,
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres/2?rel_availability=always&rel_repeatable=false",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -197,10 +198,10 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:      NewExpUnique(2, "mana sphere"),
+			Unique:      apitesttypes.NewExpUnique(2, "mana sphere"),
 			Item:        71,
 			CreatedNode: nil,
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:      0,
 					Monster:    107,
@@ -216,7 +217,7 @@ func TestGetSphere(t *testing.T) {
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres/2?rel_availability=post&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -228,10 +229,10 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:      NewExpUnique(2, "mana sphere"),
+			Unique:      apitesttypes.NewExpUnique(2, "mana sphere"),
 			Item:        71,
 			CreatedNode: nil,
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:      1,
 					Monster:    205,
@@ -259,9 +260,9 @@ func TestGetSphere(t *testing.T) {
 
 func TestRetrieveSpheres(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -269,7 +270,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{1, 13, 15, 19, 23, 27, 30},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?color=yellow&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -277,7 +278,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{6, 7, 8, 9, 10, 11},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=always&location=12&repeatable=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -285,7 +286,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{1, 2, 3},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=post&repeatable=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -293,7 +294,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{7, 10, 16, 21, 24, 30},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=post-game&repeatable=true&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -301,7 +302,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{1, 5, 10, 20, 25, 29, 30},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=always&repeatable=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -309,7 +310,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{1, 5, 11, 15, 27, 29},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=always&repeatable=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -317,7 +318,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{16, 17, 18, 20, 21, 25},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=always&repeatable=false&methods=treasure",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -325,7 +326,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{2, 4, 12, 15, 21, 25, 29},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=always&repeatable=false&methods=monster",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -333,7 +334,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{16, 17},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=always&repeatable=false&methods=monster,treasure",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -341,7 +342,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{16, 17, 20, 21, 25, 29},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=story&sublocation=28", // macalania
 				ExpectedStatus: http.StatusOK,
 			},
@@ -349,7 +350,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{4, 7, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=story&repeatable=true&sublocation=28", // macalania
 				ExpectedStatus: http.StatusOK,
 			},
@@ -357,7 +358,7 @@ func TestRetrieveSpheres(t *testing.T) {
 			Results: []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/spheres?availability=post&repeatable=true&area=203", // calm lands - arena
 				ExpectedStatus: http.StatusOK,
 			},

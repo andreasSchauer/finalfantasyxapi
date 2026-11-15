@@ -6,27 +6,28 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 func TestGetAllItem(t *testing.T) {
 	t.Parallel()
-	tests := []MasterItem{
+	tests := []apitesttypes.MasterItem{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/173",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "all item with provided id '173' doesn't exist. max id: 172",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/4",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(4, "mega-potion"),
+			Unique:    apitesttypes.NewExpUnique(4, "mega-potion"),
 			TypedItem: "/items/4",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -38,12 +39,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/111",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(111, "underdog's secret"),
+			Unique:    apitesttypes.NewExpUnique(111, "underdog's secret"),
 			TypedItem: "/items/111",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -55,12 +56,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/130",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(130, "saturn sigil"),
+			Unique:    apitesttypes.NewExpUnique(130, "saturn sigil"),
 			TypedItem: "/key-items/18",
 			ItemType:  database.ItemTypeKeyItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -72,12 +73,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/2?rel_availability=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(2, "hi-potion"),
+			Unique:    apitesttypes.NewExpUnique(2, "hi-potion"),
 			TypedItem: "/items/2",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -89,12 +90,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/2?rel_availability=always&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(2, "hi-potion"),
+			Unique:    apitesttypes.NewExpUnique(2, "hi-potion"),
 			TypedItem: "/items/2",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -106,12 +107,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/2?rel_availability=post",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(2, "hi-potion"),
+			Unique:    apitesttypes.NewExpUnique(2, "hi-potion"),
 			TypedItem: "/items/2",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -123,12 +124,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/55?rel_availability=post",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(55, "chocobo wing"),
+			Unique:    apitesttypes.NewExpUnique(55, "chocobo wing"),
 			TypedItem: "/items/55",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -140,12 +141,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/55?rel_availability=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(55, "chocobo wing"),
+			Unique:    apitesttypes.NewExpUnique(55, "chocobo wing"),
 			TypedItem: "/items/55",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -157,12 +158,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/55?rel_availability=always&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(55, "chocobo wing"),
+			Unique:    apitesttypes.NewExpUnique(55, "chocobo wing"),
 			TypedItem: "/items/55",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -174,12 +175,12 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items/55?rel_availability=always&rel_repeatable=false",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    NewExpUnique(55, "chocobo wing"),
+			Unique:    apitesttypes.NewExpUnique(55, "chocobo wing"),
 			TypedItem: "/items/55",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -197,9 +198,9 @@ func TestGetAllItem(t *testing.T) {
 
 func TestRetrieveAllItems(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -207,7 +208,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{1, 28, 53, 99, 148, 172},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?type=1&methods=quest&limit=maX",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -215,7 +216,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{1, 10, 29, 46, 54, 60, 80, 109, 112},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?location=14&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -223,7 +224,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{1, 4, 16, 47, 57, 87, 100, 134, 160},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?sublocation=20&limit=max", // moonflow
 				ExpectedStatus: http.StatusOK,
 			},
@@ -231,7 +232,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{3, 14, 38, 103, 117, 142, 158},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?area=36", // besaid village
 				ExpectedStatus: http.StatusOK,
 			},
@@ -239,7 +240,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{1, 2, 9, 138},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?availability=story&location=9",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -247,7 +248,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{5, 81},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?availability=post-game&methods=shop&pre_airship=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -255,7 +256,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{1, 9, 11, 17, 20, 36, 95, 100},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?availability=post-game&methods=shop&pre_airship=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -264,7 +265,7 @@ func TestRetrieveAllItems(t *testing.T) {
 		},
 
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?repeatable=true&methods=monster&area=170", // sanubia desert - west
 				ExpectedStatus: http.StatusOK,
 			},
@@ -272,7 +273,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{2, 10, 21, 36, 42, 54, 77, 102, 112},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?availability=story&repeatable=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -280,7 +281,7 @@ func TestRetrieveAllItems(t *testing.T) {
 			Results: []int32{113, 114, 117, 118, 165, 166, 167, 168},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/all-items?availability=post-game&repeatable=false&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},

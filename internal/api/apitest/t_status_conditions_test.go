@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetStatusCondition(t *testing.T) {
 	t.Parallel()
-	tests := []StatusCondition{
+	tests := []apitesttypes.StatusCondition{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/status-conditions/46",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "status condition with provided id '46' doesn't exist. max id: 45",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/status-conditions/5?inflict_min=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -34,10 +35,10 @@ func TestGetStatusCondition(t *testing.T) {
 					"inflicted by - status conditions":   0,
 				},
 			},
-			Unique:             NewExpUnique(5, "death"),
+			Unique:             apitesttypes.NewExpUnique(5, "death"),
 			AutoAbilities:      []int32{19, 20, 54, 77, 78},
 			MonstersResistance: []int32{},
-			InflictedBy: &TestStatusInfliction{
+			InflictedBy: &apitesttypes.TestStatusInfliction{
 				PlayerAbilities:    []int32{98},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{},
@@ -47,7 +48,7 @@ func TestGetStatusCondition(t *testing.T) {
 			RemovedBy: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/status-conditions/9?inflict_max=60",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -67,17 +68,17 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     0,
 				},
 			},
-			Unique:             NewExpUnique(9, "petrification"),
+			Unique:             apitesttypes.NewExpUnique(9, "petrification"),
 			AutoAbilities:      []int32{17, 18, 54, 75, 76, 129},
 			MonstersResistance: []int32{2, 5, 55, 92, 129, 157, 189, 216, 237, 272, 295, 307},
-			InflictedBy: &TestStatusInfliction{
+			InflictedBy: &apitesttypes.TestStatusInfliction{
 				PlayerAbilities:    []int32{},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{},
 				MiscAbilities:      []int32{},
 				EnemyAbilities:     []int32{21, 29, 178, 183, 377, 379, 381},
 			},
-			RemovedBy: &TestStatusRemoval{
+			RemovedBy: &apitesttypes.TestStatusRemoval{
 				PlayerAbilities:    []int32{53},
 				OverdriveAbilities: []int32{152, 153, 158, 159},
 				ItemAbilities:      []int32{12, 16, 21},
@@ -86,7 +87,7 @@ func TestGetStatusCondition(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/status-conditions/21?inflict_min=infinite&resistance=immune",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -106,17 +107,17 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     3,
 				},
 			},
-			Unique:             NewExpUnique(21, "haste"),
+			Unique:             apitesttypes.NewExpUnique(21, "haste"),
 			AutoAbilities:      []int32{96, 101},
 			MonstersResistance: []int32{3, 33, 135, 156, 199, 252, 253},
-			InflictedBy: &TestStatusInfliction{
+			InflictedBy: &apitesttypes.TestStatusInfliction{
 				PlayerAbilities:    []int32{56, 57},
 				OverdriveAbilities: []int32{165, 166, 167},
 				ItemAbilities:      []int32{54, 55},
 				MiscAbilities:      []int32{},
 				EnemyAbilities:     []int32{},
 			},
-			RemovedBy: &TestStatusRemoval{
+			RemovedBy: &apitesttypes.TestStatusRemoval{
 				PlayerAbilities:    []int32{63, 90},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{63},
@@ -125,7 +126,7 @@ func TestGetStatusCondition(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/status-conditions/31",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -145,17 +146,17 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     2,
 				},
 			},
-			Unique:             NewExpUnique(31, "boost"),
+			Unique:             apitesttypes.NewExpUnique(31, "boost"),
 			AutoAbilities:      []int32{},
 			MonstersResistance: []int32{3, 33, 69, 108, 135, 253},
-			InflictedBy: &TestStatusInfliction{
+			InflictedBy: &apitesttypes.TestStatusInfliction{
 				PlayerAbilities:    []int32{},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{},
 				MiscAbilities:      []int32{8},
 				EnemyAbilities:     []int32{},
 			},
-			RemovedBy: &TestStatusRemoval{
+			RemovedBy: &apitesttypes.TestStatusRemoval{
 				PlayerAbilities:    []int32{},
 				OverdriveAbilities: []int32{},
 				ItemAbilities:      []int32{},
@@ -170,9 +171,9 @@ func TestGetStatusCondition(t *testing.T) {
 
 func TestRetrieveStatusConditions(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/status-conditions?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -180,7 +181,7 @@ func TestRetrieveStatusConditions(t *testing.T) {
 			Results: []int32{1, 8, 14, 16, 22, 38, 45},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/status-conditions/?category=2",
 				ExpectedStatus: http.StatusOK,
 			},

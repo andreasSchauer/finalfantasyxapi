@@ -6,22 +6,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/sections/sectiontypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetMonsterFormation(t *testing.T) {
 	t.Parallel()
-	tests := []MonsterFormation{
+	tests := []apitesttypes.MonsterFormation{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations/332",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "monster-formation with provided id '332' doesn't exist. max id: 331",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations/27",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -31,7 +32,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			IDOnly:         NewExpIDOnly(27),
+			IDOnly:         apitesttypes.NewExpIDOnly(27),
 			Category:       "boss-fight",
 			IsForcedAmbush: false,
 			CanEscape:      false,
@@ -44,10 +45,10 @@ func TestGetMonsterFormation(t *testing.T) {
 				"sinscale - 3":       4,
 			},
 			Areas:           []int32{42},
-			TriggerCommands: []TestFormationTC{},
+			TriggerCommands: []apitesttypes.TestFormationTC{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations/77",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -59,7 +60,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			IDOnly:         NewExpIDOnly(77),
+			IDOnly:         apitesttypes.NewExpIDOnly(77),
 			Category:       "random-encounter",
 			IsForcedAmbush: false,
 			CanEscape:      true,
@@ -72,7 +73,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			Areas: []int32{99, 100, 106},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations/137",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -82,7 +83,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 2,
 				},
 			},
-			IDOnly:         NewExpIDOnly(137),
+			IDOnly:         apitesttypes.NewExpIDOnly(137),
 			Category:       "boss-fight",
 			IsForcedAmbush: false,
 			CanEscape:      false,
@@ -96,7 +97,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"guado guardian - 1": 2,
 			},
 			Areas: []int32{164},
-			TriggerCommands: []TestFormationTC{
+			TriggerCommands: []apitesttypes.TestFormationTC{
 				{
 					Ability: 4,
 					Users:   []int32{5},
@@ -108,7 +109,7 @@ func TestGetMonsterFormation(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations/265",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -118,7 +119,7 @@ func TestGetMonsterFormation(t *testing.T) {
 					"trigger commands": 0,
 				},
 			},
-			IDOnly:         NewExpIDOnly(265),
+			IDOnly:         apitesttypes.NewExpIDOnly(265),
 			Category:       "random-encounter",
 			IsForcedAmbush: true,
 			CanEscape:      true,
@@ -129,7 +130,7 @@ func TestGetMonsterFormation(t *testing.T) {
 				"great malboro": 1,
 			},
 			Areas:           []int32{234, 236, 237},
-			TriggerCommands: []TestFormationTC{},
+			TriggerCommands: []apitesttypes.TestFormationTC{},
 		},
 	}
 
@@ -138,16 +139,16 @@ func TestGetMonsterFormation(t *testing.T) {
 
 func TestRetrieveMonsterFormations(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?limit=asd",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -155,7 +156,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{1, 175, 238, 307, 331},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?monster=44",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -163,7 +164,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{63, 64, 67, 68, 69},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?location=12",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -171,7 +172,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{90, 93, 98, 102, 105},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?sublocation=7", // besaid
 				ExpectedStatus: http.StatusOK,
 			},
@@ -179,7 +180,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{9, 15, 19, 24, 25},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?area=232", // sin - city of dying dreams
 				ExpectedStatus: http.StatusOK,
 			},
@@ -187,7 +188,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{257, 258, 262, 266},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?ambush=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -195,7 +196,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{226, 265, 298},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?category=boss-fight&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -203,7 +204,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{3, 37, 83, 137, 189, 204, 245, 270, 296},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?availability=post&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -211,7 +212,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{7, 20, 70, 171, 213, 266, 287, 314, 331},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?availability=pre-story&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -219,7 +220,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{1, 2, 28, 37, 134, 164, 178, 203, 245, 254},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?repeatable=true&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -227,7 +228,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{9, 35, 58, 81, 103, 148, 165, 193, 239, 280, 319, 331},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?category=boss-fight&repeatable=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -235,7 +236,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{226, 227},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?availability=always&location=23",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -243,7 +244,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{230, 233, 234, 237, 240, 244},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?availability=post&location=25",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -251,7 +252,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{256, 260, 265, 266, 269},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?availability=pre-story&sublocation=34", // highbridge
 				ExpectedStatus: http.StatusOK,
 			},
@@ -259,7 +260,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{174, 190, 191, 192},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?availability=story&area=234", // sin - the nucleus
 				ExpectedStatus: http.StatusOK,
 			},
@@ -267,7 +268,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{260, 262, 263, 265, 266, 267, 268, 269},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?availability=post&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -275,7 +276,7 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 			Results: []int32{7, 20, 70, 78, 83, 171, 213, 255, 264, 295, 310, 331},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations?escape=false&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -289,9 +290,9 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 
 func TestSubsectionMonsterFormations(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/locations/23/monster-formations",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleLocations,
@@ -301,7 +302,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			Results:        []int32{228, 231, 235, 237, 240, 244, 245},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/locations/4/monster-formations",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleLocations,
@@ -311,7 +312,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			Results:        []int32{9, 13, 15, 18, 21, 23, 25},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/sublocations/38/monster-formations",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleSublocations,
@@ -321,7 +322,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			Results:        []int32{198, 202, 216, 217, 221, 224, 227},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/sublocations/18/monster-formations",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleSublocations,
@@ -331,7 +332,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			Results:        []int32{86, 89, 90, 93, 95},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/areas/89/monster-formations",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleAreas,
@@ -341,7 +342,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			Results:        []int32{46, 49, 54, 57, 58, 59},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/areas/170/monster-formations",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleAreas,
@@ -351,7 +352,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			Results:        []int32{140, 144, 149, 150, 153, 155},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/200/monster-formations",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleMonsters,
@@ -361,7 +362,7 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 			Results:        []int32{170},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/155/monster-formations",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleMonsters,

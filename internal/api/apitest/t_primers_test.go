@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetPrimer(t *testing.T) {
 	t.Parallel()
-	tests := []Primer{
+	tests := []apitesttypes.Primer{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/primers/27",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "primer with provided id '27' doesn't exist. max id: 26",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/primers/1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -28,13 +29,13 @@ func TestGetPrimer(t *testing.T) {
 					"treasures": 2,
 				},
 			},
-			Unique:    NewExpUnique(1, "al bhed primer i"),
+			Unique:    apitesttypes.NewExpUnique(1, "al bhed primer i"),
 			KeyItem:   35,
 			Areas:     []int32{15, 167},
 			Treasures: []int32{13, 215},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/primers/22",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -43,7 +44,7 @@ func TestGetPrimer(t *testing.T) {
 					"treasures": 1,
 				},
 			},
-			Unique:    NewExpUnique(22, "al bhed primer xxii"),
+			Unique:    apitesttypes.NewExpUnique(22, "al bhed primer xxii"),
 			KeyItem:   56,
 			Areas:     []int32{195},
 			Treasures: []int32{252},
@@ -55,9 +56,9 @@ func TestGetPrimer(t *testing.T) {
 
 func TestRetrievePrimers(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/primers?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -65,7 +66,7 @@ func TestRetrievePrimers(t *testing.T) {
 			Results: []int32{1, 5, 17, 20, 26},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/primers?availability=pre-story",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -73,7 +74,7 @@ func TestRetrievePrimers(t *testing.T) {
 			Results: []int32{19, 20, 21, 22},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/primers?availability=always&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -81,7 +82,7 @@ func TestRetrievePrimers(t *testing.T) {
 			Results: []int32{1, 5, 10, 15, 17, 23, 25},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/primers?availability=pre-story",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -89,7 +90,7 @@ func TestRetrievePrimers(t *testing.T) {
 			Results: []int32{19, 20, 21, 22},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/primers?availability=post",
 				ExpectedStatus: http.StatusOK,
 			},

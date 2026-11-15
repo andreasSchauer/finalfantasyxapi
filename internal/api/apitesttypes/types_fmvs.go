@@ -1,0 +1,24 @@
+package apitesttypes
+
+import (
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
+)
+
+type FMV struct {
+	TestGeneral
+	Unique
+	Area int32
+	Song *int32
+}
+
+func (e FMV) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
+}
+
+func (e FMV) Compare(test Test, got apitypes.FMV) {
+	test.T.Helper()
+	test.compareExpUnique(e.Unique, got.ID, got.Name)
+	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.Area, got.Area)
+	test.compIDAPIResourcePtrs("song", apilookups.E.Songs.Endpoint, e.Song, got.Song)
+}

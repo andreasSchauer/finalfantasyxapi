@@ -11,16 +11,18 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
 type testCase[G any] interface {
-	GetTestGeneral() TestGeneral
+	GetTestGeneral() apitesttypes.TestGeneral
 	testType[G]
 }
 
 type testType[G any] interface {
-	Compare(Test, G)
+	Compare(apitesttypes.Test, G)
 }
 
 func testSingleResources[E testCase[G], G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
@@ -28,13 +30,13 @@ func testSingleResources[E testCase[G], G any](t *testing.T, tests []E, testFunc
 
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
-		name := tc.getTestName(testFuncName, i+1)
+		name := tc.GetTestName(testFuncName, i+1)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
 			testObj, got, err := setupTest[G](t, tc, name, handlerFunc)
-			if errors.Is(err, errCorrect) {
+			if errors.Is(err, errs.ErrCorrect) {
 				return
 			}
 
@@ -43,10 +45,10 @@ func testSingleResources[E testCase[G], G any](t *testing.T, tests []E, testFunc
 	}
 }
 
-func testStatusses(t *testing.T, tests []TestGeneral, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
+func testStatusses(t *testing.T, tests []apitesttypes.TestGeneral, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
 	t.Helper()
 	for i, tc := range tests {
-		name := tc.getTestName(testFuncName, i+1)
+		name := tc.GetTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
@@ -57,25 +59,25 @@ func testStatusses(t *testing.T, tests []TestGeneral, testFuncName string, handl
 			t.Parallel()
 
 			_, _, err := setupTest[any](t, tc, name, expHandler)
-			if errors.Is(err, errCorrect) {
+			if errors.Is(err, errs.ErrCorrect) {
 				return
 			}
 		})
 	}
 }
 
-func testServiceResponsesGet[G any](t *testing.T, tests []TestGeneral, testFuncName string) {
+func testServiceResponsesGet[G any](t *testing.T, tests []apitesttypes.TestGeneral, testFuncName string) {
 	t.Helper()
 	var zero G
 
 	for i, tc := range tests {
-		name := tc.getTestName(testFuncName, i+1)
+		name := tc.GetTestName(testFuncName, i+1)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
 			test, got, err := setupTest[G](t, tc, name, tc.Handler)
-			if errors.Is(err, errCorrect) {
+			if errors.Is(err, errs.ErrCorrect) {
 				return
 			}
 
@@ -91,13 +93,13 @@ func testServiceResponsesPost[E testCase[G], G any](t *testing.T, tests []E, tes
 
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
-		name := tc.getTestName(testFuncName, i+1)
+		name := tc.GetTestName(testFuncName, i+1)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
 			test, got, err := setupTest[G](t, tc, name, handlerFunc)
-			if errors.Is(err, errCorrect) {
+			if errors.Is(err, errs.ErrCorrect) {
 				return
 			}
 
@@ -108,11 +110,11 @@ func testServiceResponsesPost[E testCase[G], G any](t *testing.T, tests []E, tes
 
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections
-func testIDList[G any](t *testing.T, tests []ListIDs, endpoint ts.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(Test, ts.EndpointName, ListIDs, G)) {
+func testIDList[G any](t *testing.T, tests []apitesttypes.ListIDs, endpoint ts.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(apitesttypes.Test, ts.EndpointName, apitesttypes.ListIDs, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
-		name := tc.getTestName(testFuncName, i+1)
+		name := tc.GetTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
@@ -128,7 +130,7 @@ func testIDList[G any](t *testing.T, tests []ListIDs, endpoint ts.EndpointName, 
 			t.Parallel()
 
 			test, got, err := setupTest[G](t, exp.TestGeneral, name, expHandler)
-			if errors.Is(err, errCorrect) {
+			if errors.Is(err, errs.ErrCorrect) {
 				return
 			}
 
@@ -138,11 +140,11 @@ func testIDList[G any](t *testing.T, tests []ListIDs, endpoint ts.EndpointName, 
 }
 
 // compareAPIResourceListPaths for api resources
-func testPathList[G any](t *testing.T, tests []ListPaths, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(Test, ListPaths, G)) {
+func testPathList[G any](t *testing.T, tests []apitesttypes.ListPaths, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(apitesttypes.Test, apitesttypes.ListPaths, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.TestGeneral
-		name := tc.getTestName(testFuncName, i+1)
+		name := tc.GetTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
@@ -153,7 +155,7 @@ func testPathList[G any](t *testing.T, tests []ListPaths, testFuncName string, h
 			t.Parallel()
 
 			test, got, err := setupTest[G](t, exp.TestGeneral, name, expHandler)
-			if errors.Is(err, errCorrect) {
+			if errors.Is(err, errs.ErrCorrect) {
 				return
 			}
 
@@ -164,17 +166,17 @@ func testPathList[G any](t *testing.T, tests []ListPaths, testFuncName string, h
 
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
-func testNameList[G any](t *testing.T, tests []ListNames, testFuncName string, compFunc func(Test, ts.EndpointName, ListNames, G)) {
+func testNameList[G any](t *testing.T, tests []apitesttypes.ListNames, testFuncName string, compFunc func(apitesttypes.Test, ts.EndpointName, apitesttypes.ListNames, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.TestGeneral
-		name := tc.getTestName(testFuncName, i+1)
+		name := tc.GetTestName(testFuncName, i+1)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
 			test, got, err := setupTest[G](t, exp.TestGeneral, name, exp.Handler)
-			if errors.Is(err, errCorrect) {
+			if errors.Is(err, errs.ErrCorrect) {
 				return
 			}
 
@@ -184,7 +186,7 @@ func testNameList[G any](t *testing.T, tests []ListNames, testFuncName string, c
 }
 
 // makes the http request for the test and returns the result, as well as a test struct
-func setupTest[G any](t *testing.T, tc TestGeneral, testName string, handlerFunc func(http.ResponseWriter, *http.Request)) (Test, G, error) {
+func setupTest[G any](t *testing.T, tc apitesttypes.TestGeneral, testName string, handlerFunc func(http.ResponseWriter, *http.Request)) (apitesttypes.Test, G, error) {
 	t.Helper()
 	var zero G
 
@@ -225,7 +227,7 @@ func setupTest[G any](t *testing.T, tc TestGeneral, testName string, handlerFunc
 		if !strings.Contains(rawErr, tc.ExpectedErr) {
 			t.Fatalf("error mismatch.\n- want: %s\n- got %s\n\n", tc.ExpectedErr, rawErr)
 		}
-		return Test{}, zero, errCorrect
+		return apitesttypes.Test{}, zero, errs.ErrCorrect
 	}
 
 	var got G
@@ -234,7 +236,7 @@ func setupTest[G any](t *testing.T, tc TestGeneral, testName string, handlerFunc
 		t.Fatalf("failed to decode: %v\n\n", err)
 	}
 
-	test := Test{
+	test := apitesttypes.Test{
 		T:          t,
 		Srv:        &testSrv,
 		Name:       testName,

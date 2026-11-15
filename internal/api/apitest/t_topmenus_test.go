@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetTopmenu(t *testing.T) {
 	t.Parallel()
-	tests := []Topmenu{
+	tests := []apitesttypes.Topmenu{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/topmenus/5",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "topmenu with provided id '5' doesn't exist. max id: 4",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/topmenus/1",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -30,7 +31,7 @@ func TestGetTopmenu(t *testing.T) {
 					"aeon commands":      9,
 				},
 			},
-			Unique:            NewExpUnique(1, "main"),
+			Unique:            apitesttypes.NewExpUnique(1, "main"),
 			Submenus:          []int32{1, 2, 3, 4, 5, 6, 12},
 			Abilities:         []int32{88, 89, 90, 91, 92, 93, 374, 375},
 			OverdriveCommands: []int32{},
@@ -38,7 +39,7 @@ func TestGetTopmenu(t *testing.T) {
 			AeonCommands:      []int32{1, 2, 3, 4, 5, 6, 7, 8, 9},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/topmenus/2",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -49,7 +50,7 @@ func TestGetTopmenu(t *testing.T) {
 					"aeon commands":      0,
 				},
 			},
-			Unique:            NewExpUnique(2, "right"),
+			Unique:            apitesttypes.NewExpUnique(2, "right"),
 			Submenus:          []int32{7, 8},
 			Abilities:         []int32{377, 378, 379, 380, 381, 382},
 			OverdriveCommands: []int32{},
@@ -57,7 +58,7 @@ func TestGetTopmenu(t *testing.T) {
 			AeonCommands:      []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/topmenus/3",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -68,7 +69,7 @@ func TestGetTopmenu(t *testing.T) {
 					"aeon commands":      0,
 				},
 			},
-			Unique:            NewExpUnique(3, "left"),
+			Unique:            apitesttypes.NewExpUnique(3, "left"),
 			Submenus:          []int32{},
 			Abilities:         []int32{362, 364, 367, 370, 372, 373},
 			OverdriveCommands: []int32{1, 2, 3, 4, 5, 6, 7},
@@ -82,9 +83,9 @@ func TestGetTopmenu(t *testing.T) {
 
 func TestRetrieveTopmenus(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/topmenus",
 				ExpectedStatus: http.StatusOK,
 			},

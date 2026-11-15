@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetCelestialWeapon(t *testing.T) {
 	t.Parallel()
-	tests := []CelestialWeapon{
+	tests := []apitesttypes.CelestialWeapon{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/celestial-weapons/8",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "celestial weapon with provided id '8' doesn't exist. max id: 7",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/celestial-weapons/3",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -27,7 +28,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 					"auto-abilities": 4,
 				},
 			},
-			Unique:        NewExpUnique(3, "world champion"),
+			Unique:        apitesttypes.NewExpUnique(3, "world champion"),
 			Equipment:     3,
 			AutoAbilities: []int32{51, 49, 44, 38},
 			Crest:         19,
@@ -37,7 +38,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 			SigilQuest:    98,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/celestial-weapons/6",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -45,7 +46,7 @@ func TestGetCelestialWeapon(t *testing.T) {
 					"auto-abilities": 4,
 				},
 			},
-			Unique:        NewExpUnique(6, "masamune"),
+			Unique:        apitesttypes.NewExpUnique(6, "masamune"),
 			Equipment:     6,
 			AutoAbilities: []int32{51, 49, 3, 37},
 			Crest:         15,
@@ -61,9 +62,9 @@ func TestGetCelestialWeapon(t *testing.T) {
 
 func TestRetrieveCelestialWeapons(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/celestial-weapons",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -71,7 +72,7 @@ func TestRetrieveCelestialWeapons(t *testing.T) {
 			Results: []int32{1, 2, 3, 4, 5, 6, 7},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/celestial-weapons?formula=hp-high",
 				ExpectedStatus: http.StatusOK,
 			},

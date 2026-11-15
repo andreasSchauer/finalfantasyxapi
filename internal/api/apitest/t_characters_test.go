@@ -6,22 +6,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetCharacter(t *testing.T) {
 	t.Parallel()
-	tests := []Character{
+	tests := []apitesttypes.Character{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/9",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "character with provided id '9' doesn't exist. max id: 8",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/1?osg_stats=standard",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -32,13 +33,13 @@ func TestGetCharacter(t *testing.T) {
 					"exp sg abilities":  11,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   1,
 				Name: "tidus",
 			},
 			UntypedUnit: 1,
 			Area:        1,
-			Agility: TestAgilityParams{
+			Agility: apitesttypes.TestAgilityParams{
 				AgilityTier: 16,
 				TickSpeed:   6,
 				MinICV:      h.GetInt32Ptr(17),
@@ -61,7 +62,7 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       29,
 				"accuracy":      29,
 			},
-			RegenAmounts: []TestRegenAmount{
+			RegenAmounts: []apitesttypes.TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -84,10 +85,10 @@ func TestGetCharacter(t *testing.T) {
 				},
 			},
 			DefaultPlayerAbilities: []int32{},
-			StdSphereGrid: &SphereGrid{
+			StdSphereGrid: &apitesttypes.SphereGrid{
 				PlayerAbilities: []int32{9, 10, 13, 22, 27, 38, 56, 59},
 			},
-			ExpSphereGrid: &SphereGrid{
+			ExpSphereGrid: &apitesttypes.SphereGrid{
 				PlayerAbilities: []int32{10, 22, 25, 57, 58, 59},
 			},
 			OverdriveModes: map[string]int32{
@@ -99,7 +100,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/5",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -110,13 +111,13 @@ func TestGetCharacter(t *testing.T) {
 					"exp sg abilities":  4,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   5,
 				Name: "kimahri",
 			},
 			UntypedUnit: 5,
 			Area:        42,
-			Agility: TestAgilityParams{
+			Agility: apitesttypes.TestAgilityParams{
 				AgilityTier: 6,
 				TickSpeed:   16,
 				MinICV:      h.GetInt32Ptr(46),
@@ -139,7 +140,7 @@ func TestGetCharacter(t *testing.T) {
 				"evasion":       5,
 				"accuracy":      5,
 			},
-			RegenAmounts: []TestRegenAmount{
+			RegenAmounts: []apitesttypes.TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -162,10 +163,10 @@ func TestGetCharacter(t *testing.T) {
 				},
 			},
 			DefaultPlayerAbilities: []int32{33},
-			StdSphereGrid: &SphereGrid{
+			StdSphereGrid: &apitesttypes.SphereGrid{
 				PlayerAbilities: []int32{12, 32, 33, 52, 87},
 			},
-			ExpSphereGrid: &SphereGrid{
+			ExpSphereGrid: &apitesttypes.SphereGrid{
 				PlayerAbilities: []int32{12, 32, 33, 52},
 			},
 			OverdriveModes: map[string]int32{
@@ -177,7 +178,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/4?osg_stats=expert",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -190,13 +191,13 @@ func TestGetCharacter(t *testing.T) {
 					"exp sg abilities":  19,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   4,
 				Name: "lulu",
 			},
 			UntypedUnit: 4,
 			Area:        36,
-			Agility: TestAgilityParams{
+			Agility: apitesttypes.TestAgilityParams{
 				AgilityTier: 12,
 				TickSpeed:   10,
 				MinICV:      h.GetInt32Ptr(26),
@@ -220,10 +221,10 @@ func TestGetCharacter(t *testing.T) {
 				"accuracy":      13,
 			},
 			DefaultPlayerAbilities: []int32{69, 70, 71, 72},
-			StdSphereGrid: &SphereGrid{
+			StdSphereGrid: &apitesttypes.SphereGrid{
 				PlayerAbilities: []int32{21, 29, 43, 69, 74, 78, 83, 86},
 			},
-			ExpSphereGrid: &SphereGrid{
+			ExpSphereGrid: &apitesttypes.SphereGrid{
 				PlayerAbilities: []int32{29, 30, 43, 70, 74, 75, 79, 81, 87},
 			},
 			OverdriveModes: map[string]int32{
@@ -235,7 +236,7 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/8",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -246,13 +247,13 @@ func TestGetCharacter(t *testing.T) {
 					"default abilities": 15,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   8,
 				Name: "seymour",
 			},
 			UntypedUnit: 8,
 			Area:        102,
-			Agility: TestAgilityParams{
+			Agility: apitesttypes.TestAgilityParams{
 				AgilityTier: 12,
 				TickSpeed:   10,
 				MinICV:      h.GetInt32Ptr(28),
@@ -287,9 +288,9 @@ func TestGetCharacter(t *testing.T) {
 
 func TestRetrieveCharacters(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -297,7 +298,7 @@ func TestRetrieveCharacters(t *testing.T) {
 			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters?story_based=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -305,7 +306,7 @@ func TestRetrieveCharacters(t *testing.T) {
 			Results: []int32{8},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters?underwater=true",
 				ExpectedStatus: http.StatusOK,
 			},

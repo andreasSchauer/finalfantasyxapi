@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/sections/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
@@ -13,16 +14,16 @@ import (
 
 func TestGetPlayerAbility(t *testing.T) {
 	t.Parallel()
-	tests := []PlayerAbility{
+	tests := []apitesttypes.PlayerAbility{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities/103",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "player ability with provided id '103' doesn't exist. max id: 102",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities/10?ability_user=shiva",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -31,7 +32,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:          NewExpNameVer(10, "delay buster", 0),
+			NameVer:          apitesttypes.NewExpNameVer(10, "delay buster", 0),
 			Rank:             h.GetInt32Ptr(8),
 			AppearsInHelpBar: true,
 			CanCopyCat:       true,
@@ -42,7 +43,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			StdChar:          h.GetInt32Ptr(1),
 			ExpChar:          h.GetInt32Ptr(1),
 			Monsters:         []int32{},
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "single-target",
 					AbilityRange:   h.GetInt32Ptr(1),
@@ -52,15 +53,15 @@ func TestGetPlayerAbility(t *testing.T) {
 					Darkable:       true,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "accuracy",
 						HitChance:   nil,
 						AccModifier: h.GetFloat32Ptr(2.5),
 					},
-					Damage: &Damage{
+					Damage: &apitesttypes.Damage{
 						AttackType: database.AttackTypeAttack,
 						DamageType: database.DamageTypePhysical,
-						Hp: &ClassDamage{
+						Hp: &apitesttypes.ClassDamage{
 							DamageFormula:  database.DamageFormulaStrVsDef,
 							DamageConstant: 14,
 						},
@@ -70,19 +71,19 @@ func TestGetPlayerAbility(t *testing.T) {
 						BreakDmgLmt:     h.GetStrPtr("auto-ability"),
 						Element:         nil,
 					},
-					InflictedDelay: &InflictedDelay{
+					InflictedDelay: &apitesttypes.InflictedDelay{
 						DelayStrength: "strong",
 					},
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges:           []ModChange{},
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges:           []apitesttypes.ModChange{},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities/10?ability_user=auron&celestial_weapon=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -91,7 +92,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:          NewExpNameVer(10, "delay buster", 0),
+			NameVer:          apitesttypes.NewExpNameVer(10, "delay buster", 0),
 			Rank:             h.GetInt32Ptr(8),
 			AppearsInHelpBar: true,
 			CanCopyCat:       true,
@@ -102,7 +103,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			StdChar:          h.GetInt32Ptr(1),
 			ExpChar:          h.GetInt32Ptr(1),
 			Monsters:         []int32{},
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "single-target",
 					AbilityRange:   h.GetInt32Ptr(1),
@@ -112,15 +113,15 @@ func TestGetPlayerAbility(t *testing.T) {
 					Darkable:       true,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "accuracy",
 						HitChance:   nil,
 						AccModifier: h.GetFloat32Ptr(1),
 					},
-					Damage: &Damage{
+					Damage: &apitesttypes.Damage{
 						AttackType: database.AttackTypeAttack,
 						DamageType: database.DamageTypePhysical,
-						Hp: &ClassDamage{
+						Hp: &apitesttypes.ClassDamage{
 							DamageFormula:  database.DamageFormulaClstlHpLow,
 							DamageConstant: 16,
 						},
@@ -130,19 +131,19 @@ func TestGetPlayerAbility(t *testing.T) {
 						BreakDmgLmt:     h.GetStrPtr("auto-ability"),
 						Element:         nil,
 					},
-					InflictedDelay: &InflictedDelay{
+					InflictedDelay: &apitesttypes.InflictedDelay{
 						DelayStrength: "strong",
 					},
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges:           []ModChange{},
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges:           []apitesttypes.ModChange{},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities/24",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -150,7 +151,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 0,
 				},
 			},
-			NameVer:            NewExpNameVer(24, "use", 0),
+			NameVer:            apitesttypes.NewExpNameVer(24, "use", 0),
 			Rank:               h.GetInt32Ptr(2),
 			AppearsInHelpBar:   false,
 			CanCopyCat:         true,
@@ -161,10 +162,10 @@ func TestGetPlayerAbility(t *testing.T) {
 			StdChar:            h.GetInt32Ptr(7),
 			ExpChar:            h.GetInt32Ptr(7),
 			Monsters:           []int32{},
-			BattleInteractions: []BattleInteraction{},
+			BattleInteractions: []apitesttypes.BattleInteraction{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities/27",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -175,7 +176,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions 0 mod changes":  1,
 				},
 			},
-			NameVer:          NewExpNameVer(27, "cheer", 0),
+			NameVer:          apitesttypes.NewExpNameVer(27, "cheer", 0),
 			Rank:             h.GetInt32Ptr(2),
 			AppearsInHelpBar: true,
 			CanCopyCat:       true,
@@ -186,7 +187,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			StdChar:          h.GetInt32Ptr(1),
 			ExpChar:          h.GetInt32Ptr(1),
 			Monsters:         []int32{},
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "all-allies",
 					AbilityRange:   nil,
@@ -196,7 +197,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    false,
 					Reflectable:    false,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
@@ -206,14 +207,14 @@ func TestGetPlayerAbility(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges: []StatChange{
+					StatChanges: []apitesttypes.StatChange{
 						{
 							Stat:            3,
 							CalculationType: "added-value",
 							Value:           1,
 						},
 					},
-					ModifierChanges: []ModChange{
+					ModifierChanges: []apitesttypes.ModChange{
 						{
 							Modifier:        3,
 							CalculationType: "added-value",
@@ -224,7 +225,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities/47",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -233,7 +234,7 @@ func TestGetPlayerAbility(t *testing.T) {
 					"battle interactions": 1,
 				},
 			},
-			NameVer:          NewExpNameVer(47, "curaga", 0),
+			NameVer:          apitesttypes.NewExpNameVer(47, "curaga", 0),
 			Rank:             h.GetInt32Ptr(3),
 			AppearsInHelpBar: true,
 			CanCopyCat:       true,
@@ -244,7 +245,7 @@ func TestGetPlayerAbility(t *testing.T) {
 			StdChar:          h.GetInt32Ptr(2),
 			ExpChar:          h.GetInt32Ptr(2),
 			Monsters:         []int32{187, 195, 223, 226, 272, 275, 287},
-			BattleInteractions: []BattleInteraction{
+			BattleInteractions: []apitesttypes.BattleInteraction{
 				{
 					Target:         "single-target",
 					AbilityRange:   h.GetInt32Ptr(4),
@@ -254,15 +255,15 @@ func TestGetPlayerAbility(t *testing.T) {
 					Darkable:       false,
 					Silenceable:    true,
 					Reflectable:    true,
-					Accuracy: Accuracy{
+					Accuracy: apitesttypes.Accuracy{
 						AccSource:   "rate",
 						HitChance:   h.GetInt32Ptr(255),
 						AccModifier: nil,
 					},
-					Damage: &Damage{
+					Damage: &apitesttypes.Damage{
 						AttackType: database.AttackTypeHeal,
 						DamageType: database.DamageTypeMagical,
-						Hp: &ClassDamage{
+						Hp: &apitesttypes.ClassDamage{
 							DamageFormula:  database.DamageFormulaHealing,
 							DamageConstant: 80,
 						},
@@ -276,8 +277,8 @@ func TestGetPlayerAbility(t *testing.T) {
 					InflictedStatusConditions: []int32{},
 					RemovedStatusConditions:   []int32{},
 					CopiedStatusConditions:    []int32{},
-					StatChanges:               []StatChange{},
-					ModifierChanges:           []ModChange{},
+					StatChanges:               []apitesttypes.StatChange{},
+					ModifierChanges:           []apitesttypes.ModChange{},
 				},
 			},
 		},
@@ -288,9 +289,9 @@ func TestGetPlayerAbility(t *testing.T) {
 
 func TestGetMultiplePlayerAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities/wakizashi",
 				ExpectedStatus: http.StatusMultipleChoices,
 			},
@@ -298,7 +299,7 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 			Results: []int32{96, 97},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities/auto-life",
 				ExpectedStatus: http.StatusMultipleChoices,
 			},
@@ -312,9 +313,9 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 
 func TestRetrievePlayerAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -322,7 +323,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results: []int32{1, 22, 57, 78, 99, 102},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?category=2&help_bar=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -332,7 +333,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{24, 40, 42, 43},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?related_stat=3&darkable=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -342,7 +343,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{11},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?copycat=true&std_sg=3&user_atk=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -352,7 +353,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{28, 84, 85},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?status_inflict=none&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -362,7 +363,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{20, 24, 28, 36, 39, 43, 53, 76, 86, 96, 102},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?silenceable=true&reflectable=false&user=3",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -372,7 +373,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{82, 87},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?mp=20&exp_sg=2",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -382,7 +383,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{47},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?mp_min=20&learn_item=59",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -392,7 +393,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{64},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?mp_max=10&element=3",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -402,7 +403,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{71, 75},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?element=fire,ice",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -412,7 +413,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{69, 72, 73, 76, 77, 80},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?element=none&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -422,7 +423,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{1, 12, 24, 34, 43, 55, 67, 95, 102},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?delay=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -432,7 +433,7 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 			Results:  []int32{9, 10, 88},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-abilities?outside_battle=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -448,9 +449,9 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 
 func TestSubsectionPlayerAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/2/default-abilities",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleCharacters,
@@ -460,7 +461,7 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 			Results:        []int32{45, 53},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/2/std-sg-abilities",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleCharacters,
@@ -470,7 +471,7 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 			Results:        []int32{26, 42, 47, 53, 60, 62, 66},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/characters/2/exp-sg-abilities",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleCharacters,
@@ -480,7 +481,7 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 			Results:        []int32{14, 45, 49, 54, 60, 64, 65},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons/1/default-abilities",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleAeons,

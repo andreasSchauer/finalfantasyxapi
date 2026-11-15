@@ -6,22 +6,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	//h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetItem(t *testing.T) {
 	t.Parallel()
-	tests := []Item{
+	tests := []apitesttypes.Item{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/113",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "item with provided id '113' doesn't exist. max id: 112",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/69",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -36,10 +37,10 @@ func TestGetItem(t *testing.T) {
 					"mixes":                21,
 				},
 			},
-			Unique:      NewExpUnique(69, "three stars"),
+			Unique:      apitesttypes.NewExpUnique(69, "three stars"),
 			UntypedItem: 69,
 			Category:    database.ItemCategorySupport,
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 203,
@@ -75,7 +76,7 @@ func TestGetItem(t *testing.T) {
 			Mixes: []int32{6, 12, 26, 49, 62, 64},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/69?rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -93,8 +94,8 @@ func TestGetItem(t *testing.T) {
 					"quests":   0,
 				},
 			},
-			Unique: NewExpUnique(69, "three stars"),
-			Monsters: []TestMonItemAmts{
+			Unique: apitesttypes.NewExpUnique(69, "three stars"),
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 203,
@@ -114,7 +115,7 @@ func TestGetItem(t *testing.T) {
 			Quests: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/26",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -129,10 +130,10 @@ func TestGetItem(t *testing.T) {
 					"mixes":                24,
 				},
 			},
-			Unique:      NewExpUnique(26, "fire gem"),
+			Unique:      apitesttypes.NewExpUnique(26, "fire gem"),
 			UntypedItem: 26,
 			Category:    database.ItemCategoryOffensive,
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 109,
@@ -159,7 +160,7 @@ func TestGetItem(t *testing.T) {
 			Mixes: []int32{1, 6, 15, 31, 55, 63},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -174,10 +175,10 @@ func TestGetItem(t *testing.T) {
 					"mixes":                16,
 				},
 			},
-			Unique:      NewExpUnique(2, "hi-potion"),
+			Unique:      apitesttypes.NewExpUnique(2, "hi-potion"),
 			UntypedItem: 2,
 			Category:    database.ItemCategoryHealing,
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:     1,
 					Monster:   39,
@@ -211,7 +212,7 @@ func TestGetItem(t *testing.T) {
 			Mixes:         []int32{34, 40, 51, 56, 61},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/64",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -226,10 +227,10 @@ func TestGetItem(t *testing.T) {
 					"mixes":                9,
 				},
 			},
-			Unique:      NewExpUnique(64, "stamina tablet"),
+			Unique:      apitesttypes.NewExpUnique(64, "stamina tablet"),
 			UntypedItem: 64,
 			Category:    database.ItemCategorySupport,
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 69,
@@ -255,7 +256,7 @@ func TestGetItem(t *testing.T) {
 			Mixes: []int32{42, 56, 60, 63, 64},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/64?rel_availability=pre-story",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -270,10 +271,10 @@ func TestGetItem(t *testing.T) {
 					"mixes":                9,
 				},
 			},
-			Unique:      NewExpUnique(64, "stamina tablet"),
+			Unique:      apitesttypes.NewExpUnique(64, "stamina tablet"),
 			UntypedItem: 64,
 			Category:    database.ItemCategorySupport,
-			Monsters: []TestMonItemAmts{
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:       0,
 					Monster:     195,
@@ -292,7 +293,7 @@ func TestGetItem(t *testing.T) {
 			Mixes: []int32{42, 56, 60, 63, 64},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/55?rel_availability=post",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -310,8 +311,8 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: NewExpUnique(55, "chocobo wing"),
-			Monsters: []TestMonItemAmts{
+			Unique: apitesttypes.NewExpUnique(55, "chocobo wing"),
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 242,
@@ -334,7 +335,7 @@ func TestGetItem(t *testing.T) {
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/55?rel_availability=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -352,8 +353,8 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: NewExpUnique(55, "chocobo wing"),
-			Monsters: []TestMonItemAmts{
+			Unique: apitesttypes.NewExpUnique(55, "chocobo wing"),
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   100,
@@ -373,7 +374,7 @@ func TestGetItem(t *testing.T) {
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/55?rel_availability=always&rel_repeatable=false",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -391,8 +392,8 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:    NewExpUnique(55, "chocobo wing"),
-			Monsters:  []TestMonItemAmts{},
+			Unique:    apitesttypes.NewExpUnique(55, "chocobo wing"),
+			Monsters:  []apitesttypes.TestMonItemAmts{},
 			Treasures: nil,
 			Shops:     []int32{},
 			Quests: map[int32]int32{
@@ -401,7 +402,7 @@ func TestGetItem(t *testing.T) {
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/55?rel_availability=always&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -419,8 +420,8 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: NewExpUnique(55, "chocobo wing"),
-			Monsters: []TestMonItemAmts{
+			Unique: apitesttypes.NewExpUnique(55, "chocobo wing"),
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   100,
@@ -438,7 +439,7 @@ func TestGetItem(t *testing.T) {
 			BlitzballPrizes: nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/2?rel_availability=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -456,8 +457,8 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 2,
 				},
 			},
-			Unique: NewExpUnique(2, "hi-potion"),
-			Monsters: []TestMonItemAmts{
+			Unique: apitesttypes.NewExpUnique(2, "hi-potion"),
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   39,
@@ -491,7 +492,7 @@ func TestGetItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/2?rel_availability=always&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -509,8 +510,8 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 2,
 				},
 			},
-			Unique: NewExpUnique(2, "hi-potion"),
-			Monsters: []TestMonItemAmts{
+			Unique: apitesttypes.NewExpUnique(2, "hi-potion"),
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   39,
@@ -538,7 +539,7 @@ func TestGetItem(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items/2?rel_availability=post",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -556,8 +557,8 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: NewExpUnique(2, "hi-potion"),
-			Monsters: []TestMonItemAmts{
+			Unique: apitesttypes.NewExpUnique(2, "hi-potion"),
+			Monsters: []apitesttypes.TestMonItemAmts{
 				{
 					Index:       0,
 					Monster:     239,
@@ -583,16 +584,16 @@ func TestGetItem(t *testing.T) {
 
 func TestRetrieveItems(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?methods=shop,treasures",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value 'treasures' used for parameter 'methods'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -600,7 +601,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 42, 67, 78, 90, 110, 112},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?category=healing,support&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -608,7 +609,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 5, 11, 21, 23, 54, 59, 64, 69},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?category=healing,support&limit=max&flip=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -616,7 +617,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{17, 29, 41, 49, 73, 86, 106, 112},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?methods=treasure,blitzball&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -624,7 +625,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 2, 9, 11, 12, 13, 16, 21, 71, 85, 101, 111},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?has_ability=true&related_stat=mp",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -632,7 +633,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{65, 67, 68, 69},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?location=17&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -640,7 +641,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 7, 21, 34, 76, 102, 111},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?sublocation=13", // ss winno
 				ExpectedStatus: http.StatusOK,
 			},
@@ -648,7 +649,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 2, 9, 11},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?area=237&limit=max", // omega ruins top
 				ExpectedStatus: http.StatusOK,
 			},
@@ -656,7 +657,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{4, 23, 60, 89, 110},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=post",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -664,7 +665,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{23, 45, 67, 68, 76, 79, 88, 99},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=post-story&location=18&methods=monster",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -672,7 +673,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{3, 5, 43, 45, 58, 61, 83, 96},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -680,7 +681,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -688,7 +689,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=post-game&repeatable=true&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -696,7 +697,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 17, 19, 38, 54, 67, 88, 100, 112},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=post&repeatable=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -704,7 +705,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{23, 45, 67, 68, 76, 88, 90, 95, 105},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=always&repeatable=true&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -712,7 +713,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 7, 21, 37, 56, 69, 80, 104, 112},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=always&repeatable=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -720,7 +721,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{85, 86, 87, 89, 90, 94, 105},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=story&sublocation=26", // macalania woods
 				ExpectedStatus: http.StatusOK,
 			},
@@ -728,7 +729,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{6, 82},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=post-game&area=23", // besaid - waterfall way (1)
 				ExpectedStatus: http.StatusOK,
 			},
@@ -736,7 +737,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 9, 30, 31, 32, 38, 41, 70, 71, 72},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=always&methods=shop",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -744,7 +745,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 2, 9, 14, 20, 36, 100},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?availability=always&methods=shop&location=12",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -752,7 +753,7 @@ func TestRetrieveItems(t *testing.T) {
 			Results: []int32{1, 9, 11, 12, 13, 14},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/items?repeatable=true&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},

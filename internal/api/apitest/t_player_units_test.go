@@ -6,22 +6,23 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetPlayerUnit(t *testing.T) {
 	t.Parallel()
-	tests := []PlayerUnit{
+	tests := []apitesttypes.PlayerUnit{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-units/19",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "player unit with provided id '19' doesn't exist. max id: 18",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-units/1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -29,7 +30,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 2,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   1,
 				Name: "tidus",
 			},
@@ -40,7 +41,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			CharacterClasses: []int32{1, 5},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-units/8",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -48,7 +49,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 1,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   8,
 				Name: "seymour",
 			},
@@ -59,7 +60,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			CharacterClasses: []int32{12},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-units/10",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -67,7 +68,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 3,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   10,
 				Name: "ifrit",
 			},
@@ -78,7 +79,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			CharacterClasses: []int32{2, 3, 14},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-units/15",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -86,7 +87,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 2,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   15,
 				Name: "yojimbo",
 			},
@@ -97,7 +98,7 @@ func TestGetPlayerUnit(t *testing.T) {
 			CharacterClasses: []int32{2, 19},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-units/16",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -105,7 +106,7 @@ func TestGetPlayerUnit(t *testing.T) {
 					"character classes": 3,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   16,
 				Name: "cindy",
 			},
@@ -122,9 +123,9 @@ func TestGetPlayerUnit(t *testing.T) {
 
 func TestRetrievePlayerUnits(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-units",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -132,7 +133,7 @@ func TestRetrievePlayerUnits(t *testing.T) {
 			Results: []int32{1, 3, 4, 8, 12, 17, 18},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/player-units?type=aeon",
 				ExpectedStatus: http.StatusOK,
 			},

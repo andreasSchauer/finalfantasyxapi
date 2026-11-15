@@ -6,35 +6,36 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetOverdriveMode(t *testing.T) {
 	t.Parallel()
-	tests := []OverdriveMode{
+	tests := []apitesttypes.OverdriveMode{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes/ally/2",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "wrong format. usage: '/api/overdrive-modes', '/api/overdrive-modes/{id}', '/api/overdrive-modes/{name}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes/18",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "overdrive mode with provided id '18' doesn't exist. max id: 17",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes/a",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "overdrive mode not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes/ally/",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -44,7 +45,7 @@ func TestGetOverdriveMode(t *testing.T) {
 					"actions": 7,
 				},
 			},
-			Unique:      NewExpUnique(14, "ally"),
+			Unique:      apitesttypes.NewExpUnique(14, "ally"),
 			Description: "Charges on character's turn.",
 			ModeType:    "per-action",
 			FillRate:    h.GetFloat32Ptr(0.03),
@@ -59,14 +60,14 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes/3",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
 					"description": true,
 				},
 			},
-			Unique:   NewExpUnique(3, "comrade"),
+			Unique:   apitesttypes.NewExpUnique(3, "comrade"),
 			Effect:   "The gauge fills when an ally takes damage.",
 			ModeType: "formula",
 			FillRate: nil,
@@ -77,7 +78,7 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes/1/",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -89,7 +90,7 @@ func TestGetOverdriveMode(t *testing.T) {
 					"actions": 0,
 				},
 			},
-			Unique:   NewExpUnique(1, "stoic"),
+			Unique:   apitesttypes.NewExpUnique(1, "stoic"),
 			ModeType: "formula",
 		},
 	}
@@ -99,16 +100,16 @@ func TestGetOverdriveMode(t *testing.T) {
 
 func TestRetrieveOverdriveModes(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes?type=f",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid enum value 'f' used for parameter 'type'. use /api/overdrive-modes/parameters to see allowed values",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes/",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -118,7 +119,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			Results:  []int32{1, 8, 17},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes?type=formula",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -130,7 +131,7 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 			Results: []int32{1, 2, 3, 4},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-modes?type=2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{

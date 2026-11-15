@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/sections/sectiontypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -14,135 +15,135 @@ import (
 
 func TestGetMonster(t *testing.T) {
 	t.Parallel()
-	tests := []Monster{
+	tests := []apitesttypes.Monster{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/308",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "monster with provided id '308' doesn't exist. max id: 307",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/a",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "monster not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/a/2",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "monster not found: 'a', version '2'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/1/?ids=1",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/a/2/3",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "wrong format. usage: '/api/monsters', '/api/monsters/{id}', '/api/monsters/{name}', '/api/monsters/{name}/{version}', '/api/monsters/id/{subsection}'. supported subsections: 'abilities', 'areas', 'monster-formations', 'simple'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/211?has_overdrive=true",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid usage of parameter 'has_overdrive'. parameter 'has_overdrive' can only be used with list-endpoints",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/1?altered_state=1",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "monster 'sinscale - 1 (dream zanarkand)' has no altered states",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/105?altered_state=5",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "provided id '5' used for parameter 'altered_state' is out of range. max id: 1",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/210?omnis_elements=iifii",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid id '210'. parameter 'omnis_elements' can only be used with ids: '211'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/211?omnis_elements=iifii",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid input. omnis_elements must contain a combination of exactly four letters. valid letters are 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/211?omnis_elements=iftw",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid letter 't' for omnis_elements. use any four-letter-combination of 'f' (fire), 'i' (ice), 'l' (lightning), 'w' (water)",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/169?kimahri_stats=hp:1000",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid id '169'. parameter 'kimahri_stats' can only be used with ids: '167', '168'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/168?kimahri_stats=hp:100000",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "hp in 'kimahri_stats' can't be higher than 99999",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/168?kimahri_stats=hp-3000,strength:255",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid input for parameter 'kimahri_stats': 'hp-3000' . usage: '?kimahri_stats={stat}:{int},...'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/167?kimahri_stats=defense:5",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid stat 'defense' in 'kimahri_stats'. 'kimahri_stats' only uses 'hp', 'strength', 'magic', 'agility'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/1?yuna_stats=hp:200",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid id '1'. parameter 'yuna_stats' can only be used with ids: '216', '217', '218', '219', '220', '221', '222', '223', '224', '225'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/216?yuna_stats=hp:999999",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "hp in 'yuna_stats' can't be higher than 99999",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/216?yuna_stats=evasion:999999",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "evasion in 'yuna_stats' can't be higher than 255",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/27",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -164,8 +165,8 @@ func TestGetMonster(t *testing.T) {
 					"abilities":         1,
 				},
 			},
-			NameVer: NewExpNameVer(27, "yellow element", 0),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(27, "yellow element", 0),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 6,
 				TickSpeed:   16,
 				MinICV:      h.GetInt32Ptr(48),
@@ -184,7 +185,7 @@ func TestGetMonster(t *testing.T) {
 				"magic":   18,
 				"evasion": 0,
 			},
-			RegenAmounts: []TestRegenAmount{
+			RegenAmounts: []apitesttypes.TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -206,14 +207,14 @@ func TestGetMonster(t *testing.T) {
 					HealedHP: 135,
 				},
 			},
-			Items: &TestMonItems{
+			Items: &apitesttypes.TestMonItems{
 				ItemDropChance: 255,
-				Items: map[string]*TestResAmount[apiresource.Typed]{
-					"steal common": h.GetStructPtr(NewTestResAmount[apiresource.Typed](27, 1)),
-					"steal rare":   h.GetStructPtr(NewTestResAmount[apiresource.Typed](28, 1)),
-					"drop common":  h.GetStructPtr(NewTestResAmount[apiresource.Typed](71, 1)),
-					"drop rare":    h.GetStructPtr(NewTestResAmount[apiresource.Typed](71, 1)),
-					"bribe":        h.GetStructPtr(NewTestResAmount[apiresource.Typed](28, 6)),
+				Items: map[string]*apitesttypes.TestResAmount[apiresource.Typed]{
+					"steal common": h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](27, 1)),
+					"steal rare":   h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](28, 1)),
+					"drop common":  h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](71, 1)),
+					"drop rare":    h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](71, 1)),
+					"bribe":        h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](28, 6)),
 				},
 			},
 			BribeChances: []apitypes.BribeChance{
@@ -234,7 +235,7 @@ func TestGetMonster(t *testing.T) {
 					Chance: 100,
 				},
 			},
-			Equipment: &TestMonEquipment{
+			Equipment: &apitesttypes.TestMonEquipment{
 				AbilitySlots: apitypes.MonsterEquipmentSlots{
 					MinAmount: 1,
 					MaxAmount: 2,
@@ -266,7 +267,7 @@ func TestGetMonster(t *testing.T) {
 				WeaponAbilities: []int32{2, 6, 26},
 				ArmorAbilities:  []int32{58},
 			},
-			ElemResists: []TestElemResist{
+			ElemResists: []apitesttypes.TestElemResist{
 				{Element: 1, Affinity: database.ElementalAffinityHalved},
 				{Element: 2, Affinity: database.ElementalAffinityAbsorb},
 				{Element: 3, Affinity: database.ElementalAffinityWeak},
@@ -280,7 +281,7 @@ func TestGetMonster(t *testing.T) {
 			Abilities: []int32{70},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/magIc_urn/1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -300,24 +301,24 @@ func TestGetMonster(t *testing.T) {
 					"other items": 3,
 				},
 			},
-			NameVer:      NewExpNameVer(156, "magic urn", 1),
+			NameVer:      apitesttypes.NewExpNameVer(156, "magic urn", 1),
 			Agility:      nil,
 			RegenAmounts: nil,
-			Items: &TestMonItems{
+			Items: &apitesttypes.TestMonItems{
 				ItemDropChance: 0,
-				Items: map[string]*TestResAmount[apiresource.Typed]{
-					"steal common": h.GetStructPtr(NewTestResAmount[apiresource.Typed](1, 1)),
-					"steal rare":   h.GetStructPtr(NewTestResAmount[apiresource.Typed](1, 1)),
+				Items: map[string]*apitesttypes.TestResAmount[apiresource.Typed]{
+					"steal common": h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](1, 1)),
+					"steal rare":   h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](1, 1)),
 				},
-				OtherItems: []TestPossibleItem{
-					NewTestPossibleItem(0, 9, 1, 60),
-					NewTestPossibleItem(1, 64, 1, 20),
-					NewTestPossibleItem(2, 7, 1, 20),
+				OtherItems: []apitesttypes.TestPossibleItem{
+					apitesttypes.NewTestPossibleItem(0, 9, 1, 60),
+					apitesttypes.NewTestPossibleItem(1, 64, 1, 20),
+					apitesttypes.NewTestPossibleItem(2, 7, 1, 20),
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/sphErimorph?altered_state=1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -344,31 +345,31 @@ func TestGetMonster(t *testing.T) {
 					"abilities":         11,
 				},
 			},
-			NameVer: NewExpNameVer(86, "spherimorph", 0),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(86, "spherimorph", 0),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 10,
 				TickSpeed:   12,
 				MinICV:      h.GetInt32Ptr(36),
 				MaxICV:      h.GetInt32Ptr(40),
 			},
-			AppliedState: &TestAppliedState{
+			AppliedState: &apitesttypes.TestAppliedState{
 				Condition:   "Fire-elemental.",
 				IsTemporary: false,
 			},
 			Properties: []int32{1},
 			Areas:      []int32{148},
 			Formations: []int32{126},
-			Items: &TestMonItems{
+			Items: &apitesttypes.TestMonItems{
 				ItemDropChance: 255,
-				Items: map[string]*TestResAmount[apiresource.Typed]{
-					"steal common": h.GetStructPtr(NewTestResAmount[apiresource.Typed](5, 1)),
-					"steal rare":   h.GetStructPtr(NewTestResAmount[apiresource.Typed](6, 1)),
-					"drop common":  h.GetStructPtr(NewTestResAmount[apiresource.Typed](82, 1)),
-					"drop rare":    h.GetStructPtr(NewTestResAmount[apiresource.Typed](82, 1)),
+				Items: map[string]*apitesttypes.TestResAmount[apiresource.Typed]{
+					"steal common": h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](5, 1)),
+					"steal rare":   h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](6, 1)),
+					"drop common":  h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](82, 1)),
+					"drop rare":    h.GetStructPtr(apitesttypes.NewTestResAmount[apiresource.Typed](82, 1)),
 					"bribe":        nil,
 				},
 			},
-			Equipment: &TestMonEquipment{
+			Equipment: &apitesttypes.TestMonEquipment{
 				AbilitySlots: apitypes.MonsterEquipmentSlots{
 					MinAmount: 2,
 					MaxAmount: 3,
@@ -400,7 +401,7 @@ func TestGetMonster(t *testing.T) {
 				WeaponAbilities: []int32{2, 5, 6},
 				ArmorAbilities:  []int32{55, 58, 61, 64},
 			},
-			ElemResists: []TestElemResist{
+			ElemResists: []apitesttypes.TestElemResist{
 				{Element: 1, Affinity: database.ElementalAffinityAbsorb},
 				{Element: 2, Affinity: database.ElementalAffinityAbsorb},
 				{Element: 3, Affinity: database.ElementalAffinityAbsorb},
@@ -412,10 +413,10 @@ func TestGetMonster(t *testing.T) {
 				"poison": 90,
 			},
 			Abilities: []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
-			DefaultState: &TestDefaultState{
+			DefaultState: &apitesttypes.TestDefaultState{
 				IsTemporary: false,
-				Change: &TestAltStateChange{
-					ElemResists: []TestElemResist{
+				Change: &apitesttypes.TestAltStateChange{
+					ElemResists: []apitesttypes.TestElemResist{
 						{Element: 1, Affinity: database.ElementalAffinityVaries},
 						{Element: 2, Affinity: database.ElementalAffinityVaries},
 						{Element: 3, Affinity: database.ElementalAffinityVaries},
@@ -425,7 +426,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/105?altered_state=1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -451,8 +452,8 @@ func TestGetMonster(t *testing.T) {
 					"altered states":    1,
 				},
 			},
-			NameVer: NewExpNameVer(105, "sand worm", 0),
-			AppliedState: &TestAppliedState{
+			NameVer: apitesttypes.NewExpNameVer(105, "sand worm", 0),
+			AppliedState: &apitesttypes.TestAppliedState{
 				Condition:   "While 'Readying Quake'.",
 				IsTemporary: true,
 			},
@@ -462,20 +463,20 @@ func TestGetMonster(t *testing.T) {
 				"darkness":    50,
 				"power break": 50,
 			},
-			DefaultState: &TestDefaultState{
+			DefaultState: &apitesttypes.TestDefaultState{
 				IsTemporary: false,
-				Gain: &TestAltStateGain{
+				Gain: &apitesttypes.TestAltStateGain{
 					StatusResists: map[string]int32{
 						"sleep": 80,
 					},
 				},
-				Loss: &TestAltStateLoss{
+				Loss: &apitesttypes.TestAltStateLoss{
 					StatusImmunities: []int32{13, 32},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/neslug?altered_state=1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -499,12 +500,12 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 2,
 				},
 			},
-			NameVer: NewExpNameVer(287, "neslug", 0),
-			AppliedState: &TestAppliedState{
+			NameVer: apitesttypes.NewExpNameVer(287, "neslug", 0),
+			AppliedState: &apitesttypes.TestAppliedState{
 				Condition:   "While hidden in its shell.",
 				IsTemporary: true,
 			},
-			RegenAmounts: []TestRegenAmount{
+			RegenAmounts: []apitesttypes.TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -528,16 +529,16 @@ func TestGetMonster(t *testing.T) {
 			},
 			Properties:    []int32{6, 8},
 			AutoAbilities: []int32{102},
-			DefaultState: &TestDefaultState{
+			DefaultState: &apitesttypes.TestDefaultState{
 				IsTemporary: false,
-				Loss: &TestAltStateLoss{
+				Loss: &apitesttypes.TestAltStateLoss{
 					Properties:    []int32{6},
 					AutoAbilities: []int32{102},
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/neslug?altered_state=2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -561,12 +562,12 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 2,
 				},
 			},
-			NameVer: NewExpNameVer(287, "neslug", 0),
-			AppliedState: &TestAppliedState{
+			NameVer: apitesttypes.NewExpNameVer(287, "neslug", 0),
+			AppliedState: &apitesttypes.TestAppliedState{
 				Condition:   "Without its shell.",
 				IsTemporary: false,
 			},
-			Agility: &TestAgilityParams{
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 18,
 				TickSpeed:   4,
 				MinICV:      h.GetInt32Ptr(12),
@@ -577,9 +578,9 @@ func TestGetMonster(t *testing.T) {
 			BaseStats: map[string]int32{
 				"agility": 120,
 			},
-			DefaultState: &TestDefaultState{
+			DefaultState: &apitesttypes.TestDefaultState{
 				IsTemporary: false,
-				Change: &TestAltStateChange{
+				Change: &apitesttypes.TestAltStateChange{
 					BaseStats: map[string]int32{
 						"agility": 43,
 					},
@@ -587,7 +588,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/evrae?altered_state=1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -611,21 +612,21 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 1,
 				},
 			},
-			NameVer: NewExpNameVer(114, "evrae", 0),
-			AppliedState: &TestAppliedState{
+			NameVer: apitesttypes.NewExpNameVer(114, "evrae", 0),
+			AppliedState: &apitesttypes.TestAppliedState{
 				Condition:   "When the Airship is far away.",
 				IsTemporary: false,
 			},
 			Distance: 4,
-			DefaultState: &TestDefaultState{
+			DefaultState: &apitesttypes.TestDefaultState{
 				IsTemporary: false,
-				Change: &TestAltStateChange{
+				Change: &apitesttypes.TestAltStateChange{
 					Distance: h.GetInt32Ptr(1),
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/penance?altered_state=1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -649,30 +650,30 @@ func TestGetMonster(t *testing.T) {
 					"altered states": 1,
 				},
 			},
-			NameVer: NewExpNameVer(305, "penance", 0),
-			AppliedState: &TestAppliedState{
+			NameVer: apitesttypes.NewExpNameVer(305, "penance", 0),
+			AppliedState: &apitesttypes.TestAppliedState{
 				Condition:     "When HP falls below 9000000.",
 				IsTemporary:   false,
 				AppliedStatus: h.GetInt32Ptr(21),
 			},
-			Agility: &TestAgilityParams{
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 19,
 				TickSpeed:   1,
 				MinICV:      h.GetInt32Ptr(9),
 				MaxICV:      h.GetInt32Ptr(10),
 			},
-			DefaultState: &TestDefaultState{
+			DefaultState: &apitesttypes.TestDefaultState{
 				IsTemporary: false,
-				Gain: &TestAltStateGain{
+				Gain: &apitesttypes.TestAltStateGain{
 					AutoAbilities: []int32{99},
 				},
-				Loss: &TestAltStateLoss{
+				Loss: &apitesttypes.TestAltStateLoss{
 					Status: h.GetInt32Ptr(21),
 				},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/211?omnis_elements=iLfw",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -695,8 +696,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(211, "seymour omnis", 0),
-			ElemResists: []TestElemResist{
+			NameVer: apitesttypes.NewExpNameVer(211, "seymour omnis", 0),
+			ElemResists: []apitesttypes.TestElemResist{
 				{
 					Element:  1,
 					Affinity: database.ElementalAffinityHalved,
@@ -720,7 +721,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/211?omnis_elements=iiff",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -743,8 +744,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(211, "seymour omnis", 0),
-			ElemResists: []TestElemResist{
+			NameVer: apitesttypes.NewExpNameVer(211, "seymour omnis", 0),
+			ElemResists: []apitesttypes.TestElemResist{
 				{
 					Element:  1,
 					Affinity: database.ElementalAffinityImmune,
@@ -768,7 +769,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/211?omnis_elements=iiii",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -791,8 +792,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(211, "seymour omnis", 0),
-			ElemResists: []TestElemResist{
+			NameVer: apitesttypes.NewExpNameVer(211, "seymour omnis", 0),
+			ElemResists: []apitesttypes.TestElemResist{
 				{
 					Element:  1,
 					Affinity: database.ElementalAffinityWeak,
@@ -816,7 +817,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/biran_ronso?kimahri_stats=hP:1000,strEngth:255,mAgic:255,agIlity:255",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -840,8 +841,8 @@ func TestGetMonster(t *testing.T) {
 					"ronso rages": 4,
 				},
 			},
-			NameVer: NewExpNameVer(167, "biran ronso", 0),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(167, "biran ronso", 0),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 19,
 				TickSpeed:   3,
 				MinICV:      h.GetInt32Ptr(9),
@@ -856,7 +857,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp:3500,strength:35,magic:45,agility:28",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -880,8 +881,8 @@ func TestGetMonster(t *testing.T) {
 					"ronso rages": 4,
 				},
 			},
-			NameVer: NewExpNameVer(168, "yenke ronso", 0),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(168, "yenke ronso", 0),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 12,
 				TickSpeed:   10,
 				MinICV:      h.GetInt32Ptr(30),
@@ -896,7 +897,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/yenke_ronso?kimahri_stats=hp:1500",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -919,8 +920,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(168, "yenke ronso", 0),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(168, "yenke ronso", 0),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 2,
 				TickSpeed:   26,
 				MinICV:      h.GetInt32Ptr(84),
@@ -934,7 +935,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/vidatu",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -959,8 +960,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(273, "vidatu", 0),
-			RegenAmounts: []TestRegenAmount{
+			NameVer: apitesttypes.NewExpNameVer(273, "vidatu", 0),
+			RegenAmounts: []apitesttypes.TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -989,7 +990,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/216?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -1012,8 +1013,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(216, "valefor", 1),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(216, "valefor", 1),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 15,
 				TickSpeed:   7,
 				MinICV:      h.GetInt32Ptr(-1),
@@ -1033,7 +1034,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/216?battles=600",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -1056,8 +1057,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(216, "valefor", 1),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(216, "valefor", 1),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 14,
 				TickSpeed:   8,
 				MinICV:      h.GetInt32Ptr(-1),
@@ -1077,7 +1078,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/216?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15&battles=600",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -1100,8 +1101,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(216, "valefor", 1),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(216, "valefor", 1),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 15,
 				TickSpeed:   7,
 				MinICV:      h.GetInt32Ptr(-1),
@@ -1121,7 +1122,7 @@ func TestGetMonster(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/87?rel_availability=pre-story&rel_repeatable=false",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -1148,12 +1149,12 @@ func TestGetMonster(t *testing.T) {
 					"formation": 1,
 				},
 			},
-			NameVer:    NewExpNameVer(87, "evil eye", 1),
+			NameVer:    apitesttypes.NewExpNameVer(87, "evil eye", 1),
 			Areas:      []int32{159},
 			Formations: []int32{134},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/87?rel_availability=pre-story&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -1180,12 +1181,12 @@ func TestGetMonster(t *testing.T) {
 					"formation": 2,
 				},
 			},
-			NameVer:    NewExpNameVer(87, "evil eye", 1),
+			NameVer:    apitesttypes.NewExpNameVer(87, "evil eye", 1),
 			Areas:      []int32{159},
 			Formations: []int32{128, 132},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/87?rel_availability=always&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -1212,12 +1213,12 @@ func TestGetMonster(t *testing.T) {
 					"formation": 2,
 				},
 			},
-			NameVer:    NewExpNameVer(87, "evil eye", 1),
+			NameVer:    apitesttypes.NewExpNameVer(87, "evil eye", 1),
 			Areas:      []int32{154, 157},
 			Formations: []int32{128, 132},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/seymour",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -1240,8 +1241,8 @@ func TestGetMonster(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			NameVer: NewExpNameVer(93, "seymour", 0),
-			Agility: &TestAgilityParams{
+			NameVer: apitesttypes.NewExpNameVer(93, "seymour", 0),
+			Agility: &apitesttypes.TestAgilityParams{
 				AgilityTier: 12,
 				TickSpeed:   10,
 				MinICV:      h.GetInt32Ptr(-1),
@@ -1256,9 +1257,9 @@ func TestGetMonster(t *testing.T) {
 
 func TestGetMultipleMonsters(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/guado_guardian",
 				ExpectedStatus: http.StatusMultipleChoices,
 			},
@@ -1266,7 +1267,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			Results: []int32{94, 96, 113},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/yojimbo",
 				ExpectedStatus: http.StatusMultipleChoices,
 			},
@@ -1274,7 +1275,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			Results: []int32{165, 222, 235},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/mimic",
 				ExpectedStatus: http.StatusMultipleChoices,
 			},
@@ -1282,7 +1283,7 @@ func TestGetMultipleMonsters(t *testing.T) {
 			Results: []int32{249, 250, 251, 252},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/%3F%3F%3F",
 				ExpectedStatus: http.StatusMultipleChoices,
 			},
@@ -1296,128 +1297,128 @@ func TestGetMultipleMonsters(t *testing.T) {
 
 func TestRetrieveMonsters(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?limit=asd",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?ids=1,33,22,68,",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid usage of parameter 'ids'. parameter 'ids' can only be used in the following format: '/api/monsters/simple?ids={id},...'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?elemental_resists=weak",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid input for parameter 'elemental_resists': 'weak'. usage: '?elemental_resists={element|id}:{affinity|id},...'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?elemental_resists=fire-weak,water:absorb",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid input for parameter 'elemental_resists': 'fire-weak'. usage: '?elemental_resists={element|id}:{affinity|id},...'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/?omnis_elements=ffff",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid usage of parameter 'omnis_elements'. parameter 'omnis_elements' can only be used with single-resource-endpoints",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?elemental_resists=weak:fire",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "unknown element 'weak' used for parameter 'elemental_resists'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?elemental_resists=fire:weak,fire:neutral",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "duplicate use of id '1' for parameter 'elemental_resists'. each element can only be used once",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?status_resists=4&resistance=350",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value '350' used for parameter 'resistance'. value must be an integer ranging from 1 to 254",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?status_resists=4&resistance=frank",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value 'frank' used for parameter 'resistance'. usage: '?resistance={int|'immune'}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?resistance=50",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid usage of parameter 'resistance'. when using parameter 'resistance', the following parameter(s) must be present: 'status_resists'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?methods=steal",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid usage of parameter 'methods'. when using parameter 'methods', the following parameter(s) must be present: 'item'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?item=22&methods=steals",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value 'steals' used for parameter 'methods'. allowed values: 'steal', 'drop', 'bribe', 'other'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?item=asf&methods=drop",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid id 'asf' used for parameter 'item'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?distance=5",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value '5' used for parameter 'distance'. value must be an integer ranging from 1 to 4",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?distance=frank",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value 'frank' used for parameter 'distance'. usage: '?distance={int},...|{int}-{int}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?ronso_rage=13",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "provided id '13' used for parameter 'ronso_rage' is out of range. max id: 12",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?species=wywrm",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid enum value 'wywrm' used for parameter 'species'. use /api/monsters/parameters to see allowed values",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1427,7 +1428,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results:  []int32{1, 175, 238, 307},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?elemental_resists=FIre:weAk,water:neutral",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -1438,7 +1439,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{11, 23, 64, 148},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?limit=max&status_resists=37",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1446,7 +1447,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{32, 127, 211, 233, 295},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?limit=max&status_resists=1,4,10&resistance=50",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1454,7 +1455,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{3, 128, 188, 227, 249},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?limit=max&status_resists=4&resistance=immune",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1462,7 +1463,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{5, 67, 100, 151, 258},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?limit=max&item=7",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1470,7 +1471,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{32, 91, 156, 192, 295, 305},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?item=7&methods=drop",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1478,7 +1479,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{32, 91},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?auto_ability=24",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1486,7 +1487,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{199, 200, 209, 244, 257, 279, 285},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?auto_ability=2&is_forced=false",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1494,7 +1495,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{167, 168, 202},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?empty_slots=3",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1502,7 +1503,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{74, 80, 118, 119, 161, 201, 244, 247},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?ronso_rage=12",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1510,7 +1511,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{255, 292},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?location=15",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1518,7 +1519,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{80, 90, 297},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?sublocation=26", // macalania woods
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1526,7 +1527,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{80, 86},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?area=89", // mi'ihen highroad - central
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1534,7 +1535,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{38, 45},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?distance=2&availability=pre-story",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1542,7 +1543,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{57, 58, 92, 119, 194},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?repeatable=true&capture=false&has_overdrive=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1550,7 +1551,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{229, 236, 299},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?underwater=true&category=bOss",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1558,7 +1559,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{5, 71, 291},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?zombie=true&species=wyRm",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1566,7 +1567,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{134},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?creation_area=DJose",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1574,7 +1575,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{60, 63, 67},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=post&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1582,7 +1583,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{201, 202, 210, 227, 246, 268, 284, 307},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=post&location=4",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1590,7 +1591,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{293},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=post-game&location=4",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1598,7 +1599,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{16, 17, 18, 293},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=post&location=23",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1606,7 +1607,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{301},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=post&location=25",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1614,7 +1615,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{170, 201, 202, 203, 208, 210, 247},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=post-game&area=140", // thunder plains - north
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1622,7 +1623,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{72, 74, 78, 295, 296},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=story&sublocation=35", // calm lands
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1630,7 +1631,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{149, 150},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=story&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1638,7 +1639,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{1, 8, 23, 57, 109, 127, 185, 217, 226},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=story&repeatable=true&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1646,7 +1647,7 @@ func TestRetrieveMonsters(t *testing.T) {
 			Results: []int32{7, 31, 111, 118, 130, 209},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters?availability=post-game&repeatable=false&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -1660,9 +1661,9 @@ func TestRetrieveMonsters(t *testing.T) {
 
 func TestSubsectionMonsters(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/?ids=1&location=15",
 				ExpectedStatus: http.StatusBadRequest,
 				Handler:        testSrv.HandleMonsters,
@@ -1670,7 +1671,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/simple?limit=max",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleMonsters,
@@ -1682,7 +1683,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results: []int32{1, 22, 33, 68, 123, 199, 278, 307},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/simple?ids=1-21",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleMonsters,
@@ -1694,7 +1695,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results: []int32{1, 7, 18, 21},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/simple?ids=1,33,22,22,22,22,68,",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleMonsters,
@@ -1706,7 +1707,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results: []int32{1, 22, 33, 68},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/simple?ids=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleMonsters,
@@ -1718,7 +1719,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results: []int32{1, 5, 16, 18, 21},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/areas/89/monsters/",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleAreas,
@@ -1728,7 +1729,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results:        []int32{38, 39, 40, 42, 43, 45},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/areas/23/monsters/",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleAreas,
@@ -1738,7 +1739,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results:        []int32{15, 16, 17, 18},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/areas/236/monsters/",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleAreas,
@@ -1749,7 +1750,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results:        []int32{190, 201, 210, 239, 245, 249, 253},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations/193/monsters/",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleMonsterFormations,
@@ -1759,7 +1760,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results:        []int32{143, 145, 148},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monster-formations/140/monsters/",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleMonsterFormations,
@@ -1769,7 +1770,7 @@ func TestSubsectionMonsters(t *testing.T) {
 			Results:        []int32{104, 99, 103},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/monsters/simple?ids=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1",
 				ExpectedStatus: http.StatusBadRequest,
 				Handler:        testSrv.HandleMonsters,

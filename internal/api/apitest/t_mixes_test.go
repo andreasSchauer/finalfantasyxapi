@@ -6,21 +6,22 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 func TestGetMix(t *testing.T) {
 	t.Parallel()
-	tests := []Mix{
+	tests := []apitesttypes.Mix{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/mixes/65",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "mix with provided id '65' doesn't exist. max id: 64",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/mixes/23",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -28,10 +29,10 @@ func TestGetMix(t *testing.T) {
 					"combinations": 62,
 				},
 			},
-			Unique:    NewExpUnique(23, "tidal wave"),
+			Unique:    apitesttypes.NewExpUnique(23, "tidal wave"),
 			Category:  database.MixCategoryWaterElemental,
 			Overdrive: 74,
-			Combinations: []TestMixCombination{
+			Combinations: []apitesttypes.TestMixCombination{
 				{
 					Index:      7,
 					FirstItem:  30,
@@ -50,7 +51,7 @@ func TestGetMix(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/mixes/23?best=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -58,10 +59,10 @@ func TestGetMix(t *testing.T) {
 					"combinations": 2,
 				},
 			},
-			Unique:    NewExpUnique(23, "tidal wave"),
+			Unique:    apitesttypes.NewExpUnique(23, "tidal wave"),
 			Category:  database.MixCategoryWaterElemental,
 			Overdrive: 74,
-			Combinations: []TestMixCombination{
+			Combinations: []apitesttypes.TestMixCombination{
 				{
 					Index:      0,
 					FirstItem:  31,
@@ -75,7 +76,7 @@ func TestGetMix(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/mixes/34?contains_item=2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -83,10 +84,10 @@ func TestGetMix(t *testing.T) {
 					"combinations": 15,
 				},
 			},
-			Unique:    NewExpUnique(34, "ultra potion"),
+			Unique:    apitesttypes.NewExpUnique(34, "ultra potion"),
 			Category:  database.MixCategoryRecovery,
 			Overdrive: 85,
-			Combinations: []TestMixCombination{
+			Combinations: []apitesttypes.TestMixCombination{
 				{
 					Index:      0,
 					FirstItem:  1,
@@ -111,9 +112,9 @@ func TestGetMix(t *testing.T) {
 
 func TestRetrieveMixes(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/mixes?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -121,7 +122,7 @@ func TestRetrieveMixes(t *testing.T) {
 			Results: []int32{1, 14, 38, 44, 55, 64},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/mixes?category=fire-elemental",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -129,7 +130,7 @@ func TestRetrieveMixes(t *testing.T) {
 			Results: []int32{11, 12, 13, 14, 15},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/mixes?req_item=45",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -137,7 +138,7 @@ func TestRetrieveMixes(t *testing.T) {
 			Results: []int32{5, 9, 33, 58, 63},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/mixes?req_item=45&second_item=98",
 				ExpectedStatus: http.StatusOK,
 			},

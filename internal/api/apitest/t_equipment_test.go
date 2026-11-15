@@ -6,28 +6,29 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetEquipment(t *testing.T) {
 	t.Parallel()
-	tests := []Equipment{
+	tests := []apitesttypes.Equipment{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/1053",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "equipment with provided id '1053' doesn't exist. max id: 1052",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/1?table=4",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "invalid value '4' used for parameter 'table'. 'table' can range from 1 to 3 for this resource",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/1?table=1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -38,18 +39,18 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			Unique:                  NewExpUnique(1, "caladbolg"),
+			Unique:                  apitesttypes.NewExpUnique(1, "caladbolg"),
 			EquipmentTable:          1,
 			Priority:                h.GetInt32Ptr(1),
 			CelestialWeapon:         h.GetInt32Ptr(1),
 			RequiredAutoAbilities:   []int32{51, 49, 38, 39},
-			SelectableAutoAbilities: []TestAbilityPool{},
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{},
 			RequiredSlots:           nil,
 			Treasures:               []int32{270},
 			Shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/1?table=2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -60,18 +61,18 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			Unique:                  NewExpUnique(1, "caladbolg"),
+			Unique:                  apitesttypes.NewExpUnique(1, "caladbolg"),
 			EquipmentTable:          8,
 			Priority:                h.GetInt32Ptr(1),
 			CelestialWeapon:         h.GetInt32Ptr(1),
 			RequiredAutoAbilities:   []int32{53, 48},
-			SelectableAutoAbilities: []TestAbilityPool{},
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{},
 			RequiredSlots:           h.GetInt32Ptr(2),
 			Treasures:               []int32{270},
 			Shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/1?table=3",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -82,18 +83,18 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			Unique:                  NewExpUnique(1, "caladbolg"),
+			Unique:                  apitesttypes.NewExpUnique(1, "caladbolg"),
 			EquipmentTable:          9,
 			Priority:                h.GetInt32Ptr(1),
 			CelestialWeapon:         h.GetInt32Ptr(1),
 			RequiredAutoAbilities:   []int32{53},
-			SelectableAutoAbilities: []TestAbilityPool{},
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{},
 			RequiredSlots:           h.GetInt32Ptr(3),
 			Treasures:               []int32{270},
 			Shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/8",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -104,18 +105,18 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			Unique:                  NewExpUnique(8, "brotherhood"),
+			Unique:                  apitesttypes.NewExpUnique(8, "brotherhood"),
 			EquipmentTable:          10,
 			Priority:                h.GetInt32Ptr(2),
 			CelestialWeapon:         nil,
 			RequiredAutoAbilities:   []int32{30, 31, 7, 1},
-			SelectableAutoAbilities: []TestAbilityPool{},
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{},
 			RequiredSlots:           nil,
 			Treasures:               []int32{36, 174},
 			Shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/8?table=2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -126,18 +127,18 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     0,
 				},
 			},
-			Unique:                  NewExpUnique(8, "brotherhood"),
+			Unique:                  apitesttypes.NewExpUnique(8, "brotherhood"),
 			EquipmentTable:          11,
 			Priority:                h.GetInt32Ptr(2),
 			CelestialWeapon:         nil,
 			RequiredAutoAbilities:   []int32{30},
-			SelectableAutoAbilities: []TestAbilityPool{},
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{},
 			RequiredSlots:           h.GetInt32Ptr(3),
 			Treasures:               []int32{36, 174},
 			Shops:                   []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/333?rel_availability=pre-story",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -148,18 +149,18 @@ func TestGetEquipment(t *testing.T) {
 					"shops":                     1,
 				},
 			},
-			Unique:                  NewExpUnique(333, "scout"),
+			Unique:                  apitesttypes.NewExpUnique(333, "scout"),
 			EquipmentTable:          58,
 			Priority:                h.GetInt32Ptr(49),
 			CelestialWeapon:         nil,
 			RequiredAutoAbilities:   []int32{1},
-			SelectableAutoAbilities: []TestAbilityPool{},
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{},
 			RequiredSlots:           nil,
 			Treasures:               []int32{},
 			Shops:                   []int32{2},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/945",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -171,12 +172,12 @@ func TestGetEquipment(t *testing.T) {
 					"shops":     0,
 				},
 			},
-			Unique:                NewExpUnique(945, "mythril armguard"),
+			Unique:                apitesttypes.NewExpUnique(945, "mythril armguard"),
 			EquipmentTable:        147,
 			Priority:              h.GetInt32Ptr(69),
 			CelestialWeapon:       nil,
 			RequiredAutoAbilities: []int32{},
-			SelectableAutoAbilities: []TestAbilityPool{
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{
 				{
 					Index:         0,
 					AutoAbilities: []int32{106, 105, 104, 103},
@@ -193,7 +194,7 @@ func TestGetEquipment(t *testing.T) {
 			Shops:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/805?rel_availability=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -209,12 +210,12 @@ func TestGetEquipment(t *testing.T) {
 					"shops":     0,
 				},
 			},
-			Unique:    NewExpUnique(805, "lucid ring"),
+			Unique:    apitesttypes.NewExpUnique(805, "lucid ring"),
 			Treasures: []int32{194},
 			Shops:     []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/805?rel_availability=pre-story",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -230,12 +231,12 @@ func TestGetEquipment(t *testing.T) {
 					"shops":     0,
 				},
 			},
-			Unique:    NewExpUnique(805, "lucid ring"),
+			Unique:    apitesttypes.NewExpUnique(805, "lucid ring"),
 			Treasures: []int32{261},
 			Shops:     []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment/805?rel_availability=post",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -251,7 +252,7 @@ func TestGetEquipment(t *testing.T) {
 					"shops":     1,
 				},
 			},
-			Unique:    NewExpUnique(805, "lucid ring"),
+			Unique:    apitesttypes.NewExpUnique(805, "lucid ring"),
 			Treasures: []int32{},
 			Shops:     []int32{5},
 		},
@@ -262,9 +263,9 @@ func TestGetEquipment(t *testing.T) {
 
 func TestRetrieveEquipment(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -272,7 +273,7 @@ func TestRetrieveEquipment(t *testing.T) {
 			Results: []int32{1, 123, 265, 373, 429, 555, 767, 998, 1009, 1052},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment?auto_abilities=10,12,14,16&character=1",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -280,7 +281,7 @@ func TestRetrieveEquipment(t *testing.T) {
 			Results: []int32{100, 149},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment?type=armor&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -288,7 +289,7 @@ func TestRetrieveEquipment(t *testing.T) {
 			Results: []int32{472, 677, 793, 822, 999, 1052},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment?celestial_weapon=true",
 				ExpectedStatus: http.StatusOK,
 			},

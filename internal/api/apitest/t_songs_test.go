@@ -6,36 +6,37 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/sections/sectiontypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetSong(t *testing.T) {
 	t.Parallel()
-	tests := []Song{
+	tests := []apitesttypes.Song{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs/a",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "song not found: 'a'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs/a/2",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "wrong format. usage: '/api/songs', '/api/songs/{id}', '/api/songs/{name}'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs/2/a",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "endpoint /songs doesn't have any subsections",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs/44",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -46,19 +47,19 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             0,
 				},
 			},
-			Unique:            NewExpUnique(44, "twilight"),
+			Unique:            apitesttypes.NewExpUnique(44, "twilight"),
 			Composer:          h.GetStrPtr("junya nakano"),
 			Arranger:          h.GetStrPtr("junya nakano"),
 			DurationInSeconds: 280,
 			CanLoop:           true,
-			BackgroundMusic: []TestBackgroundMusic{
+			BackgroundMusic: []apitesttypes.TestBackgroundMusic{
 				{
 					Index:                  0,
 					ReplacesEncounterMusic: false,
 					Areas:                  []int32{232, 233, 234},
 				},
 			},
-			Cues: []TestCue{
+			Cues: []apitesttypes.TestCue{
 				{
 					Index:                  0,
 					TriggerArea:            h.GetInt32Ptr(103),
@@ -85,7 +86,7 @@ func TestGetSong(t *testing.T) {
 			Fmvs:       []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs/a_fLeeting_dream",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -96,19 +97,19 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             1,
 				},
 			},
-			Unique:            NewExpUnique(78, "a fleeting dream"),
+			Unique:            apitesttypes.NewExpUnique(78, "a fleeting dream"),
 			Composer:          h.GetStrPtr("nobuo uematsu"),
 			Arranger:          h.GetStrPtr("masashi hamauzu"),
 			DurationInSeconds: 264,
 			CanLoop:           true,
-			BackgroundMusic: []TestBackgroundMusic{
+			BackgroundMusic: []apitesttypes.TestBackgroundMusic{
 				{
 					Index:                  0,
 					ReplacesEncounterMusic: true,
 					Areas:                  []int32{219, 220},
 				},
 			},
-			Cues: []TestCue{
+			Cues: []apitesttypes.TestCue{
 				{
 					Index:                  0,
 					TriggerArea:            h.GetInt32Ptr(42),
@@ -135,7 +136,7 @@ func TestGetSong(t *testing.T) {
 			Fmvs:       []int32{51},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs/80",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -149,7 +150,7 @@ func TestGetSong(t *testing.T) {
 					"fmvs":             1,
 				},
 			},
-			Unique:            NewExpUnique(80, "challenge"),
+			Unique:            apitesttypes.NewExpUnique(80, "challenge"),
 			Composer:          h.GetStrPtr("masashi hamauzu"),
 			Arranger:          h.GetStrPtr("masashi hamauzu"),
 			DurationInSeconds: 258,
@@ -164,9 +165,9 @@ func TestGetSong(t *testing.T) {
 
 func TestRetrieveSongs(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -174,7 +175,7 @@ func TestRetrieveSongs(t *testing.T) {
 			Results: []int32{1, 15, 18, 33, 47, 56, 71, 80, 93, 95},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs?location=13",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -182,7 +183,7 @@ func TestRetrieveSongs(t *testing.T) {
 			Results: []int32{20, 43, 49, 77},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs?sublocation=15", // luca
 				ExpectedStatus: http.StatusOK,
 			},
@@ -190,7 +191,7 @@ func TestRetrieveSongs(t *testing.T) {
 			Results: []int32{10, 16, 17, 27, 32, 34, 75, 77},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs?area=211", // gagazet - mountain gate
 				ExpectedStatus: http.StatusOK,
 			},
@@ -198,7 +199,7 @@ func TestRetrieveSongs(t *testing.T) {
 			Results: []int32{9, 27, 75},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs?composer=nobuo-uematsu&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -206,7 +207,7 @@ func TestRetrieveSongs(t *testing.T) {
 			Results: []int32{2, 10, 19, 40, 42, 67, 78, 91, 95},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs?arranger=3&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -214,7 +215,7 @@ func TestRetrieveSongs(t *testing.T) {
 			Results: []int32{18, 41, 46, 61, 64, 76, 88},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs?special_use=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -222,7 +223,7 @@ func TestRetrieveSongs(t *testing.T) {
 			Results: []int32{9, 10, 11, 16, 24, 34, 37, 40},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/songs?fmvs=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -236,9 +237,9 @@ func TestRetrieveSongs(t *testing.T) {
 
 func TestSubsectionSongs(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/locations/25/songs",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleLocations,
@@ -248,7 +249,7 @@ func TestSubsectionSongs(t *testing.T) {
 			Results:        []int32{5, 44, 57, 60, 78, 79, 84, 85, 87, 88, 89},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/sublocations/31/songs",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleSublocations,
@@ -258,7 +259,7 @@ func TestSubsectionSongs(t *testing.T) {
 			Results:        []int32{2, 27, 59, 60},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/areas/148/songs",
 				ExpectedStatus: http.StatusOK,
 				Handler:        testSrv.HandleAreas,

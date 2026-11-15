@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
@@ -15,9 +16,9 @@ func TestTurnOrder(t *testing.T) {
 	t.Parallel()
 	requestURL := "/api/turn-order"
 
-	tests := []TurnOrderResponse{
+	tests := []apitesttypes.TurnOrderResponse{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -26,7 +27,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -37,7 +38,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -48,7 +49,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -59,7 +60,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -70,7 +71,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -81,7 +82,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -93,7 +94,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -108,7 +109,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -127,7 +128,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -147,7 +148,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -166,7 +167,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -186,7 +187,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -207,7 +208,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -227,7 +228,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -242,7 +243,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -257,7 +258,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -276,7 +277,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -295,7 +296,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -320,7 +321,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -336,7 +337,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -352,7 +353,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -368,7 +369,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -386,7 +387,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -402,7 +403,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -443,7 +444,7 @@ func TestTurnOrder(t *testing.T) {
 				},
 				OpponentParty: []servicetypes.Participant{},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -468,7 +469,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -532,7 +533,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -564,7 +565,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -629,7 +630,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -661,7 +662,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -747,7 +748,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -779,7 +780,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -878,7 +879,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -917,7 +918,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -985,7 +986,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -1017,7 +1018,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1085,7 +1086,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -1124,7 +1125,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1187,7 +1188,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -1226,7 +1227,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1300,7 +1301,7 @@ func TestTurnOrder(t *testing.T) {
 					},
 				},
 			},
-			TestTurnOrder: []TestBattleTurn{
+			TestTurnOrder: []apitesttypes.TestBattleTurn{
 				{
 					Index:       0,
 					Turn:        1,
@@ -1339,7 +1340,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1385,7 +1386,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1432,7 +1433,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1484,7 +1485,7 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1525,7 +1526,7 @@ func TestTurnOrder(t *testing.T) {
 				},
 				OpponentParty: []servicetypes.Participant{},
 			},
-			TestTurnOrder: []TestBattleTurn{},
+			TestTurnOrder: []apitesttypes.TestBattleTurn{},
 		},
 	}
 

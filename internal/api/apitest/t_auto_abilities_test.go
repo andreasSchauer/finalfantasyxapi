@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetAutoAbility(t *testing.T) {
 	t.Parallel()
-	tests := []AutoAbility{
+	tests := []apitesttypes.AutoAbility{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/131",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "auto-ability with provided id '131' doesn't exist. max id: 130",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/50",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -32,9 +33,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       NewExpUnique(50, "gillionaire"),
+			Unique:       apitesttypes.NewExpUnique(50, "gillionaire"),
 			MonstersDrop: []int32{302},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 190,
@@ -62,7 +63,7 @@ func TestGetAutoAbility(t *testing.T) {
 			EquipmentTables:  []int32{7, 30},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/2?rel_availability=post",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -75,9 +76,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       NewExpUnique(2, "piercing"),
+			Unique:       apitesttypes.NewExpUnique(2, "piercing"),
 			MonstersDrop: []int32{201, 206, 210, 243, 248, 287},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:    0,
 					Monster:  247,
@@ -95,7 +96,7 @@ func TestGetAutoAbility(t *testing.T) {
 			EquipmentTables:  []int32{76, 78},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/2?rel_availability=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -108,9 +109,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       NewExpUnique(2, "piercing"),
+			Unique:       apitesttypes.NewExpUnique(2, "piercing"),
 			MonstersDrop: []int32{16, 25, 41, 54, 78, 139, 163, 183, 192},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:    0,
 					Monster:  161,
@@ -133,7 +134,7 @@ func TestGetAutoAbility(t *testing.T) {
 			EquipmentTables:  []int32{76, 78},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/45?rel_availability=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -146,9 +147,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       NewExpUnique(45, "triple ap"),
+			Unique:       apitesttypes.NewExpUnique(45, "triple ap"),
 			MonstersDrop: []int32{},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 142,
@@ -166,7 +167,7 @@ func TestGetAutoAbility(t *testing.T) {
 			EquipmentTables:  []int32{15, 20},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/55?rel_availability=story&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -179,16 +180,16 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   1,
 				},
 			},
-			Unique:           NewExpUnique(55, "fire ward"),
+			Unique:           apitesttypes.NewExpUnique(55, "fire ward"),
 			MonstersDrop:     []int32{109, 118, 119},
-			MonstersItems:    []TestMonItemAmts{},
+			MonstersItems:    []apitesttypes.TestMonItemAmts{},
 			ShopsPreAirship:  []int32{4, 10},
 			ShopsPostAirship: []int32{},
 			Treasures:        []int32{},
 			EquipmentTables:  []int32{137},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/55?rel_availability=post-game&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -201,9 +202,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   1,
 				},
 			},
-			Unique:       NewExpUnique(55, "fire ward"),
+			Unique:       apitesttypes.NewExpUnique(55, "fire ward"),
 			MonstersDrop: []int32{38, 53, 141, 151, 176, 191, 192, 239},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:       0,
 					Monster:     38,
@@ -223,7 +224,7 @@ func TestGetAutoAbility(t *testing.T) {
 			EquipmentTables:  []int32{137},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/10",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -236,9 +237,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   3,
 				},
 			},
-			Unique:       NewExpUnique(10, "darkstrike"),
+			Unique:       apitesttypes.NewExpUnique(10, "darkstrike"),
 			MonstersDrop: []int32{185, 200, 257, 279, 285},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:     0,
 					Monster:   11,
@@ -262,7 +263,7 @@ func TestGetAutoAbility(t *testing.T) {
 			EquipmentTables:  []int32{25, 32, 46},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/89?rel_availability=pre-airship",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -275,9 +276,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       NewExpUnique(89, "sos nulblaze"),
+			Unique:       apitesttypes.NewExpUnique(89, "sos nulblaze"),
 			MonstersDrop: []int32{31, 71, 102, 143, 158, 181},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:   0,
 					Monster: 38,
@@ -306,7 +307,7 @@ func TestGetAutoAbility(t *testing.T) {
 			EquipmentTables:  []int32{102, 142},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/1?rel_availability=always",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -320,9 +321,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          4,
 				},
 			},
-			Unique:       NewExpUnique(1, "sensor"),
+			Unique:       apitesttypes.NewExpUnique(1, "sensor"),
 			MonstersDrop: []int32{16, 64, 99},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:      0,
 					Monster:    39,
@@ -346,7 +347,7 @@ func TestGetAutoAbility(t *testing.T) {
 			Treasures:        []int32{39, 54, 104, 174},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/1?rel_availability=always&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -360,9 +361,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:       NewExpUnique(1, "sensor"),
+			Unique:       apitesttypes.NewExpUnique(1, "sensor"),
 			MonstersDrop: []int32{16, 64, 99},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:      0,
 					Monster:    39,
@@ -387,7 +388,7 @@ func TestGetAutoAbility(t *testing.T) {
 			Treasures:        []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/1?rel_availability=pre-story",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -401,9 +402,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          1,
 				},
 			},
-			Unique:       NewExpUnique(1, "sensor"),
+			Unique:       apitesttypes.NewExpUnique(1, "sensor"),
 			MonstersDrop: []int32{11, 47, 94, 113},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:      0,
 					Monster:    6,
@@ -428,7 +429,7 @@ func TestGetAutoAbility(t *testing.T) {
 			Treasures:        []int32{84},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/51?rel_availability=always&rel_repeatable=true",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -442,9 +443,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:       NewExpUnique(51, "break damage limit"),
+			Unique:       apitesttypes.NewExpUnique(51, "break damage limit"),
 			MonstersDrop: []int32{299},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:    0,
 					Monster:  261,
@@ -466,7 +467,7 @@ func TestGetAutoAbility(t *testing.T) {
 			Treasures:        []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities/51?rel_availability=post&rel_repeatable=false",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -480,9 +481,9 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:       NewExpUnique(51, "break damage limit"),
+			Unique:       apitesttypes.NewExpUnique(51, "break damage limit"),
 			MonstersDrop: []int32{293, 298, 302, 305},
-			MonstersItems: []TestMonItemAmts{
+			MonstersItems: []apitesttypes.TestMonItemAmts{
 				{
 					Index:      0,
 					Monster:    293,
@@ -510,9 +511,9 @@ func TestGetAutoAbility(t *testing.T) {
 
 func TestRetrieveAutoAbilities(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -520,7 +521,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{1, 33, 67, 89, 101, 111, 121, 130},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?category=1&type=armor",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -528,7 +529,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{103, 106, 110, 112, 114, 118},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?monster=294",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -536,7 +537,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{5, 51, 57, 128, 129},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?monster_items=294",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -544,7 +545,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{51, 113, 117, 121, 129},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?availability=post&customize=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -552,7 +553,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{32, 35, 36, 42, 88, 105, 118},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?availability=post&customize=false&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -560,7 +561,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{3, 38, 42, 50, 84, 98, 110, 121, 127},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?availability=always&monster=85&character=1",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -568,7 +569,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{5, 6, 7, 8, 27, 73, 116},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?availability=pre-story&character=5&area=213", // gagazet - prominence
 				ExpectedStatus: http.StatusOK,
 			},
@@ -576,7 +577,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{2, 10, 93},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?availability=always&sublocation=26&character=2&methods=treasure", // macalania woods
 				ExpectedStatus: http.StatusOK,
 			},
@@ -584,7 +585,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{69, 83},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?availability=post&location=4",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -592,7 +593,7 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 			Results: []int32{3, 38, 43, 51, 59, 102, 128, 129},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/auto-abilities?availability=post&area=236&repeatable=false", // omega ruins bottom
 				ExpectedStatus: http.StatusOK,
 			},

@@ -6,21 +6,22 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetSubmenu(t *testing.T) {
 	t.Parallel()
-	tests := []Submenu{
+	tests := []apitesttypes.Submenu{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/submenus/16",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "submenu with provided id '16' doesn't exist. max id: 15",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/submenus/1",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -29,18 +30,18 @@ func TestGetSubmenu(t *testing.T) {
 					"opened by - overdrive commands": 1,
 				},
 			},
-			Unique:    NewExpUnique(1, "summon"),
+			Unique:    apitesttypes.NewExpUnique(1, "summon"),
 			Topmenu:   h.GetInt32Ptr(1),
 			Users:     []int32{6},
 			Abilities: []int32{390, 391, 392, 393, 394, 395, 396, 397},
-			OpenedBy: &MenuOpen{
+			OpenedBy: &apitesttypes.MenuOpen{
 				Ability:           nil,
 				AeonCommand:       nil,
 				OverdriveCommands: []int32{2},
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/submenus/3",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -48,14 +49,14 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 22,
 				},
 			},
-			Unique:    NewExpUnique(3, "special"),
+			Unique:    apitesttypes.NewExpUnique(3, "special"),
 			Topmenu:   h.GetInt32Ptr(1),
 			Users:     []int32{1, 3},
 			Abilities: []int32{23, 27, 32, 33, 38, 41, 44},
 			OpenedBy:  nil,
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/submenus/9",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -63,18 +64,18 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 0,
 				},
 			},
-			Unique:    NewExpUnique(9, "use"),
+			Unique:    apitesttypes.NewExpUnique(9, "use"),
 			Topmenu:   nil,
 			Users:     []int32{1},
 			Abilities: []int32{},
-			OpenedBy: &MenuOpen{
+			OpenedBy: &apitesttypes.MenuOpen{
 				Ability:           h.GetInt32Ptr(24),
 				AeonCommand:       nil,
 				OverdriveCommands: nil,
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/submenus/12",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
@@ -82,11 +83,11 @@ func TestGetSubmenu(t *testing.T) {
 					"abilities": 0,
 				},
 			},
-			Unique:    NewExpUnique(12, "gil yojimbo"),
+			Unique:    apitesttypes.NewExpUnique(12, "gil yojimbo"),
 			Topmenu:   h.GetInt32Ptr(1),
 			Users:     []int32{19},
 			Abilities: []int32{},
-			OpenedBy: &MenuOpen{
+			OpenedBy: &apitesttypes.MenuOpen{
 				Ability:           nil,
 				AeonCommand:       h.GetInt32Ptr(1),
 				OverdriveCommands: nil,
@@ -99,9 +100,9 @@ func TestGetSubmenu(t *testing.T) {
 
 func TestRetrieveSubmenus(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/submenus",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -109,7 +110,7 @@ func TestRetrieveSubmenus(t *testing.T) {
 			Results: []int32{1, 4, 8, 9, 13, 15},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/submenus?topmenu=1",
 				ExpectedStatus: http.StatusOK,
 			},

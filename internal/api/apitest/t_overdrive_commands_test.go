@@ -6,28 +6,29 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetOverdriveCommand(t *testing.T) {
 	t.Parallel()
-	tests := []OverdriveCommand{
+	tests := []apitesttypes.OverdriveCommand{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-commands/8",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "overdrive command with provided id '8' doesn't exist. max id: 7",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-commands/2",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
 					"overdrives": 8,
 				},
 			},
-			Unique:      NewExpUnique(2, "grand summon"),
+			Unique:      apitesttypes.NewExpUnique(2, "grand summon"),
 			Rank:        0,
 			User:        6,
 			Topmenu:     h.GetInt32Ptr(3),
@@ -35,14 +36,14 @@ func TestGetOverdriveCommand(t *testing.T) {
 			Overdrives:  []int32{5, 6, 7, 8, 9, 10, 11, 12},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-commands/3",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
 					"overdrives": 4,
 				},
 			},
-			Unique:      NewExpUnique(3, "slots"),
+			Unique:      apitesttypes.NewExpUnique(3, "slots"),
 			Rank:        5,
 			User:        7,
 			Topmenu:     h.GetInt32Ptr(3),
@@ -50,14 +51,14 @@ func TestGetOverdriveCommand(t *testing.T) {
 			Overdrives:  []int32{13, 14, 15, 16},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-commands/7",
 				ExpectedStatus: http.StatusOK,
 				ExpLengths: map[string]int{
 					"overdrives": 64,
 				},
 			},
-			Unique:      NewExpUnique(7, "mix"),
+			Unique:      apitesttypes.NewExpUnique(7, "mix"),
 			Rank:        5,
 			User:        11,
 			Topmenu:     h.GetInt32Ptr(3),
@@ -71,9 +72,9 @@ func TestGetOverdriveCommand(t *testing.T) {
 
 func TestRetrieveOverdriveCommands(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/overdrive-commands",
 				ExpectedStatus: http.StatusOK,
 			},

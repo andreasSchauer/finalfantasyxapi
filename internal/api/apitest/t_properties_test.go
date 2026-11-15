@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetProperty(t *testing.T) {
 	t.Parallel()
-	tests := []Property{
+	tests := []apitesttypes.Property{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/properties/14",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "property with provided id '14' doesn't exist. max id: 13",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/properties/1",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -28,12 +29,12 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       53,
 				},
 			},
-			Unique:        NewExpUnique(1, "armored"),
+			Unique:        apitesttypes.NewExpUnique(1, "armored"),
 			AutoAbilities: []int32{},
 			Monsters:      []int32{5, 29, 79, 107, 197, 277, 292},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/properties/4",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -42,12 +43,12 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       0,
 				},
 			},
-			Unique:        NewExpUnique(4, "piercing"),
+			Unique:        apitesttypes.NewExpUnique(4, "piercing"),
 			AutoAbilities: []int32{2},
 			Monsters:      []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/properties/11",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -56,7 +57,7 @@ func TestGetProperty(t *testing.T) {
 					"monsters":       123,
 				},
 			},
-			Unique:        NewExpUnique(11, "delayproof"),
+			Unique:        apitesttypes.NewExpUnique(11, "delayproof"),
 			AutoAbilities: []int32{54},
 			Monsters:      []int32{5, 33, 70, 136, 193, 235, 262, 282, 307},
 		},
@@ -67,9 +68,9 @@ func TestGetProperty(t *testing.T) {
 
 func TestRetrieveProperties(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/properties",
 				ExpectedStatus: http.StatusOK,
 			},

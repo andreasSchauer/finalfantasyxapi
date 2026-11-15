@@ -6,21 +6,22 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetEquipmentTable(t *testing.T) {
 	t.Parallel()
-	tests := []EquipmentTable{
+	tests := []apitesttypes.EquipmentTable{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment-tables/164",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "equipment table with provided id '164' doesn't exist. max id: 163",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment-tables/2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -30,16 +31,16 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment":                 1,
 				},
 			},
-			IDOnly:                  NewExpIDOnly(2),
+			IDOnly:                  apitesttypes.NewExpIDOnly(2),
 			CelestialWeapon:         h.GetInt32Ptr(2),
 			SpecificCharacter:       h.GetInt32Ptr(2),
 			RequiredAutoAbilities:   []int32{51, 49, 44, 43},
-			SelectableAutoAbilities: []TestAbilityPool{},
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{},
 			RequiredSlots:           nil,
 			Equipment:               []int32{2},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment-tables/20",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -49,16 +50,16 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment":                 7,
 				},
 			},
-			IDOnly:                  NewExpIDOnly(20),
+			IDOnly:                  apitesttypes.NewExpIDOnly(20),
 			CelestialWeapon:         nil,
 			SpecificCharacter:       nil,
 			RequiredAutoAbilities:   []int32{45},
-			SelectableAutoAbilities: []TestAbilityPool{},
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{},
 			RequiredSlots:           nil,
 			Equipment:               []int32{65, 66, 67, 68, 69, 70, 71},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment-tables/145",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -70,11 +71,11 @@ func TestGetEquipmentTable(t *testing.T) {
 					"equipment": 7,
 				},
 			},
-			IDOnly:                NewExpIDOnly(145),
+			IDOnly:                apitesttypes.NewExpIDOnly(145),
 			CelestialWeapon:       nil,
 			SpecificCharacter:     nil,
 			RequiredAutoAbilities: []int32{},
-			SelectableAutoAbilities: []TestAbilityPool{
+			SelectableAutoAbilities: []apitesttypes.TestAbilityPool{
 				{
 					Index:         0,
 					AutoAbilities: []int32{114, 113, 112, 111},
@@ -96,9 +97,9 @@ func TestGetEquipmentTable(t *testing.T) {
 
 func TestRetrieveEquipmentTables(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment-tables?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -106,7 +107,7 @@ func TestRetrieveEquipmentTables(t *testing.T) {
 			Results: []int32{1, 25, 58, 63, 77, 117, 129, 151, 163},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment-tables?auto_abilities=7,8",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -114,7 +115,7 @@ func TestRetrieveEquipmentTables(t *testing.T) {
 			Results: []int32{13, 31, 49},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment-tables?type=weapon&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -122,7 +123,7 @@ func TestRetrieveEquipmentTables(t *testing.T) {
 			Results: []int32{1, 13, 29, 45, 67, 78},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/equipment-tables?celestial_weapon=false&limit=max",
 				ExpectedStatus: http.StatusOK,
 			},

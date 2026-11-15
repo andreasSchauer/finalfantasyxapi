@@ -6,27 +6,28 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestRetrieveEndpoints(t *testing.T) {
 	t.Parallel()
-	tests := []ListPaths{
+	tests := []apitesttypes.ListPaths{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/endpoints/1",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "wrong format. '/endpoints' doesn't support single-resource requests",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/endpoints/1/1",
 				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "wrong format. usage: '/api/endpoints'",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/endpoints",
 				ExpectedStatus: http.StatusOK,
 			},

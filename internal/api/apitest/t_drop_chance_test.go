@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
@@ -14,9 +15,9 @@ func TestDropChance(t *testing.T) {
 	t.Parallel()
 	requestURL := "/api/drop-chance"
 
-	tests := []DropChanceResponse{
+	tests := []apitesttypes.DropChanceResponse{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -27,7 +28,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -40,7 +41,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -53,7 +54,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -66,7 +67,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -80,7 +81,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -94,7 +95,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -106,7 +107,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -118,7 +119,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -130,7 +131,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -142,7 +143,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -154,7 +155,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -166,7 +167,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -179,7 +180,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -192,7 +193,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -204,7 +205,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -217,7 +218,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -230,7 +231,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -243,7 +244,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -255,7 +256,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -267,7 +268,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -279,7 +280,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -290,7 +291,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
@@ -301,7 +302,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -386,7 +387,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -428,7 +429,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -526,7 +527,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -560,7 +561,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -594,7 +595,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -629,7 +630,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -655,7 +656,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -691,7 +692,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -783,7 +784,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -812,7 +813,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -841,7 +842,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -869,7 +870,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -898,7 +899,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -926,7 +927,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -961,7 +962,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -996,7 +997,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1033,7 +1034,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1070,7 +1071,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1132,7 +1133,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1188,7 +1189,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1222,7 +1223,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1259,7 +1260,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1288,7 +1289,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1317,7 +1318,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1346,7 +1347,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1374,7 +1375,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1411,7 +1412,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1440,7 +1441,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1478,7 +1479,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1516,7 +1517,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,
@@ -1554,7 +1555,7 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusOK,

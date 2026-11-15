@@ -5,13 +5,14 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 )
 
 func TestServiceBody(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []apitesttypes.TestGeneral{
 		{
 			RequestURL:     "/api/al-bhed/body",
 			ExpectedStatus: http.StatusOK,
@@ -65,7 +66,7 @@ func TestServiceBody(t *testing.T) {
 func TestServiceBodyDocs(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []apitesttypes.TestGeneral{
 		{
 			RequestURL:     "/api/al-bhed/body/docs",
 			ExpectedStatus: http.StatusOK,
@@ -89,7 +90,7 @@ func TestServiceBodyDocs(t *testing.T) {
 func TestAlBhedBodySamples(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []apitesttypes.TestGeneral{
 		{
 			RequestURL:     "/api/al-bhed/body/samples",
 			ExpectedStatus: http.StatusOK,
@@ -103,7 +104,7 @@ func TestAlBhedBodySamples(t *testing.T) {
 func TestTurnOrderBodySamples(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []apitesttypes.TestGeneral{
 		{
 			RequestURL:     "/api/turn-order/body/samples",
 			ExpectedStatus: http.StatusOK,
@@ -117,7 +118,7 @@ func TestTurnOrderBodySamples(t *testing.T) {
 func TestDropChanceBodySamples(t *testing.T) {
 	t.Parallel()
 
-	tests := []TestGeneral{
+	tests := []apitesttypes.TestGeneral{
 		{
 			RequestURL:     "/api/drop-chance/body/samples",
 			ExpectedStatus: http.StatusOK,

@@ -6,20 +6,21 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 )
 
 func TestGetModifier(t *testing.T) {
 	t.Parallel()
-	tests := []Modifier{
+	tests := []apitesttypes.Modifier{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/modifiers/32",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "modifier with provided id '32' doesn't exist. max id: 31",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/modifiers/3",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -34,7 +35,7 @@ func TestGetModifier(t *testing.T) {
 					"properties":          0,
 				},
 			},
-			Unique:             NewExpUnique(3, "buff-factor-str-based"),
+			Unique:             apitesttypes.NewExpUnique(3, "buff-factor-str-based"),
 			AutoAbilities:      []int32{},
 			PlayerAbilities:    []int32{27},
 			OverdriveAbilities: []int32{162, 163, 170},
@@ -45,7 +46,7 @@ func TestGetModifier(t *testing.T) {
 			Properties:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/modifiers/16",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -60,7 +61,7 @@ func TestGetModifier(t *testing.T) {
 					"properties":          0,
 				},
 			},
-			Unique:             NewExpUnique(16, "mp-cost"),
+			Unique:             apitesttypes.NewExpUnique(16, "mp-cost"),
 			AutoAbilities:      []int32{40, 42, 43},
 			PlayerAbilities:    []int32{},
 			OverdriveAbilities: []int32{174, 175},
@@ -71,7 +72,7 @@ func TestGetModifier(t *testing.T) {
 			Properties:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/modifiers/18",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -86,7 +87,7 @@ func TestGetModifier(t *testing.T) {
 					"properties":          0,
 				},
 			},
-			Unique:             NewExpUnique(18, "overdrive-gauge"),
+			Unique:             apitesttypes.NewExpUnique(18, "overdrive-gauge"),
 			AutoAbilities:      []int32{},
 			PlayerAbilities:    []int32{},
 			OverdriveAbilities: []int32{},
@@ -97,7 +98,7 @@ func TestGetModifier(t *testing.T) {
 			Properties:         []int32{},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/modifiers/20",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -112,7 +113,7 @@ func TestGetModifier(t *testing.T) {
 					"properties":          1,
 				},
 			},
-			Unique:             NewExpUnique(20, "physical-damage-taken"),
+			Unique:             apitesttypes.NewExpUnique(20, "physical-damage-taken"),
 			AutoAbilities:      []int32{103, 104, 105, 106},
 			PlayerAbilities:    []int32{},
 			OverdriveAbilities: []int32{},
@@ -129,9 +130,9 @@ func TestGetModifier(t *testing.T) {
 
 func TestRetrieveModifiers(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/modifiers?limit=max",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -139,7 +140,7 @@ func TestRetrieveModifiers(t *testing.T) {
 			Results: []int32{1, 7, 12, 17, 20, 25, 31},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/modifiers?category=percentage",
 				ExpectedStatus: http.StatusOK,
 			},

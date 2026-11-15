@@ -6,21 +6,22 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetAeon(t *testing.T) {
 	t.Parallel()
-	tests := []Aeon{
+	tests := []apitesttypes.Aeon{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons/11",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "aeon with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons/3",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -35,14 +36,14 @@ func TestGetAeon(t *testing.T) {
 					"armor abilities":   4,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   3,
 				Name: "ixion",
 			},
 			UntypedUnit:    11,
 			Area:           114,
 			BattlesToRegen: 20,
-			Agility: TestAgilityParams{
+			Agility: apitesttypes.TestAgilityParams{
 				AgilityTier: 7,
 				TickSpeed:   15,
 				MinICV:      h.GetInt32Ptr(43),
@@ -65,7 +66,7 @@ func TestGetAeon(t *testing.T) {
 			AeonCommands:           []int32{},
 			DefaultPlayerAbilities: []int32{49, 50, 70, 74, 90},
 			Overdrives:             []int32{120},
-			WeaponAbilities: []AeonEquipment{
+			WeaponAbilities: []apitesttypes.AeonEquipment{
 				{
 					AutoAbility:     54,
 					CelestialWeapon: false,
@@ -79,7 +80,7 @@ func TestGetAeon(t *testing.T) {
 					CelestialWeapon: true,
 				},
 			},
-			ArmorAbilities: []AeonEquipment{
+			ArmorAbilities: []apitesttypes.AeonEquipment{
 				{
 					AutoAbility:     1,
 					CelestialWeapon: false,
@@ -99,7 +100,7 @@ func TestGetAeon(t *testing.T) {
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons/9?battles=347&yuna_stats=strength:24",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -116,13 +117,13 @@ func TestGetAeon(t *testing.T) {
 				},
 			},
 			UntypedUnit: 17,
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   9,
 				Name: "sandy",
 			},
 			Area:           208,
 			BattlesToRegen: 30,
-			Agility: TestAgilityParams{
+			Agility: apitesttypes.TestAgilityParams{
 				AgilityTier: 12,
 				TickSpeed:   10,
 				MinICV:      h.GetInt32Ptr(26),
@@ -142,7 +143,7 @@ func TestGetAeon(t *testing.T) {
 				"evasion":       27,
 				"accuracy":      18,
 			},
-			RegenAmounts: []TestRegenAmount{
+			RegenAmounts: []apitesttypes.TestRegenAmount{
 				{
 					Index:    0,
 					Ticks:    0,
@@ -169,7 +170,7 @@ func TestGetAeon(t *testing.T) {
 			Overdrives:             []int32{124},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -184,14 +185,14 @@ func TestGetAeon(t *testing.T) {
 					"overdrives":        2,
 				},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   1,
 				Name: "valefor",
 			},
 			UntypedUnit:    9,
 			Area:           33,
 			BattlesToRegen: 8,
-			Agility: TestAgilityParams{
+			Agility: apitesttypes.TestAgilityParams{
 				AgilityTier: 15,
 				TickSpeed:   7,
 				MinICV:      h.GetInt32Ptr(20),
@@ -216,7 +217,7 @@ func TestGetAeon(t *testing.T) {
 			Overdrives:             []int32{117, 118},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15&battles=600",
 				ExpectedStatus: http.StatusOK,
 				DontCheck: map[string]bool{
@@ -233,12 +234,12 @@ func TestGetAeon(t *testing.T) {
 				},
 				ExpLengths: map[string]int{},
 			},
-			Unique: Unique{
+			Unique: apitesttypes.Unique{
 				ID:   1,
 				Name: "valefor",
 			},
 			UntypedUnit: 9,
-			Agility: TestAgilityParams{
+			Agility: apitesttypes.TestAgilityParams{
 				AgilityTier: 15,
 				TickSpeed:   7,
 				MinICV:      h.GetInt32Ptr(20),
@@ -264,9 +265,9 @@ func TestGetAeon(t *testing.T) {
 
 func TestRetrieveAeons(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -274,7 +275,7 @@ func TestRetrieveAeons(t *testing.T) {
 			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons?optional=true",
 				ExpectedStatus: http.StatusOK,
 			},
@@ -282,7 +283,7 @@ func TestRetrieveAeons(t *testing.T) {
 			Results: []int32{6, 7, 8, 9, 10},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/aeons?optional=false",
 				ExpectedStatus: http.StatusOK,
 			},

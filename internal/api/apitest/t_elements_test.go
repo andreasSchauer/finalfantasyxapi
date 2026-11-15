@@ -6,21 +6,22 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apitesttypes"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 )
 
 func TestGetElement(t *testing.T) {
 	t.Parallel()
-	tests := []Element{
+	tests := []apitesttypes.Element{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/elements/6",
 				ExpectedStatus: http.StatusNotFound,
 				ExpectedErr:    "element with provided id '6' doesn't exist. max id: 5",
 			},
 		},
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/elements/2",
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
@@ -36,7 +37,7 @@ func TestGetElement(t *testing.T) {
 					"monsters absorb":     19,
 				},
 			},
-			Unique:             NewExpUnique(2, "lightning"),
+			Unique:             apitesttypes.NewExpUnique(2, "lightning"),
 			StatusProtection:   h.GetInt32Ptr(23),
 			AutoAbilities:      []int32{6, 58, 59, 60},
 			PlayerAbilities:    []int32{70, 74, 78},
@@ -55,9 +56,9 @@ func TestGetElement(t *testing.T) {
 
 func TestRetrieveElements(t *testing.T) {
 	t.Parallel()
-	tests := []ListIDs{
+	tests := []apitesttypes.ListIDs{
 		{
-			TestGeneral: TestGeneral{
+			TestGeneral: apitesttypes.TestGeneral{
 				RequestURL:     "/api/elements",
 				ExpectedStatus: http.StatusOK,
 			},
