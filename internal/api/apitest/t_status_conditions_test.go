@@ -34,7 +34,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"inflicted by - status conditions":   0,
 				},
 			},
-			Unique:             newExpUnique(5, "death"),
+			Unique:             NewExpUnique(5, "death"),
 			AutoAbilities:      []int32{19, 20, 54, 77, 78},
 			MonstersResistance: []int32{},
 			InflictedBy: &TestStatusInfliction{
@@ -67,7 +67,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     0,
 				},
 			},
-			Unique:             newExpUnique(9, "petrification"),
+			Unique:             NewExpUnique(9, "petrification"),
 			AutoAbilities:      []int32{17, 18, 54, 75, 76, 129},
 			MonstersResistance: []int32{2, 5, 55, 92, 129, 157, 189, 216, 237, 272, 295, 307},
 			InflictedBy: &TestStatusInfliction{
@@ -106,7 +106,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     3,
 				},
 			},
-			Unique:             newExpUnique(21, "haste"),
+			Unique:             NewExpUnique(21, "haste"),
 			AutoAbilities:      []int32{96, 101},
 			MonstersResistance: []int32{3, 33, 135, 156, 199, 252, 253},
 			InflictedBy: &TestStatusInfliction{
@@ -145,7 +145,7 @@ func TestGetStatusCondition(t *testing.T) {
 					"removed by - status conditions":     2,
 				},
 			},
-			Unique:             newExpUnique(31, "boost"),
+			Unique:             NewExpUnique(31, "boost"),
 			AutoAbilities:      []int32{},
 			MonstersResistance: []int32{3, 33, 69, 108, 135, 253},
 			InflictedBy: &TestStatusInfliction{

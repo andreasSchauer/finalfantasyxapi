@@ -26,7 +26,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(4, "mega-potion"),
+			Unique:    NewExpUnique(4, "mega-potion"),
 			TypedItem: "/items/4",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -43,7 +43,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(111, "underdog's secret"),
+			Unique:    NewExpUnique(111, "underdog's secret"),
 			TypedItem: "/items/111",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -60,7 +60,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(130, "saturn sigil"),
+			Unique:    NewExpUnique(130, "saturn sigil"),
 			TypedItem: "/key-items/18",
 			ItemType:  database.ItemTypeKeyItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -77,7 +77,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(2, "hi-potion"),
+			Unique:    NewExpUnique(2, "hi-potion"),
 			TypedItem: "/items/2",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -94,7 +94,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(2, "hi-potion"),
+			Unique:    NewExpUnique(2, "hi-potion"),
 			TypedItem: "/items/2",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -111,7 +111,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(2, "hi-potion"),
+			Unique:    NewExpUnique(2, "hi-potion"),
 			TypedItem: "/items/2",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -128,7 +128,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(55, "chocobo wing"),
+			Unique:    NewExpUnique(55, "chocobo wing"),
 			TypedItem: "/items/55",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -145,7 +145,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(55, "chocobo wing"),
+			Unique:    NewExpUnique(55, "chocobo wing"),
 			TypedItem: "/items/55",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -162,7 +162,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(55, "chocobo wing"),
+			Unique:    NewExpUnique(55, "chocobo wing"),
 			TypedItem: "/items/55",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{
@@ -179,7 +179,7 @@ func TestGetAllItem(t *testing.T) {
 				ExpectedStatus: http.StatusOK,
 				DontCheck:      map[string]bool{},
 			},
-			Unique:    newExpUnique(55, "chocobo wing"),
+			Unique:    NewExpUnique(55, "chocobo wing"),
 			TypedItem: "/items/55",
 			ItemType:  database.ItemTypeItem,
 			ObtainableFrom: apitypes.ObtainableFrom{

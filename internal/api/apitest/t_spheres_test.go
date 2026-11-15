@@ -32,7 +32,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:      newExpUnique(4, "ability sphere"),
+			Unique:      NewExpUnique(4, "ability sphere"),
 			Item:        73,
 			CreatedNode: nil,
 			Monsters: []TestMonItemAmts{
@@ -67,7 +67,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: newExpUnique(16, "hp sphere"),
+			Unique: NewExpUnique(16, "hp sphere"),
 			Item:   85,
 			CreatedNode: &apitypes.CreatedNode{
 				Node:  "hp",
@@ -116,7 +116,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: newExpUnique(16, "hp sphere"),
+			Unique: NewExpUnique(16, "hp sphere"),
 			Item:   85,
 			CreatedNode: &apitypes.CreatedNode{
 				Node:  "hp",
@@ -153,7 +153,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:          newExpUnique(26, "clear sphere"),
+			Unique:          NewExpUnique(26, "clear sphere"),
 			Item:            95,
 			CreatedNode:     nil,
 			Monsters:        []TestMonItemAmts{},
@@ -175,7 +175,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:          newExpUnique(26, "clear sphere"),
+			Unique:          NewExpUnique(26, "clear sphere"),
 			Item:            95,
 			CreatedNode:     nil,
 			Monsters:        []TestMonItemAmts{},
@@ -197,7 +197,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:      newExpUnique(2, "mana sphere"),
+			Unique:      NewExpUnique(2, "mana sphere"),
 			Item:        71,
 			CreatedNode: nil,
 			Monsters: []TestMonItemAmts{
@@ -228,7 +228,7 @@ func TestGetSphere(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:      newExpUnique(2, "mana sphere"),
+			Unique:      NewExpUnique(2, "mana sphere"),
 			Item:        71,
 			CreatedNode: nil,
 			Monsters: []TestMonItemAmts{

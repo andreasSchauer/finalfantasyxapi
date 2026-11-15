@@ -47,7 +47,7 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 14,
 				},
 			},
-			IDOnly:   newExpIDOnly(2),
+			IDOnly:   NewExpIDOnly(2),
 			Area:     47,
 			Category: database.ShopCategoryStandard,
 			PreAirship: &TestSubShop{
@@ -127,15 +127,15 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 5,
 				},
 			},
-			IDOnly:   newExpIDOnly(16),
+			IDOnly:   NewExpIDOnly(16),
 			Area:     121,
 			Category: database.ShopCategoryStandard,
 			PreAirship: &TestSubShop{
 				Items: []TestShopItem{
-					newTestShopItem(0, 1, 100),
-					newTestShopItem(1, 9, 200),
-					newTestShopItem(3, 13, 100),
-					newTestShopItem(4, 14, 100),
+					NewTestShopItem(0, 1, 100),
+					NewTestShopItem(1, 9, 200),
+					NewTestShopItem(3, 13, 100),
+					NewTestShopItem(4, 14, 100),
 				},
 				Equipment: []TestShopEquipment{
 					{
@@ -160,9 +160,9 @@ func TestGetShop(t *testing.T) {
 			},
 			PostAirship: &TestSubShop{
 				Items: []TestShopItem{
-					newTestShopItem(1, 9, 115),
-					newTestShopItem(4, 14, 57),
-					newTestShopItem(5, 12, 57),
+					NewTestShopItem(1, 9, 115),
+					NewTestShopItem(4, 14, 57),
+					NewTestShopItem(5, 12, 57),
 				},
 				Equipment: []TestShopEquipment{
 					{
@@ -198,14 +198,14 @@ func TestGetShop(t *testing.T) {
 					"post airship - equipment": 0,
 				},
 			},
-			IDOnly:   newExpIDOnly(31),
+			IDOnly:   NewExpIDOnly(31),
 			Area:     200,
 			Category: database.ShopCategoryTravelAgency,
 			PreAirship: &TestSubShop{
 				Items: []TestShopItem{
-					newTestShopItem(1, 2, 500),
-					newTestShopItem(4, 13, 50),
-					newTestShopItem(9, 19, 100),
+					NewTestShopItem(1, 2, 500),
+					NewTestShopItem(4, 13, 50),
+					NewTestShopItem(9, 19, 100),
 				},
 				Equipment: []TestShopEquipment{
 					{

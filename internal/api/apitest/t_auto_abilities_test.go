@@ -32,7 +32,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       newExpUnique(50, "gillionaire"),
+			Unique:       NewExpUnique(50, "gillionaire"),
 			MonstersDrop: []int32{302},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -75,7 +75,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       newExpUnique(2, "piercing"),
+			Unique:       NewExpUnique(2, "piercing"),
 			MonstersDrop: []int32{201, 206, 210, 243, 248, 287},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -108,7 +108,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       newExpUnique(2, "piercing"),
+			Unique:       NewExpUnique(2, "piercing"),
 			MonstersDrop: []int32{16, 25, 41, 54, 78, 139, 163, 183, 192},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -146,7 +146,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       newExpUnique(45, "triple ap"),
+			Unique:       NewExpUnique(45, "triple ap"),
 			MonstersDrop: []int32{},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -179,7 +179,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   1,
 				},
 			},
-			Unique:           newExpUnique(55, "fire ward"),
+			Unique:           NewExpUnique(55, "fire ward"),
 			MonstersDrop:     []int32{109, 118, 119},
 			MonstersItems:    []TestMonItemAmts{},
 			ShopsPreAirship:  []int32{4, 10},
@@ -201,7 +201,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   1,
 				},
 			},
-			Unique:       newExpUnique(55, "fire ward"),
+			Unique:       NewExpUnique(55, "fire ward"),
 			MonstersDrop: []int32{38, 53, 141, 151, 176, 191, 192, 239},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -236,7 +236,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   3,
 				},
 			},
-			Unique:       newExpUnique(10, "darkstrike"),
+			Unique:       NewExpUnique(10, "darkstrike"),
 			MonstersDrop: []int32{185, 200, 257, 279, 285},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -275,7 +275,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"equipment tables":   2,
 				},
 			},
-			Unique:       newExpUnique(89, "sos nulblaze"),
+			Unique:       NewExpUnique(89, "sos nulblaze"),
 			MonstersDrop: []int32{31, 71, 102, 143, 158, 181},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -320,7 +320,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          4,
 				},
 			},
-			Unique:       newExpUnique(1, "sensor"),
+			Unique:       NewExpUnique(1, "sensor"),
 			MonstersDrop: []int32{16, 64, 99},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -360,7 +360,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:       newExpUnique(1, "sensor"),
+			Unique:       NewExpUnique(1, "sensor"),
 			MonstersDrop: []int32{16, 64, 99},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -401,7 +401,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          1,
 				},
 			},
-			Unique:       newExpUnique(1, "sensor"),
+			Unique:       NewExpUnique(1, "sensor"),
 			MonstersDrop: []int32{11, 47, 94, 113},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -442,7 +442,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:       newExpUnique(51, "break damage limit"),
+			Unique:       NewExpUnique(51, "break damage limit"),
 			MonstersDrop: []int32{299},
 			MonstersItems: []TestMonItemAmts{
 				{
@@ -480,7 +480,7 @@ func TestGetAutoAbility(t *testing.T) {
 					"treasures":          0,
 				},
 			},
-			Unique:       newExpUnique(51, "break damage limit"),
+			Unique:       NewExpUnique(51, "break damage limit"),
 			MonstersDrop: []int32{293, 298, 302, 305},
 			MonstersItems: []TestMonItemAmts{
 				{

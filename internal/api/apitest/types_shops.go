@@ -45,7 +45,7 @@ type TestShopItem struct {
 	Price int32
 }
 
-func newTestShopItem(idx int, itemID, price int32) TestShopItem {
+func NewTestShopItem(idx int, itemID, price int32) TestShopItem {
 	return TestShopItem{
 		Index: idx,
 		Item:  itemID,

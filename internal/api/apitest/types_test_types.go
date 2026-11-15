@@ -85,7 +85,7 @@ type NameVer struct {
 	Version *int32
 }
 
-func newExpNameVer(id int32, name string, version int32) NameVer {
+func NewExpNameVer(id int32, name string, version int32) NameVer {
 	vPtr := new(version)
 	if version == 0 {
 		vPtr = nil
@@ -110,7 +110,7 @@ type Unique struct {
 	Name string
 }
 
-func newExpUnique(id int32, name string) Unique {
+func NewExpUnique(id int32, name string) Unique {
 	return Unique{
 		ID:   id,
 		Name: name,
@@ -127,7 +127,7 @@ type IDOnly struct {
 	ID int32
 }
 
-func newExpIDOnly(id int32) IDOnly {
+func NewExpIDOnly(id int32) IDOnly {
 	return IDOnly{
 		ID: id,
 	}
@@ -152,7 +152,7 @@ func (l ListIDs) GetListParams() apiresource.ListParams {
 type ListPaths struct {
 	TestGeneral
 	apiresource.ListParams
-	Results  []string
+	Results []string
 }
 
 func (l ListPaths) GetListParams() apiresource.ListParams {
@@ -162,7 +162,7 @@ func (l ListPaths) GetListParams() apiresource.ListParams {
 type ListNames struct {
 	TestGeneral
 	apiresource.ListParams
-	Results  []ts.NamedParam
+	Results []ts.NamedParam
 }
 
 func (l ListNames) GetListParams() apiresource.ListParams {

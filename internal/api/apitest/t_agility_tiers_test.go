@@ -29,7 +29,7 @@ func TestGetAgilityTier(t *testing.T) {
 					"char min icvs": 9,
 				},
 			},
-			IDOnly:      newExpIDOnly(15),
+			IDOnly:      NewExpIDOnly(15),
 			FromAgility: 35,
 			ToAgility:   43,
 			TickSpeed:   7,

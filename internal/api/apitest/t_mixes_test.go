@@ -28,7 +28,7 @@ func TestGetMix(t *testing.T) {
 					"combinations": 62,
 				},
 			},
-			Unique:    newExpUnique(23, "tidal wave"),
+			Unique:    NewExpUnique(23, "tidal wave"),
 			Category:  database.MixCategoryWaterElemental,
 			Overdrive: 74,
 			Combinations: []TestMixCombination{
@@ -58,7 +58,7 @@ func TestGetMix(t *testing.T) {
 					"combinations": 2,
 				},
 			},
-			Unique:    newExpUnique(23, "tidal wave"),
+			Unique:    NewExpUnique(23, "tidal wave"),
 			Category:  database.MixCategoryWaterElemental,
 			Overdrive: 74,
 			Combinations: []TestMixCombination{
@@ -83,7 +83,7 @@ func TestGetMix(t *testing.T) {
 					"combinations": 15,
 				},
 			},
-			Unique:    newExpUnique(34, "ultra potion"),
+			Unique:    NewExpUnique(34, "ultra potion"),
 			Category:  database.MixCategoryRecovery,
 			Overdrive: 85,
 			Combinations: []TestMixCombination{

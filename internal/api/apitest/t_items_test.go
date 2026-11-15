@@ -36,7 +36,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                21,
 				},
 			},
-			Unique:      newExpUnique(69, "three stars"),
+			Unique:      NewExpUnique(69, "three stars"),
 			UntypedItem: 69,
 			Category:    database.ItemCategorySupport,
 			Monsters: []TestMonItemAmts{
@@ -93,7 +93,7 @@ func TestGetItem(t *testing.T) {
 					"quests":   0,
 				},
 			},
-			Unique: newExpUnique(69, "three stars"),
+			Unique: NewExpUnique(69, "three stars"),
 			Monsters: []TestMonItemAmts{
 				{
 					Index:   0,
@@ -129,7 +129,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                24,
 				},
 			},
-			Unique:      newExpUnique(26, "fire gem"),
+			Unique:      NewExpUnique(26, "fire gem"),
 			UntypedItem: 26,
 			Category:    database.ItemCategoryOffensive,
 			Monsters: []TestMonItemAmts{
@@ -174,7 +174,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                16,
 				},
 			},
-			Unique:      newExpUnique(2, "hi-potion"),
+			Unique:      NewExpUnique(2, "hi-potion"),
 			UntypedItem: 2,
 			Category:    database.ItemCategoryHealing,
 			Monsters: []TestMonItemAmts{
@@ -226,7 +226,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                9,
 				},
 			},
-			Unique:      newExpUnique(64, "stamina tablet"),
+			Unique:      NewExpUnique(64, "stamina tablet"),
 			UntypedItem: 64,
 			Category:    database.ItemCategorySupport,
 			Monsters: []TestMonItemAmts{
@@ -270,7 +270,7 @@ func TestGetItem(t *testing.T) {
 					"mixes":                9,
 				},
 			},
-			Unique:      newExpUnique(64, "stamina tablet"),
+			Unique:      NewExpUnique(64, "stamina tablet"),
 			UntypedItem: 64,
 			Category:    database.ItemCategorySupport,
 			Monsters: []TestMonItemAmts{
@@ -310,7 +310,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: newExpUnique(55, "chocobo wing"),
+			Unique: NewExpUnique(55, "chocobo wing"),
 			Monsters: []TestMonItemAmts{
 				{
 					Index:   0,
@@ -352,7 +352,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: newExpUnique(55, "chocobo wing"),
+			Unique: NewExpUnique(55, "chocobo wing"),
 			Monsters: []TestMonItemAmts{
 				{
 					Index:     0,
@@ -391,7 +391,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique:    newExpUnique(55, "chocobo wing"),
+			Unique:    NewExpUnique(55, "chocobo wing"),
 			Monsters:  []TestMonItemAmts{},
 			Treasures: nil,
 			Shops:     []int32{},
@@ -419,7 +419,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: newExpUnique(55, "chocobo wing"),
+			Unique: NewExpUnique(55, "chocobo wing"),
 			Monsters: []TestMonItemAmts{
 				{
 					Index:     0,
@@ -456,7 +456,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 2,
 				},
 			},
-			Unique: newExpUnique(2, "hi-potion"),
+			Unique: NewExpUnique(2, "hi-potion"),
 			Monsters: []TestMonItemAmts{
 				{
 					Index:     0,
@@ -509,7 +509,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 2,
 				},
 			},
-			Unique: newExpUnique(2, "hi-potion"),
+			Unique: NewExpUnique(2, "hi-potion"),
 			Monsters: []TestMonItemAmts{
 				{
 					Index:     0,
@@ -556,7 +556,7 @@ func TestGetItem(t *testing.T) {
 					"blitzball prizes": 0,
 				},
 			},
-			Unique: newExpUnique(2, "hi-potion"),
+			Unique: NewExpUnique(2, "hi-potion"),
 			Monsters: []TestMonItemAmts{
 				{
 					Index:       0,

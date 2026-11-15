@@ -36,7 +36,7 @@ func TestGetElement(t *testing.T) {
 					"monsters absorb":     19,
 				},
 			},
-			Unique:             newExpUnique(2, "lightning"),
+			Unique:             NewExpUnique(2, "lightning"),
 			StatusProtection:   h.GetInt32Ptr(23),
 			AutoAbilities:      []int32{6, 58, 59, 60},
 			PlayerAbilities:    []int32{70, 74, 78},

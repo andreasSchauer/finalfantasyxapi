@@ -17,7 +17,7 @@ func (e TestResAmount[A]) Compare(test Test, fieldName string, got apiresource.R
 	test.compare(fieldName+" - amount", e.Amount, got.Amount)
 }
 
-func newTestResAmount[A apiresource.APIResource](itemID int32, amount int32) TestResAmount[A] {
+func NewTestResAmount[A apiresource.APIResource](itemID int32, amount int32) TestResAmount[A] {
 	return TestResAmount[A]{
 		Item:   itemID,
 		Amount: amount,
@@ -30,10 +30,10 @@ type TestPossibleItem struct {
 	Chance int32
 }
 
-func newTestPossibleItem(idx int, itemID int32, amount, chance int32) TestPossibleItem {
+func NewTestPossibleItem(idx int, itemID int32, amount, chance int32) TestPossibleItem {
 	return TestPossibleItem{
 		Index:         idx,
-		TestResAmount: newTestResAmount[apiresource.Typed](itemID, amount),
+		TestResAmount: NewTestResAmount[apiresource.Typed](itemID, amount),
 		Chance:        chance,
 	}
 }
