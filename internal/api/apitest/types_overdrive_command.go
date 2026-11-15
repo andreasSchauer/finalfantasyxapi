@@ -6,7 +6,7 @@ import (
 )
 
 type OverdriveCommand struct {
-	testGeneral
+	TestGeneral
 	Unique
 	rank        int32
 	user        int32
@@ -15,12 +15,12 @@ type OverdriveCommand struct {
 	overdrives  []int32
 }
 
-func (e OverdriveCommand) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e OverdriveCommand) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e OverdriveCommand) Compare(test test, got apitypes.OverdriveCommand) {
-	test.t.Helper()
+func (e OverdriveCommand) Compare(test Test, got apitypes.OverdriveCommand) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("rank", e.rank, got.Rank)
 	test.compIDAPIResource("user", apilookups.E.CharacterClasses.Endpoint, e.user, got.User)

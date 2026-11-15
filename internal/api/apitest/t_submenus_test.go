@@ -13,17 +13,17 @@ func TestGetSubmenu(t *testing.T) {
 	t.Parallel()
 	tests := []Submenu{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/submenus/16",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "submenu with provided id '16' doesn't exist. max id: 15",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/submenus/16",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "submenu with provided id '16' doesn't exist. max id: 15",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/submenus/1",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/submenus/1",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"users":                          1,
 					"abilities":                      8,
 					"opened by - overdrive commands": 1,
@@ -40,10 +40,10 @@ func TestGetSubmenu(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/submenus/3",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/submenus/3",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"users":     2,
 					"abilities": 22,
 				},
@@ -55,10 +55,10 @@ func TestGetSubmenu(t *testing.T) {
 			openedBy:  nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/submenus/9",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/submenus/9",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"users":     1,
 					"abilities": 0,
 				},
@@ -74,10 +74,10 @@ func TestGetSubmenu(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/submenus/12",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/submenus/12",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"users":     1,
 					"abilities": 0,
 				},
@@ -101,20 +101,20 @@ func TestRetrieveSubmenus(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/submenus",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/submenus",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   15,
-			results: []int32{1, 4, 8, 9, 13, 15},
+			Count:   15,
+			Results: []int32{1, 4, 8, 9, 13, 15},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/submenus?topmenu=1",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/submenus?topmenu=1",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{1, 2, 3, 4, 5, 6, 12},
+			Count:   7,
+			Results: []int32{1, 2, 3, 4, 5, 6, 12},
 		},
 	}
 

@@ -14,18 +14,18 @@ func TestGetEnemyAbility(t *testing.T) {
 	t.Parallel()
 	tests := []EnemyAbility{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities/444",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "enemy ability with provided id '444' doesn't exist. max id: 443",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities/444",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "enemy ability with provided id '444' doesn't exist. max id: 443",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities/56",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities/56",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            1,
 					"battle interactions": 1,
 					"battle interactions 0 removed status conditions": 10,
@@ -75,11 +75,11 @@ func TestGetEnemyAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities/228",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities/228",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            1,
 					"battle interactions": 1,
 				},
@@ -128,11 +128,11 @@ func TestGetEnemyAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities/393",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities/393",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            1,
 					"battle interactions": 1,
 					"battle interactions 0 removed status conditions": 9,
@@ -179,20 +179,20 @@ func TestGetMultipleEnemyAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities/attack?limit=max",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities/attack?limit=max",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   43,
-			results: []int32{17, 22, 24, 32, 37, 39, 45, 54, 55, 59},
+			Count:   43,
+			Results: []int32{17, 22, 24, 32, 37, 39, 45, 54, 55, 59},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities/breath",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities/breath",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   6,
-			results: []int32{88, 89, 90, 91, 92, 93},
+			Count:   6,
+			Results: []int32{88, 89, 90, 91, 92, 93},
 		},
 	}
 
@@ -203,54 +203,54 @@ func TestRetrieveEnemyAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    443,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 223, 18, 45, 177, 386, 443},
+			Count:    443,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 223, 18, 45, 177, 386, 443},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities?target_type=single-target&rank=3&damage_type=magical&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities?target_type=single-target&rank=3&damage_type=magical&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    21,
-			previous: nil,
-			next:     nil,
-			results:  []int32{12, 111, 150, 180, 257, 379, 435},
+			Count:    21,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{12, 111, 150, 180, 257, 379, 435},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities?damage_formula=11",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities?damage_formula=11",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    16,
-			previous: nil,
-			next:     nil,
-			results:  []int32{126, 133, 155, 247, 402},
+			Count:    16,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{126, 133, 155, 247, 402},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities?monster=244",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities?monster=244",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    4,
-			previous: nil,
-			next:     nil,
-			results:  []int32{46, 227, 427, 429},
+			Count:    4,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{46, 227, 427, 429},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/enemy-abilities?bdl=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/enemy-abilities?bdl=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    101,
-			previous: nil,
-			next:     nil,
-			results:  []int32{2, 50, 69, 133, 196, 228, 277, 322, 406, 428, 443},
+			Count:    101,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{2, 50, 69, 133, 196, 228, 277, 322, 406, 428, 443},
 		},
 	}
 

@@ -14,18 +14,18 @@ func TestGetItemAbility(t *testing.T) {
 	t.Parallel()
 	tests := []ItemAbility{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities/70",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "item ability with provided id '70' doesn't exist. max id: 69",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities/70",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "item ability with provided id '70' doesn't exist. max id: 69",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities/2",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities/2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 1,
 				},
 			},
@@ -75,11 +75,11 @@ func TestGetItemAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities/48",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities/48",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions":                               1,
 					"battle interactions 0 inflicted status conditions": 1,
 				},
@@ -132,11 +132,11 @@ func TestGetItemAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities/62",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities/62",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 1,
 				},
 			},
@@ -190,11 +190,11 @@ func TestGetItemAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities/66",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities/66",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions":                1,
 					"battle interactions 0 stat changes": 1,
 				},
@@ -239,11 +239,11 @@ func TestGetItemAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities/69",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities/69",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions":               1,
 					"battle interactions 0 mod changes": 1,
 				},
@@ -296,44 +296,44 @@ func TestRetrieveItemAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    69,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 13, 27, 38, 39, 42, 55, 69},
+			Count:    69,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 13, 27, 38, 39, 42, 55, 69},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities?category=2&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities?category=2&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    34,
-			previous: nil,
-			next:     nil,
-			results:  []int32{24, 27, 35, 43, 50, 60},
+			Count:    34,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{24, 27, 35, 43, 50, 60},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities?attack_type=heal&outside_battle=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities?attack_type=heal&outside_battle=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    7,
-			previous: nil,
-			next:     nil,
-			results:  []int32{9, 10, 21, 22, 23, 54, 55},
+			Count:    7,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{9, 10, 21, 22, 23, 54, 55},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/item-abilities?related_stat=1",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/item-abilities?related_stat=1",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    2,
-			previous: nil,
-			next:     nil,
-			results:  []int32{64, 66},
+			Count:    2,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{64, 66},
 		},
 	}
 

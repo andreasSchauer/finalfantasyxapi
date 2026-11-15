@@ -5,19 +5,19 @@ import (
 )
 
 type BlitzballPrize struct {
-	testGeneral
+	TestGeneral
 	IDOnly
 	category string
 	slot     string
 	items    []testPossibleItem
 }
 
-func (e BlitzballPrize) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e BlitzballPrize) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e BlitzballPrize) Compare(test test, got apitypes.BlitzballPrize) {
-	test.t.Helper()
+func (e BlitzballPrize) Compare(test Test, got apitypes.BlitzballPrize) {
+	test.T.Helper()
 	test.compareExpIDOnly(e.IDOnly, got.ID)
 	test.compare("category", e.category, got.Category)
 	test.compare("slot", e.slot, got.Slot)

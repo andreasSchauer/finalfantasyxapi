@@ -6,7 +6,7 @@ import (
 )
 
 type StatusCondition struct {
-	testGeneral
+	TestGeneral
 	Unique
 	autoAbilities      []int32
 	inflictedBy        *testStatusInfliction
@@ -14,12 +14,12 @@ type StatusCondition struct {
 	monstersResistance []int32
 }
 
-func (e StatusCondition) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e StatusCondition) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e StatusCondition) Compare(test test, got apitypes.StatusCondition) {
-	test.t.Helper()
+func (e StatusCondition) Compare(test Test, got apitypes.StatusCondition) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)
 	test.compTestStructPtrs("inflicted by", e.inflictedBy, got.InflictedBy)
@@ -35,8 +35,8 @@ type testStatusInfliction struct {
 	enemyAbilities     []int32
 }
 
-func (e testStatusInfliction) Compare(test test, fieldName string, got apitypes.StatusInfliction) {
-	test.t.Helper()
+func (e testStatusInfliction) Compare(test Test, fieldName string, got apitypes.StatusInfliction) {
+	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)
 	test.checkResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.overdriveAbilities, got.OverdriveAbilities)
 	test.checkResIDsInSlice(fieldName+" - item abilities", apilookups.E.ItemAbilities.Endpoint, e.itemAbilities, got.ItemAbilities)
@@ -52,8 +52,8 @@ type testStatusRemoval struct {
 	statusConditions   []int32
 }
 
-func (e testStatusRemoval) Compare(test test, fieldName string, got apitypes.StatusRemoval) {
-	test.t.Helper()
+func (e testStatusRemoval) Compare(test Test, fieldName string, got apitypes.StatusRemoval) {
+	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" - player abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)
 	test.checkResIDsInSlice(fieldName+" - overdrive abilities", apilookups.E.OverdriveAbilities.Endpoint, e.overdriveAbilities, got.OverdriveAbilities)
 	test.checkResIDsInSlice(fieldName+" - item abilities", apilookups.E.ItemAbilities.Endpoint, e.itemAbilities, got.ItemAbilities)

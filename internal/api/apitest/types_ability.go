@@ -7,7 +7,7 @@ import (
 )
 
 type Ability struct {
-	testGeneral
+	TestGeneral
 	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
@@ -18,12 +18,12 @@ type Ability struct {
 	battleInteractions []BattleInteraction
 }
 
-func (e Ability) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Ability) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Ability) Compare(test test, got apitypes.Ability) {
-	test.t.Helper()
+func (e Ability) Compare(test Test, got apitypes.Ability) {
+	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
 	test.compare("ability type", string(e.abilityType), string(got.Type))
 	test.compare("rank", e.rank, got.Rank)
@@ -36,7 +36,7 @@ func (e Ability) Compare(test test, got apitypes.Ability) {
 }
 
 type EnemyAbility struct {
-	testGeneral
+	TestGeneral
 	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
@@ -46,12 +46,12 @@ type EnemyAbility struct {
 	battleInteractions []BattleInteraction
 }
 
-func (e EnemyAbility) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e EnemyAbility) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e EnemyAbility) Compare(test test, got apitypes.EnemyAbility) {
-	test.t.Helper()
+func (e EnemyAbility) Compare(test Test, got apitypes.EnemyAbility) {
+	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", e.rank, got.Rank)
 	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
@@ -62,7 +62,7 @@ func (e EnemyAbility) Compare(test test, got apitypes.EnemyAbility) {
 }
 
 type ItemAbility struct {
-	testGeneral
+	TestGeneral
 	Unique
 	rank                *int32
 	appearsInHelpBar    bool
@@ -74,12 +74,12 @@ type ItemAbility struct {
 	battleInteractions  []BattleInteraction
 }
 
-func (e ItemAbility) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e ItemAbility) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e ItemAbility) Compare(test test, got apitypes.ItemAbility) {
-	test.t.Helper()
+func (e ItemAbility) Compare(test Test, got apitypes.ItemAbility) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("rank", e.rank, got.Rank)
 	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
@@ -92,7 +92,7 @@ func (e ItemAbility) Compare(test test, got apitypes.ItemAbility) {
 }
 
 type PlayerAbility struct {
-	testGeneral
+	TestGeneral
 	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
@@ -107,12 +107,12 @@ type PlayerAbility struct {
 	battleInteractions []BattleInteraction
 }
 
-func (e PlayerAbility) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e PlayerAbility) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e PlayerAbility) Compare(test test, got apitypes.PlayerAbility) {
-	test.t.Helper()
+func (e PlayerAbility) Compare(test Test, got apitypes.PlayerAbility) {
+	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", e.rank, got.Rank)
 	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
@@ -128,7 +128,7 @@ func (e PlayerAbility) Compare(test test, got apitypes.PlayerAbility) {
 }
 
 type OverdriveAbility struct {
-	testGeneral
+	TestGeneral
 	NameVer
 	rank               *int32
 	untypedAbility     int32
@@ -137,12 +137,12 @@ type OverdriveAbility struct {
 	battleInteractions []BattleInteraction
 }
 
-func (e OverdriveAbility) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e OverdriveAbility) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e OverdriveAbility) Compare(test test, got apitypes.OverdriveAbility) {
-	test.t.Helper()
+func (e OverdriveAbility) Compare(test Test, got apitypes.OverdriveAbility) {
+	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", e.rank, got.Rank)
 	test.compIDAPIResource("untyped ability", apilookups.E.Abilities.Endpoint, e.untypedAbility, got.UntypedAbility)
@@ -152,7 +152,7 @@ func (e OverdriveAbility) Compare(test test, got apitypes.OverdriveAbility) {
 }
 
 type MiscAbility struct {
-	testGeneral
+	TestGeneral
 	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
@@ -164,12 +164,12 @@ type MiscAbility struct {
 	battleInteractions []BattleInteraction
 }
 
-func (e MiscAbility) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e MiscAbility) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e MiscAbility) Compare(test test, got apitypes.MiscAbility) {
-	test.t.Helper()
+func (e MiscAbility) Compare(test Test, got apitypes.MiscAbility) {
+	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", e.rank, got.Rank)
 	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)
@@ -182,7 +182,7 @@ func (e MiscAbility) Compare(test test, got apitypes.MiscAbility) {
 }
 
 type TriggerCommand struct {
-	testGeneral
+	TestGeneral
 	NameVer
 	rank               *int32
 	appearsInHelpBar   bool
@@ -194,12 +194,12 @@ type TriggerCommand struct {
 	battleInteractions []BattleInteraction
 }
 
-func (e TriggerCommand) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e TriggerCommand) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e TriggerCommand) Compare(test test, got apitypes.TriggerCommand) {
-	test.t.Helper()
+func (e TriggerCommand) Compare(test Test, got apitypes.TriggerCommand) {
+	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
 	test.compare("rank", e.rank, got.Rank)
 	test.compare("appears in help bar", e.appearsInHelpBar, got.AppearsInHelpBar)

@@ -12,17 +12,17 @@ func TestGetRonsoRage(t *testing.T) {
 	t.Parallel()
 	tests := []RonsoRage{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/ronso-rages/13",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "ronso rage with provided id '13' doesn't exist. max id: 12",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/ronso-rages/13",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "ronso rage with provided id '13' doesn't exist. max id: 12",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/ronso-rages/4",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/ronso-rages/4",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"monsters": 5,
 				},
 			},
@@ -31,10 +31,10 @@ func TestGetRonsoRage(t *testing.T) {
 			monsters:  []int32{38, 109, 167, 176, 245},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/ronso-rages/8",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/ronso-rages/8",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"monsters": 3,
 				},
 			},
@@ -51,12 +51,12 @@ func TestRetrieveRonsoRages(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/ronso-rages",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/ronso-rages",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{1, 3, 8, 9, 11, 12},
+			Count:   12,
+			Results: []int32{1, 3, 8, 9, 11, 12},
 		},
 	}
 

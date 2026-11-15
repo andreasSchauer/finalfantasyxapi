@@ -15,18 +15,18 @@ func TestGetAbility(t *testing.T) {
 	t.Parallel()
 	tests := []Ability{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities/841",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "ability with provided id '841' doesn't exist. max id: 840",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities/841",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "ability with provided id '841' doesn't exist. max id: 840",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities/736",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities/736",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            2,
 					"battle interactions": 2,
 					"battle interactions 1 inflicted status conditions": 1,
@@ -98,11 +98,11 @@ func TestGetAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities/269",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities/269",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            0,
 					"battle interactions": 1,
 					"battle interactions 0 inflicted status conditions": 5,
@@ -152,11 +152,11 @@ func TestGetAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities/72",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities/72",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            6,
 					"battle interactions": 1,
 				},
@@ -213,136 +213,136 @@ func TestRetrieveAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?type=7",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '7' used for parameter 'type' doesn't exist. max id: 6",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?type=7",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "provided id '7' used for parameter 'type' doesn't exist. max id: 6",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?type=asd",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'asd' used for parameter 'type'. use /api/abilities/parameters to see allowed values",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?type=asd",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid enum value 'asd' used for parameter 'type'. use /api/abilities/parameters to see allowed values",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    840,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 133, 299, 333, 555, 666, 840},
+			Count:    840,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 133, 299, 333, 555, 666, 840},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?monster=86",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?monster=86",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    11,
-			previous: nil,
-			next:     nil,
-			results:  []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
+			Count:    11,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{69, 70, 71, 72, 415, 481, 548, 565, 705, 804, 831},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?type=2&help_bar=false&rank=5&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?type=2&help_bar=false&rank=5&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    8,
-			previous: nil,
-			next:     nil,
-			results:  []int32{111, 112, 113, 114, 115, 116, 117, 118},
+			Count:    8,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{111, 112, 113, 114, 115, 116, 117, 118},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?type=3&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?type=3&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    69,
-			previous: nil,
-			next:     nil,
-			results:  []int32{293, 295, 310, 337, 344, 352, 361},
+			Count:    69,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{293, 295, 310, 337, 344, 352, 361},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?delay=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?delay=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    33,
-			previous: nil,
-			next:     nil,
-			results:  []int32{9, 10, 88, 138, 340, 546, 709, 803},
+			Count:    33,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{9, 10, 88, 138, 340, 546, 709, 803},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?status_inflict=4&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?status_inflict=4&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    39,
-			previous: nil,
-			next:     nil,
-			results:  []int32{3, 6, 8, 134, 226, 333, 422, 708, 752},
+			Count:    39,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{3, 6, 8, 134, 226, 333, 422, 708, 752},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?bdl=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?bdl=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    281,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 5, 65, 89, 128, 170, 205, 399, 449, 530, 623, 830},
+			Count:    281,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 5, 65, 89, 128, 170, 205, 399, 449, 530, 623, 830},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?copycat=true&target_type=single-enemy&user_atk=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?copycat=true&target_type=single-enemy&user_atk=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{20, 21},
+			Count:   2,
+			Results: []int32{20, 21},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?darkable=true&attack_type=absorb",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?darkable=true&attack_type=absorb",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{538, 539},
+			Count:   2,
+			Results: []int32{538, 539},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?silenceable=true&reflectable=true&damage_type=magical&element=1",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?silenceable=true&reflectable=true&damage_type=magical&element=1",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{69, 73, 77, 565, 665},
+			Count:   5,
+			Results: []int32{69, 73, 77, 565, 665},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?damage_formula=special-var&can_crit=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?damage_formula=special-var&can_crit=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{220, 225, 229, 328, 329},
+			Count:   12,
+			Results: []int32{220, 225, 229, 328, 329},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?status_remove=4",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?status_remove=4",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{53, 254, 260, 308, 672, 790},
+			Count:   12,
+			Results: []int32{53, 254, 260, 308, 672, 790},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/abilities?stat_changes=true&mod_changes=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/abilities?stat_changes=true&mod_changes=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{27, 29, 264, 265, 272, 275},
+			Count:   6,
+			Results: []int32{27, 29, 264, 265, 272, 275},
 		},
 	}
 
@@ -353,54 +353,54 @@ func TestSubsectionAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/1/default-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacterClasses,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/1/default-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacterClasses,
 			},
-			count:          5,
-			parentResource: h.GetStrPtr("/character-classes/1"),
-			results:        []int32{374, 376, 377, 378, 379},
+			Count:          5,
+			ParentResource: h.GetStrPtr("/character-classes/1"),
+			Results:        []int32{374, 376, 377, 378, 379},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/1/learnable-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacterClasses,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/1/learnable-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacterClasses,
 			},
-			count:          90,
-			parentResource: h.GetStrPtr("/character-classes/1"),
-			results:        []int32{1, 13, 24, 53, 66, 78, 374, 379},
+			Count:          90,
+			ParentResource: h.GetStrPtr("/character-classes/1"),
+			Results:        []int32{1, 13, 24, 53, 66, 78, 374, 379},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/submenus/2/abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSubmenus,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/submenus/2/abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSubmenus,
 			},
-			count:          22,
-			parentResource: h.GetStrPtr("/submenus/2"),
-			results:        []int32{1, 5, 8, 13, 17, 19, 22},
+			Count:          22,
+			ParentResource: h.GetStrPtr("/submenus/2"),
+			Results:        []int32{1, 5, 8, 13, 17, 19, 22},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/topmenus/2/abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleTopmenus,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/topmenus/2/abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleTopmenus,
 			},
-			count:          6,
-			parentResource: h.GetStrPtr("/topmenus/2"),
-			results:        []int32{377, 378, 379, 380, 381, 382},
+			Count:          6,
+			ParentResource: h.GetStrPtr("/topmenus/2"),
+			Results:        []int32{377, 378, 379, 380, 381, 382},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/185/abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleMonsters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monsters/185/abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleMonsters,
 			},
-			count:          6,
-			parentResource: h.GetStrPtr("/monsters/185"),
-			results:        []int32{61, 62, 460, 531, 573, 630},
+			Count:          6,
+			ParentResource: h.GetStrPtr("/monsters/185"),
+			Results:        []int32{61, 62, 460, 531, 573, 630},
 		},
 	}
 

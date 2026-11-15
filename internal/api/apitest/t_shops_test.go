@@ -15,32 +15,32 @@ func TestGetShop(t *testing.T) {
 	t.Parallel()
 	tests := []Shop{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops/37",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "shop with provided id '37' doesn't exist. max id: 36",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops/37",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "shop with provided id '37' doesn't exist. max id: 36",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops/34/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "subsection 'a' does not exist for endpoint /shops. supported subsections: 'simple'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops/34/a",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "subsection 'a' does not exist for endpoint /shops. supported subsections: 'simple'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops/a",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid id 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops/2",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops/2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"pre airship - items":      0,
 					"pre airship - equipment":  10,
 					"post airship - items":     0,
@@ -116,11 +116,11 @@ func TestGetShop(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops/16",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops/16",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"pre airship - items":      6,
 					"pre airship - equipment":  5,
 					"post airship - items":     6,
@@ -187,11 +187,11 @@ func TestGetShop(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops/31",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops/31",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"pre airship - items":      11,
 					"pre airship - equipment":  7,
 					"post airship - items":     0,
@@ -239,132 +239,132 @@ func TestRetrieveShops(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   36,
-			results: []int32{1, 7, 8, 16, 23, 28, 35, 36},
+			Count:   36,
+			Results: []int32{1, 7, 8, 16, 23, 28, 35, 36},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?auto_ability=103",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?auto_ability=103",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{5, 6, 9},
+			Count:   3,
+			Results: []int32{5, 6, 9},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?equipment=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?equipment=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{3, 8, 11, 18, 26, 29, 30},
+			Count:   7,
+			Results: []int32{3, 8, 11, 18, 26, 29, 30},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?items=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?items=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{2},
+			Count:   1,
+			Results: []int32{2},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?availability=always",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?availability=always",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   16,
-			results: []int32{1, 6, 7, 12, 17, 20, 21, 32, 33, 34},
+			Count:   16,
+			Results: []int32{1, 6, 7, 12, 17, 20, 21, 32, 33, 34},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?location=12",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?location=12",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{13, 14, 15, 16, 17, 18},
+			Count:   6,
+			Results: []int32{13, 14, 15, 16, 17, 18},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?sublocation=26", // macalania woods
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?sublocation=26", // macalania woods
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{22, 36},
+			Count:   2,
+			Results: []int32{22, 36},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?category=oaka",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?category=oaka",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{3, 4, 10, 13, 22, 26, 30},
+			Count:   14,
+			Results: []int32{3, 4, 10, 13, 22, 26, 30},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?auto_ability=111&character=3&empty_slots=0",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?auto_ability=111&character=3&empty_slots=0",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{1, 2, 9, 21},
+			Count:   4,
+			Results: []int32{1, 2, 9, 21},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?empty_slots=2-4&availability=post",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?empty_slots=2-4&availability=post",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{1, 2, 12, 24, 27, 32, 36},
+			Count:   11,
+			Results: []int32{1, 2, 12, 24, 27, 32, 36},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?availability=post&location=15",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?availability=post&location=15",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{36},
+			Count:   1,
+			Results: []int32{36},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?availability=pre-airship&sublocation=16", // highroad (mi'ihen)
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?availability=pre-airship&sublocation=16", // highroad (mi'ihen)
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{7, 8},
+			Count:   2,
+			Results: []int32{7, 8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?availability=pre-story&empty_slots=2&character=7&auto_ability=41",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?availability=pre-story&empty_slots=2&character=7&auto_ability=41",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{35},
+			Count:   1,
+			Results: []int32{35},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?availability=pre-story&equipment=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?availability=pre-story&equipment=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{4, 10, 19, 22, 25, 31, 35},
+			Count:   11,
+			Results: []int32{4, 10, 19, 22, 25, 31, 35},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?availability=always&empty_slots=2&character=3",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?availability=always&empty_slots=2&character=3",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{34},
+			Count:   1,
+			Results: []int32{34},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops?availability=post&auto_ability=4",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops?availability=post&auto_ability=4",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{12},
+			Count:   1,
+			Results: []int32{12},
 		},
 	}
 
@@ -375,24 +375,24 @@ func TestSubsectionShops(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/8/shops/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/8/shops/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleLocations,
 			},
-			count:          3,
-			parentResource: h.GetStrPtr("/locations/8"),
-			results:        []int32{4, 5, 6},
+			Count:          3,
+			ParentResource: h.GetStrPtr("/locations/8"),
+			Results:        []int32{4, 5, 6},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/26/shops/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/26/shops/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/sublocations/26"),
-			results:        []int32{22, 36},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/sublocations/26"),
+			Results:        []int32{22, 36},
 		},
 	}
 

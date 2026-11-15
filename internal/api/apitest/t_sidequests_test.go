@@ -12,39 +12,39 @@ func TestGetSidequest(t *testing.T) {
 	t.Parallel()
 	tests := []Sidequest{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/11",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests/11",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/11/a",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests/11/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "sidequest with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/a",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sidequest not found: 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "sidequest not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/10/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "subsection 'a' does not exist for endpoint /sidequests. supported subsections: 'subquests'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests/10/a",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "subsection 'a' does not exist for endpoint /sidequests. supported subsections: 'subquests'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/2",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests/2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"completion - areas": 1,
 					"subquests":          16,
 				},
@@ -58,11 +58,11 @@ func TestGetSidequest(t *testing.T) {
 			subquests: []int32{37, 39, 42, 44, 45, 49, 52},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/4",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests/4",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"subquests": 9,
 				},
 			},
@@ -72,11 +72,11 @@ func TestGetSidequest(t *testing.T) {
 			subquests:    []int32{59, 62, 64, 65, 67},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/9",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests/9",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"completion - areas": 2,
 					"subquests":          0,
 				},
@@ -98,36 +98,36 @@ func TestRetrieveSidequests(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{1, 2, 3, 5, 6, 9, 10},
+			Count:   10,
+			Results: []int32{1, 2, 3, 5, 6, 9, 10},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests?availability=post",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests?availability=post",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{1, 2, 5, 6, 9},
+			Count:   5,
+			Results: []int32{1, 2, 5, 6, 9},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests?availability=always",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests?availability=always",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{3, 4, 7, 8, 10},
+			Count:   5,
+			Results: []int32{3, 4, 7, 8, 10},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests?availability=post",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests?availability=post",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{1, 2, 5, 6, 9},
+			Count:   5,
+			Results: []int32{1, 2, 5, 6, 9},
 		},
 	}
 

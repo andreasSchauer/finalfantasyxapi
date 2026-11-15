@@ -14,24 +14,24 @@ func TestGetPlayerUnit(t *testing.T) {
 	t.Parallel()
 	tests := []PlayerUnit{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-units/19",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "player unit with provided id '19' doesn't exist. max id: 18",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-units/19",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "player unit with provided id '19' doesn't exist. max id: 18",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-units/1",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-units/1",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"character classes": 2,
 				},
 			},
 			Unique: Unique{
-				id:   1,
-				name: "tidus",
+				ID:   1,
+				Name: "tidus",
 			},
 			unitType:         database.UnitTypeCharacter,
 			typedUnit:        "/characters/1",
@@ -40,17 +40,17 @@ func TestGetPlayerUnit(t *testing.T) {
 			characterClasses: []int32{1, 5},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-units/8",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-units/8",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"character classes": 1,
 				},
 			},
 			Unique: Unique{
-				id:   8,
-				name: "seymour",
+				ID:   8,
+				Name: "seymour",
 			},
 			unitType:         database.UnitTypeCharacter,
 			typedUnit:        "/characters/8",
@@ -59,17 +59,17 @@ func TestGetPlayerUnit(t *testing.T) {
 			characterClasses: []int32{12},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-units/10",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-units/10",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"character classes": 3,
 				},
 			},
 			Unique: Unique{
-				id:   10,
-				name: "ifrit",
+				ID:   10,
+				Name: "ifrit",
 			},
 			unitType:         database.UnitTypeAeon,
 			typedUnit:        "/aeons/2",
@@ -78,17 +78,17 @@ func TestGetPlayerUnit(t *testing.T) {
 			characterClasses: []int32{2, 3, 14},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-units/15",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-units/15",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"character classes": 2,
 				},
 			},
 			Unique: Unique{
-				id:   15,
-				name: "yojimbo",
+				ID:   15,
+				Name: "yojimbo",
 			},
 			unitType:         database.UnitTypeAeon,
 			typedUnit:        "/aeons/7",
@@ -97,17 +97,17 @@ func TestGetPlayerUnit(t *testing.T) {
 			characterClasses: []int32{2, 19},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-units/16",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-units/16",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"character classes": 3,
 				},
 			},
 			Unique: Unique{
-				id:   16,
-				name: "cindy",
+				ID:   16,
+				Name: "cindy",
 			},
 			unitType:         database.UnitTypeAeon,
 			typedUnit:        "/aeons/8",
@@ -124,20 +124,20 @@ func TestRetrievePlayerUnits(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-units",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-units",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   18,
-			results: []int32{1, 3, 4, 8, 12, 17, 18},
+			Count:   18,
+			Results: []int32{1, 3, 4, 8, 12, 17, 18},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-units?type=aeon",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-units?type=aeon",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{9, 11, 13, 14, 15, 16, 18},
+			Count:   10,
+			Results: []int32{9, 11, 13, 14, 15, 16, 18},
 		},
 	}
 

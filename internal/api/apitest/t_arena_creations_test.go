@@ -13,32 +13,32 @@ func TestGetArenaCreation(t *testing.T) {
 	t.Parallel()
 	tests := []ArenaCreation{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations/36",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "arena creation with provided id '36' doesn't exist. max id: 35",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations/36",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "arena creation with provided id '36' doesn't exist. max id: 35",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations/a",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "arena creation not found: 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "arena creation not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations/a/2",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/arena-creations', '/api/arena-creations/{id}', '/api/arena-creations/{name}'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations/a/2",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "wrong format. usage: '/api/arena-creations', '/api/arena-creations/{id}', '/api/arena-creations/{name}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations/13",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations/13",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required monsters": 10,
 				},
 			},
@@ -51,11 +51,11 @@ func TestGetArenaCreation(t *testing.T) {
 			requiredMonsters:    []int32{239, 243, 245, 248},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations/one-eye",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations/one-eye",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required monsters": 5,
 				},
 			},
@@ -68,11 +68,11 @@ func TestGetArenaCreation(t *testing.T) {
 			requiredMonsters:    []int32{40, 73, 87, 170, 240},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations/31",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations/31",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required monsters": 0,
 				},
 			},
@@ -94,27 +94,27 @@ func TestRetrieveArenaCreations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations?category=asd",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/arena-creations/parameters to see allowed values",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations?category=asd",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/arena-creations/parameters to see allowed values",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   35,
-			results: []int32{1, 11, 14, 20, 27, 31, 35},
+			Count:   35,
+			Results: []int32{1, 11, 14, 20, 27, 31, 35},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations?category=species&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations?category=species&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{14, 15, 18, 19, 23, 27},
+			Count:   14,
+			Results: []int32{14, 15, 18, 19, 23, 27},
 		},
 	}
 

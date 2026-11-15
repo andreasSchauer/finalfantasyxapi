@@ -5,7 +5,7 @@ import (
 )
 
 type OverdriveMode struct {
-	testGeneral
+	TestGeneral
 	Unique
 	description   string
 	effect        string
@@ -14,12 +14,12 @@ type OverdriveMode struct {
 	actionsAmount map[string]int32
 }
 
-func (e OverdriveMode) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e OverdriveMode) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e OverdriveMode) Compare(test test, got apitypes.OverdriveMode) {
-	test.t.Helper()
+func (e OverdriveMode) Compare(test Test, got apitypes.OverdriveMode) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("description", e.description, got.Description)
 	test.compare("effect", e.effect, got.Effect)

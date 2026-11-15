@@ -12,17 +12,17 @@ func TestGetTopmenu(t *testing.T) {
 	t.Parallel()
 	tests := []Topmenu{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/topmenus/5",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "topmenu with provided id '5' doesn't exist. max id: 4",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/topmenus/5",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "topmenu with provided id '5' doesn't exist. max id: 4",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/topmenus/1",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/topmenus/1",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"submenus":           7,
 					"abilities":          8,
 					"overdrive commands": 0,
@@ -38,10 +38,10 @@ func TestGetTopmenu(t *testing.T) {
 			aeonCommands:      []int32{1, 2, 3, 4, 5, 6, 7, 8, 9},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/topmenus/2",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/topmenus/2",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"submenus":           2,
 					"abilities":          6,
 					"overdrive commands": 0,
@@ -57,10 +57,10 @@ func TestGetTopmenu(t *testing.T) {
 			aeonCommands:      []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/topmenus/3",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/topmenus/3",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"submenus":           0,
 					"abilities":          12,
 					"overdrive commands": 7,
@@ -84,12 +84,12 @@ func TestRetrieveTopmenus(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/topmenus",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/topmenus",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{1, 2, 3, 4},
+			Count:   4,
+			Results: []int32{1, 2, 3, 4},
 		},
 	}
 

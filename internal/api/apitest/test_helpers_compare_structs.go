@@ -8,24 +8,24 @@ import (
 
 // checks if two structs with the same type are equal.
 // itemAmount == itemAmount
-func (test test) compStructs[T any](fieldName string, exp, got T) {
-	test.t.Helper()
+func (test Test) compStructs[T any](fieldName string, exp, got T) {
+	test.T.Helper()
 
-	if test.dontCheck != nil && test.dontCheck[fieldName] {
+	if test.DontCheck != nil && test.DontCheck[fieldName] {
 		return
 	}
 
 	if !reflect.DeepEqual(exp, got) {
-		test.t.Errorf("expected %s %v, got %v\n\n", fieldName, exp, got)
+		test.T.Errorf("expected %s %v, got %v\n\n", fieldName, exp, got)
 	}
 }
 
 // checks if two struct pointers with the same type are equal. ptr presence is checked via compPtr
 // itemAmount == itemAmount (both ptrs)
-func (test test) compStructPtrs[T any](fieldName string, exp, got *T) {
-	test.t.Helper()
+func (test Test) compStructPtrs[T any](fieldName string, exp, got *T) {
+	test.T.Helper()
 
-	if test.dontCheck != nil && test.dontCheck[fieldName] {
+	if test.DontCheck != nil && test.DontCheck[fieldName] {
 		return
 	}
 
@@ -34,8 +34,8 @@ func (test test) compStructPtrs[T any](fieldName string, exp, got *T) {
 
 // checks if two same-typed struct slices are equal. if the slice is not nullable, it needs to be explicitely ignored.
 // []itemAmount == []itemAmount
-func (test test) compStructSlices[T any](fieldName string, exp, got []T) {
-	test.t.Helper()
+func (test Test) compStructSlices[T any](fieldName string, exp, got []T) {
+	test.T.Helper()
 	err := test.checkSliceBasic(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
@@ -48,10 +48,10 @@ func (test test) compStructSlices[T any](fieldName string, exp, got []T) {
 
 // checks if a pointer to a test struct is equal to a pointer to the original struct. uses a compare function.
 // testItemAmount == itemAmount (both Ptrs)
-func (test test) compTestStructPtrs[E testStruct[G], G any](fieldName string, exp *E, got *G) {
-	test.t.Helper()
+func (test Test) compTestStructPtrs[E testStruct[G], G any](fieldName string, exp *E, got *G) {
+	test.T.Helper()
 
-	if test.dontCheck != nil && test.dontCheck[fieldName] {
+	if test.DontCheck != nil && test.DontCheck[fieldName] {
 		return
 	}
 
@@ -65,8 +65,8 @@ func (test test) compTestStructPtrs[E testStruct[G], G any](fieldName string, ex
 
 // checks if a slice of test structs is equal to the slice of original structs, meaning it contains every entry of the original struct in the correct order. uses a compare function. if the slice is not nullable, it needs to be explicitely ignored.
 // []testItemAmount == []itemAmount
-func (test test) compTestStructSlices[E testStruct[G], G any](fieldName string, exp []E, got []G) {
-	test.t.Helper()
+func (test Test) compTestStructSlices[E testStruct[G], G any](fieldName string, exp []E, got []G) {
+	test.T.Helper()
 	err := test.checkSliceBasic(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
@@ -79,8 +79,8 @@ func (test test) compTestStructSlices[E testStruct[G], G any](fieldName string, 
 }
 
 // checks if all stated testStructs with index are present in the gotStruct slice by using a testStruct's targetIndex.
-func (test test) checkTestStructsInSlice[E testStructIdx[G], G any](fieldName string, exp []E, got []G) {
-	test.t.Helper()
+func (test Test) checkTestStructsInSlice[E testStructIdx[G], G any](fieldName string, exp []E, got []G) {
+	test.T.Helper()
 	err := test.checkSliceBasic(fieldName, exp, got)
 	if errors.Is(err, errIgnoredField) {
 		return
@@ -94,11 +94,11 @@ func (test test) checkTestStructsInSlice[E testStructIdx[G], G any](fieldName st
 }
 
 // checks the length of a slice, whether it should be ignored (returns errIgnoredField in that case), and if the exp and got slice are present
-func (test test) checkSliceBasic[E, G any](fieldName string, exp []E, got []G) error {
-	test.t.Helper()
+func (test Test) checkSliceBasic[E, G any](fieldName string, exp []E, got []G) error {
+	test.T.Helper()
 	test.compLength(fieldName, len(got))
 
-	dontCheck := test.dontCheck
+	dontCheck := test.DontCheck
 	if dontCheck != nil && dontCheck[fieldName] {
 		return errIgnoredField
 	}

@@ -14,18 +14,18 @@ func TestGetItem(t *testing.T) {
 	t.Parallel()
 	tests := []Item{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/113",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "item with provided id '113' doesn't exist. max id: 112",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/113",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "item with provided id '113' doesn't exist. max id: 112",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/69",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/69",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":             5,
 					"treasures":            0,
 					"shops":                0,
@@ -75,10 +75,10 @@ func TestGetItem(t *testing.T) {
 			mixes: []int32{6, 12, 26, 49, 62, 64},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/69?rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/69?rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"untyped item":         true,
 					"category":             true,
 					"treasures":            true,
@@ -88,7 +88,7 @@ func TestGetItem(t *testing.T) {
 					"aeon learn abilities": true,
 					"mixes":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters": 4,
 					"quests":   0,
 				},
@@ -114,11 +114,11 @@ func TestGetItem(t *testing.T) {
 			quests: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/26",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/26",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":             5,
 					"treasures":            0,
 					"shops":                0,
@@ -159,11 +159,11 @@ func TestGetItem(t *testing.T) {
 			mixes: []int32{1, 6, 15, 31, 55, 63},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/2",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":             37,
 					"treasures":            26,
 					"shops":                22,
@@ -211,11 +211,11 @@ func TestGetItem(t *testing.T) {
 			mixes:         []int32{34, 40, 51, 56, 61},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/64",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/64",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":             10,
 					"treasures":            0,
 					"shops":                0,
@@ -255,11 +255,11 @@ func TestGetItem(t *testing.T) {
 			mixes: []int32{42, 56, 60, 63, 64},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/64?rel_availability=pre-story",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/64?rel_availability=pre-story",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":             1,
 					"treasures":            0,
 					"shops":                0,
@@ -292,17 +292,17 @@ func TestGetItem(t *testing.T) {
 			mixes: []int32{42, 56, 60, 63, 64},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/55?rel_availability=post",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/55?rel_availability=post",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"untyped item":         true,
 					"category":             true,
 					"aeon learn abilities": true,
 					"auto abilities":       true,
 					"mixes":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters":         3,
 					"treasures":        0,
 					"shops":            0,
@@ -334,17 +334,17 @@ func TestGetItem(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/55?rel_availability=always",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/55?rel_availability=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"untyped item":         true,
 					"category":             true,
 					"aeon learn abilities": true,
 					"auto abilities":       true,
 					"mixes":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters":         2,
 					"treasures":        0,
 					"shops":            0,
@@ -373,17 +373,17 @@ func TestGetItem(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/55?rel_availability=always&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/55?rel_availability=always&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"untyped item":         true,
 					"category":             true,
 					"aeon learn abilities": true,
 					"auto abilities":       true,
 					"mixes":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters":         0,
 					"treasures":        0,
 					"shops":            0,
@@ -401,17 +401,17 @@ func TestGetItem(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/55?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/55?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"untyped item":         true,
 					"category":             true,
 					"aeon learn abilities": true,
 					"auto abilities":       true,
 					"mixes":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters":         2,
 					"treasures":        0,
 					"shops":            0,
@@ -438,17 +438,17 @@ func TestGetItem(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/2?rel_availability=always",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/2?rel_availability=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"untyped item":         true,
 					"category":             true,
 					"aeon learn abilities": true,
 					"auto abilities":       true,
 					"mixes":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters":         22,
 					"treasures":        11,
 					"shops":            4,
@@ -491,17 +491,17 @@ func TestGetItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/2?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/2?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"untyped item":         true,
 					"category":             true,
 					"aeon learn abilities": true,
 					"auto abilities":       true,
 					"mixes":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters":         22,
 					"treasures":        0,
 					"shops":            4,
@@ -538,17 +538,17 @@ func TestGetItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items/2?rel_availability=post",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items/2?rel_availability=post",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"untyped item":         true,
 					"category":             true,
 					"aeon learn abilities": true,
 					"auto abilities":       true,
 					"mixes":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters":         2,
 					"treasures":        1,
 					"shops":            9,
@@ -585,179 +585,179 @@ func TestRetrieveItems(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?methods=shop,treasures",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'treasures' used for parameter 'methods'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?methods=shop,treasures",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid value 'treasures' used for parameter 'methods'. allowed values: 'monster', 'treasure', 'shop', 'quest', 'blitzball'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   112,
-			results: []int32{1, 42, 67, 78, 90, 110, 112},
+			Count:   112,
+			Results: []int32{1, 42, 67, 78, 90, 110, 112},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?category=healing,support&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?category=healing,support&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   31,
-			results: []int32{1, 5, 11, 21, 23, 54, 59, 64, 69},
+			Count:   31,
+			Results: []int32{1, 5, 11, 21, 23, 54, 59, 64, 69},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?category=healing,support&limit=max&flip=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?category=healing,support&limit=max&flip=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   81,
-			results: []int32{17, 29, 41, 49, 73, 86, 106, 112},
+			Count:   81,
+			Results: []int32{17, 29, 41, 49, 73, 86, 106, 112},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?methods=treasure,blitzball&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?methods=treasure,blitzball&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   50,
-			results: []int32{1, 2, 9, 11, 12, 13, 16, 21, 71, 85, 101, 111},
+			Count:   50,
+			Results: []int32{1, 2, 9, 11, 12, 13, 16, 21, 71, 85, 101, 111},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?has_ability=true&related_stat=mp",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?has_ability=true&related_stat=mp",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{65, 67, 68, 69},
+			Count:   4,
+			Results: []int32{65, 67, 68, 69},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?location=17&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?location=17&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   22,
-			results: []int32{1, 7, 21, 34, 76, 102, 111},
+			Count:   22,
+			Results: []int32{1, 7, 21, 34, 76, 102, 111},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?sublocation=13", // ss winno
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?sublocation=13", // ss winno
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{1, 2, 9, 11},
+			Count:   4,
+			Results: []int32{1, 2, 9, 11},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?area=237&limit=max", // omega ruins top
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?area=237&limit=max", // omega ruins top
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   31,
-			results: []int32{4, 23, 60, 89, 110},
+			Count:   31,
+			Results: []int32{4, 23, 60, 89, 110},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=post",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=post",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{23, 45, 67, 68, 76, 79, 88, 99},
+			Count:   12,
+			Results: []int32{23, 45, 67, 68, 76, 79, 88, 99},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=post-story&location=18&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=post-story&location=18&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{3, 5, 43, 45, 58, 61, 83, 96},
+			Count:   10,
+			Results: []int32{3, 5, 43, 45, 58, 61, 83, 96},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   0,
-			results: []int32{},
+			Count:   0,
+			Results: []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=post-game&repeatable=false&pre_airship=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   0,
-			results: []int32{},
+			Count:   0,
+			Results: []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=post-game&repeatable=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=post-game&repeatable=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   112,
-			results: []int32{1, 17, 19, 38, 54, 67, 88, 100, 112},
+			Count:   112,
+			Results: []int32{1, 17, 19, 38, 54, 67, 88, 100, 112},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=post&repeatable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=post&repeatable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   19,
-			results: []int32{23, 45, 67, 68, 76, 88, 90, 95, 105},
+			Count:   19,
+			Results: []int32{23, 45, 67, 68, 76, 88, 90, 95, 105},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=always&repeatable=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=always&repeatable=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   93,
-			results: []int32{1, 7, 21, 37, 56, 69, 80, 104, 112},
+			Count:   93,
+			Results: []int32{1, 7, 21, 37, 56, 69, 80, 104, 112},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=always&repeatable=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=always&repeatable=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{85, 86, 87, 89, 90, 94, 105},
+			Count:   7,
+			Results: []int32{85, 86, 87, 89, 90, 94, 105},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=story&sublocation=26", // macalania woods
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=story&sublocation=26", // macalania woods
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{6, 82},
+			Count:   2,
+			Results: []int32{6, 82},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=post-game&area=23", // besaid - waterfall way (1)
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=post-game&area=23", // besaid - waterfall way (1)
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{1, 9, 30, 31, 32, 38, 41, 70, 71, 72},
+			Count:   10,
+			Results: []int32{1, 9, 30, 31, 32, 38, 41, 70, 71, 72},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=always&methods=shop",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=always&methods=shop",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{1, 2, 9, 14, 20, 36, 100},
+			Count:   14,
+			Results: []int32{1, 2, 9, 14, 20, 36, 100},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?availability=always&methods=shop&location=12",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?availability=always&methods=shop&location=12",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{1, 9, 11, 12, 13, 14},
+			Count:   6,
+			Results: []int32{1, 9, 11, 12, 13, 14},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/items?repeatable=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/items?repeatable=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   112,
-			results: []int32{1, 17, 19, 38, 54, 67, 88, 100, 112},
+			Count:   112,
+			Results: []int32{1, 17, 19, 38, 54, 67, 88, 100, 112},
 		},
 	}
 

@@ -8,7 +8,7 @@ import (
 )
 
 type Monster struct {
-	testGeneral
+	TestGeneral
 	NameVer
 	appliedState     *testAppliedState
 	agility          *testAgilityParams
@@ -32,12 +32,12 @@ type Monster struct {
 	abilities        []int32
 }
 
-func (e Monster) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Monster) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Monster) Compare(test test, got apitypes.Monster) {
-	test.t.Helper()
+func (e Monster) Compare(test Test, got apitypes.Monster) {
+	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
 	test.compare("species", string(e.species), got.Species)
 	test.compare("ctb icon type", string(e.ctbIconType), got.CTBIconType)
@@ -67,8 +67,8 @@ type testMonItems struct {
 	otherItems     []testPossibleItem
 }
 
-func (e testMonItems) Compare(test test, fieldName string, got apitypes.MonsterItems) {
-	test.t.Helper()
+func (e testMonItems) Compare(test Test, fieldName string, got apitypes.MonsterItems) {
+	test.T.Helper()
 	itemMap := e.items
 
 	test.compare("item drop chance", e.itemDropChance, got.DropChance)
@@ -89,8 +89,8 @@ type testMonEquipment struct {
 	armorAbilities    []int32
 }
 
-func (e testMonEquipment) Compare(test test, _ string, got apitypes.MonsterEquipment) {
-	test.t.Helper()
+func (e testMonEquipment) Compare(test Test, _ string, got apitypes.MonsterEquipment) {
+	test.T.Helper()
 	test.compStructs("ability slots", e.abilitySlots, got.AbilitySlots)
 	test.compStructs("attached abilities", e.attachedAbilities, got.AttachedAbilities)
 	test.checkResIDsInSlice("weapon abilities", apilookups.E.AutoAbilities.Endpoint, e.weaponAbilities, got.WeaponAbilities)

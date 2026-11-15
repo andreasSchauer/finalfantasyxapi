@@ -13,18 +13,18 @@ func TestGetSphere(t *testing.T) {
 	t.Parallel()
 	tests := []Sphere{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/31",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sphere with provided id '31' doesn't exist. max id: 30",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres/31",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "sphere with provided id '31' doesn't exist. max id: 30",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/4?rel_availability=pre-story&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres/4?rel_availability=pre-story&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         10,
 					"treasures":        0,
 					"shops":            0,
@@ -55,11 +55,11 @@ func TestGetSphere(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/16",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres/16",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         3,
 					"treasures":        4,
 					"shops":            0,
@@ -104,11 +104,11 @@ func TestGetSphere(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/16?rel_availability=post-game&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres/16?rel_availability=post-game&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         1,
 					"treasures":        3,
 					"shops":            0,
@@ -141,11 +141,11 @@ func TestGetSphere(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/26?rel_availability=post&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres/26?rel_availability=post&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         0,
 					"treasures":        0,
 					"shops":            1,
@@ -163,11 +163,11 @@ func TestGetSphere(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/26",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres/26",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         0,
 					"treasures":        0,
 					"shops":            1,
@@ -185,11 +185,11 @@ func TestGetSphere(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/2?rel_availability=always&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres/2?rel_availability=always&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         1,
 					"treasures":        1,
 					"shops":            0,
@@ -216,11 +216,11 @@ func TestGetSphere(t *testing.T) {
 			blitzballPrizes: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres/2?rel_availability=post&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres/2?rel_availability=post&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         10,
 					"treasures":        0,
 					"shops":            0,
@@ -261,108 +261,108 @@ func TestRetrieveSpheres(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   30,
-			results: []int32{1, 13, 15, 19, 23, 27, 30},
+			Count:   30,
+			Results: []int32{1, 13, 15, 19, 23, 27, 30},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?color=yellow&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?color=yellow&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{6, 7, 8, 9, 10, 11},
+			Count:   6,
+			Results: []int32{6, 7, 8, 9, 10, 11},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=always&location=12&repeatable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=always&location=12&repeatable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{1, 2, 3},
+			Count:   3,
+			Results: []int32{1, 2, 3},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=post&repeatable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=post&repeatable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{7, 10, 16, 21, 24, 30},
+			Count:   14,
+			Results: []int32{7, 10, 16, 21, 24, 30},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=post-game&repeatable=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=post-game&repeatable=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   30,
-			results: []int32{1, 5, 10, 20, 25, 29, 30},
+			Count:   30,
+			Results: []int32{1, 5, 10, 20, 25, 29, 30},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=always&repeatable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=always&repeatable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   16,
-			results: []int32{1, 5, 11, 15, 27, 29},
+			Count:   16,
+			Results: []int32{1, 5, 11, 15, 27, 29},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=always&repeatable=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=always&repeatable=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{16, 17, 18, 20, 21, 25},
+			Count:   6,
+			Results: []int32{16, 17, 18, 20, 21, 25},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=always&repeatable=false&methods=treasure",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=always&repeatable=false&methods=treasure",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   15,
-			results: []int32{2, 4, 12, 15, 21, 25, 29},
+			Count:   15,
+			Results: []int32{2, 4, 12, 15, 21, 25, 29},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=always&repeatable=false&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=always&repeatable=false&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{16, 17},
+			Count:   2,
+			Results: []int32{16, 17},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=always&repeatable=false&methods=monster,treasure",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=always&repeatable=false&methods=monster,treasure",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{16, 17, 20, 21, 25, 29},
+			Count:   6,
+			Results: []int32{16, 17, 20, 21, 25, 29},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=story&sublocation=28", // macalania
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=story&sublocation=28", // macalania
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{4, 7, 10},
+			Count:   3,
+			Results: []int32{4, 7, 10},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=story&repeatable=true&sublocation=28", // macalania
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=story&repeatable=true&sublocation=28", // macalania
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   0,
-			results: []int32{},
+			Count:   0,
+			Results: []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/spheres?availability=post&repeatable=true&area=203", // calm lands - arena
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/spheres?availability=post&repeatable=true&area=203", // calm lands - arena
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   17,
-			results: []int32{13, 15, 17, 19, 22, 25, 26, 30},
+			Count:   17,
+			Results: []int32{13, 15, 17, 19, 22, 25, 26, 30},
 		},
 	}
 

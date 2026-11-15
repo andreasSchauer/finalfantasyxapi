@@ -6,19 +6,19 @@ import (
 )
 
 type Location struct {
-	testGeneral
+	TestGeneral
 	Unique
 	connectedLocations []int32
 	sublocations       []int32
 	LocRel
 }
 
-func (e Location) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Location) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Location) Compare(test test, got apitypes.Location) {
-	test.t.Helper()
+func (e Location) Compare(test Test, got apitypes.Location) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compTestStructPtrs("music", e.music, got.Music)
 	test.checkResIDsInSlice("connected locations", apilookups.E.Locations.Endpoint, e.connectedLocations, got.ConnectedLocations)

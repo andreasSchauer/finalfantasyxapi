@@ -6,7 +6,7 @@ import (
 )
 
 type CelestialWeapon struct {
-	testGeneral
+	TestGeneral
 	Unique
 	equipment     int32
 	autoAbilities []int32
@@ -17,12 +17,12 @@ type CelestialWeapon struct {
 	sigilQuest    int32
 }
 
-func (e CelestialWeapon) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e CelestialWeapon) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e CelestialWeapon) Compare(test test, got apitypes.CelestialWeapon) {
-	test.t.Helper()
+func (e CelestialWeapon) Compare(test Test, got apitypes.CelestialWeapon) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("equipment", apilookups.E.Equipment.Endpoint, e.equipment, got.Equipment)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)

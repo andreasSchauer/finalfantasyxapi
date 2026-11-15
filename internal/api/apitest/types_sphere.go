@@ -6,7 +6,7 @@ import (
 )
 
 type Sphere struct {
-	testGeneral
+	TestGeneral
 	Unique
 	item            int32
 	createdNode     *apitypes.CreatedNode
@@ -17,12 +17,12 @@ type Sphere struct {
 	blitzballPrizes map[int32]int32
 }
 
-func (e Sphere) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Sphere) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Sphere) Compare(test test, got apitypes.Sphere) {
-	test.t.Helper()
+func (e Sphere) Compare(test Test, got apitypes.Sphere) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("item", apilookups.E.Items.Endpoint, e.item, got.Item)
 	test.compStructPtrs("created node", e.createdNode, got.CreatedNode)

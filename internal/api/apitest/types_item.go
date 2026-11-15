@@ -7,7 +7,7 @@ import (
 )
 
 type Item struct {
-	testGeneral
+	TestGeneral
 	Unique
 	untypedItem        int32
 	category           database.ItemCategory
@@ -21,12 +21,12 @@ type Item struct {
 	mixes              []int32
 }
 
-func (e Item) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Item) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Item) Compare(test test, got apitypes.Item) {
-	test.t.Helper()
+func (e Item) Compare(test Test, got apitypes.Item) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, e.untypedItem, got.UntypedItem)
 	test.compare("category", string(e.category), got.Category)
@@ -57,8 +57,8 @@ func (e testMonItemAmts) GetIndex() int {
 	return e.index
 }
 
-func (e testMonItemAmts) Compare(test test, fieldName string, got apitypes.MonItemAmts) {
-	test.t.Helper()
+func (e testMonItemAmts) Compare(test Test, fieldName string, got apitypes.MonItemAmts) {
+	test.T.Helper()
 	test.compIDAPIResource(fieldName+" - monster", apilookups.E.Monsters.Endpoint, e.monster, got.Monster)
 	test.compare(fieldName+" - steal common", e.stealCommon, got.StealCommon)
 	test.compare(fieldName+" - steal rare", e.stealRare, got.StealRare)

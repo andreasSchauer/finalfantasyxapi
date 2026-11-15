@@ -6,7 +6,7 @@ import (
 )
 
 type Overdrive struct {
-	testGeneral
+	TestGeneral
 	Unique
 	rank               *int32
 	countdownInSec     *int32
@@ -15,12 +15,12 @@ type Overdrive struct {
 	overdriveAbilities []int32
 }
 
-func (e Overdrive) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Overdrive) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Overdrive) Compare(test test, got apitypes.Overdrive) {
-	test.t.Helper()
+func (e Overdrive) Compare(test Test, got apitypes.Overdrive) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("rank", e.rank, got.Rank)
 	test.compare("countdown in sec", e.countdownInSec, got.CountdownInSec)

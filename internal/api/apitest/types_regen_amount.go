@@ -14,8 +14,8 @@ func (e testRegenAmount) GetIndex() int {
 	return e.index
 }
 
-func (e testRegenAmount) Compare(test test, fieldName string, got apitypes.RegenAmount) {
-	test.t.Helper()
+func (e testRegenAmount) Compare(test Test, fieldName string, got apitypes.RegenAmount) {
+	test.T.Helper()
 	test.compare(fieldName+" - ticks", e.ticks, got.Ticks)
 	test.compare(fieldName+" - healed hp", e.healedHP, got.HealedHP)
 }

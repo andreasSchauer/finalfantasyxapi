@@ -6,18 +6,18 @@ import (
 )
 
 type RonsoRage struct {
-	testGeneral
+	TestGeneral
 	Unique
 	overdrive int32
 	monsters  []int32
 }
 
-func (e RonsoRage) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e RonsoRage) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e RonsoRage) Compare(test test, got apitypes.RonsoRage) {
-	test.t.Helper()
+func (e RonsoRage) Compare(test Test, got apitypes.RonsoRage) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, e.overdrive, got.Overdrive)
 	test.checkResIDsInSlice("monsters", apilookups.E.Monsters.Endpoint, e.monsters, got.Monsters)

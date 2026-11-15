@@ -17,8 +17,8 @@ type LocRel struct {
 	music      *testLocMusic
 }
 
-func (e LocRel) Compare(test test, got apitypes.LocRel) {
-	test.t.Helper()
+func (e LocRel) Compare(test Test, got apitypes.LocRel) {
+	test.T.Helper()
 	test.compTestStructPtrs("music", e.music, got.Music)
 	test.checkResIDsInSlice("characters", apilookups.E.Characters.Endpoint, e.characters, got.Characters)
 	test.checkResIDsInSlice("aeons", apilookups.E.Aeons.Endpoint, e.aeons, got.Aeons)
@@ -37,8 +37,8 @@ type testLocMusic struct {
 	bossMusic []int32
 }
 
-func (e testLocMusic) Compare(test test, _ string, got apitypes.LocBasedMusic) {
-	test.t.Helper()
+func (e testLocMusic) Compare(test Test, _ string, got apitypes.LocBasedMusic) {
+	test.T.Helper()
 	songsEndpoint := apilookups.E.Songs.Endpoint
 
 	test.checkResIDsInSlice("bg music", songsEndpoint, e.bgMusic, got.BackgroundMusic)

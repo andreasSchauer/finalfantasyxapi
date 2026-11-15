@@ -7,7 +7,7 @@ import (
 )
 
 type KeyItem struct {
-	testGeneral
+	TestGeneral
 	Unique
 	untypedItem     int32
 	category        database.KeyItemCategory
@@ -18,12 +18,12 @@ type KeyItem struct {
 	quests          []int32
 }
 
-func (e KeyItem) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e KeyItem) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e KeyItem) Compare(test test, got apitypes.KeyItem) {
-	test.t.Helper()
+func (e KeyItem) Compare(test Test, got apitypes.KeyItem) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped item", apilookups.E.AllItems.Endpoint, e.untypedItem, got.UntypedItem)
 	test.compare("category", string(e.category), got.Category)

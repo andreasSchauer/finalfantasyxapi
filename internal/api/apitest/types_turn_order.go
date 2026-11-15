@@ -5,17 +5,17 @@ import (
 )
 
 type TurnOrderResponse struct {
-	testGeneral
+	TestGeneral
 	servicetypes.TurnOrderResponse
 	testTurnOrder []testBattleTurn
 }
 
-func (e TurnOrderResponse) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e TurnOrderResponse) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e TurnOrderResponse) Compare(test test, got servicetypes.TurnOrderResponse) {
-	test.t.Helper()
+func (e TurnOrderResponse) Compare(test Test, got servicetypes.TurnOrderResponse) {
+	test.T.Helper()
 	test.compare("turns amt", e.TurnsAmt, got.TurnsAmt)
 	test.compare("ign first turn", e.IgnFirstTurn, got.IgnFirstTurn)
 	test.compare("ign immunities", e.IgnImmunities, got.IgnImmunities)
@@ -38,8 +38,8 @@ func (e testBattleTurn) GetIndex() int {
 	return e.index
 }
 
-func (e testBattleTurn) Compare(test test, fieldName string, got servicetypes.BattleTurn) {
-	test.t.Helper()
+func (e testBattleTurn) Compare(test Test, fieldName string, got servicetypes.BattleTurn) {
+	test.T.Helper()
 	test.compare(fieldName+" turn", e.turn, got.Turn)
 	test.compare(fieldName+" current tick", e.currentTick, got.CurrentTick)
 	test.compare(fieldName+" name", e.name, got.Name)

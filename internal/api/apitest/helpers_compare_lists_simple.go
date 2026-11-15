@@ -21,30 +21,30 @@ func (l gotSimpleResourceList[T, S]) GetResults() []S {
 	return l.Results
 }
 
-func compareSimpleResourceLists[T apiresource.APIResource, S apiresource.SimpleResource](test test, endpoint ts.EndpointName, expList ListIDs, gotList gotSimpleResourceList[T, S]) {
-	test.t.Helper()
+func compareSimpleResourceLists[T apiresource.APIResource, S apiresource.SimpleResource](test Test, endpoint ts.EndpointName, expList ListIDs, gotList gotSimpleResourceList[T, S]) {
+	test.T.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
 
 	gotParentURL := gotList.ParentResource.GetURL()
-	test.compPageURL("parent resource", expList.parentResource, &gotParentURL)
+	test.compPageURL("parent resource", expList.ParentResource, &gotParentURL)
 
-	test.checkSubResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
+	test.checkSubResIDsInSlice("results", endpoint, expList.Results, gotList.GetResults())
 }
 
-func (test test) checkSubResIDsInSlice[T apiresource.SimpleResource](fieldName string, endpoint ts.EndpointName, expIDs []int32, gotRes []T) {
-	test.t.Helper()
+func (test Test) checkSubResIDsInSlice[T apiresource.SimpleResource](fieldName string, endpoint ts.EndpointName, expIDs []int32, gotRes []T) {
+	test.T.Helper()
 	test.checkSliceBasic(fieldName, expIDs, gotRes)
 
 	gotMap := handlerinput.GetSimpleResourceURLMap(gotRes)
 	if len(gotMap) != len(gotRes) {
-		test.t.Errorf("there appear to be duplicates in '%s'.\n\n", fieldName)
+		test.T.Errorf("there appear to be duplicates in '%s'.\n\n", fieldName)
 	}
 
 	for _, expID := range expIDs {
 		expURL := ah.CreateResourceURL(endpoint, expID)
 		_, ok := gotMap[expURL]
 		if !ok {
-			test.t.Errorf("'%s' doesn't contain all wanted resources. missing '%s'\n\n", fieldName, ah.CompleteTestPath(endpoint, expID))
+			test.T.Errorf("'%s' doesn't contain all wanted resources. missing '%s'\n\n", fieldName, ah.CompleteTestPath(endpoint, expID))
 		}
 	}
 }

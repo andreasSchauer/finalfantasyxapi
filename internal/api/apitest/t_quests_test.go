@@ -13,52 +13,52 @@ func TestGetQuest(t *testing.T) {
 	t.Parallel()
 	tests := []Quest{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests/99",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "quest with provided id '99' doesn't exist. max id: 98",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests/99",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "quest with provided id '99' doesn't exist. max id: 98",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests/1",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths:     map[string]int{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests/1",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths:     map[string]int{},
 			},
 			Unique: Unique{
-				id:   1,
-				name: "monster arena",
+				ID:   1,
+				Name: "monster arena",
 			},
 			questType:  database.QuestTypeSidequest,
 			typedQuest: "/sidequests/1",
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests/47",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths:     map[string]int{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests/47",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths:     map[string]int{},
 			},
 			Unique: Unique{
-				id:   47,
-				name: "valefor - first win",
+				ID:   47,
+				Name: "valefor - first win",
 			},
 			questType:  database.QuestTypeSubquest,
 			typedQuest: "/subquests/37",
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests/80",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests/80",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"character classes": 2,
 				},
 			},
 			Unique: Unique{
-				id:   80,
-				name: "6 or 7 guardian spheres",
+				ID:   80,
+				Name: "6 or 7 guardian spheres",
 			},
 			questType:  database.QuestTypeSubquest,
 			typedQuest: "/subquests/70",
@@ -72,68 +72,68 @@ func TestRetrieveQuests(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   98,
-			results: []int32{1, 3, 17, 18, 25, 37, 44, 58, 65, 77, 83, 91, 98},
+			Count:   98,
+			Results: []int32{1, 3, 17, 18, 25, 37, 44, 58, 65, 77, 83, 91, 98},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests?type=sidequest",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests?type=sidequest",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			Count:   10,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests?repeatable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests?repeatable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{48, 54, 60, 70, 76},
+			Count:   12,
+			Results: []int32{48, 54, 60, 70, 76},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests?limit=max&availability=post",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests?limit=max&availability=post",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   44,
-			results: []int32{1, 6, 11, 24, 34, 46, 62, 80, 87},
+			Count:   44,
+			Results: []int32{1, 6, 11, 24, 34, 46, 62, 80, 87},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests?availability=post&repeatable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests?availability=post&repeatable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{58, 62},
+			Count:   2,
+			Results: []int32{58, 62},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests?availability=always&repeatable=false&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests?availability=always&repeatable=false&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   43,
-			results: []int32{3, 10, 38, 59, 77, 92, 98},
+			Count:   43,
+			Results: []int32{3, 10, 38, 59, 77, 92, 98},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests?availability=pre-story",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests?availability=pre-story",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{97},
+			Count:   1,
+			Results: []int32{97},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/quests?availability=always&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/quests?availability=always&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   53,
-			results: []int32{3, 20, 55, 68, 82, 94, 98},
+			Count:   53,
+			Results: []int32{3, 20, 55, 68, 82, 94, 98},
 		},
 	}
 

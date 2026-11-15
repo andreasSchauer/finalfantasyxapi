@@ -6,7 +6,7 @@ import (
 )
 
 type AeonCommand struct {
-	testGeneral
+	TestGeneral
 	Unique
 	user              int32
 	topmenu           *int32
@@ -14,12 +14,12 @@ type AeonCommand struct {
 	possibleAbilities []PossibleAbilityList
 }
 
-func (e AeonCommand) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e AeonCommand) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e AeonCommand) Compare(test test, got apitypes.AeonCommand) {
-	test.t.Helper()
+func (e AeonCommand) Compare(test Test, got apitypes.AeonCommand) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("user", apilookups.E.CharacterClasses.Endpoint, e.user, got.User)
 	test.compIDAPIResourcePtrs("topmenu", apilookups.E.Topmenus.Endpoint, e.topmenu, got.Topmenu)
@@ -32,8 +32,8 @@ type PossibleAbilityList struct {
 	abilities []int32
 }
 
-func (e PossibleAbilityList) Compare(test test, fieldName string, got apitypes.PossibleAbilityList) {
-	test.t.Helper()
+func (e PossibleAbilityList) Compare(test Test, fieldName string, got apitypes.PossibleAbilityList) {
+	test.T.Helper()
 	test.compIDAPIResource(fieldName+" - user", apilookups.E.CharacterClasses.Endpoint, e.user, got.User)
 	test.checkResIDsInSlice(fieldName+" - abilities", apilookups.E.Abilities.Endpoint, e.abilities, got.Abilities)
 }

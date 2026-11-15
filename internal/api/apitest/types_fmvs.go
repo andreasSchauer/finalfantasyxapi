@@ -6,18 +6,18 @@ import (
 )
 
 type FMV struct {
-	testGeneral
+	TestGeneral
 	Unique
 	area int32
 	song *int32
 }
 
-func (e FMV) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e FMV) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e FMV) Compare(test test, got apitypes.FMV) {
-	test.t.Helper()
+func (e FMV) Compare(test Test, got apitypes.FMV) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
 	test.compIDAPIResourcePtrs("song", apilookups.E.Songs.Endpoint, e.song, got.Song)

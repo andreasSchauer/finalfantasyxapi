@@ -13,17 +13,17 @@ func TestGetAeonCommand(t *testing.T) {
 	t.Parallel()
 	tests := []AeonCommand{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeon-commands/10",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "aeon command with provided id '10' doesn't exist. max id: 9",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeon-commands/10",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "aeon command with provided id '10' doesn't exist. max id: 9",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeon-commands/1",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeon-commands/1",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"possible abilities":               1,
 					"possible abilities 0 - abilities": 6,
 				},
@@ -40,10 +40,10 @@ func TestGetAeonCommand(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeon-commands/2",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeon-commands/2",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"possible abilities":               3,
 					"possible abilities 0 - abilities": 10,
 					"possible abilities 1 - abilities": 3,
@@ -70,10 +70,10 @@ func TestGetAeonCommand(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeon-commands/7",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeon-commands/7",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"possible abilities":               1,
 					"possible abilities 0 - abilities": 10,
 				},
@@ -98,12 +98,12 @@ func TestRetrieveAeonCommands(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeon-commands",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeon-commands",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   9,
-			results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9},
+			Count:   9,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9},
 		},
 	}
 

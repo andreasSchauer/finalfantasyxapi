@@ -6,7 +6,7 @@ import (
 )
 
 type Modifier struct {
-	testGeneral
+	TestGeneral
 	Unique
 	autoAbilities      []int32
 	playerAbilities    []int32
@@ -18,12 +18,12 @@ type Modifier struct {
 	properties         []int32
 }
 
-func (e Modifier) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Modifier) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Modifier) Compare(test test, got apitypes.Modifier) {
-	test.t.Helper()
+func (e Modifier) Compare(test Test, got apitypes.Modifier) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)
 	test.checkResIDsInSlice("player abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)

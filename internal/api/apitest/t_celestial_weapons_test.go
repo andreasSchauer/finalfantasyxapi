@@ -12,18 +12,18 @@ func TestGetCelestialWeapon(t *testing.T) {
 	t.Parallel()
 	tests := []CelestialWeapon{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/celestial-weapons/8",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "celestial weapon with provided id '8' doesn't exist. max id: 7",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/celestial-weapons/8",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "celestial weapon with provided id '8' doesn't exist. max id: 7",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/celestial-weapons/3",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/celestial-weapons/3",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities": 4,
 				},
 			},
@@ -37,11 +37,11 @@ func TestGetCelestialWeapon(t *testing.T) {
 			sigilQuest:    98,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/celestial-weapons/6",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/celestial-weapons/6",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities": 4,
 				},
 			},
@@ -63,20 +63,20 @@ func TestRetrieveCelestialWeapons(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/celestial-weapons",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/celestial-weapons",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{1, 2, 3, 4, 5, 6, 7},
+			Count:   7,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/celestial-weapons?formula=hp-high",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/celestial-weapons?formula=hp-high",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{1, 3, 5, 7},
+			Count:   4,
+			Results: []int32{1, 3, 5, 7},
 		},
 	}
 

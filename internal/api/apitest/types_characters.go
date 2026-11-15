@@ -6,7 +6,7 @@ import (
 )
 
 type Character struct {
-	testGeneral
+	TestGeneral
 	Unique
 	untypedUnit            int32
 	area                   int32
@@ -24,12 +24,12 @@ type Character struct {
 	overdriveModes         map[string]int32
 }
 
-func (e Character) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Character) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Character) Compare(test test, got apitypes.Character) {
-	test.t.Helper()
+func (e Character) Compare(test Test, got apitypes.Character) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped unit", apilookups.E.PlayerUnits.Endpoint, e.untypedUnit, got.UntypedUnit)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
@@ -51,7 +51,7 @@ type SphereGrid struct {
 	playerAbilities []int32
 }
 
-func (e SphereGrid) Compare(test test, fieldName string, got apitypes.SphereGrid) {
-	test.t.Helper()
+func (e SphereGrid) Compare(test Test, fieldName string, got apitypes.SphereGrid) {
+	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" abilities", apilookups.E.PlayerAbilities.Endpoint, e.playerAbilities, got.PlayerAbilities)
 }

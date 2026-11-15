@@ -6,7 +6,7 @@ import (
 )
 
 type Sublocation struct {
-	testGeneral
+	TestGeneral
 	Unique
 	parentLocation        int32
 	connectedSublocations []int32
@@ -14,12 +14,12 @@ type Sublocation struct {
 	LocRel
 }
 
-func (e Sublocation) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Sublocation) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Sublocation) Compare(test test, got apitypes.Sublocation) {
-	test.t.Helper()
+func (e Sublocation) Compare(test Test, got apitypes.Sublocation) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("location", apilookups.E.Locations.Endpoint, e.parentLocation, got.ParentLocation)
 	test.compTestStructPtrs("music", e.music, got.Music)

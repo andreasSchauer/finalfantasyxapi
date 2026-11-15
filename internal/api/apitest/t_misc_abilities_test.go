@@ -14,53 +14,53 @@ func TestGetMiscAbility(t *testing.T) {
 	t.Parallel()
 	tests := []MiscAbility{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/25",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "misc ability with provided id '25' doesn't exist. max id: 24",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/25",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "misc ability with provided id '25' doesn't exist. max id: 24",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/2?ability_user=wakka",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid input for parameter 'ability_user': player unit 'wakka' can't learn misc ability 'attack - 2'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/2?ability_user=wakka",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid input for parameter 'ability_user': player unit 'wakka' can't learn misc ability 'attack - 2'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/2?ability_user=we",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "unknown player unit 'we' used for parameter 'ability_user'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/2?ability_user=we",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "unknown player unit 'we' used for parameter 'ability_user'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/2?bomb_wpn=true",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid usage of parameter 'bomb_wpn'. when using parameter 'bomb_wpn', the following parameter(s) must be present: 'ability_user'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/2?bomb_wpn=true",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid usage of parameter 'bomb_wpn'. when using parameter 'bomb_wpn', the following parameter(s) must be present: 'ability_user'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/1?ability_user=8&celestial_weapon=true",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "character seymour doesn't have a celestial weapon",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/1?ability_user=8&celestial_weapon=true",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "character seymour doesn't have a celestial weapon",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/1?ability_user=9&celestial_weapon=true",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "aeons don't use celestial weapons",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/1?ability_user=9&celestial_weapon=true",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "aeons don't use celestial weapons",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/1?ability_user=wakka&celestial_weapon=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/1?ability_user=wakka&celestial_weapon=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 1,
 				},
 			},
@@ -110,11 +110,11 @@ func TestGetMiscAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/1?ability_user=3&bomb_wpn=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/1?ability_user=3&bomb_wpn=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 1,
 				},
 			},
@@ -164,11 +164,11 @@ func TestGetMiscAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/2?ability_user=16&bomb_wpn=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/2?ability_user=16&bomb_wpn=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 1,
 				},
 			},
@@ -218,11 +218,11 @@ func TestGetMiscAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/10",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/10",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 0,
 				},
 			},
@@ -237,11 +237,11 @@ func TestGetMiscAbility(t *testing.T) {
 			battleInteractions: []BattleInteraction{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/4",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/4",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 0,
 				},
 			},
@@ -264,28 +264,28 @@ func TestGetMultipleMiscAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/attack",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/attack",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   2,
-			results: []int32{1, 2},
+			Count:   2,
+			Results: []int32{1, 2},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/switch",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/switch",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   7,
-			results: []int32{10, 11, 12, 13, 14, 15, 16},
+			Count:   7,
+			Results: []int32{10, 11, 12, 13, 14, 15, 16},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities/summon",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities/summon",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   8,
-			results: []int32{17, 18, 19, 20, 21, 22, 23, 24},
+			Count:   8,
+			Results: []int32{17, 18, 19, 20, 21, 22, 23, 24},
 		},
 	}
 
@@ -296,44 +296,44 @@ func TestRetrieveMiscAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    24,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 8, 13, 17, 18, 24},
+			Count:    24,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 8, 13, 17, 18, 24},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities?rank=1",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities?rank=1",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    3,
-			previous: nil,
-			next:     nil,
-			results:  []int32{4, 5, 6},
+			Count:    3,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{4, 5, 6},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities?help_bar=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities?help_bar=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    3,
-			previous: nil,
-			next:     nil,
-			results:  []int32{7, 8, 9},
+			Count:    3,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{7, 8, 9},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/misc-abilities?user=characters&copycat=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/misc-abilities?user=characters&copycat=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    3,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 3, 6},
+			Count:    3,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 3, 6},
 		},
 	}
 

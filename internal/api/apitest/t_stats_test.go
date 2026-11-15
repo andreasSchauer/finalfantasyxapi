@@ -12,18 +12,18 @@ func TestGetStat(t *testing.T) {
 	t.Parallel()
 	tests := []Stat{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/stats/11",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "stat with provided id '11' doesn't exist. max id: 10",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/stats/11",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "stat with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/stats/2?changes_only=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/stats/2?changes_only=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"spheres":             5,
 					"auto-abilities":      4,
 					"player abilities":    0,
@@ -43,11 +43,11 @@ func TestGetStat(t *testing.T) {
 			statusConditions:   []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/stats/3",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/stats/3",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"spheres":             5,
 					"auto-abilities":      5,
 					"player abilities":    2,
@@ -69,10 +69,10 @@ func TestGetStat(t *testing.T) {
 			properties:         []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/stats/4",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/stats/4",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"spheres":             true,
 					"auto-abilities":      true,
 					"player abilities":    true,
@@ -81,7 +81,7 @@ func TestGetStat(t *testing.T) {
 					"trigger commands":    true,
 					"status conditions":   true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"properties": 2,
 				},
 			},
@@ -97,12 +97,12 @@ func TestRetrieveStats(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/stats",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/stats",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			Count:   10,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		},
 	}
 

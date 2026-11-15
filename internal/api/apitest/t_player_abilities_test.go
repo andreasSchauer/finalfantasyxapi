@@ -15,18 +15,18 @@ func TestGetPlayerAbility(t *testing.T) {
 	t.Parallel()
 	tests := []PlayerAbility{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/103",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "player ability with provided id '103' doesn't exist. max id: 102",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities/103",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "player ability with provided id '103' doesn't exist. max id: 102",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/10?ability_user=shiva",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities/10?ability_user=shiva",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            0,
 					"battle interactions": 1,
 				},
@@ -82,11 +82,11 @@ func TestGetPlayerAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/10?ability_user=auron&celestial_weapon=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities/10?ability_user=auron&celestial_weapon=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            0,
 					"battle interactions": 1,
 				},
@@ -142,11 +142,11 @@ func TestGetPlayerAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/24",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities/24",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 0,
 				},
 			},
@@ -164,11 +164,11 @@ func TestGetPlayerAbility(t *testing.T) {
 			battleInteractions: []BattleInteraction{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/27",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities/27",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":                           0,
 					"battle interactions":                1,
 					"battle interactions 0 stat changes": 1,
@@ -224,11 +224,11 @@ func TestGetPlayerAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/47",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities/47",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":            7,
 					"battle interactions": 1,
 				},
@@ -290,20 +290,20 @@ func TestGetMultiplePlayerAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/wakizashi",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities/wakizashi",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   2,
-			results: []int32{96, 97},
+			Count:   2,
+			Results: []int32{96, 97},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities/auto-life",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities/auto-life",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   2,
-			results: []int32{66, 67},
+			Count:   2,
+			Results: []int32{66, 67},
 		},
 	}
 
@@ -314,132 +314,132 @@ func TestRetrievePlayerAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   102,
-			results: []int32{1, 22, 57, 78, 99, 102},
+			Count:   102,
+			Results: []int32{1, 22, 57, 78, 99, 102},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?category=2&help_bar=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?category=2&help_bar=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    4,
-			previous: nil,
-			next:     nil,
-			results:  []int32{24, 40, 42, 43},
+			Count:    4,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{24, 40, 42, 43},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?related_stat=3&darkable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?related_stat=3&darkable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    1,
-			previous: nil,
-			next:     nil,
-			results:  []int32{11},
+			Count:    1,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{11},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?copycat=true&std_sg=3&user_atk=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?copycat=true&std_sg=3&user_atk=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    3,
-			previous: nil,
-			next:     nil,
-			results:  []int32{28, 84, 85},
+			Count:    3,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{28, 84, 85},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?status_inflict=none&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?status_inflict=none&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    54,
-			previous: nil,
-			next:     nil,
-			results:  []int32{20, 24, 28, 36, 39, 43, 53, 76, 86, 96, 102},
+			Count:    54,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{20, 24, 28, 36, 39, 43, 53, 76, 86, 96, 102},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?silenceable=true&reflectable=false&user=3",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?silenceable=true&reflectable=false&user=3",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    2,
-			previous: nil,
-			next:     nil,
-			results:  []int32{82, 87},
+			Count:    2,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{82, 87},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?mp=20&exp_sg=2",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?mp=20&exp_sg=2",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    1,
-			previous: nil,
-			next:     nil,
-			results:  []int32{47},
+			Count:    1,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{47},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?mp_min=20&learn_item=59",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?mp_min=20&learn_item=59",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    1,
-			previous: nil,
-			next:     nil,
-			results:  []int32{64},
+			Count:    1,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{64},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?mp_max=10&element=3",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?mp_max=10&element=3",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    2,
-			previous: nil,
-			next:     nil,
-			results:  []int32{71, 75},
+			Count:    2,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{71, 75},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?element=fire,ice",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?element=fire,ice",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    6,
-			previous: nil,
-			next:     nil,
-			results:  []int32{69, 72, 73, 76, 77, 80},
+			Count:    6,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{69, 72, 73, 76, 77, 80},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?element=none&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?element=none&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    89,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 12, 24, 34, 43, 55, 67, 95, 102},
+			Count:    89,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 12, 24, 34, 43, 55, 67, 95, 102},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?delay=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?delay=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    3,
-			previous: nil,
-			next:     nil,
-			results:  []int32{9, 10, 88},
+			Count:    3,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{9, 10, 88},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/player-abilities?outside_battle=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/player-abilities?outside_battle=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    3,
-			previous: nil,
-			next:     nil,
-			results:  []int32{45, 46, 47},
+			Count:    3,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{45, 46, 47},
 		},
 	}
 
@@ -450,44 +450,44 @@ func TestSubsectionPlayerAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/2/default-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/2/default-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacters,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/characters/2"),
-			results:        []int32{45, 53},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/characters/2"),
+			Results:        []int32{45, 53},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/2/std-sg-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/2/std-sg-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacters,
 			},
-			count:          18,
-			parentResource: h.GetStrPtr("/characters/2"),
-			results:        []int32{26, 42, 47, 53, 60, 62, 66},
+			Count:          18,
+			ParentResource: h.GetStrPtr("/characters/2"),
+			Results:        []int32{26, 42, 47, 53, 60, 62, 66},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/2/exp-sg-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/2/exp-sg-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacters,
 			},
-			count:          19,
-			parentResource: h.GetStrPtr("/characters/2"),
-			results:        []int32{14, 45, 49, 54, 60, 64, 65},
+			Count:          19,
+			ParentResource: h.GetStrPtr("/characters/2"),
+			Results:        []int32{14, 45, 49, 54, 60, 64, 65},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/1/default-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAeons,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/1/default-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAeons,
 			},
-			count:          5,
-			parentResource: h.GetStrPtr("/aeons/1"),
-			results:        []int32{69, 70, 71, 72, 88},
+			Count:          5,
+			ParentResource: h.GetStrPtr("/aeons/1"),
+			Results:        []int32{69, 70, 71, 72, 88},
 		},
 	}
 

@@ -6,18 +6,18 @@ import (
 )
 
 type Quest struct {
-	testGeneral
+	TestGeneral
 	Unique
 	questType  database.QuestType
 	typedQuest string
 }
 
-func (e Quest) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Quest) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Quest) Compare(test test, got apitypes.Quest) {
-	test.t.Helper()
+func (e Quest) Compare(test Test, got apitypes.Quest) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("quest type", string(e.questType), string(got.Type))
 	test.compPathAPIResource("typed quest", e.typedQuest, got.TypedQuest)

@@ -6,7 +6,7 @@ import (
 )
 
 type Equipment struct {
-	testGeneral
+	TestGeneral
 	Unique
 	equipmentTable          int32
 	priority                *int32
@@ -18,12 +18,12 @@ type Equipment struct {
 	shops                   []int32
 }
 
-func (e Equipment) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Equipment) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Equipment) Compare(test test, got apitypes.EquipmentName) {
-	test.t.Helper()
+func (e Equipment) Compare(test Test, got apitypes.EquipmentName) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("equipment table", apilookups.E.EquipmentTables.Endpoint, e.equipmentTable, got.EquipmentTable)
 	test.compare("priority", e.priority, got.Priority)

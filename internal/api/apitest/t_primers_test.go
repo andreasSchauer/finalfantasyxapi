@@ -12,18 +12,18 @@ func TestGetPrimer(t *testing.T) {
 	t.Parallel()
 	tests := []Primer{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/primers/27",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "primer with provided id '27' doesn't exist. max id: 26",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/primers/27",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "primer with provided id '27' doesn't exist. max id: 26",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/primers/1",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/primers/1",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"areas":     2,
 					"treasures": 2,
 				},
@@ -34,11 +34,11 @@ func TestGetPrimer(t *testing.T) {
 			treasures: []int32{13, 215},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/primers/22",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/primers/22",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"areas":     1,
 					"treasures": 1,
 				},
@@ -57,44 +57,44 @@ func TestRetrievePrimers(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/primers?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/primers?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   26,
-			results: []int32{1, 5, 17, 20, 26},
+			Count:   26,
+			Results: []int32{1, 5, 17, 20, 26},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/primers?availability=pre-story",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/primers?availability=pre-story",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{19, 20, 21, 22},
+			Count:   4,
+			Results: []int32{19, 20, 21, 22},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/primers?availability=always&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/primers?availability=always&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   21,
-			results: []int32{1, 5, 10, 15, 17, 23, 25},
+			Count:   21,
+			Results: []int32{1, 5, 10, 15, 17, 23, 25},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/primers?availability=pre-story",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/primers?availability=pre-story",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{19, 20, 21, 22},
+			Count:   4,
+			Results: []int32{19, 20, 21, 22},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/primers?availability=post",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/primers?availability=post",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{26},
+			Count:   1,
+			Results: []int32{26},
 		},
 	}
 

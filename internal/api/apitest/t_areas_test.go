@@ -14,31 +14,31 @@ func TestGetArea(t *testing.T) {
 	t.Parallel()
 	tests := []Area{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/0",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "area with provided id '0' doesn't exist. max id: 237",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/0",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "area with provided id '0' doesn't exist. max id: 237",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/238",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "area with provided id '238' doesn't exist. max id: 237",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/238",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "area with provided id '238' doesn't exist. max id: 237",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/a",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid id 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/143/",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/143/",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"characters": true,
 					"aeons":      true,
 					"shops":      true,
@@ -47,7 +47,7 @@ func TestGetArea(t *testing.T) {
 					"boss music": true,
 					"fmvs":       true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected areas": 2,
 					"characters":      0,
 					"aeons":           0,
@@ -79,10 +79,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/36",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/36",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"aeons":      true,
 					"shops":      true,
 					"monsters":   true,
@@ -93,7 +93,7 @@ func TestGetArea(t *testing.T) {
 					"boss music": true,
 					"fmvs":       true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected areas": 7,
 					"characters":      2,
 					"aeons":           0,
@@ -122,10 +122,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/159?rel_availability=pre-story&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/159?rel_availability=pre-story&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"parent location":    true,
 					"parent sublocation": true,
 					"connected areas":    true,
@@ -134,7 +134,7 @@ func TestGetArea(t *testing.T) {
 					"music":              true,
 					"fmvs":               true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"shops":      0,
 					"treasures":  0,
 					"monsters":   4,
@@ -155,10 +155,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/159?rel_availability=always&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/159?rel_availability=always&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"parent location":    true,
 					"parent sublocation": true,
 					"connected areas":    true,
@@ -167,7 +167,7 @@ func TestGetArea(t *testing.T) {
 					"music":              true,
 					"fmvs":               true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"shops":      0,
 					"treasures":  0,
 					"monsters":   1,
@@ -188,10 +188,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/203?rel_availability=post",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/203?rel_availability=post",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"parent location":    true,
 					"parent sublocation": true,
 					"connected areas":    true,
@@ -200,7 +200,7 @@ func TestGetArea(t *testing.T) {
 					"music":              true,
 					"fmvs":               true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"shops":      0,
 					"treasures":  0,
 					"monsters":   30,
@@ -221,10 +221,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/203?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/203?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"parent location":    true,
 					"parent sublocation": true,
 					"connected areas":    true,
@@ -233,7 +233,7 @@ func TestGetArea(t *testing.T) {
 					"music":              true,
 					"fmvs":               true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"shops":      0,
 					"treasures":  0,
 					"monsters":   7,
@@ -254,10 +254,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/203?rel_availability=always&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/203?rel_availability=always&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"parent location":    true,
 					"parent sublocation": true,
 					"connected areas":    true,
@@ -266,7 +266,7 @@ func TestGetArea(t *testing.T) {
 					"music":              true,
 					"fmvs":               true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"shops":      1,
 					"treasures":  1,
 					"monsters":   0,
@@ -287,10 +287,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/68",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/68",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"connected areas": true,
 					"characters":      true,
 					"aeons":           true,
@@ -302,7 +302,7 @@ func TestGetArea(t *testing.T) {
 					"boss music":      true,
 					"fmvs":            true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected areas": 6,
 					"characters":      0,
 					"aeons":           0,
@@ -331,10 +331,10 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/138",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/138",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"connected areas": true,
 					"characters":      true,
 					"aeons":           true,
@@ -345,7 +345,7 @@ func TestGetArea(t *testing.T) {
 					"music":           true,
 					"fmvs":            true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"quests": 9,
 				},
 			},
@@ -358,16 +358,16 @@ func TestGetArea(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/42",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/42",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"connected areas": true,
 					"aeons":           true,
 					"shops":           true,
 					"quests":          true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"characters": 1,
 					"aeons":      0,
 					"shops":      0,
@@ -409,259 +409,259 @@ func TestRetrieveAreas(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?comp_sphere=fa",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid boolean value 'fa' used for parameter 'comp_sphere'. usage: '?comp_sphere={bool}'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?comp_sphere=fa",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid boolean value 'fa' used for parameter 'comp_sphere'. usage: '?comp_sphere={bool}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?item=113",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '113' used for parameter 'item' is out of range. max id: 112",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?item=113",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "provided id '113' used for parameter 'item' is out of range. max id: 112",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?key_item=61",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '61' used for parameter 'key_item' is out of range. max id: 60",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?key_item=61",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "provided id '61' used for parameter 'key_item' is out of range. max id: 60",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?location=0",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "provided id '0' used for parameter 'location' is out of range. max id: 26",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?location=0",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "provided id '0' used for parameter 'location' is out of range. max id: 26",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   237,
-			next:    h.GetStrPtr("/areas?limit=20&offset=20"),
-			results: []int32{1, 5, 20},
+			Count:   237,
+			Next:    h.GetStrPtr("/areas?limit=20&offset=20"),
+			Results: []int32{1, 5, 20},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   237,
-			results: []int32{1, 50, 237},
+			Count:   237,
+			Results: []int32{1, 50, 237},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?offset=50&limit=30",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?offset=50&limit=30",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    237,
-			previous: h.GetStrPtr("/areas?limit=30&offset=20"),
-			next:     h.GetStrPtr("/areas?limit=30&offset=80"),
-			results:  []int32{51, 80},
+			Count:    237,
+			Previous: h.GetStrPtr("/areas?limit=30&offset=20"),
+			Next:     h.GetStrPtr("/areas?limit=30&offset=80"),
+			Results:  []int32{51, 80},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?monsters=true&chocobo=true&save_sphere=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?monsters=true&chocobo=true&save_sphere=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{87, 96, 201},
+			Count:   3,
+			Results: []int32{87, 96, 201},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?item=7&availability=post-game&monsters=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?item=7&availability=post-game&monsters=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{35, 75, 127, 138, 206},
+			Count:   5,
+			Results: []int32{35, 75, 127, 138, 206},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?item=3&methods=quest,monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?item=3&methods=quest,monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   17,
-			results: []int32{26, 77, 138, 159, 174, 190, 207},
+			Count:   17,
+			Results: []int32{26, 77, 138, 159, 174, 190, 207},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?characters=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?characters=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{1, 20, 102},
+			Count:   7,
+			Results: []int32{1, 20, 102},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?sidequests=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?sidequests=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{74, 138, 142, 143, 145, 180, 183, 201},
+			Count:   12,
+			Results: []int32{74, 138, 142, 143, 145, 180, 183, 201},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?key_item=37",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?key_item=37",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{46, 167},
+			Count:   2,
+			Results: []int32{46, 167},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=post&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=post&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   22,
-			results: []int32{13, 27, 105, 208, 233, 237},
+			Count:   22,
+			Results: []int32{13, 27, 105, 208, 233, 237},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?location=13&treasures=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?location=13&treasures=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{127, 130, 132, 134, 136},
+			Count:   5,
+			Results: []int32{127, 130, 132, 134, 136},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?shops=true&airship=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?shops=true&airship=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{47, 68, 91, 139, 199, 211},
+			Count:   10,
+			Results: []int32{47, 68, 91, 139, 199, 211},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?sublocation=27&boss_fights=true", // lake macalania
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?sublocation=27&boss_fights=true", // lake macalania
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{156},
+			Count:   1,
+			Results: []int32{156},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?comp_sphere=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?comp_sphere=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{6, 91, 155, 176, 182},
+			Count:   5,
+			Results: []int32{6, 91, 155, 176, 182},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?fmvs=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?fmvs=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   26,
-			results: []int32{3, 34, 49, 125, 179, 235},
+			Count:   26,
+			Results: []int32{3, 34, 49, 125, 179, 235},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=pre-airship&item=56&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=pre-airship&item=56&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{137, 140, 156, 204, 209, 223},
+			Count:   6,
+			Results: []int32{137, 140, 156, 204, 209, 223},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=post-game&item=56&methods=monster&pre_airship=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=post-game&item=56&methods=monster&pre_airship=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{137, 140, 203, 209, 223, 236, 237},
+			Count:   7,
+			Results: []int32{137, 140, 203, 209, 223, 236, 237},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=always&auto_ability=4&item=27&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=always&auto_ability=4&item=27&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{137, 140},
+			Count:   2,
+			Results: []int32{137, 140},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=post&monsters=true&treasures=false&item=53",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=post&monsters=true&treasures=false&item=53",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{26, 99, 100, 170, 190, 211, 228},
+			Count:   7,
+			Results: []int32{26, 99, 100, 170, 190, 211, 228},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=pre-story&monster=31",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=pre-story&monster=31",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{76, 77, 78},
+			Count:   3,
+			Results: []int32{76, 77, 78},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=pre-story&shops=true&monster=87&repeatable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=pre-story&shops=true&monster=87&repeatable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{159},
+			Count:   1,
+			Results: []int32{159},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=post-story",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=post-story",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{234, 235},
+			Count:   2,
+			Results: []int32{234, 235},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=post&sidequests=true&boss_fights=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=post&sidequests=true&boss_fights=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{170, 203},
+			Count:   2,
+			Results: []int32{170, 203},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=post&monsters=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=post&monsters=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   18,
-			results: []int32{7, 26, 106, 170, 207, 230, 237},
+			Count:   18,
+			Results: []int32{7, 26, 106, 170, 207, 230, 237},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=post&monsters=false&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=post&monsters=false&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   219,
-			results: []int32{1, 18, 63, 74, 110, 136, 153, 180, 229, 235},
+			Count:   219,
+			Results: []int32{1, 18, 63, 74, 110, 136, 153, 180, 229, 235},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=always&monster=48",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=always&monster=48",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{99, 100, 104, 107, 117},
+			Count:   5,
+			Results: []int32{99, 100, 104, 107, 117},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=pre-story&shops=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=pre-story&shops=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   18,
-			results: []int32{65, 96, 123, 147, 183, 200, 212},
+			Count:   18,
+			Results: []int32{65, 96, 123, 147, 183, 200, 212},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas?availability=always&key_item=23",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas?availability=always&key_item=23",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{170},
+			Count:   1,
+			Results: []int32{170},
 		},
 	}
 
@@ -672,104 +672,104 @@ func TestSubsectionAreas(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/36/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/36/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          7,
-			parentResource: h.GetStrPtr("/areas/36"),
-			results:        []int32{26, 30, 37, 38, 39, 40, 41},
+			Count:          7,
+			ParentResource: h.GetStrPtr("/areas/36"),
+			Results:        []int32{26, 30, 37, 38, 39, 40, 41},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/209/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/209/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/areas/209"),
-			results:        []int32{205, 210},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/areas/209"),
+			Results:        []int32{205, 210},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/9/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/9/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/areas/9"),
-			results:        []int32{8, 10, 11, 15},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/areas/9"),
+			Results:        []int32{8, 10, 11, 15},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/235/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/235/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          0,
-			parentResource: h.GetStrPtr("/areas/235"),
-			results:        []int32{},
+			Count:          0,
+			ParentResource: h.GetStrPtr("/areas/235"),
+			Results:        []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/149/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/149/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          3,
-			parentResource: h.GetStrPtr("/areas/149"),
-			results:        []int32{141, 150, 199},
+			Count:          3,
+			ParentResource: h.GetStrPtr("/areas/149"),
+			Results:        []int32{141, 150, 199},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/45/areas/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleMonsters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monsters/45/areas/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleMonsters,
 			},
-			count:          5,
-			parentResource: h.GetStrPtr("/monsters/45"),
-			results:        []int32{87, 88, 89, 92, 93},
+			Count:          5,
+			ParentResource: h.GetStrPtr("/monsters/45"),
+			Results:        []int32{87, 88, 89, 92, 93},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/140/areas/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleMonsters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monsters/140/areas/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleMonsters,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/monsters/140"),
-			results:        []int32{200, 201, 202, 209},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/monsters/140"),
+			Results:        []int32{200, 201, 202, 209},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/66/areas/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleMonsters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monsters/66/areas/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleMonsters,
 			},
-			count:          1,
-			parentResource: h.GetStrPtr("/monsters/66"),
-			results:        []int32{125},
+			Count:          1,
+			ParentResource: h.GetStrPtr("/monsters/66"),
+			Results:        []int32{125},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/42/areas/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/42/areas/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          7,
-			parentResource: h.GetStrPtr("/sublocations/42"),
-			results:        []int32{229, 230, 231, 232, 233, 234, 235},
+			Count:          7,
+			ParentResource: h.GetStrPtr("/sublocations/42"),
+			Results:        []int32{229, 230, 231, 232, 233, 234, 235},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/10/areas/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/10/areas/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleLocations,
 			},
-			count:          9,
-			parentResource: h.GetStrPtr("/locations/10"),
-			results:        []int32{98, 99, 100, 103, 106},
+			Count:          9,
+			ParentResource: h.GetStrPtr("/locations/10"),
+			Results:        []int32{98, 99, 100, 103, 106},
 		},
 	}
 

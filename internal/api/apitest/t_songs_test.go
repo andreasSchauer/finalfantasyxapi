@@ -14,32 +14,32 @@ func TestGetSong(t *testing.T) {
 	t.Parallel()
 	tests := []Song{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs/a",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "song not found: 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "song not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs/a/2",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/songs', '/api/songs/{id}', '/api/songs/{name}'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs/a/2",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "wrong format. usage: '/api/songs', '/api/songs/{id}', '/api/songs/{name}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs/2/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "endpoint /songs doesn't have any subsections",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs/2/a",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "endpoint /songs doesn't have any subsections",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs/44",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs/44",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"background music": 1,
 					"cues":             3,
 					"boss fights":      0,
@@ -85,11 +85,11 @@ func TestGetSong(t *testing.T) {
 			fmvs:       []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs/a_fLeeting_dream",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs/a_fLeeting_dream",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"background music": 1,
 					"cues":             6,
 					"boss fights":      0,
@@ -135,14 +135,14 @@ func TestGetSong(t *testing.T) {
 			fmvs:       []int32{51},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs/80",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs/80",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"background music": true,
 					"cues":             true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"background music": 0,
 					"cues":             0,
 					"boss fights":      5,
@@ -166,68 +166,68 @@ func TestRetrieveSongs(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   95,
-			results: []int32{1, 15, 18, 33, 47, 56, 71, 80, 93, 95},
+			Count:   95,
+			Results: []int32{1, 15, 18, 33, 47, 56, 71, 80, 93, 95},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs?location=13",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs?location=13",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{20, 43, 49, 77},
+			Count:   4,
+			Results: []int32{20, 43, 49, 77},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs?sublocation=15", // luca
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs?sublocation=15", // luca
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{10, 16, 17, 27, 32, 34, 75, 77},
+			Count:   12,
+			Results: []int32{10, 16, 17, 27, 32, 34, 75, 77},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs?area=211", // gagazet - mountain gate
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs?area=211", // gagazet - mountain gate
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{9, 27, 75},
+			Count:   3,
+			Results: []int32{9, 27, 75},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs?composer=nobuo-uematsu&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs?composer=nobuo-uematsu&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   53,
-			results: []int32{2, 10, 19, 40, 42, 67, 78, 91, 95},
+			Count:   53,
+			Results: []int32{2, 10, 19, 40, 42, 67, 78, 91, 95},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs?arranger=3&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs?arranger=3&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   34,
-			results: []int32{18, 41, 46, 61, 64, 76, 88},
+			Count:   34,
+			Results: []int32{18, 41, 46, 61, 64, 76, 88},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs?special_use=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs?special_use=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{9, 10, 11, 16, 24, 34, 37, 40},
+			Count:   8,
+			Results: []int32{9, 10, 11, 16, 24, 34, 37, 40},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs?fmvs=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs?fmvs=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   20,
-			results: []int32{5, 6, 17, 29, 61, 63, 64, 70, 89},
+			Count:   20,
+			Results: []int32{5, 6, 17, 29, 61, 63, 64, 70, 89},
 		},
 	}
 
@@ -238,34 +238,34 @@ func TestSubsectionSongs(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/25/songs",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/25/songs",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleLocations,
 			},
-			count:          11,
-			parentResource: h.GetStrPtr("/locations/25"),
-			results:        []int32{5, 44, 57, 60, 78, 79, 84, 85, 87, 88, 89},
+			Count:          11,
+			ParentResource: h.GetStrPtr("/locations/25"),
+			Results:        []int32{5, 44, 57, 60, 78, 79, 84, 85, 87, 88, 89},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/31/songs",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/31/songs",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/sublocations/31"),
-			results:        []int32{2, 27, 59, 60},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/sublocations/31"),
+			Results:        []int32{2, 27, 59, 60},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/148/songs",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/148/songs",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/areas/148"),
-			results:        []int32{4, 16, 30, 51},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/areas/148"),
+			Results:        []int32{4, 16, 30, 51},
 		},
 	}
 

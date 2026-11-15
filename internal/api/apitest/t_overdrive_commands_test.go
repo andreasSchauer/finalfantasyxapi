@@ -13,17 +13,17 @@ func TestGetOverdriveCommand(t *testing.T) {
 	t.Parallel()
 	tests := []OverdriveCommand{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-commands/8",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive command with provided id '8' doesn't exist. max id: 7",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-commands/8",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "overdrive command with provided id '8' doesn't exist. max id: 7",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-commands/2",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-commands/2",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"overdrives": 8,
 				},
 			},
@@ -35,10 +35,10 @@ func TestGetOverdriveCommand(t *testing.T) {
 			overdrives:  []int32{5, 6, 7, 8, 9, 10, 11, 12},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-commands/3",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-commands/3",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"overdrives": 4,
 				},
 			},
@@ -50,10 +50,10 @@ func TestGetOverdriveCommand(t *testing.T) {
 			overdrives:  []int32{13, 14, 15, 16},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-commands/7",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-commands/7",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"overdrives": 64,
 				},
 			},
@@ -73,12 +73,12 @@ func TestRetrieveOverdriveCommands(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-commands",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-commands",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{1, 2, 3, 4, 5, 6, 7},
+			Count:   7,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7},
 		},
 	}
 

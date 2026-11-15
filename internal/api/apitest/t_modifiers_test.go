@@ -12,18 +12,18 @@ func TestGetModifier(t *testing.T) {
 	t.Parallel()
 	tests := []Modifier{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/modifiers/32",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "modifier with provided id '32' doesn't exist. max id: 31",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/modifiers/32",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "modifier with provided id '32' doesn't exist. max id: 31",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/modifiers/3",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/modifiers/3",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":      0,
 					"player abilities":    1,
 					"overdrive abilities": 3,
@@ -45,11 +45,11 @@ func TestGetModifier(t *testing.T) {
 			properties:         []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/modifiers/16",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/modifiers/16",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":      3,
 					"player abilities":    0,
 					"overdrive abilities": 2,
@@ -71,11 +71,11 @@ func TestGetModifier(t *testing.T) {
 			properties:         []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/modifiers/18",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/modifiers/18",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":      0,
 					"player abilities":    0,
 					"overdrive abilities": 0,
@@ -97,11 +97,11 @@ func TestGetModifier(t *testing.T) {
 			properties:         []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/modifiers/20",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/modifiers/20",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":      4,
 					"player abilities":    0,
 					"overdrive abilities": 0,
@@ -131,20 +131,20 @@ func TestRetrieveModifiers(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/modifiers?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/modifiers?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   31,
-			results: []int32{1, 7, 12, 17, 20, 25, 31},
+			Count:   31,
+			Results: []int32{1, 7, 12, 17, 20, 25, 31},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/modifiers?category=percentage",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/modifiers?category=percentage",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   9,
-			results: []int32{5, 7, 9, 25, 26, 29},
+			Count:   9,
+			Results: []int32{5, 7, 9, 25, 26, 29},
 		},
 	}
 

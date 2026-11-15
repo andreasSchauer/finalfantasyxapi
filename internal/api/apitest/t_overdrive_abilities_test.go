@@ -15,18 +15,18 @@ func TestGetOverdriveAbility(t *testing.T) {
 	t.Parallel()
 	tests := []OverdriveAbility{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities/191",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive ability with provided id '191' doesn't exist. max id: 190",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities/191",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "overdrive ability with provided id '191' doesn't exist. max id: 190",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities/20",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities/20",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"overdrives":          2,
 					"battle interactions": 1,
 				},
@@ -74,11 +74,11 @@ func TestGetOverdriveAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities/159",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities/159",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"overdrives":          1,
 					"battle interactions": 1,
 					"battle interactions 0 inflicted status conditions": 1,
@@ -132,11 +132,11 @@ func TestGetOverdriveAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities/163",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities/163",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions":                               1,
 					"battle interactions 0 inflicted status conditions": 4,
 					"battle interactions 0 stat changes":                2,
@@ -206,11 +206,11 @@ func TestGetOverdriveAbility(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities/7",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities/7",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"overdrives":          1,
 					"battle interactions": 2,
 				},
@@ -300,28 +300,28 @@ func TestGetMultipleOverdriveAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities/grand_summon",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities/grand_summon",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   8,
-			results: []int32{9, 10, 11, 12, 13, 14, 15, 16},
+			Count:   8,
+			Results: []int32{9, 10, 11, 12, 13, 14, 15, 16},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities/dragon_fang",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities/dragon_fang",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   3,
-			results: []int32{107, 108, 109},
+			Count:   3,
+			Results: []int32{107, 108, 109},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities/fire_fury",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities/fire_fury",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   3,
-			results: []int32{40, 41, 42},
+			Count:   3,
+			Results: []int32{40, 41, 42},
 		},
 	}
 
@@ -332,64 +332,64 @@ func TestRetrieveOverdriveAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    190,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 26, 83, 99, 176, 190},
+			Count:    190,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 26, 83, 99, 176, 190},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities?rank=6&can_crit=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities?rank=6&can_crit=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    14,
-			previous: nil,
-			next:     nil,
-			results:  []int32{113, 115, 120, 123, 126, 127, 190},
+			Count:    14,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{113, 115, 120, 123, 126, 127, 190},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities?status_remove=10",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities?status_remove=10",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    4,
-			previous: nil,
-			next:     nil,
-			results:  []int32{152, 153, 158, 159},
+			Count:    4,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{152, 153, 158, 159},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities?stat_changes=true&mod_changes=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities?stat_changes=true&mod_changes=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    4,
-			previous: nil,
-			next:     nil,
-			results:  []int32{162, 163, 170, 173},
+			Count:    4,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{162, 163, 170, 173},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities?user=5",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities?user=5",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    8,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 2, 3, 4, 5, 6, 7, 8},
+			Count:    8,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-abilities?related_stat=5",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-abilities?related_stat=5",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    3,
-			previous: nil,
-			next:     nil,
-			results:  []int32{162, 163, 173},
+			Count:    3,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{162, 163, 173},
 		},
 	}
 
@@ -400,44 +400,44 @@ func TestSubsectionOverdriveAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrives/14/overdrive-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleOverdrives,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrives/14/overdrive-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleOverdrives,
 			},
-			count:          6,
-			parentResource: h.GetStrPtr("/overdrives/14"),
-			results:        []int32{26, 27, 28, 29, 30, 31},
+			Count:          6,
+			ParentResource: h.GetStrPtr("/overdrives/14"),
+			Results:        []int32{26, 27, 28, 29, 30, 31},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-commands/1/overdrive-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleOverdriveCommands,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-commands/1/overdrive-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleOverdriveCommands,
 			},
-			count:          8,
-			parentResource: h.GetStrPtr("/overdrive-commands/1"),
-			results:        []int32{1, 2, 3, 4, 5, 6, 7, 8},
+			Count:          8,
+			ParentResource: h.GetStrPtr("/overdrive-commands/1"),
+			Results:        []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/1/overdrive-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/1/overdrive-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacters,
 			},
-			count:          8,
-			parentResource: h.GetStrPtr("/characters/1"),
-			results:        []int32{1, 2, 3, 4, 5, 6, 7, 8},
+			Count:          8,
+			ParentResource: h.GetStrPtr("/characters/1"),
+			Results:        []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/1/overdrive-abilities",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAeons,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/1/overdrive-abilities",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAeons,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/aeons/1"),
-			results:        []int32{183, 184},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/aeons/1"),
+			Results:        []int32{183, 184},
 		},
 	}
 

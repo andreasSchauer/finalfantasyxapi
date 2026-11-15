@@ -14,31 +14,31 @@ func TestGetLocation(t *testing.T) {
 	t.Parallel()
 	tests := []Location{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/0",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "location with provided id '0' doesn't exist. max id: 26",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/0",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "location with provided id '0' doesn't exist. max id: 26",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/27",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "location with provided id '27' doesn't exist. max id: 26",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/27",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "location with provided id '27' doesn't exist. max id: 26",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/a",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "location not found: 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "location not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/15/",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/15/",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"connected locations": 4,
 					"sublocations":        3,
 					"characters":          0,
@@ -76,10 +76,10 @@ func TestGetLocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/15?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/15?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"connected locations": 4,
 					"sublocations":        3,
 					"characters":          0,
@@ -117,10 +117,10 @@ func TestGetLocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/15?rel_availability=always&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/15?rel_availability=always&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"connected locations": 4,
 					"sublocations":        3,
 					"characters":          0,
@@ -158,10 +158,10 @@ func TestGetLocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/15?rel_availability=pre-story",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/15?rel_availability=pre-story",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"connected locations": 4,
 					"sublocations":        3,
 					"characters":          0,
@@ -199,10 +199,10 @@ func TestGetLocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/OmeGa_rUInS",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/OmeGa_rUInS",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"connected locations": true,
 					"characters":          true,
 					"aeons":               true,
@@ -212,7 +212,7 @@ func TestGetLocation(t *testing.T) {
 					"fmvs music":          true,
 					"fmvs":                true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected locations": 0,
 					"sublocations":        1,
 					"characters":          0,
@@ -251,164 +251,164 @@ func TestRetrieveLocations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   26,
-			results: []int32{1, 6, 18, 26},
+			Count:   26,
+			Results: []int32{1, 6, 18, 26},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?monsters=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?monsters=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{7, 13},
+			Count:   2,
+			Results: []int32{7, 13},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?characters=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?characters=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{1, 4, 5, 8, 10, 12},
+			Count:   6,
+			Results: []int32{1, 4, 5, 8, 10, 12},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?aeons=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?aeons=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{2, 4, 6, 11, 15, 19, 21, 22},
+			Count:   8,
+			Results: []int32{2, 4, 6, 11, 15, 19, 21, 22},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?item=45&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?item=45&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{18, 20, 25, 26},
+			Count:   4,
+			Results: []int32{18, 20, 25, 26},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?key_item=13",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?key_item=13",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{4},
+			Count:   1,
+			Results: []int32{4},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?boss_fights=true&shops=true&treasures=true&sidequests=true&fmvs=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?boss_fights=true&shops=true&treasures=true&sidequests=true&fmvs=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{8, 15, 18},
+			Count:   3,
+			Results: []int32{8, 15, 18},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=pre-airship&item=56&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=pre-airship&item=56&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{14, 15, 20, 22, 24},
+			Count:   5,
+			Results: []int32{14, 15, 20, 22, 24},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=post-game&item=56&methods=monster&pre_airship=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=post-game&item=56&methods=monster&pre_airship=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{14, 20, 22, 24, 26},
+			Count:   5,
+			Results: []int32{14, 20, 22, 24, 26},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=always&auto_ability=4&item=27&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=always&auto_ability=4&item=27&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{14},
+			Count:   1,
+			Results: []int32{14},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=post&monsters=true&treasures=false&item=53",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=post&monsters=true&treasures=false&item=53",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{18, 23},
+			Count:   2,
+			Results: []int32{18, 23},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=pre-story&monster=31",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=pre-story&monster=31",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{8},
+			Count:   1,
+			Results: []int32{8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=always&monster=87&repeatable=true&boss_fights=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=always&monster=87&repeatable=true&boss_fights=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{15},
+			Count:   1,
+			Results: []int32{15},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=pre-story",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=pre-story",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{1, 3, 17},
+			Count:   3,
+			Results: []int32{1, 3, 17},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=post&sidequests=true&boss_fights=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=post&sidequests=true&boss_fights=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{16, 18, 20},
+			Count:   3,
+			Results: []int32{16, 18, 20},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=post&monsters=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=post&monsters=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{2, 16, 20, 23, 24, 26},
+			Count:   11,
+			Results: []int32{2, 16, 20, 23, 24, 26},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=post&monsters=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=post&monsters=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   15,
-			results: []int32{1, 7, 12, 15, 19, 22},
+			Count:   15,
+			Results: []int32{1, 7, 12, 15, 19, 22},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=always&monster=48",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=always&monster=48",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{10, 11, 12},
+			Count:   3,
+			Results: []int32{10, 11, 12},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=pre-story&shops=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=pre-story&shops=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{7, 12, 15, 20, 23},
+			Count:   11,
+			Results: []int32{7, 12, 15, 20, 23},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations?availability=always&key_item=23",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations?availability=always&key_item=23",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{16},
+			Count:   1,
+			Results: []int32{16},
 		},
 	}
 
@@ -419,31 +419,31 @@ func TestSubsectionLocations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/5/connected/",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/5/connected/",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/locations/5"),
-			results:        []int32{4, 6},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/locations/5"),
+			Results:        []int32{4, 6},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/11/connected/",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/11/connected/",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/locations/11"),
-			results:        []int32{10, 12},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/locations/11"),
+			Results:        []int32{10, 12},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/20/connected/",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/20/connected/",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/locations/20"),
-			results:        []int32{15, 21, 22, 23},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/locations/20"),
+			Results:        []int32{15, 21, 22, 23},
 		},
 	}
 

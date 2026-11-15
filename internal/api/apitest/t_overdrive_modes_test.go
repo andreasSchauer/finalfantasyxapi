@@ -13,34 +13,34 @@ func TestGetOverdriveMode(t *testing.T) {
 	t.Parallel()
 	tests := []OverdriveMode{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/ally/2",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/overdrive-modes', '/api/overdrive-modes/{id}', '/api/overdrive-modes/{name}'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes/ally/2",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "wrong format. usage: '/api/overdrive-modes', '/api/overdrive-modes/{id}', '/api/overdrive-modes/{name}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/18",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive mode with provided id '18' doesn't exist. max id: 17",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes/18",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "overdrive mode with provided id '18' doesn't exist. max id: 17",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/a",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive mode not found: 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "overdrive mode not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/ally/",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes/ally/",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"effect": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"actions": 7,
 				},
 			},
@@ -59,10 +59,10 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/3",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes/3",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"description": true,
 				},
 			},
@@ -77,15 +77,15 @@ func TestGetOverdriveMode(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/1/",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes/1/",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"description": true,
 					"effect":      true,
 					"fill rate":   true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"actions": 0,
 				},
 			},
@@ -101,45 +101,45 @@ func TestRetrieveOverdriveModes(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes?type=f",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'f' used for parameter 'type'. use /api/overdrive-modes/parameters to see allowed values",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes?type=f",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid enum value 'f' used for parameter 'type'. use /api/overdrive-modes/parameters to see allowed values",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes/",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    17,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 8, 17},
+			Count:    17,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 8, 17},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes?type=formula",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes?type=formula",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"previous": true,
 					"next":     true,
 				},
 			},
-			count:   4,
-			results: []int32{1, 2, 3, 4},
+			Count:   4,
+			Results: []int32{1, 2, 3, 4},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes?type=2",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes?type=2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"previous": true,
 					"next":     true,
 				},
 			},
-			count:   13,
-			results: []int32{5, 12, 17},
+			Count:   13,
+			Results: []int32{5, 12, 17},
 		},
 	}
 

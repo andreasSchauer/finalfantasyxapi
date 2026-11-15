@@ -14,18 +14,18 @@ func TestGetMonsterFormation(t *testing.T) {
 	t.Parallel()
 	tests := []MonsterFormation{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations/332",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "monster-formation with provided id '332' doesn't exist. max id: 331",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations/332",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "monster-formation with provided id '332' doesn't exist. max id: 331",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations/27",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations/27",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         2,
 					"areas":            1,
 					"trigger commands": 0,
@@ -47,13 +47,13 @@ func TestGetMonsterFormation(t *testing.T) {
 			triggerCommands: []testFormationTC{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations/77",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations/77",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"trigger commands": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters":         1,
 					"areas":            3,
 					"trigger commands": 0,
@@ -72,11 +72,11 @@ func TestGetMonsterFormation(t *testing.T) {
 			areas: []int32{99, 100, 106},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations/137",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations/137",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         3,
 					"areas":            1,
 					"trigger commands": 2,
@@ -108,11 +108,11 @@ func TestGetMonsterFormation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations/265",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations/265",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters":         1,
 					"areas":            3,
 					"trigger commands": 0,
@@ -140,147 +140,147 @@ func TestRetrieveMonsterFormations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?limit=asd",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?limit=asd",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid value 'asd' used for parameter 'limit'. usage: '?limit={int|'max'}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   331,
-			results: []int32{1, 175, 238, 307, 331},
+			Count:   331,
+			Results: []int32{1, 175, 238, 307, 331},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?monster=44",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?monster=44",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{63, 64, 67, 68, 69},
+			Count:   5,
+			Results: []int32{63, 64, 67, 68, 69},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?location=12",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?location=12",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   12,
-			results: []int32{90, 93, 98, 102, 105},
+			Count:   12,
+			Results: []int32{90, 93, 98, 102, 105},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?sublocation=7", // besaid
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?sublocation=7", // besaid
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{9, 15, 19, 24, 25},
+			Count:   14,
+			Results: []int32{9, 15, 19, 24, 25},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?area=232", // sin - city of dying dreams
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?area=232", // sin - city of dying dreams
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{257, 258, 262, 266},
+			Count:   8,
+			Results: []int32{257, 258, 262, 266},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?ambush=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?ambush=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{226, 265, 298},
+			Count:   3,
+			Results: []int32{226, 265, 298},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?category=boss-fight&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?category=boss-fight&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   52,
-			results: []int32{3, 37, 83, 137, 189, 204, 245, 270, 296},
+			Count:   52,
+			Results: []int32{3, 37, 83, 137, 189, 204, 245, 270, 296},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=post&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?availability=post&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   70,
-			results: []int32{7, 20, 70, 171, 213, 266, 287, 314, 331},
+			Count:   70,
+			Results: []int32{7, 20, 70, 171, 213, 266, 287, 314, 331},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=pre-story&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?availability=pre-story&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   86,
-			results: []int32{1, 2, 28, 37, 134, 164, 178, 203, 245, 254},
+			Count:   86,
+			Results: []int32{1, 2, 28, 37, 134, 164, 178, 203, 245, 254},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?repeatable=true&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?repeatable=true&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   237,
-			results: []int32{9, 35, 58, 81, 103, 148, 165, 193, 239, 280, 319, 331},
+			Count:   237,
+			Results: []int32{9, 35, 58, 81, 103, 148, 165, 193, 239, 280, 319, 331},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?category=boss-fight&repeatable=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?category=boss-fight&repeatable=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{226, 227},
+			Count:   2,
+			Results: []int32{226, 227},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=always&location=23",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?availability=always&location=23",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{230, 233, 234, 237, 240, 244},
+			Count:   14,
+			Results: []int32{230, 233, 234, 237, 240, 244},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=post&location=25",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?availability=post&location=25",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{256, 260, 265, 266, 269},
+			Count:   11,
+			Results: []int32{256, 260, 265, 266, 269},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=pre-story&sublocation=34", // highbridge
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?availability=pre-story&sublocation=34", // highbridge
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{174, 190, 191, 192},
+			Count:   4,
+			Results: []int32{174, 190, 191, 192},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=story&area=234", // sin - the nucleus
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?availability=story&area=234", // sin - the nucleus
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{260, 262, 263, 265, 266, 267, 268, 269},
+			Count:   8,
+			Results: []int32{260, 262, 263, 265, 266, 267, 268, 269},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?availability=post&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?availability=post&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   70,
-			results: []int32{7, 20, 70, 78, 83, 171, 213, 255, 264, 295, 310, 331},
+			Count:   70,
+			Results: []int32{7, 20, 70, 78, 83, 171, 213, 255, 264, 295, 310, 331},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations?escape=false&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations?escape=false&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   82,
-			results: []int32{1, 38, 137, 183, 253, 279, 296},
+			Count:   82,
+			Results: []int32{1, 38, 137, 183, 253, 279, 296},
 		},
 	}
 
@@ -291,84 +291,84 @@ func TestSubsectionMonsterFormations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/23/monster-formations",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/23/monster-formations",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleLocations,
 			},
-			count:          18,
-			parentResource: h.GetStrPtr("/locations/23"),
-			results:        []int32{228, 231, 235, 237, 240, 244, 245},
+			Count:          18,
+			ParentResource: h.GetStrPtr("/locations/23"),
+			Results:        []int32{228, 231, 235, 237, 240, 244, 245},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/4/monster-formations",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/4/monster-formations",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleLocations,
 			},
-			count:          14,
-			parentResource: h.GetStrPtr("/locations/4"),
-			results:        []int32{9, 13, 15, 18, 21, 23, 25},
+			Count:          14,
+			ParentResource: h.GetStrPtr("/locations/4"),
+			Results:        []int32{9, 13, 15, 18, 21, 23, 25},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/38/monster-formations",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/38/monster-formations",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          14,
-			parentResource: h.GetStrPtr("/sublocations/38"),
-			results:        []int32{198, 202, 216, 217, 221, 224, 227},
+			Count:          14,
+			ParentResource: h.GetStrPtr("/sublocations/38"),
+			Results:        []int32{198, 202, 216, 217, 221, 224, 227},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/18/monster-formations",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/18/monster-formations",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          10,
-			parentResource: h.GetStrPtr("/sublocations/18"),
-			results:        []int32{86, 89, 90, 93, 95},
+			Count:          10,
+			ParentResource: h.GetStrPtr("/sublocations/18"),
+			Results:        []int32{86, 89, 90, 93, 95},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/89/monster-formations",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/89/monster-formations",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          10,
-			parentResource: h.GetStrPtr("/areas/89"),
-			results:        []int32{46, 49, 54, 57, 58, 59},
+			Count:          10,
+			ParentResource: h.GetStrPtr("/areas/89"),
+			Results:        []int32{46, 49, 54, 57, 58, 59},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/170/monster-formations",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/170/monster-formations",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          12,
-			parentResource: h.GetStrPtr("/areas/170"),
-			results:        []int32{140, 144, 149, 150, 153, 155},
+			Count:          12,
+			ParentResource: h.GetStrPtr("/areas/170"),
+			Results:        []int32{140, 144, 149, 150, 153, 155},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/200/monster-formations",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleMonsters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monsters/200/monster-formations",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleMonsters,
 			},
-			count:          1,
-			parentResource: h.GetStrPtr("/monsters/200"),
-			results:        []int32{170},
+			Count:          1,
+			ParentResource: h.GetStrPtr("/monsters/200"),
+			Results:        []int32{170},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/155/monster-formations",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleMonsters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monsters/155/monster-formations",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleMonsters,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/monsters/155"),
-			results:        []int32{216, 232},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/monsters/155"),
+			Results:        []int32{216, 232},
 		},
 	}
 

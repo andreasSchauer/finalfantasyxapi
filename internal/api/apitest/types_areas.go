@@ -6,7 +6,7 @@ import (
 )
 
 type Area struct {
-	testGeneral
+	TestGeneral
 	NameVer
 	displayName       string
 	parentLocation    int32
@@ -15,12 +15,12 @@ type Area struct {
 	LocRel
 }
 
-func (e Area) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Area) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Area) Compare(test test, got apitypes.Area) {
-	test.t.Helper()
+func (e Area) Compare(test Test, got apitypes.Area) {
+	test.T.Helper()
 	test.compareExpNameVer(e.NameVer, got.ID, got.Name, got.Version)
 	test.compare("displayName", e.displayName, got.DisplayName)
 	test.compIDAPIResource("location", apilookups.E.Locations.Endpoint, e.parentLocation, got.ParentLocation)

@@ -16,23 +16,23 @@ func TestDropChance(t *testing.T) {
 
 	tests := []DropChanceResponse{
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "field 'monster_id' can't be empty",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "field 'monster_id' can't be empty",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMinEmptySlots: 2,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "id '10' of field 'character_id' is out of range. allowed range: 1 to 7",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "id '10' of field 'character_id' is out of range. allowed range: 1 to 7",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnCharacterID:   10,
 					ts.PfnMinEmptySlots: 1,
@@ -40,12 +40,12 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "id '0' of field 'character_id' is out of range. allowed range: 1 to 7",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "id '0' of field 'character_id' is out of range. allowed range: 1 to 7",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnCharacterID:   0,
 					ts.PfnMinEmptySlots: 1,
@@ -53,12 +53,12 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "array of field 'party_members' can't have duplicate ids",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "array of field 'party_members' can't have duplicate ids",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnPartyMembers:  []any{2, 2, 2, 2, 2},
 					ts.PfnMinEmptySlots: 1,
@@ -66,12 +66,12 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "character must be in the party to be eligible for receiving equipment",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "character must be in the party to be eligible for receiving equipment",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnCharacterID:   4,
 					ts.PfnPartyMembers:  []any{1, 2, 3},
@@ -80,12 +80,12 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "too many items in array of field 'party_members'. got: 8, maximum allowed: 7",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "too many items in array of field 'party_members'. got: 8, maximum allowed: 7",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnCharacterID:   4,
 					ts.PfnPartyMembers:  []any{1, 2, 3, 4, 5, 6, 7, 8},
@@ -94,84 +94,84 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'auto_abilities': id '131' is out of range. allowed range: 1 to 130",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 0 of array at field 'auto_abilities': id '131' is out of range. allowed range: 1 to 130",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{131},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "too many items in array of field 'auto_abilities'. got: 5, maximum allowed: 4",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "too many items in array of field 'auto_abilities'. got: 5, maximum allowed: 4",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{13, 14, 15, 16, 17},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value '5' of field 'min_empty_slots' is out of range. allowed range: 0 to 4",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "value '5' of field 'min_empty_slots' is out of range. allowed range: 0 to 4",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnMinEmptySlots: 5,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value '5' of field 'total_slots' is out of range. allowed range: 0 to 4",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "value '5' of field 'total_slots' is out of range. allowed range: 0 to 4",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:  13,
 					ts.PfnTotalSlots: 5,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value '-1' of field 'min_empty_slots' is out of range. allowed range: 0 to 4",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "value '-1' of field 'min_empty_slots' is out of range. allowed range: 0 to 4",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnMinEmptySlots: -1,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "can't discern equipment's type. use 'auto_abilities' to discern the type, or set it manually by using 'equip_type'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "can't discern equipment's type. use 'auto_abilities' to discern the type, or set it manually by using 'equip_type'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnMinEmptySlots: 2,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "the amount of auto-abilities and empty slots combined (1) can't exceed the given total amount of slots (0)",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "the amount of auto-abilities and empty slots combined (1) can't exceed the given total amount of slots (0)",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{2},
 					ts.PfnTotalSlots:    0,
@@ -179,12 +179,12 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "the amount of auto-abilities and empty slots combined can't exceed 4",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "the amount of auto-abilities and empty slots combined can't exceed 4",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{2, 7, 22},
 					ts.PfnMinEmptySlots: 2,
@@ -192,24 +192,24 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "weapon- and armor-abilities can't be combined",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "weapon- and armor-abilities can't be combined",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{2, 129},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "weapon- and armor-abilities can't be combined",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "weapon- and armor-abilities can't be combined",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{2},
 					ts.PfnEquipType:     string(database.EquipTypeArmor),
@@ -217,12 +217,12 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "weapon- and armor-abilities can't be combined",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "weapon- and armor-abilities can't be combined",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{129},
 					ts.PfnEquipType:     string(database.EquipTypeWeapon),
@@ -230,12 +230,12 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value 'weaponf' of field 'equip_type' is not a valid enum value. allowed values: 'weapon', 'armor'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "value 'weaponf' of field 'equip_type' is not a valid enum value. allowed values: 'weapon', 'armor'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnMinEmptySlots: 1,
 					ts.PfnEquipType:     "weaponf",
@@ -243,69 +243,69 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "monster 'sinscale - 1 (dream zanarkand)' doesn't drop equipment",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "monster 'sinscale - 1 (dream zanarkand)' doesn't drop equipment",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     1,
 					ts.PfnAutoAbilities: []any{2},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "water flan - 1 (tutorial) doesn't drop auto-ability 'zombiestrike' (22). it only drops the following auto-abilities: 'piercing' (2), 'waterstrike' (7), 'distill mana' (26), 'water ward' (61), 'waterproof' (62)",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "water flan - 1 (tutorial) doesn't drop auto-ability 'zombiestrike' (22). it only drops the following auto-abilities: 'piercing' (2), 'waterstrike' (7), 'distill mana' (26), 'water ward' (61), 'waterproof' (62)",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{7, 22},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "kottos doesn't drop auto-ability 'piercing' (2). it only drops the following auto-abilities: 'counterattack' (37), 'evade & counter' (38), 'magic counter' (39), 'hp +30%' (114), 'hp +20%' (113), 'hp +10%' (112)",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "kottos doesn't drop auto-ability 'piercing' (2). it only drops the following auto-abilities: 'counterattack' (37), 'evade & counter' (38), 'magic counter' (39), 'hp +30%' (114), 'hp +20%' (113), 'hp +10%' (112)",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     258,
 					ts.PfnAutoAbilities: []any{2},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "at least one of these fields must have a value: 'min_empty_slots', 'total_slots', 'auto_abilities'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "at least one of these fields must have a value: 'min_empty_slots', 'total_slots', 'auto_abilities'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID: 13,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid field: 'text'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid field: 'text'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "this won't work",
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     27,
 					ts.PfnPartyMembers:  []any{1, 2, 3, 4, 5},
 					ts.PfnAutoAbilities: []any{2},
@@ -386,14 +386,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     27,
 					ts.PfnAutoAbilities: []any{2},
 					ts.PfnCharacterID:   5,
@@ -428,11 +428,11 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     50,
 					ts.PfnAutoAbilities: []any{9},
 					ts.PfnCharacterID:   5,
@@ -526,15 +526,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     50,
 					ts.PfnAutoAbilities: []any{9},
 					ts.PfnCharacterID:   5,
@@ -560,15 +560,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"character chances":    true,
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         50,
 					ts.PfnAutoAbilities:     []any{9},
 					ts.PfnOptionalAbilities: true,
@@ -594,15 +594,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     50,
 					ts.PfnAutoAbilities: []any{9},
 					ts.PfnMinEmptySlots: 1,
@@ -629,16 +629,16 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"character chances":    true,
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     50,
 					ts.PfnAutoAbilities: []any{9},
 					ts.PfnTotalSlots:    2,
@@ -655,15 +655,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         50,
 					ts.PfnAutoAbilities:     []any{2},
 					ts.PfnOptionalAbilities: true,
@@ -691,11 +691,11 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         258,
 					ts.PfnAutoAbilities:     []any{38},
 					ts.PfnOptionalAbilities: true,
@@ -783,15 +783,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         258,
 					ts.PfnAutoAbilities:     []any{38},
 					ts.PfnOptionalAbilities: false,
@@ -812,15 +812,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         258,
 					ts.PfnAutoAbilities:     []any{37},
 					ts.PfnOptionalAbilities: true,
@@ -841,15 +841,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     243,
 					ts.PfnAutoAbilities: []any{30, 19},
 				},
@@ -869,15 +869,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     243,
 					ts.PfnPartyMembers:  []any{1, 3, 7},
 					ts.PfnAutoAbilities: []any{30, 19},
@@ -898,15 +898,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     243,
 					ts.PfnAutoAbilities: []any{34, 19},
 				},
@@ -926,15 +926,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         243,
 					ts.PfnAutoAbilities:     []any{30, 19},
 					ts.PfnCharacterID:       5,
@@ -961,15 +961,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         243,
 					ts.PfnAutoAbilities:     []any{30, 19},
 					ts.PfnCharacterID:       3,
@@ -996,14 +996,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:  247,
 					ts.PfnTotalSlots: 4,
 					ts.PfnEquipType:  string(database.EquipTypeWeapon),
@@ -1033,14 +1033,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     247,
 					ts.PfnMinEmptySlots: 4,
 					ts.PfnEquipType:     string(database.EquipTypeWeapon),
@@ -1070,11 +1070,11 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     305,
 					ts.PfnAutoAbilities: []any{129},
 				},
@@ -1132,14 +1132,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"wanted equipment": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     305,
 					ts.PfnAutoAbilities: []any{51},
 				},
@@ -1188,15 +1188,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     305,
 					ts.PfnAutoAbilities: []any{51},
 					ts.PfnCharacterID:   1,
@@ -1222,14 +1222,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         13,
 					ts.PfnAutoAbilities:     []any{61},
 					ts.PfnOptionalAbilities: true,
@@ -1259,15 +1259,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         13,
 					ts.PfnAutoAbilities:     []any{62},
 					ts.PfnOptionalAbilities: true,
@@ -1288,15 +1288,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         13,
 					ts.PfnAutoAbilities:     []any{61},
 					ts.PfnOptionalAbilities: false,
@@ -1317,15 +1317,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         13,
 					ts.PfnAutoAbilities:     []any{62},
 					ts.PfnOptionalAbilities: false,
@@ -1346,15 +1346,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:     13,
 					ts.PfnAutoAbilities: []any{62, 61},
 				},
@@ -1374,14 +1374,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         256,
 					ts.PfnAutoAbilities:     []any{113, 112},
 					ts.PfnOptionalAbilities: false,
@@ -1411,15 +1411,15 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 					"wanted equipment":     true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         256,
 					ts.PfnAutoAbilities:     []any{113, 112},
 					ts.PfnOptionalAbilities: true,
@@ -1440,14 +1440,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         191,
 					ts.PfnMinEmptySlots:     4,
 					ts.PfnEquipType:         string(database.EquipTypeWeapon),
@@ -1478,14 +1478,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         191,
 					ts.PfnMinEmptySlots:     4,
 					ts.PfnEquipType:         string(database.EquipTypeWeapon),
@@ -1516,14 +1516,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         191,
 					ts.PfnTotalSlots:        4,
 					ts.PfnEquipType:         string(database.EquipTypeWeapon),
@@ -1554,14 +1554,14 @@ func TestDropChance(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"monster drop chances": true,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID:         191,
 					ts.PfnTotalSlots:        4,
 					ts.PfnEquipType:         string(database.EquipTypeWeapon),

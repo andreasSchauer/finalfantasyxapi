@@ -14,17 +14,17 @@ func TestGetAllItem(t *testing.T) {
 	t.Parallel()
 	tests := []MasterItem{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/173",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "all item with provided id '173' doesn't exist. max id: 172",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/173",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "all item with provided id '173' doesn't exist. max id: 172",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/4",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/4",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(4, "mega-potion"),
 			typedItem: "/items/4",
@@ -38,10 +38,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/111",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/111",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(111, "underdog's secret"),
 			typedItem: "/items/111",
@@ -55,10 +55,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/130",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/130",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(130, "saturn sigil"),
 			typedItem: "/key-items/18",
@@ -72,10 +72,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/2?rel_availability=always",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/2?rel_availability=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
@@ -89,10 +89,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/2?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/2?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
@@ -106,10 +106,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/2?rel_availability=post",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/2?rel_availability=post",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(2, "hi-potion"),
 			typedItem: "/items/2",
@@ -123,10 +123,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/55?rel_availability=post",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/55?rel_availability=post",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
@@ -140,10 +140,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/55?rel_availability=always",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/55?rel_availability=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
@@ -157,10 +157,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/55?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/55?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
@@ -174,10 +174,10 @@ func TestGetAllItem(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items/55?rel_availability=always&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items/55?rel_availability=always&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
 			},
 			Unique:    newExpUnique(55, "chocobo wing"),
 			typedItem: "/items/55",
@@ -199,93 +199,93 @@ func TestRetrieveAllItems(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   172,
-			results: []int32{1, 28, 53, 99, 148, 172},
+			Count:   172,
+			Results: []int32{1, 28, 53, 99, 148, 172},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?type=1&methods=quest&limit=maX",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?type=1&methods=quest&limit=maX",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   53,
-			results: []int32{1, 10, 29, 46, 54, 60, 80, 109, 112},
+			Count:   53,
+			Results: []int32{1, 10, 29, 46, 54, 60, 80, 109, 112},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?location=14&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?location=14&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   42,
-			results: []int32{1, 4, 16, 47, 57, 87, 100, 134, 160},
+			Count:   42,
+			Results: []int32{1, 4, 16, 47, 57, 87, 100, 134, 160},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?sublocation=20&limit=max", // moonflow
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?sublocation=20&limit=max", // moonflow
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   33,
-			results: []int32{3, 14, 38, 103, 117, 142, 158},
+			Count:   33,
+			Results: []int32{3, 14, 38, 103, 117, 142, 158},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?area=36", // besaid village
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?area=36", // besaid village
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{1, 2, 9, 138},
+			Count:   4,
+			Results: []int32{1, 2, 9, 138},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?availability=story&location=9",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?availability=story&location=9",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{5, 81},
+			Count:   2,
+			Results: []int32{5, 81},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?availability=post-game&methods=shop&pre_airship=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?availability=post-game&methods=shop&pre_airship=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   17,
-			results: []int32{1, 9, 11, 17, 20, 36, 95, 100},
+			Count:   17,
+			Results: []int32{1, 9, 11, 17, 20, 36, 95, 100},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?availability=post-game&methods=shop&pre_airship=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?availability=post-game&methods=shop&pre_airship=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   17,
-			results: []int32{1, 2, 11, 12, 13, 16, 18, 20, 36, 95, 100},
+			Count:   17,
+			Results: []int32{1, 2, 11, 12, 13, 16, 18, 20, 36, 95, 100},
 		},
 
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?repeatable=true&methods=monster&area=170", // sanubia desert - west
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?repeatable=true&methods=monster&area=170", // sanubia desert - west
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   20,
-			results: []int32{2, 10, 21, 36, 42, 54, 77, 102, 112},
+			Count:   20,
+			Results: []int32{2, 10, 21, 36, 42, 54, 77, 102, 112},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?availability=story&repeatable=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?availability=story&repeatable=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{113, 114, 117, 118, 165, 166, 167, 168},
+			Count:   8,
+			Results: []int32{113, 114, 117, 118, 165, 166, 167, 168},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/all-items?availability=post-game&repeatable=false&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/all-items?availability=post-game&repeatable=false&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   52,
-			results: []int32{115, 120, 125, 133, 145, 157, 172},
+			Count:   52,
+			Results: []int32{115, 120, 125, 133, 145, 157, 172},
 		},
 	}
 

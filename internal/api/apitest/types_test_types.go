@@ -39,38 +39,38 @@ type testStructIdx[G any] interface {
 }
 
 type testStruct[G any] interface {
-	Compare(test, string, G)
+	Compare(Test, string, G)
 }
 
-type test struct {
-	t          *testing.T
-	srv        *api.Server
-	name       string
-	expLengths map[string]int
-	dontCheck  map[string]bool
+type Test struct {
+	T          *testing.T
+	Srv        *api.Server
+	Name       string
+	ExpLengths map[string]int
+	DontCheck  map[string]bool
 }
 
-type testGeneral struct {
-	requestURL     string
-	expectedStatus int
-	expectedErr    string
-	dontCheck      map[string]bool
-	expLengths     map[string]int
-	endpoint       ts.EndpointName
-	handler        func(http.ResponseWriter, *http.Request)
-	method         string
-	requestBody    any
+type TestGeneral struct {
+	RequestURL     string
+	ExpectedStatus int
+	ExpectedErr    string
+	DontCheck      map[string]bool
+	ExpLengths     map[string]int
+	Endpoint       ts.EndpointName
+	Handler        func(http.ResponseWriter, *http.Request)
+	Method         string
+	RequestBody    any
 }
 
-func (t testGeneral) GetTestGeneral() testGeneral {
+func (t TestGeneral) GetTestGeneral() TestGeneral {
 	return t
 }
 
-func (t testGeneral) getTestName(name string, caseNum int) string {
-	context := fmt.Sprintf("url: %s", t.requestURL)
+func (t TestGeneral) getTestName(name string, caseNum int) string {
+	context := fmt.Sprintf("url: %s", t.RequestURL)
 
-	if t.requestBody != nil {
-		json, _ := json.Marshal(t.requestBody)
+	if t.RequestBody != nil {
+		json, _ := json.Marshal(t.RequestBody)
 		json = h.CleanUpJSON(json)
 
 		context = fmt.Sprintf("%s | json body: %s", context, string(json))
@@ -80,9 +80,9 @@ func (t testGeneral) getTestName(name string, caseNum int) string {
 }
 
 type NameVer struct {
-	id      int32
-	name    string
-	version *int32
+	ID      int32
+	Name    string
+	Version *int32
 }
 
 func newExpNameVer(id int32, name string, version int32) NameVer {
@@ -92,103 +92,85 @@ func newExpNameVer(id int32, name string, version int32) NameVer {
 	}
 
 	return NameVer{
-		id:      id,
-		name:    name,
-		version: vPtr,
+		ID:      id,
+		Name:    name,
+		Version: vPtr,
 	}
 }
 
-func (test test) compareExpNameVer(e NameVer, gotID int32, gotName string, gotVer *int32) {
-	test.t.Helper()
-	test.compare("id", e.id, gotID)
-	test.compare("name", e.name, gotName)
-	test.compare("version", e.version, gotVer)
+func (test Test) compareExpNameVer(e NameVer, gotID int32, gotName string, gotVer *int32) {
+	test.T.Helper()
+	test.compare("id", e.ID, gotID)
+	test.compare("name", e.Name, gotName)
+	test.compare("version", e.Version, gotVer)
 }
 
 type Unique struct {
-	id   int32
-	name string
+	ID   int32
+	Name string
 }
 
 func newExpUnique(id int32, name string) Unique {
 	return Unique{
-		id:   id,
-		name: name,
+		ID:   id,
+		Name: name,
 	}
 }
 
-func (test test) compareExpUnique(e Unique, gotID int32, gotName string) {
-	test.t.Helper()
-	test.compare("id", e.id, gotID)
-	test.compare("name", e.name, gotName)
+func (test Test) compareExpUnique(e Unique, gotID int32, gotName string) {
+	test.T.Helper()
+	test.compare("id", e.ID, gotID)
+	test.compare("name", e.Name, gotName)
 }
 
 type IDOnly struct {
-	id int32
+	ID int32
 }
 
 func newExpIDOnly(id int32) IDOnly {
 	return IDOnly{
-		id: id,
+		ID: id,
 	}
 }
 
-func (test test) compareExpIDOnly(e IDOnly, gotID int32) {
-	test.t.Helper()
-	test.compare("id", e.id, gotID)
+func (test Test) compareExpIDOnly(e IDOnly, gotID int32) {
+	test.T.Helper()
+	test.compare("id", e.ID, gotID)
 }
 
 type ListIDs struct {
-	testGeneral
-	count          int
-	previous       *string
-	next           *string
-	parentResource *string
-	results        []int32
+	TestGeneral
+	apiresource.ListParams
+	ParentResource *string
+	Results        []int32
 }
 
 func (l ListIDs) GetListParams() apiresource.ListParams {
-	return apiresource.ListParams{
-		Count:    l.count,
-		Previous: l.previous,
-		Next:     l.next,
-	}
+	return l.ListParams
 }
 
 type ListPaths struct {
-	testGeneral
-	count    int
-	previous *string
-	next     *string
-	results  []string
+	TestGeneral
+	apiresource.ListParams
+	Results  []string
 }
 
 func (l ListPaths) GetListParams() apiresource.ListParams {
-	return apiresource.ListParams{
-		Count:    l.count,
-		Previous: l.previous,
-		Next:     l.next,
-	}
+	return l.ListParams
 }
 
 type ListNames struct {
-	testGeneral
-	count    int
-	previous *string
-	next     *string
-	results  []ts.NamedParam
+	TestGeneral
+	apiresource.ListParams
+	Results  []ts.NamedParam
 }
 
 func (l ListNames) GetListParams() apiresource.ListParams {
-	return apiresource.ListParams{
-		Count:    l.count,
-		Previous: l.previous,
-		Next:     l.next,
-	}
+	return l.ListParams
 }
 
-func (test test) compareListParams(exp, got apiresource.ListParams) {
-	test.t.Helper()
+func (test Test) compareListParams(exp, got apiresource.ListParams) {
+	test.T.Helper()
 	test.compare("count", exp.Count, got.Count)
 	test.compPageURL("previous", exp.Previous, got.Previous)
 	test.compPageURL("next", exp.Next, got.Next)

@@ -13,18 +13,18 @@ func TestGetMix(t *testing.T) {
 	t.Parallel()
 	tests := []Mix{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/mixes/65",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "mix with provided id '65' doesn't exist. max id: 64",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/mixes/65",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "mix with provided id '65' doesn't exist. max id: 64",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/mixes/23",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/mixes/23",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"combinations": 62,
 				},
 			},
@@ -50,11 +50,11 @@ func TestGetMix(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/mixes/23?best=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/mixes/23?best=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"combinations": 2,
 				},
 			},
@@ -75,11 +75,11 @@ func TestGetMix(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/mixes/34?contains_item=2",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/mixes/34?contains_item=2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"combinations": 15,
 				},
 			},
@@ -113,36 +113,36 @@ func TestRetrieveMixes(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/mixes?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/mixes?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   64,
-			results: []int32{1, 14, 38, 44, 55, 64},
+			Count:   64,
+			Results: []int32{1, 14, 38, 44, 55, 64},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/mixes?category=fire-elemental",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/mixes?category=fire-elemental",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{11, 12, 13, 14, 15},
+			Count:   5,
+			Results: []int32{11, 12, 13, 14, 15},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/mixes?req_item=45",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/mixes?req_item=45",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{5, 9, 33, 58, 63},
+			Count:   14,
+			Results: []int32{5, 9, 33, 58, 63},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/mixes?req_item=45&second_item=98",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/mixes?req_item=45&second_item=98",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{63},
+			Count:   1,
+			Results: []int32{63},
 		},
 	}
 

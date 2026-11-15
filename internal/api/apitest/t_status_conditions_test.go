@@ -12,18 +12,18 @@ func TestGetStatusCondition(t *testing.T) {
 	t.Parallel()
 	tests := []StatusCondition{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/46",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "status condition with provided id '46' doesn't exist. max id: 45",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/status-conditions/46",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "status condition with provided id '46' doesn't exist. max id: 45",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/5?inflict_min=always",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/status-conditions/5?inflict_min=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":                     5,
 					"monsters":                           191,
 					"inflicted by - player abilities":    1,
@@ -47,11 +47,11 @@ func TestGetStatusCondition(t *testing.T) {
 			removedBy: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/9?inflict_max=60",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/status-conditions/9?inflict_max=60",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":                     6,
 					"monsters":                           195,
 					"inflicted by - player abilities":    0,
@@ -86,11 +86,11 @@ func TestGetStatusCondition(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/21?inflict_min=infinite&resistance=immune",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/status-conditions/21?inflict_min=infinite&resistance=immune",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":                     2,
 					"monsters":                           20,
 					"inflicted by - player abilities":    2,
@@ -125,11 +125,11 @@ func TestGetStatusCondition(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/31",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/status-conditions/31",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":                     0,
 					"monsters":                           6,
 					"inflicted by - player abilities":    0,
@@ -172,20 +172,20 @@ func TestRetrieveStatusConditions(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/status-conditions?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   45,
-			results: []int32{1, 8, 14, 16, 22, 38, 45},
+			Count:   45,
+			Results: []int32{1, 8, 14, 16, 22, 38, 45},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/status-conditions/?category=2",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/status-conditions/?category=2",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 40},
+			Count:   11,
+			Results: []int32{21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 40},
 		},
 	}
 

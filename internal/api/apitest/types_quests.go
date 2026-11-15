@@ -7,19 +7,19 @@ import (
 )
 
 type Sidequest struct {
-	testGeneral
+	TestGeneral
 	Unique
 	untypedQuest int32
 	completion   *testQuestCompletion
 	subquests    []int32
 }
 
-func (e Sidequest) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Sidequest) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Sidequest) Compare(test test, got apitypes.Sidequest) {
-	test.t.Helper()
+func (e Sidequest) Compare(test Test, got apitypes.Sidequest) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, e.untypedQuest, got.UntypedQuest)
 	test.compTestStructPtrs("completion", e.completion, got.Completion)
@@ -27,7 +27,7 @@ func (e Sidequest) Compare(test test, got apitypes.Sidequest) {
 }
 
 type Subquest struct {
-	testGeneral
+	TestGeneral
 	Unique
 	untypedQuest    int32
 	parentSidequest int32
@@ -35,12 +35,12 @@ type Subquest struct {
 	arenaCreation   *int32
 }
 
-func (e Subquest) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Subquest) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Subquest) Compare(test test, got apitypes.Subquest) {
-	test.t.Helper()
+func (e Subquest) Compare(test Test, got apitypes.Subquest) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped quest", apilookups.E.Quests.Endpoint, e.untypedQuest, got.UntypedQuest)
 	test.compIDAPIResource("parent sidequest", apilookups.E.Sidequests.Endpoint, e.parentSidequest, got.ParentSidequest)
@@ -53,8 +53,8 @@ type testQuestCompletion struct {
 	reward testResAmount[apiresource.Typed]
 }
 
-func (e testQuestCompletion) Compare(test test, fieldName string, got apitypes.QuestCompletion) {
-	test.t.Helper()
+func (e testQuestCompletion) Compare(test Test, fieldName string, got apitypes.QuestCompletion) {
+	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" - areas", apilookups.E.Areas.Endpoint, e.areas, got.Areas)
 	e.reward.Compare(test, fieldName+" - rewards", got.Reward)
 }

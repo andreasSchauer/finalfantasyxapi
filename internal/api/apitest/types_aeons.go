@@ -6,7 +6,7 @@ import (
 )
 
 type Aeon struct {
-	testGeneral
+	TestGeneral
 	Unique
 	untypedUnit            int32
 	area                   int32
@@ -23,12 +23,12 @@ type Aeon struct {
 	armorAbilities         []AeonEquipment
 }
 
-func (e Aeon) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Aeon) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Aeon) Compare(test test, got apitypes.Aeon) {
-	test.t.Helper()
+func (e Aeon) Compare(test Test, got apitypes.Aeon) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResource("untyped unit", apilookups.E.PlayerUnits.Endpoint, e.untypedUnit, got.UntypedUnit)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
@@ -49,8 +49,8 @@ type AeonEquipment struct {
 	celestialWeapon bool
 }
 
-func (e AeonEquipment) Compare(test test, _ string, got apitypes.AeonEquipment) {
-	test.t.Helper()
+func (e AeonEquipment) Compare(test Test, _ string, got apitypes.AeonEquipment) {
+	test.T.Helper()
 	test.compIDAPIResource("auto ability", apilookups.E.AutoAbilities.Endpoint, e.autoAbility, got.AutoAbility)
 	test.compare("celestial weapon", e.celestialWeapon, got.CelestialWeapon)
 }

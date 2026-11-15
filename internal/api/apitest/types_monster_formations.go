@@ -6,7 +6,7 @@ import (
 )
 
 type MonsterFormation struct {
-	testGeneral
+	TestGeneral
 	IDOnly
 	category        string
 	isForcedAmbush  bool
@@ -20,12 +20,12 @@ type MonsterFormation struct {
 	triggerCommands []testFormationTC
 }
 
-func (e MonsterFormation) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e MonsterFormation) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e MonsterFormation) Compare(test test, got apitypes.MonsterFormation) {
-	test.t.Helper()
+func (e MonsterFormation) Compare(test Test, got apitypes.MonsterFormation) {
+	test.T.Helper()
 	test.compareExpIDOnly(e.IDOnly, got.ID)
 	test.compare("category", e.category, got.Category)
 	test.compare("is forced ambush", e.isForcedAmbush, got.IsForcedAmbush)
@@ -44,8 +44,8 @@ type testFormationTC struct {
 	Users   []int32
 }
 
-func (e testFormationTC) Compare(test test, fieldName string, got apitypes.FormationTriggerCommand) {
-	test.t.Helper()
+func (e testFormationTC) Compare(test Test, fieldName string, got apitypes.FormationTriggerCommand) {
+	test.T.Helper()
 	tcEndpoint := apilookups.E.TriggerCommands.Endpoint
 	charClassesEndpoint := apilookups.E.CharacterClasses.Endpoint
 

@@ -15,46 +15,46 @@ func TestGetTreasure(t *testing.T) {
 	t.Parallel()
 	tests := []Treasure{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/a",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid id 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/343",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "treasure with provided id '343' doesn't exist. max id: 342",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/343",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "treasure with provided id '343' doesn't exist. max id: 342",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/3/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "endpoint /treasures doesn't have any subsections",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/3/a",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "endpoint /treasures doesn't have any subsections",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/a/3",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. usage: '/api/treasures', '/api/treasures/{id}'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/a/3",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "wrong format. usage: '/api/treasures', '/api/treasures/{id}'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/2/2",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/treasures/sections for valid subsections",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/2/2",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/treasures/sections for valid subsections",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/199",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths:     map[string]int{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/199",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths:     map[string]int{},
 			},
 			IDOnly:          newExpIDOnly(199),
 			area:            158,
@@ -69,11 +69,11 @@ func TestGetTreasure(t *testing.T) {
 			equipment: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/13",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths:     map[string]int{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/13",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths:     map[string]int{},
 			},
 			IDOnly:          newExpIDOnly(13),
 			area:            15,
@@ -88,11 +88,11 @@ func TestGetTreasure(t *testing.T) {
 			equipment: nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/62",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths:     map[string]int{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/62",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths:     map[string]int{},
 			},
 			IDOnly:          newExpIDOnly(62),
 			area:            60,
@@ -109,11 +109,11 @@ func TestGetTreasure(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/284",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths:     map[string]int{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/284",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths:     map[string]int{},
 			},
 			IDOnly:          newExpIDOnly(284),
 			area:            212,
@@ -126,11 +126,11 @@ func TestGetTreasure(t *testing.T) {
 			equipment:       nil,
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/45",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths:     map[string]int{},
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/45",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths:     map[string]int{},
 			},
 			IDOnly:          newExpIDOnly(45),
 			area:            42,
@@ -153,84 +153,84 @@ func TestRetrieveTreasures(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   342,
-			results: []int32{1, 28, 53, 84, 123, 127, 167, 191, 214, 286, 300, 342},
+			Count:   342,
+			Results: []int32{1, 28, 53, 84, 123, 127, 167, 191, 214, 286, 300, 342},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?location=4&loot_type=item&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?location=4&loot_type=item&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   21,
-			results: []int32{15, 18, 20, 23, 35, 37, 41, 44},
+			Count:   21,
+			Results: []int32{15, 18, 20, 23, 35, 37, 41, 44},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?sublocation=43&treasure_type=chest", // omega ruins
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?sublocation=43&treasure_type=chest", // omega ruins
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   15,
-			results: []int32{328, 330, 335, 337, 339, 342},
+			Count:   15,
+			Results: []int32{328, 330, 335, 337, 339, 342},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?area=212", // gagazet - mountain trail
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?area=212", // gagazet - mountain trail
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{284, 285, 286, 287, 288, 289},
+			Count:   6,
+			Results: []int32{284, 285, 286, 287, 288, 289},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?anima=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?anima=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{39, 62, 150, 210, 253, 302},
+			Count:   6,
+			Results: []int32{39, 62, 150, 210, 253, 302},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?availability=pre-story&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?availability=pre-story&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   99,
-			results: []int32{1, 23, 91, 119, 139, 206, 239, 261, 263},
+			Count:   99,
+			Results: []int32{1, 23, 91, 119, 139, 206, 239, 261, 263},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?availability=post&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?availability=post&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   59,
-			results: []int32{5, 30, 43, 64, 81, 109, 153, 211, 308, 342},
+			Count:   59,
+			Results: []int32{5, 30, 43, 64, 81, 109, 153, 211, 308, 342},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?availability=always&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?availability=always&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   174,
-			results: []int32{2, 54, 80, 108, 147, 179, 214, 265, 295, 303},
+			Count:   174,
+			Results: []int32{2, 54, 80, 108, 147, 179, 214, 265, 295, 303},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?availability=pre-story&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?availability=pre-story&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   99,
-			results: []int32{1, 55, 112, 206, 248, 267},
+			Count:   99,
+			Results: []int32{1, 55, 112, 206, 248, 267},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures?availability=post-story",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures?availability=post-story",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{317, 321, 324, 326},
+			Count:   10,
+			Results: []int32{317, 321, 324, 326},
 		},
 	}
 
@@ -241,34 +241,34 @@ func TestSubsectionTreasures(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/6/treasures",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/6/treasures",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleLocations,
 			},
-			count:          17,
-			parentResource: h.GetStrPtr("/locations/6"),
-			results:        []int32{50, 53, 55, 59, 62, 65, 66},
+			Count:          17,
+			ParentResource: h.GetStrPtr("/locations/6"),
+			Results:        []int32{50, 53, 55, 59, 62, 65, 66},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/21/treasures",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/21/treasures",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          5,
-			parentResource: h.GetStrPtr("/sublocations/21"),
-			results:        []int32{167, 168, 169, 170, 171},
+			Count:          5,
+			ParentResource: h.GetStrPtr("/sublocations/21"),
+			Results:        []int32{167, 168, 169, 170, 171},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/223/treasures",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/223/treasures",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAreas,
 			},
-			count:          3,
-			parentResource: h.GetStrPtr("/areas/223"),
-			results:        []int32{298, 299, 300},
+			Count:          3,
+			ParentResource: h.GetStrPtr("/areas/223"),
+			Results:        []int32{298, 299, 300},
 		},
 	}
 

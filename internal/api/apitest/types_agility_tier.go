@@ -5,7 +5,7 @@ import (
 )
 
 type AgilityTier struct {
-	testGeneral
+	TestGeneral
 	IDOnly
 	fromAgility int32
 	toAgility   int32
@@ -16,12 +16,12 @@ type AgilityTier struct {
 	charMinICVs []apitypes.AgilitySubtier
 }
 
-func (e AgilityTier) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e AgilityTier) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e AgilityTier) Compare(test test, got apitypes.AgilityTier) {
-	test.t.Helper()
+func (e AgilityTier) Compare(test Test, got apitypes.AgilityTier) {
+	test.T.Helper()
 	test.compareExpIDOnly(e.IDOnly, got.ID)
 	test.compare("from agility", e.fromAgility, got.FromAgility)
 	test.compare("to agility", e.toAgility, got.ToAgility)

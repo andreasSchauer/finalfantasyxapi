@@ -5,16 +5,16 @@ import (
 )
 
 type DropChanceResponse struct {
-	testGeneral
+	TestGeneral
 	servicetypes.DropChanceResponse
 }
 
-func (e DropChanceResponse) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e DropChanceResponse) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e DropChanceResponse) Compare(test test, got servicetypes.DropChanceResponse) {
-	test.t.Helper()
+func (e DropChanceResponse) Compare(test Test, got servicetypes.DropChanceResponse) {
+	test.T.Helper()
 	test.compare("drop chance fin blow", e.DropChanceFinBlow, got.DropChanceFinBlow)
 	test.compare("drop chance no fin blow", e.DropChanceNoFinBlow, got.DropChanceNoFinBlow)
 	test.compStructs("wanted equipment", e.WantedEquipment, got.WantedEquipment)

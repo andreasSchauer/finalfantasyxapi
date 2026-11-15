@@ -13,18 +13,18 @@ func TestGetElement(t *testing.T) {
 	t.Parallel()
 	tests := []Element{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/elements/6",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "element with provided id '6' doesn't exist. max id: 5",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/elements/6",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "element with provided id '6' doesn't exist. max id: 5",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/elements/2",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/elements/2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"auto-abilities":      4,
 					"player abilities":    3,
 					"overdrive abilities": 17,
@@ -57,12 +57,12 @@ func TestRetrieveElements(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/elements",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/elements",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{1, 2, 3, 4, 5},
+			Count:   5,
+			Results: []int32{1, 2, 3, 4, 5},
 		},
 	}
 

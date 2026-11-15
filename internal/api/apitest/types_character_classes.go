@@ -6,7 +6,7 @@ import (
 )
 
 type CharacterClass struct {
-	testGeneral
+	TestGeneral
 	Unique
 	category            string
 	members             []int32
@@ -17,12 +17,12 @@ type CharacterClass struct {
 	submenus            []int32
 }
 
-func (e CharacterClass) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e CharacterClass) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e CharacterClass) Compare(test test, got apitypes.CharacterClass) {
-	test.t.Helper()
+func (e CharacterClass) Compare(test Test, got apitypes.CharacterClass) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("category", e.category, got.Category)
 	test.checkResIDsInSlice("members", apilookups.E.PlayerUnits.Endpoint, e.members, got.Members)

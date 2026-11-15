@@ -12,18 +12,18 @@ func TestGetAutoAbility(t *testing.T) {
 	t.Parallel()
 	tests := []AutoAbility{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/131",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "auto-ability with provided id '131' doesn't exist. max id: 130",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/131",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "auto-ability with provided id '131' doesn't exist. max id: 130",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/50",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/50",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters drop":      1,
 					"monsters items":     4,
 					"shops pre airship":  0,
@@ -62,11 +62,11 @@ func TestGetAutoAbility(t *testing.T) {
 			equipmentTables:  []int32{7, 30},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/2?rel_availability=post",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/2?rel_availability=post",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters drop":      22,
 					"monsters items":     2,
 					"shops pre airship":  0,
@@ -95,11 +95,11 @@ func TestGetAutoAbility(t *testing.T) {
 			equipmentTables:  []int32{76, 78},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/2?rel_availability=always",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/2?rel_availability=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters drop":      100,
 					"monsters items":     3,
 					"shops pre airship":  5,
@@ -133,11 +133,11 @@ func TestGetAutoAbility(t *testing.T) {
 			equipmentTables:  []int32{76, 78},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/45?rel_availability=always",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/45?rel_availability=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters drop":      0,
 					"monsters items":     2,
 					"shops pre airship":  0,
@@ -166,11 +166,11 @@ func TestGetAutoAbility(t *testing.T) {
 			equipmentTables:  []int32{15, 20},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/55?rel_availability=story&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/55?rel_availability=story&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters drop":      3,
 					"monsters items":     0,
 					"shops pre airship":  2,
@@ -188,11 +188,11 @@ func TestGetAutoAbility(t *testing.T) {
 			equipmentTables:  []int32{137},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/55?rel_availability=post-game&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/55?rel_availability=post-game&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters drop":      8,
 					"monsters items":     2,
 					"shops pre airship":  0,
@@ -223,11 +223,11 @@ func TestGetAutoAbility(t *testing.T) {
 			equipmentTables:  []int32{137},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/10",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/10",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters drop":      9,
 					"monsters items":     9,
 					"shops pre airship":  0,
@@ -262,11 +262,11 @@ func TestGetAutoAbility(t *testing.T) {
 			equipmentTables:  []int32{25, 32, 46},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/89?rel_availability=pre-airship",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/89?rel_availability=pre-airship",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"monsters drop":      9,
 					"monsters items":     4,
 					"shops pre airship":  1,
@@ -306,13 +306,13 @@ func TestGetAutoAbility(t *testing.T) {
 			equipmentTables:  []int32{102, 142},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/1?rel_availability=always",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/1?rel_availability=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"equipment tables": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters drop":      3,
 					"monsters items":     12,
 					"shops pre airship":  2,
@@ -346,13 +346,13 @@ func TestGetAutoAbility(t *testing.T) {
 			treasures:        []int32{39, 54, 104, 174},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/1?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/1?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"equipment tables": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters drop":      3,
 					"monsters items":     12,
 					"shops pre airship":  2,
@@ -387,13 +387,13 @@ func TestGetAutoAbility(t *testing.T) {
 			treasures:        []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/1?rel_availability=pre-story",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/1?rel_availability=pre-story",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"equipment tables": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters drop":      7,
 					"monsters items":     16,
 					"shops pre airship":  1,
@@ -428,13 +428,13 @@ func TestGetAutoAbility(t *testing.T) {
 			treasures:        []int32{84},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/51?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/51?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"equipment tables": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters drop":      1,
 					"monsters items":     8,
 					"shops pre airship":  0,
@@ -466,13 +466,13 @@ func TestGetAutoAbility(t *testing.T) {
 			treasures:        []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities/51?rel_availability=post&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities/51?rel_availability=post&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"equipment tables": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"monsters drop":      8,
 					"monsters items":     9,
 					"shops pre airship":  0,
@@ -512,92 +512,92 @@ func TestRetrieveAutoAbilities(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   130,
-			results: []int32{1, 33, 67, 89, 101, 111, 121, 130},
+			Count:   130,
+			Results: []int32{1, 33, 67, 89, 101, 111, 121, 130},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?category=1&type=armor",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?category=1&type=armor",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   16,
-			results: []int32{103, 106, 110, 112, 114, 118},
+			Count:   16,
+			Results: []int32{103, 106, 110, 112, 114, 118},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?monster=294",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?monster=294",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{5, 51, 57, 128, 129},
+			Count:   5,
+			Results: []int32{5, 51, 57, 128, 129},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?monster_items=294",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?monster_items=294",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{51, 113, 117, 121, 129},
+			Count:   5,
+			Results: []int32{51, 113, 117, 121, 129},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=post&customize=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?availability=post&customize=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{32, 35, 36, 42, 88, 105, 118},
+			Count:   7,
+			Results: []int32{32, 35, 36, 42, 88, 105, 118},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=post&customize=false&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?availability=post&customize=false&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   22,
-			results: []int32{3, 38, 42, 50, 84, 98, 110, 121, 127},
+			Count:   22,
+			Results: []int32{3, 38, 42, 50, 84, 98, 110, 121, 127},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=always&monster=85&character=1",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?availability=always&monster=85&character=1",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{5, 6, 7, 8, 27, 73, 116},
+			Count:   7,
+			Results: []int32{5, 6, 7, 8, 27, 73, 116},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=pre-story&character=5&area=213", // gagazet - prominence
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?availability=pre-story&character=5&area=213", // gagazet - prominence
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{2, 10, 93},
+			Count:   3,
+			Results: []int32{2, 10, 93},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=always&sublocation=26&character=2&methods=treasure", // macalania woods
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?availability=always&sublocation=26&character=2&methods=treasure", // macalania woods
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{69, 83},
+			Count:   2,
+			Results: []int32{69, 83},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=post&location=4",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?availability=post&location=4",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{3, 38, 43, 51, 59, 102, 128, 129},
+			Count:   11,
+			Results: []int32{3, 38, 43, 51, 59, 102, 128, 129},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/auto-abilities?availability=post&area=236&repeatable=false", // omega ruins bottom
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/auto-abilities?availability=post&area=236&repeatable=false", // omega ruins bottom
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   9,
-			results: []int32{37, 39, 60, 74, 127},
+			Count:   9,
+			Results: []int32{37, 39, 60, 74, 127},
 		},
 	}
 

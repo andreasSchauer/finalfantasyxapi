@@ -6,7 +6,7 @@ import (
 )
 
 type Element struct {
-	testGeneral
+	TestGeneral
 	Unique
 	statusProtection   *int32
 	autoAbilities      []int32
@@ -20,12 +20,12 @@ type Element struct {
 	monstersAbsorb     []int32
 }
 
-func (e Element) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Element) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Element) Compare(test test, got apitypes.Element) {
-	test.t.Helper()
+func (e Element) Compare(test Test, got apitypes.Element) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compIDAPIResourcePtrs("status protection", apilookups.E.StatusConditions.Endpoint, e.statusProtection, got.StatusProtection)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)

@@ -7,19 +7,19 @@ import (
 )
 
 type Mix struct {
-	testGeneral
+	TestGeneral
 	Unique
 	category     database.MixCategory
 	overdrive    int32
 	combinations []testMixCombination
 }
 
-func (e Mix) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Mix) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Mix) Compare(test test, got apitypes.Mix) {
-	test.t.Helper()
+func (e Mix) Compare(test Test, got apitypes.Mix) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("category", string(e.category), got.Category)
 	test.compIDAPIResource("overdrive", apilookups.E.Overdrives.Endpoint, e.overdrive, got.Overdrive)
@@ -36,8 +36,8 @@ func (e testMixCombination) GetIndex() int {
 	return e.index
 }
 
-func (e testMixCombination) Compare(test test, fieldName string, got apitypes.MixCombination) {
-	test.t.Helper()
+func (e testMixCombination) Compare(test Test, fieldName string, got apitypes.MixCombination) {
+	test.T.Helper()
 	test.compIDAPIResource(fieldName+" - first item", apilookups.E.Items.Endpoint, e.firstItem, got.FirstItem)
 	test.compIDAPIResource(fieldName+" - second item", apilookups.E.Items.Endpoint, e.secondItem, got.SecondItem)
 }

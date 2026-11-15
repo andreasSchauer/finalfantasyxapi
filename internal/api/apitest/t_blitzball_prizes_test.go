@@ -12,32 +12,32 @@ func TestGetBlitzballPrize(t *testing.T) {
 	t.Parallel()
 	tests := []BlitzballPrize{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes/9",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "blitzball prize table with provided id '9' doesn't exist. max id: 8",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes/9",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "blitzball prize table with provided id '9' doesn't exist. max id: 8",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes/9/2",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/blitzball-prizes/sections for valid subsections",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes/9/2",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/blitzball-prizes/sections for valid subsections",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes/a",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid id 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes/a",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid id 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes/1",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes/1",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"items": 8,
 				},
 			},
@@ -51,11 +51,11 @@ func TestGetBlitzballPrize(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes/8",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes/8",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"items": 3,
 				},
 			},
@@ -76,27 +76,27 @@ func TestRetrieveBlitzballPrizes(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes?category=asd",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/blitzball-prizes/parameters to see allowed values",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes?category=asd",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid enum value 'asd' used for parameter 'category'. use /api/blitzball-prizes/parameters to see allowed values",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{1, 2, 3, 4, 5, 6, 7, 8},
+			Count:   8,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes?category=league",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes?category=league",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{1, 2, 3, 4},
+			Count:   4,
+			Results: []int32{1, 2, 3, 4},
 		},
 	}
 

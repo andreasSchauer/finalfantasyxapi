@@ -17,88 +17,88 @@ func TestTurnOrder(t *testing.T) {
 
 	tests := []TurnOrderResponse{
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "at least one of these fields must have a value: 'party', 'mons', 'formation_id'",
-				requestBody:    map[ts.FieldName]any{},
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "at least one of these fields must have a value: 'party', 'mons', 'formation_id'",
+				RequestBody:    map[ts.FieldName]any{},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value '0' of field 'turns_amt' is out of range. allowed range: 1 to 1000",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "value '0' of field 'turns_amt' is out of range. allowed range: 1 to 1000",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt: 0,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "id '0' of field 'formation_id' is out of range. allowed range: 1 to 331",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "id '0' of field 'formation_id' is out of range. allowed range: 1 to 331",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnFormationID: 0,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "empty array used for field 'party'. the use of empty arrays is not supported by this api. omit the field, or use 'null' instead",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "empty array used for field 'party'. the use of empty arrays is not supported by this api. omit the field, or use 'null' instead",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "empty array used for field 'mons'. the use of empty arrays is not supported by this api. omit the field, or use 'null' instead",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "empty array used for field 'mons'. the use of empty arrays is not supported by this api. omit the field, or use 'null' instead",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "too many items in array of field 'party'. got: 4, maximum allowed: 3",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "too many items in array of field 'party'. got: 4, maximum allowed: 3",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{{}, {}, {}, {}},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "field 'formation_id' can't be used in combination with field 'mons'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "field 'formation_id' can't be used in combination with field 'mons'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnFormationID: 0,
 					ts.PfnMons:        []map[ts.FieldName]any{{}, {}, {}, {}},
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 0 of array at field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID: 0,
@@ -108,12 +108,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of array at field 'party': field 'unit_id' can't be empty",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 1 of array at field 'party': field 'unit_id' can't be empty",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID:  1,
@@ -127,12 +127,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of array at field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 1 of array at field 'party': id '0' of field 'unit_id' is out of range. allowed range: 1 to 18",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID:  1,
@@ -147,12 +147,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of array at field 'party': field 'agility' can't be empty",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 1 of array at field 'party': field 'agility' can't be empty",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID:  1,
@@ -166,12 +166,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "field 'party': duplicate unit id found at index 1. each party member can only appear once",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "field 'party': duplicate unit id found at index 1. each party member can only appear once",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID:  1,
@@ -186,12 +186,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'party': value 'hapfte' of field 'status' is not a valid enum value. allowed values: 'haste', 'slow', 'auto-haste'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 0 of array at field 'party': value 'hapfte' of field 'status' is not a valid enum value. allowed values: 'haste', 'slow', 'auto-haste'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID:  1,
@@ -207,12 +207,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of array at field 'party': invalid field: 'text'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 1 of array at field 'party': invalid field: 'text'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID:  1,
@@ -227,12 +227,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'mons': at least one of these fields must have a value: 'monster_id', 'name'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 0 of array at field 'mons': at least one of these fields must have a value: 'monster_id', 'name'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnAgility: 25,
@@ -242,12 +242,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'mons': field 'name' requires the following fields to have a value: 'agility'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 0 of array at field 'mons': field 'name' requires the following fields to have a value: 'agility'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnName: "frank",
@@ -257,12 +257,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of array at field 'mons': field 'name' can't be used in combination with field 'monster_id'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 1 of array at field 'mons': field 'name' can't be used in combination with field 'monster_id'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID: 23,
@@ -276,12 +276,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 1 of array at field 'mons': field 'alt_state' requires the following fields to have a value: 'monster_id'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 1 of array at field 'mons': field 'alt_state' requires the following fields to have a value: 'monster_id'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID: 23,
@@ -295,12 +295,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 2 of array at field 'mons': field 'alt_state' can only be used with the following id-value pairs: id: 32, vals: 2, 3 | id: 139, vals: 1, 2, 3 | id: 160, vals: 1 | id: 198, vals: 1 | id: 285, vals: 1 | id: 287, vals: 2",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 2 of array at field 'mons': field 'alt_state' can only be used with the following id-value pairs: id: 32, vals: 2, 3 | id: 139, vals: 1, 2, 3 | id: 160, vals: 1 | id: 198, vals: 1 | id: 285, vals: 1 | id: 287, vals: 2",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID: 23,
@@ -320,12 +320,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'mons': provided value '1' used for 'alt_state' is not available for id '32'. allowed vals: 2, 3",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 0 of array at field 'mons': provided value '1' used for 'alt_state' is not available for id '32'. allowed vals: 2, 3",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID: 32,
@@ -336,12 +336,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'mons': provided value '0' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 0 of array at field 'mons': provided value '0' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID: 32,
@@ -352,12 +352,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "index 0 of array at field 'mons': provided value '4' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "index 0 of array at field 'mons': provided value '4' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID: 32,
@@ -368,12 +368,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "field 'mons': duplicate monster found at index 1. exact duplicate monsters are not allowed",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "field 'mons': duplicate monster found at index 1. exact duplicate monsters are not allowed",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID: 32,
@@ -386,12 +386,12 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "monster 'penance' is immune to 'slow'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "monster 'penance' is immune to 'slow'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID: 305,
@@ -402,16 +402,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     30,
 					"player party":   1,
 					"opponent party": 0,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID:  1,
@@ -468,16 +468,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     20,
 					"player party":   1,
 					"opponent party": 1,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt: 20,
 					ts.PfnRNG:      string(database.TurnOrderRngWorst),
 					ts.PfnParty: []map[ts.FieldName]any{
@@ -564,16 +564,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     10,
 					"player party":   1,
 					"opponent party": 1,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt:      10,
 					ts.PfnIgnImmunities: true,
 					ts.PfnRNG:           string(database.TurnOrderRngBest),
@@ -661,16 +661,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     10,
 					"player party":   1,
 					"opponent party": 2,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt:      10,
 					ts.PfnIgnImmunities: true,
 					ts.PfnRNG:           string(database.TurnOrderRngBest),
@@ -779,16 +779,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     10,
 					"player party":   3,
 					"opponent party": 1,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt:    10,
 					ts.PfnBattleStart: string(database.BattleStartAmbush),
 					ts.PfnParty: []map[ts.FieldName]any{
@@ -917,16 +917,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     10,
 					"player party":   1,
 					"opponent party": 2,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt:    10,
 					ts.PfnBattleStart: string(database.BattleStartNormal),
 					ts.PfnFormationID: 88,
@@ -1017,16 +1017,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     10,
 					"player party":   1,
 					"opponent party": 2,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt:    10,
 					ts.PfnBattleStart: string(database.BattleStartPreemptive),
 					ts.PfnFormationID: 88,
@@ -1124,16 +1124,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     10,
 					"player party":   1,
 					"opponent party": 1,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt:      10,
 					ts.PfnIgnFirstTurn:  true,
 					ts.PfnIgnImmunities: true,
@@ -1226,16 +1226,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     10,
 					"player party":   0,
 					"opponent party": 3,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnTurnsAmt: 10,
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
@@ -1339,19 +1339,19 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"turn order": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"turn order":     30,
 					"player party":   0,
 					"opponent party": 1,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
 							ts.PfnMonsterID:   93,
@@ -1385,19 +1385,19 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"turn order": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"turn order":     30,
 					"player party":   0,
 					"opponent party": 1,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnIgnImmunities: true,
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
@@ -1432,19 +1432,19 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"turn order": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"turn order":     30,
 					"player party":   0,
 					"opponent party": 2,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnFormationID: 226,
 				},
 			},
@@ -1484,16 +1484,16 @@ func TestTurnOrder(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"turn order":     0,
 					"player party":   1,
 					"opponent party": 0,
 				},
-				requestBody: map[ts.FieldName]any{
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
 						{
 							ts.PfnUnitID:  1,

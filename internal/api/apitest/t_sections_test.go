@@ -10,110 +10,110 @@ import (
 
 func TestSubsections(t *testing.T) {
 	t.Parallel()
-	tests := []testGeneral{
+	tests := []TestGeneral{
 		{
-			requestURL:     "/api/treasures/1/simple?availability=post",
-			expectedStatus: http.StatusBadRequest,
-			handler:        testSrv.HandleTreasures,
-			expectedErr:    "endpoint /treasures doesn't have any subsections",
+			RequestURL:     "/api/treasures/1/simple?availability=post",
+			ExpectedStatus: http.StatusBadRequest,
+			Handler:        testSrv.HandleTreasures,
+			ExpectedErr:    "endpoint /treasures doesn't have any subsections",
 		},
 		{
-			requestURL:     "/api/sublocations/1/simple?limit=2",
-			expectedStatus: http.StatusBadRequest,
-			handler:        testSrv.HandleSublocations,
-			expectedErr:    "query parameters can't be used in combination with subsections",
+			RequestURL:     "/api/sublocations/1/simple?limit=2",
+			ExpectedStatus: http.StatusBadRequest,
+			Handler:        testSrv.HandleSublocations,
+			ExpectedErr:    "query parameters can't be used in combination with subsections",
 		},
 		{
-			requestURL:     "/api/sublocations/1/areas?limit=2",
-			expectedStatus: http.StatusBadRequest,
-			handler:        testSrv.HandleSublocations,
-			expectedErr:    "query parameters can't be used in combination with subsections",
+			RequestURL:     "/api/sublocations/1/areas?limit=2",
+			ExpectedStatus: http.StatusBadRequest,
+			Handler:        testSrv.HandleSublocations,
+			ExpectedErr:    "query parameters can't be used in combination with subsections",
 		},
 		{
-			requestURL:     "/api/sublocations/simple?ids=1-5&offset=3",
-			expectedStatus: http.StatusBadRequest,
-			handler:        testSrv.HandleSublocations,
-			expectedErr:    "parameter 'ids' can't be combined with other parameters",
+			RequestURL:     "/api/sublocations/simple?ids=1-5&offset=3",
+			ExpectedStatus: http.StatusBadRequest,
+			Handler:        testSrv.HandleSublocations,
+			ExpectedErr:    "parameter 'ids' can't be combined with other parameters",
 		},
 		{
-			requestURL:     "/api/locations/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleLocations,
+			RequestURL:     "/api/locations/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleLocations,
 		},
 		{
-			requestURL:     "/api/sublocations/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleSublocations,
+			RequestURL:     "/api/sublocations/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleSublocations,
 		},
 		{
-			requestURL:     "/api/areas/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleAreas,
+			RequestURL:     "/api/areas/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleAreas,
 		},
 		{
-			requestURL:     "/api/monster-formations/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleMonsterFormations,
+			RequestURL:     "/api/monster-formations/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleMonsterFormations,
 		},
 		{
-			requestURL:     "/api/shops/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleShops,
+			RequestURL:     "/api/shops/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleShops,
 		},
 		{
-			requestURL:     "/api/monsters/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleMonsters,
+			RequestURL:     "/api/monsters/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleMonsters,
 		},
 		{
-			requestURL:     "/api/abilities/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleAbilities,
+			RequestURL:     "/api/abilities/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleAbilities,
 		},
 		{
-			requestURL:     "/api/player-abilities/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandlePlayerAbilities,
+			RequestURL:     "/api/player-abilities/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandlePlayerAbilities,
 		},
 		{
-			requestURL:     "/api/overdrive-abilities/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleOverdriveAbilities,
+			RequestURL:     "/api/overdrive-abilities/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleOverdriveAbilities,
 		},
 		{
-			requestURL:     "/api/item-abilities/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleItemAbilities,
+			RequestURL:     "/api/item-abilities/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleItemAbilities,
 		},
 		{
-			requestURL:     "/api/trigger-commands/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleTriggerCommands,
+			RequestURL:     "/api/trigger-commands/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleTriggerCommands,
 		},
 		{
-			requestURL:     "/api/misc-abilities/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleMiscAbilities,
+			RequestURL:     "/api/misc-abilities/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleMiscAbilities,
 		},
 		{
-			requestURL:     "/api/enemy-abilities/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleEnemyAbilities,
+			RequestURL:     "/api/enemy-abilities/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleEnemyAbilities,
 		},
 		{
-			requestURL:     "/api/overdrives/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleOverdrives,
+			RequestURL:     "/api/overdrives/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleOverdrives,
 		},
 		{
-			requestURL:     "/api/mixes/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleMixes,
+			RequestURL:     "/api/mixes/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleMixes,
 		},
 		{
-			requestURL:     "/api/auto-abilities/1/simple",
-			expectedStatus: http.StatusOK,
-			handler:        testSrv.HandleAutoAbilities,
+			RequestURL:     "/api/auto-abilities/1/simple",
+			ExpectedStatus: http.StatusOK,
+			Handler:        testSrv.HandleAutoAbilities,
 		},
 	}
 
@@ -124,14 +124,14 @@ func TestSections(t *testing.T) {
 	t.Parallel()
 	tests := []ListNames{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/areas/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Areas.Endpoint,
-				handler:        testSrv.HandleAreas,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/areas/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Areas.Endpoint,
+				Handler:        testSrv.HandleAreas,
 			},
-			count: 6,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 6,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnSimple,
 				ts.SnConnected,
 				ts.SnMonsters,
@@ -141,14 +141,14 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Sublocations.Endpoint,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Sublocations.Endpoint,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count: 8,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 8,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnSimple,
 				ts.SnAreas,
 				ts.SnConnected,
@@ -160,14 +160,14 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Locations.Endpoint,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Locations.Endpoint,
+				Handler:        testSrv.HandleLocations,
 			},
-			count: 9,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 9,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnSimple,
 				ts.SnAreas,
 				ts.SnConnected,
@@ -180,14 +180,14 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Aeons.Endpoint,
-				handler:        testSrv.HandleAeons,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Aeons.Endpoint,
+				Handler:        testSrv.HandleAeons,
 			},
-			count: 4,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 4,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnDefaultAbilities,
 				ts.SnOverdriveAbilities,
 				ts.SnOverdrives,
@@ -195,14 +195,14 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Characters.Endpoint,
-				handler:        testSrv.HandleCharacters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Characters.Endpoint,
+				Handler:        testSrv.HandleCharacters,
 			},
-			count: 5,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 5,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnDefaultAbilities,
 				ts.SnStdSgAbilities,
 				ts.SnExpSgAbilities,
@@ -211,14 +211,14 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.CharacterClasses.Endpoint,
-				handler:        testSrv.HandleCharacterClasses,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.CharacterClasses.Endpoint,
+				Handler:        testSrv.HandleCharacterClasses,
 			},
-			count: 4,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 4,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnDefaultAbilities,
 				ts.SnLearnableOverdrives,
 				ts.SnDefaultOverdrives,
@@ -226,44 +226,44 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/arena-creations/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.ArenaCreations.Endpoint,
-				handler:        testSrv.HandleArenaCreations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/arena-creations/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.ArenaCreations.Endpoint,
+				Handler:        testSrv.HandleArenaCreations,
 			},
-			count:   0,
-			results: []ts.NamedParam{},
+			Count:   0,
+			Results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/blitzball-prizes/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.BlitzballPrizes.Endpoint,
-				handler:        testSrv.HandleBlitzballPrizes,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/blitzball-prizes/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.BlitzballPrizes.Endpoint,
+				Handler:        testSrv.HandleBlitzballPrizes,
 			},
-			count:   0,
-			results: []ts.NamedParam{},
+			Count:   0,
+			Results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.FMVs.Endpoint,
-				handler:        testSrv.HandleFMVs,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.FMVs.Endpoint,
+				Handler:        testSrv.HandleFMVs,
 			},
-			count:   0,
-			results: []ts.NamedParam{},
+			Count:   0,
+			Results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monsters/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Monsters.Endpoint,
-				handler:        testSrv.HandleMonsters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monsters/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Monsters.Endpoint,
+				Handler:        testSrv.HandleMonsters,
 			},
-			count: 4,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 4,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnSimple,
 				ts.SnAbilities,
 				ts.SnAreas,
@@ -271,81 +271,81 @@ func TestSections(t *testing.T) {
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/monster-formations/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.MonsterFormations.Endpoint,
-				handler:        testSrv.HandleMonsterFormations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/monster-formations/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.MonsterFormations.Endpoint,
+				Handler:        testSrv.HandleMonsterFormations,
 			},
-			count: 2,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 2,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnSimple,
 				ts.SnMonsters,
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-modes/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.OverdriveModes.Endpoint,
-				handler:        testSrv.HandleOverdriveModes,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-modes/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.OverdriveModes.Endpoint,
+				Handler:        testSrv.HandleOverdriveModes,
 			},
-			count:   0,
-			results: []ts.NamedParam{},
+			Count:   0,
+			Results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/shops/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Shops.Endpoint,
-				handler:        testSrv.HandleShops,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/shops/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Shops.Endpoint,
+				Handler:        testSrv.HandleShops,
 			},
-			count: 1,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 1,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnSimple,
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/songs/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Songs.Endpoint,
-				handler:        testSrv.HandleSongs,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/songs/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Songs.Endpoint,
+				Handler:        testSrv.HandleSongs,
 			},
-			count:   0,
-			results: []ts.NamedParam{},
+			Count:   0,
+			Results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sidequests/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Sidequests.Endpoint,
-				handler:        testSrv.HandleSidequests,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sidequests/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Sidequests.Endpoint,
+				Handler:        testSrv.HandleSidequests,
 			},
-			count: 1,
-			results: ts.SnsToNamedParams([]ts.SectionName{
+			Count: 1,
+			Results: ts.SnsToNamedParams([]ts.SectionName{
 				ts.SnSubquests,
 			}),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/subquests/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Subquests.Endpoint,
-				handler:        testSrv.HandleSubquests,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/subquests/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Subquests.Endpoint,
+				Handler:        testSrv.HandleSubquests,
 			},
-			count:   0,
-			results: []ts.NamedParam{},
+			Count:   0,
+			Results: []ts.NamedParam{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/treasures/sections",
-				expectedStatus: http.StatusOK,
-				endpoint:       apilookups.E.Treasures.Endpoint,
-				handler:        testSrv.HandleTreasures,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/treasures/sections",
+				ExpectedStatus: http.StatusOK,
+				Endpoint:       apilookups.E.Treasures.Endpoint,
+				Handler:        testSrv.HandleTreasures,
 			},
-			count:   0,
-			results: []ts.NamedParam{},
+			Count:   0,
+			Results: []ts.NamedParam{},
 		},
 	}
 

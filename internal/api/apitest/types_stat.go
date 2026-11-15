@@ -6,7 +6,7 @@ import (
 )
 
 type Stat struct {
-	testGeneral
+	TestGeneral
 	Unique
 	spheres            []int32
 	autoAbilities      []int32
@@ -18,12 +18,12 @@ type Stat struct {
 	properties         []int32
 }
 
-func (e Stat) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Stat) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Stat) Compare(test test, got apitypes.Stat) {
-	test.t.Helper()
+func (e Stat) Compare(test Test, got apitypes.Stat) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("spheres", apilookups.E.Spheres.Endpoint, e.spheres, got.Spheres)
 	test.checkResIDsInSlice("auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)

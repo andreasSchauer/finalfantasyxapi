@@ -14,17 +14,17 @@ func TestGetOverdrive(t *testing.T) {
 	t.Parallel()
 	tests := []Overdrive{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrives/125",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "overdrive with provided id '125' doesn't exist. max id: 124",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrives/125",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "overdrive with provided id '125' doesn't exist. max id: 124",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrives/15",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrives/15",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"overdrive abilities": 7,
 				},
 			},
@@ -36,10 +36,10 @@ func TestGetOverdrive(t *testing.T) {
 			overdriveAbilities: []int32{17, 32, 33, 34, 35, 36, 37},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrives/50",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrives/50",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"overdrive abilities": 3,
 				},
 			},
@@ -51,10 +51,10 @@ func TestGetOverdrive(t *testing.T) {
 			overdriveAbilities: []int32{113, 114, 115},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrives/64",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrives/64",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"overdrive abilities": 1,
 				},
 			},
@@ -66,10 +66,10 @@ func TestGetOverdrive(t *testing.T) {
 			overdriveAbilities: []int32{130},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrives/124",
-				expectedStatus: http.StatusOK,
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrives/124",
+				ExpectedStatus: http.StatusOK,
+				ExpLengths: map[string]int{
 					"overdrive abilities": 1,
 				},
 			},
@@ -89,20 +89,20 @@ func TestRetrieveOverdrives(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrives?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrives?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   124,
-			results: []int32{1, 23, 45, 68, 77, 83, 84, 112, 124},
+			Count:   124,
+			Results: []int32{1, 23, 45, 68, 77, 83, 84, 112, 124},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrives?user=lulu&rank=5",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrives?user=lulu&rank=5",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{17, 18, 21, 24, 26, 29, 31},
+			Count:   14,
+			Results: []int32{17, 18, 21, 24, 26, 29, 31},
 		},
 	}
 
@@ -113,54 +113,54 @@ func TestSubsectionOverdrives(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/overdrive-commands/1/overdrives",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleOverdriveCommands,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/overdrive-commands/1/overdrives",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleOverdriveCommands,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/overdrive-commands/1"),
-			results:        []int32{1, 2, 3, 4},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/overdrive-commands/1"),
+			Results:        []int32{1, 2, 3, 4},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/8/default-overdrives",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacterClasses,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/8/default-overdrives",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacterClasses,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/character-classes/8"),
-			results:        []int32{17, 18, 19, 20},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/character-classes/8"),
+			Results:        []int32{17, 18, 19, 20},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/7/learnable-overdrives",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacterClasses,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/7/learnable-overdrives",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacterClasses,
 			},
-			count:          3,
-			parentResource: h.GetStrPtr("/character-classes/7"),
-			results:        []int32{14, 15, 16},
+			Count:          3,
+			ParentResource: h.GetStrPtr("/character-classes/7"),
+			Results:        []int32{14, 15, 16},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/6/overdrives",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleCharacters,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/6/overdrives",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleCharacters,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/characters/6"),
-			results:        []int32{48, 49, 50, 51},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/characters/6"),
+			Results:        []int32{48, 49, 50, 51},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/6/overdrives",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleAeons,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/6/overdrives",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleAeons,
 			},
-			count:          1,
-			parentResource: h.GetStrPtr("/aeons/6"),
-			results:        []int32{123},
+			Count:          1,
+			ParentResource: h.GetStrPtr("/aeons/6"),
+			Results:        []int32{123},
 		},
 	}
 

@@ -6,7 +6,7 @@ import (
 )
 
 type EquipmentTable struct {
-	testGeneral
+	TestGeneral
 	IDOnly
 	celestialWeapon         *int32
 	specificCharacter       *int32
@@ -16,12 +16,12 @@ type EquipmentTable struct {
 	equipment               []int32
 }
 
-func (e EquipmentTable) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e EquipmentTable) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e EquipmentTable) Compare(test test, got apitypes.EquipmentTable) {
-	test.t.Helper()
+func (e EquipmentTable) Compare(test Test, got apitypes.EquipmentTable) {
+	test.T.Helper()
 	test.compareExpIDOnly(e.IDOnly, got.ID)
 	test.compIDAPIResourcePtrs("celestial weapon", apilookups.E.CelestialWeapons.Endpoint, e.celestialWeapon, got.CelestialWeapon)
 	test.compIDAPIResourcePtrs("specific character", apilookups.E.Characters.Endpoint, e.specificCharacter, got.SpecificCharacter)
@@ -37,8 +37,8 @@ type testAbilityPool struct {
 	reqAmount     int32
 }
 
-func (e testAbilityPool) Compare(test test, fieldName string, got apitypes.AbilityPool) {
-	test.t.Helper()
+func (e testAbilityPool) Compare(test Test, fieldName string, got apitypes.AbilityPool) {
+	test.T.Helper()
 	test.checkResIDsInSlice(fieldName+" - auto-abilities", apilookups.E.AutoAbilities.Endpoint, e.autoAbilities, got.AutoAbilities)
 	test.compare(fieldName+" - required amount", e.reqAmount, got.ReqAmount)
 }

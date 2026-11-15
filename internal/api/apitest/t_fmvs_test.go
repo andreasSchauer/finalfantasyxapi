@@ -13,39 +13,39 @@ func TestGetFMV(t *testing.T) {
 	t.Parallel()
 	tests := []FMV{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs/a",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "fmv not found: 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "fmv not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs/53",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "fmv with provided id '53' doesn't exist. max id: 52",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs/53",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "fmv with provided id '53' doesn't exist. max id: 52",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs/2/2",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/fmvs/sections for valid subsections",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs/2/2",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid subsection '2'. subsection can't be an integer. use /api/fmvs/sections for valid subsections",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs/9",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs/9",
+				ExpectedStatus: http.StatusOK,
 			},
 			Unique: newExpUnique(9, "fear on the sea"),
 			area:   42,
 			song:   h.GetInt32Ptr(16),
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs/38",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs/38",
+				ExpectedStatus: http.StatusOK,
 			},
 			Unique: newExpUnique(38, "the last chapter"),
 			area:   218,
@@ -60,28 +60,28 @@ func TestRetrieveFMVs(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   52,
-			results: []int32{1, 13, 27, 34, 45, 46, 52},
+			Count:   52,
+			Results: []int32{1, 13, 27, 34, 45, 46, 52},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs?location=15",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs?location=15",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{27, 36},
+			Count:   2,
+			Results: []int32{27, 36},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/fmvs?location=5",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/fmvs?location=5",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{9, 10, 11, 12, 13, 14},
+			Count:   6,
+			Results: []int32{9, 10, 11, 12, 13, 14},
 		},
 	}
 

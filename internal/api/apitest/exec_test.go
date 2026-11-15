@@ -15,12 +15,12 @@ import (
 )
 
 type testCase[G any] interface {
-	GetTestGeneral() testGeneral
+	GetTestGeneral() TestGeneral
 	testType[G]
 }
 
 type testType[G any] interface {
-	Compare(test, G)
+	Compare(Test, G)
 }
 
 func testSingleResources[E testCase[G], G any](t *testing.T, tests []E, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
@@ -43,14 +43,14 @@ func testSingleResources[E testCase[G], G any](t *testing.T, tests []E, testFunc
 	}
 }
 
-func testStatusses(t *testing.T, tests []testGeneral, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
+func testStatusses(t *testing.T, tests []TestGeneral, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request)) {
 	t.Helper()
 	for i, tc := range tests {
 		name := tc.getTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
-			expHandler = tc.handler
+			expHandler = tc.Handler
 		}
 
 		t.Run(name, func(t *testing.T) {
@@ -64,7 +64,7 @@ func testStatusses(t *testing.T, tests []testGeneral, testFuncName string, handl
 	}
 }
 
-func testServiceResponsesGet[G any](t *testing.T, tests []testGeneral, testFuncName string) {
+func testServiceResponsesGet[G any](t *testing.T, tests []TestGeneral, testFuncName string) {
 	t.Helper()
 	var zero G
 
@@ -74,13 +74,13 @@ func testServiceResponsesGet[G any](t *testing.T, tests []testGeneral, testFuncN
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			test, got, err := setupTest[G](t, tc, name, tc.handler)
+			test, got, err := setupTest[G](t, tc, name, tc.Handler)
 			if errors.Is(err, errCorrect) {
 				return
 			}
 
 			if reflect.DeepEqual(zero, got) {
-				test.t.Errorf("expected %s to have a response body, but didn't get one.\n\n", name)
+				test.T.Errorf("expected %s to have a response body, but didn't get one.\n\n", name)
 			}
 		})
 	}
@@ -108,7 +108,7 @@ func testServiceResponsesPost[E testCase[G], G any](t *testing.T, tests []E, tes
 
 // compareAPIResourceLists for normal API Resources
 // compareSimpleResourceLists for Subsections
-func testIDList[G any](t *testing.T, tests []ListIDs, endpoint ts.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, ts.EndpointName, ListIDs, G)) {
+func testIDList[G any](t *testing.T, tests []ListIDs, endpoint ts.EndpointName, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(Test, ts.EndpointName, ListIDs, G)) {
 	t.Helper()
 	for i, exp := range tests {
 		tc := exp.GetTestGeneral()
@@ -116,18 +116,18 @@ func testIDList[G any](t *testing.T, tests []ListIDs, endpoint ts.EndpointName, 
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
-			expHandler = exp.handler
+			expHandler = exp.Handler
 		}
 
 		expEndpoint := endpoint
 		if endpoint == "" {
-			expEndpoint = exp.endpoint
+			expEndpoint = exp.Endpoint
 		}
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
+			test, got, err := setupTest[G](t, exp.TestGeneral, name, expHandler)
 			if errors.Is(err, errCorrect) {
 				return
 			}
@@ -138,21 +138,21 @@ func testIDList[G any](t *testing.T, tests []ListIDs, endpoint ts.EndpointName, 
 }
 
 // compareAPIResourceListPaths for api resources
-func testPathList[G any](t *testing.T, tests []ListPaths, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(test, ListPaths, G)) {
+func testPathList[G any](t *testing.T, tests []ListPaths, testFuncName string, handlerFunc func(http.ResponseWriter, *http.Request), compFunc func(Test, ListPaths, G)) {
 	t.Helper()
 	for i, exp := range tests {
-		tc := exp.testGeneral
+		tc := exp.TestGeneral
 		name := tc.getTestName(testFuncName, i+1)
 
 		expHandler := handlerFunc
 		if handlerFunc == nil {
-			expHandler = exp.handler
+			expHandler = exp.Handler
 		}
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			test, got, err := setupTest[G](t, exp.testGeneral, name, expHandler)
+			test, got, err := setupTest[G](t, exp.TestGeneral, name, expHandler)
 			if errors.Is(err, errCorrect) {
 				return
 			}
@@ -164,45 +164,45 @@ func testPathList[G any](t *testing.T, tests []ListPaths, testFuncName string, h
 
 // compareParameterLists for /parameters lists
 // compareSectionLists for /sections lists
-func testNameList[G any](t *testing.T, tests []ListNames, testFuncName string, compFunc func(test, ts.EndpointName, ListNames, G)) {
+func testNameList[G any](t *testing.T, tests []ListNames, testFuncName string, compFunc func(Test, ts.EndpointName, ListNames, G)) {
 	t.Helper()
 	for i, exp := range tests {
-		tc := exp.testGeneral
+		tc := exp.TestGeneral
 		name := tc.getTestName(testFuncName, i+1)
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			test, got, err := setupTest[G](t, exp.testGeneral, name, exp.handler)
+			test, got, err := setupTest[G](t, exp.TestGeneral, name, exp.Handler)
 			if errors.Is(err, errCorrect) {
 				return
 			}
 
-			compFunc(test, exp.endpoint, exp, got)
+			compFunc(test, exp.Endpoint, exp, got)
 		})
 	}
 }
 
 // makes the http request for the test and returns the result, as well as a test struct
-func setupTest[G any](t *testing.T, tc testGeneral, testName string, handlerFunc func(http.ResponseWriter, *http.Request)) (test, G, error) {
+func setupTest[G any](t *testing.T, tc TestGeneral, testName string, handlerFunc func(http.ResponseWriter, *http.Request)) (Test, G, error) {
 	t.Helper()
 	var zero G
 
-	if tc.method == "" {
-		tc.method = http.MethodGet
+	if tc.Method == "" {
+		tc.Method = http.MethodGet
 	}
 
 	var body io.Reader
-	if tc.method == http.MethodPost && tc.requestBody != nil {
+	if tc.Method == http.MethodPost && tc.RequestBody != nil {
 		var buf bytes.Buffer
-		err := json.NewEncoder(&buf).Encode(tc.requestBody)
+		err := json.NewEncoder(&buf).Encode(tc.RequestBody)
 		if err != nil {
 			t.Fatalf("failed to encode test request body: %v", err)
 		}
 		body = &buf
 	}
 
-	req := httptest.NewRequest(tc.method, tc.requestURL, body)
+	req := httptest.NewRequest(tc.Method, tc.RequestURL, body)
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
@@ -212,20 +212,20 @@ func setupTest[G any](t *testing.T, tc testGeneral, testName string, handlerFunc
 	handler := http.HandlerFunc(handlerFunc)
 	handler.ServeHTTP(res, req)
 
-	if res.Code != tc.expectedStatus {
+	if res.Code != tc.ExpectedStatus {
 		if res.Code >= 400 {
-			t.Fatalf("expected status: %d, got %d, body=%s\n\n", tc.expectedStatus, res.Code, res.Body.String())
+			t.Fatalf("expected status: %d, got %d, body=%s\n\n", tc.ExpectedStatus, res.Code, res.Body.String())
 		}
 
-		t.Fatalf("expected status: %d, got %d\n\n", tc.expectedStatus, res.Code)
+		t.Fatalf("expected status: %d, got %d\n\n", tc.ExpectedStatus, res.Code)
 	}
 
-	if tc.expectedErr != "" {
+	if tc.ExpectedErr != "" {
 		rawErr := res.Body.String()
-		if !strings.Contains(rawErr, tc.expectedErr) {
-			t.Fatalf("error mismatch.\n- want: %s\n- got %s\n\n", tc.expectedErr, rawErr)
+		if !strings.Contains(rawErr, tc.ExpectedErr) {
+			t.Fatalf("error mismatch.\n- want: %s\n- got %s\n\n", tc.ExpectedErr, rawErr)
 		}
-		return test{}, zero, errCorrect
+		return Test{}, zero, errCorrect
 	}
 
 	var got G
@@ -234,12 +234,12 @@ func setupTest[G any](t *testing.T, tc testGeneral, testName string, handlerFunc
 		t.Fatalf("failed to decode: %v\n\n", err)
 	}
 
-	test := test{
-		t:          t,
-		srv:        &testSrv,
-		name:       testName,
-		expLengths: tc.expLengths,
-		dontCheck:  tc.dontCheck,
+	test := Test{
+		T:          t,
+		Srv:        &testSrv,
+		Name:       testName,
+		ExpLengths: tc.ExpLengths,
+		DontCheck:  tc.DontCheck,
 	}
 
 	return test, got, nil

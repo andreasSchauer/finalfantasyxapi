@@ -6,7 +6,7 @@ import (
 )
 
 type Topmenu struct {
-	testGeneral
+	TestGeneral
 	Unique
 	submenus          []int32
 	abilities         []int32
@@ -15,12 +15,12 @@ type Topmenu struct {
 	aeonCommands      []int32
 }
 
-func (e Topmenu) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Topmenu) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Topmenu) Compare(test test, got apitypes.Topmenu) {
-	test.t.Helper()
+func (e Topmenu) Compare(test Test, got apitypes.Topmenu) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("submenus", apilookups.E.Submenus.Endpoint, e.submenus, got.Submenus)
 	test.checkResIDsInSlice("abilities", apilookups.E.Abilities.Endpoint, e.abilities, got.Abilities)

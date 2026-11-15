@@ -13,25 +13,25 @@ func TestGetEquipment(t *testing.T) {
 	t.Parallel()
 	tests := []Equipment{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/1053",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "equipment with provided id '1053' doesn't exist. max id: 1052",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/1053",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "equipment with provided id '1053' doesn't exist. max id: 1052",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/1?table=4",
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid value '4' used for parameter 'table'. 'table' can range from 1 to 3 for this resource",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/1?table=4",
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid value '4' used for parameter 'table'. 'table' can range from 1 to 3 for this resource",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/1?table=1",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/1?table=1",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required auto-abilities":   4,
 					"selectable auto-abilities": 0,
 					"treasures":                 1,
@@ -49,11 +49,11 @@ func TestGetEquipment(t *testing.T) {
 			shops:                   []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/1?table=2",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/1?table=2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required auto-abilities":   2,
 					"selectable auto-abilities": 0,
 					"treasures":                 1,
@@ -71,11 +71,11 @@ func TestGetEquipment(t *testing.T) {
 			shops:                   []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/1?table=3",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/1?table=3",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required auto-abilities":   1,
 					"selectable auto-abilities": 0,
 					"treasures":                 1,
@@ -93,11 +93,11 @@ func TestGetEquipment(t *testing.T) {
 			shops:                   []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/8",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/8",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required auto-abilities":   4,
 					"selectable auto-abilities": 0,
 					"treasures":                 2,
@@ -115,11 +115,11 @@ func TestGetEquipment(t *testing.T) {
 			shops:                   []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/8?table=2",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/8?table=2",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required auto-abilities":   1,
 					"selectable auto-abilities": 0,
 					"treasures":                 2,
@@ -137,11 +137,11 @@ func TestGetEquipment(t *testing.T) {
 			shops:                   []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/333?rel_availability=pre-story",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/333?rel_availability=pre-story",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required auto-abilities":   1,
 					"selectable auto-abilities": 0,
 					"treasures":                 0,
@@ -159,11 +159,11 @@ func TestGetEquipment(t *testing.T) {
 			shops:                   []int32{2},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/945",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/945",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"required auto-abilities":                      0,
 					"selectable auto-abilities":                    2,
 					"selectable auto-abilities 0 - auto-abilities": 4,
@@ -193,10 +193,10 @@ func TestGetEquipment(t *testing.T) {
 			shops:         []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/805?rel_availability=always",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/805?rel_availability=always",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"equipment table":           true,
 					"priority":                  true,
 					"celestial weapon":          true,
@@ -204,7 +204,7 @@ func TestGetEquipment(t *testing.T) {
 					"selectable auto-abilities": true,
 					"required slots":            true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"treasures": 1,
 					"shops":     0,
 				},
@@ -214,10 +214,10 @@ func TestGetEquipment(t *testing.T) {
 			shops:     []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/805?rel_availability=pre-story",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/805?rel_availability=pre-story",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"equipment table":           true,
 					"priority":                  true,
 					"celestial weapon":          true,
@@ -225,7 +225,7 @@ func TestGetEquipment(t *testing.T) {
 					"selectable auto-abilities": true,
 					"required slots":            true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"treasures": 1,
 					"shops":     0,
 				},
@@ -235,10 +235,10 @@ func TestGetEquipment(t *testing.T) {
 			shops:     []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment/805?rel_availability=post",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment/805?rel_availability=post",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"equipment table":           true,
 					"priority":                  true,
 					"celestial weapon":          true,
@@ -246,7 +246,7 @@ func TestGetEquipment(t *testing.T) {
 					"selectable auto-abilities": true,
 					"required slots":            true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"treasures": 0,
 					"shops":     1,
 				},
@@ -264,36 +264,36 @@ func TestRetrieveEquipment(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1052,
-			results: []int32{1, 123, 265, 373, 429, 555, 767, 998, 1009, 1052},
+			Count:   1052,
+			Results: []int32{1, 123, 265, 373, 429, 555, 767, 998, 1009, 1052},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment?auto_abilities=10,12,14,16&character=1",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment?auto_abilities=10,12,14,16&character=1",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{100, 149},
+			Count:   2,
+			Results: []int32{100, 149},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment?type=armor&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment?type=armor&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   581,
-			results: []int32{472, 677, 793, 822, 999, 1052},
+			Count:   581,
+			Results: []int32{472, 677, 793, 822, 999, 1052},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/equipment?celestial_weapon=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/equipment?celestial_weapon=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{1, 2, 3, 4, 5, 6, 7},
+			Count:   7,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7},
 		},
 	}
 

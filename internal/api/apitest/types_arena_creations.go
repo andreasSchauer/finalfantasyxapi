@@ -7,7 +7,7 @@ import (
 )
 
 type ArenaCreation struct {
-	testGeneral
+	TestGeneral
 	Unique
 	category                  string
 	monster                   int32
@@ -18,12 +18,12 @@ type ArenaCreation struct {
 	requiredMonsters          []int32
 }
 
-func (e ArenaCreation) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e ArenaCreation) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e ArenaCreation) Compare(test test, got apitypes.ArenaCreation) {
-	test.t.Helper()
+func (e ArenaCreation) Compare(test Test, got apitypes.ArenaCreation) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("category", e.category, got.Category)
 	test.compIDAPIResource("monster", apilookups.E.Monsters.Endpoint, e.monster, got.Monster)

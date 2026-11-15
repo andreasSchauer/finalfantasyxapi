@@ -14,18 +14,18 @@ func TestGetCharacter(t *testing.T) {
 	t.Parallel()
 	tests := []Character{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/9",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "character with provided id '9' doesn't exist. max id: 8",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/9",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "character with provided id '9' doesn't exist. max id: 8",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/1?osg_stats=standard",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/1?osg_stats=standard",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"character classes": 2,
 					"default abilities": 0,
 					"std sg abilities":  11,
@@ -33,8 +33,8 @@ func TestGetCharacter(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   1,
-				name: "tidus",
+				ID:   1,
+				Name: "tidus",
 			},
 			untypedUnit: 1,
 			area:        1,
@@ -99,11 +99,11 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/5",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/5",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"character classes": 2,
 					"default abilities": 1,
 					"std sg abilities":  5,
@@ -111,8 +111,8 @@ func TestGetCharacter(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   5,
-				name: "kimahri",
+				ID:   5,
+				Name: "kimahri",
 			},
 			untypedUnit: 5,
 			area:        42,
@@ -177,13 +177,13 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/4?osg_stats=expert",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/4?osg_stats=expert",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"regen amounts": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"character classes": 2,
 					"default abilities": 4,
 					"std sg abilities":  20,
@@ -191,8 +191,8 @@ func TestGetCharacter(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   4,
-				name: "lulu",
+				ID:   4,
+				Name: "lulu",
 			},
 			untypedUnit: 4,
 			area:        36,
@@ -235,20 +235,20 @@ func TestGetCharacter(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters/8",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters/8",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"regen amounts": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"character classes": 1,
 					"default abilities": 15,
 				},
 			},
 			Unique: Unique{
-				id:   8,
-				name: "seymour",
+				ID:   8,
+				Name: "seymour",
 			},
 			untypedUnit: 8,
 			area:        102,
@@ -289,28 +289,28 @@ func TestRetrieveCharacters(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{1, 2, 3, 4, 5, 6, 7, 8},
+			Count:   8,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters?story_based=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters?story_based=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{8},
+			Count:   1,
+			Results: []int32{8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/characters?underwater=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/characters?underwater=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{1, 3, 7},
+			Count:   3,
+			Results: []int32{1, 3, 7},
 		},
 	}
 

@@ -7,21 +7,21 @@ import (
 )
 
 // checks the basic fields of an apiresource.APIResourceList (count, pagination urls) and then checks for the stated resources
-func compareAPIResourceLists[A apiresource.APIResource](test test, endpoint ts.EndpointName, expList ListIDs, gotList apiresource.APIResourceList[A]) {
-	test.t.Helper()
+func compareAPIResourceLists[A apiresource.APIResource](test Test, endpoint ts.EndpointName, expList ListIDs, gotList apiresource.APIResourceList[A]) {
+	test.T.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
-	test.checkResIDsInSlice("results", endpoint, expList.results, gotList.GetResults())
+	test.checkResIDsInSlice("results", endpoint, expList.Results, gotList.GetResults())
 }
 
 // checks the basic fields of an apiresource.APIResourceList (count, pagination urls) and then checks for the stated resource paths
-func compareAPIResourceListPaths[A apiresource.APIResource](test test, expList ListPaths, gotList apiresource.APIResourceList[A]) {
-	test.t.Helper()
+func compareAPIResourceListPaths[A apiresource.APIResource](test Test, expList ListPaths, gotList apiresource.APIResourceList[A]) {
+	test.T.Helper()
 	test.compareListParams(expList.GetListParams(), gotList.GetListParams())
-	test.checkResPathsInSlice("results", expList.results, gotList.GetResults())
+	test.checkResPathsInSlice("results", expList.Results, gotList.GetResults())
 }
 
-func compareParameterLists(test test, _ ts.EndpointName, exp ListNames, got handlerinput.QueryParameterList) {
-	test.t.Helper()
+func compareParameterLists(test Test, _ ts.EndpointName, exp ListNames, got handlerinput.QueryParameterList) {
+	test.T.Helper()
 	test.compareListParams(exp.GetListParams(), got.GetListParams())
 	gotNames := []string{}
 
@@ -29,12 +29,12 @@ func compareParameterLists(test test, _ ts.EndpointName, exp ListNames, got hand
 		gotNames = append(gotNames, string(param.Name))
 	}
 
-	test.checkStringsInSlice("results", exp.results, gotNames)
+	test.checkStringsInSlice("results", exp.Results, gotNames)
 }
 
-func compareSectionLists(test test, endpoint ts.EndpointName, exp ListNames, got handlerinput.SectionList) {
-	test.t.Helper()
+func compareSectionLists(test Test, endpoint ts.EndpointName, exp ListNames, got handlerinput.SectionList) {
+	test.T.Helper()
 
 	test.compareListParams(exp.GetListParams(), got.GetListParams())
-	test.checkStringsInSlice("results", exp.results, got.Results)
+	test.checkStringsInSlice("results", exp.Results, got.Results)
 }

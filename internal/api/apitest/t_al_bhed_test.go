@@ -14,98 +14,98 @@ func TestAlBhed(t *testing.T) {
 
 	tests := []AlBhedResponse{
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid or corrupt payload in request body",
-				requestBody:    []byte(string("asjdasoi")),
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid or corrupt payload in request body",
+				RequestBody:    []byte(string("asjdasoi")),
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "field 'text' can't be empty",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "field 'text' can't be empty",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnDirection: "to-english",
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "value 'bla' of field 'direction' is not a valid enum value. allowed values: 'to-al-bhed', 'to-english'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "value 'bla' of field 'direction' is not a valid enum value. allowed values: 'to-al-bhed', 'to-english'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText:      "father",
 					ts.PfnDirection: "bla",
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. all brackets must be closed",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "wrong format. all brackets must be closed",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "v[ath",
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "v]ath",
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "wrong format. nested brackets are not allowed, and the first bracket must be an opening bracket",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "v[a[th",
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "wrong format. all brackets must be closed",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "wrong format. all brackets must be closed",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "v[ath",
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusBadRequest,
-				expectedErr:    "invalid field: 'monster_id'",
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "invalid field: 'monster_id'",
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnMonsterID: 1,
 				},
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "I am cool",
 				},
 			},
@@ -116,11 +116,11 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "father",
 				},
 			},
@@ -131,11 +131,11 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "f[y]the[n]",
 				},
 			},
@@ -146,11 +146,11 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "f[Ydr]er",
 				},
 			},
@@ -161,11 +161,11 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText:      "v[ath]an",
 					ts.PfnDirection: "to-english",
 				},
@@ -177,11 +177,11 @@ func TestAlBhed(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     requestURL,
-				method:         http.MethodPost,
-				expectedStatus: http.StatusOK,
-				requestBody: map[ts.FieldName]any{
+			TestGeneral: TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				RequestBody: map[ts.FieldName]any{
 					ts.PfnText: "!?,. 1234567890",
 				},
 			},

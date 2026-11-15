@@ -14,18 +14,18 @@ func TestGetAgilityTier(t *testing.T) {
 	t.Parallel()
 	tests := []AgilityTier{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/agility-tiers/20",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "agility tier with provided id '20' doesn't exist. max id: 19",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/agility-tiers/20",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "agility tier with provided id '20' doesn't exist. max id: 19",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/agility-tiers/15",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/agility-tiers/15",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"char min icvs": 9,
 				},
 			},
@@ -93,20 +93,20 @@ func TestRetrieveAgilityTiers(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/agility-tiers",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/agility-tiers",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   19,
-			results: []int32{1, 3, 7, 8, 12, 17, 19},
+			Count:   19,
+			Results: []int32{1, 3, 7, 8, 12, 17, 19},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/agility-tiers?agility=95",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/agility-tiers?agility=95",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{17},
+			Count:   1,
+			Results: []int32{17},
 		},
 	}
 

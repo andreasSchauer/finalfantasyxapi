@@ -12,18 +12,18 @@ func TestGetCharacterClass(t *testing.T) {
 	t.Parallel()
 	tests := []CharacterClass{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/23",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "character class with provided id '23' doesn't exist. max id: 22",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/23",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "character class with provided id '23' doesn't exist. max id: 22",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/1",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/1",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"members":              7,
 					"default abilities":    5,
 					"learnable abilities":  85,
@@ -33,8 +33,8 @@ func TestGetCharacterClass(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   1,
-				name: "characters",
+				ID:   1,
+				Name: "characters",
 			},
 			category:            "group",
 			members:             []int32{1, 2, 3, 4, 5, 6, 7},
@@ -45,11 +45,11 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 15},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/3",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/3",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"members":              6,
 					"default abilities":    3,
 					"learnable abilities":  67,
@@ -59,8 +59,8 @@ func TestGetCharacterClass(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   3,
-				name: "standard-aeons",
+				ID:   3,
+				Name: "standard-aeons",
 			},
 			category:            "group",
 			members:             []int32{9, 10, 11, 12, 13, 14},
@@ -71,11 +71,11 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{2, 3, 4, 5},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/4",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/4",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"members":              3,
 					"default abilities":    2,
 					"learnable abilities":  0,
@@ -85,8 +85,8 @@ func TestGetCharacterClass(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   4,
-				name: "magus-sisters",
+				ID:   4,
+				Name: "magus-sisters",
 			},
 			category:            "group",
 			members:             []int32{16, 17, 18},
@@ -97,11 +97,11 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/6",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/6",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"members":              1,
 					"default abilities":    9,
 					"learnable abilities":  7,
@@ -111,8 +111,8 @@ func TestGetCharacterClass(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   6,
-				name: "yuna",
+				ID:   6,
+				Name: "yuna",
 			},
 			category:            "character",
 			members:             []int32{2},
@@ -123,11 +123,11 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{1},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/8",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/8",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"members":              1,
 					"default abilities":    10,
 					"learnable abilities":  0,
@@ -137,8 +137,8 @@ func TestGetCharacterClass(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   8,
-				name: "lulu",
+				ID:   8,
+				Name: "lulu",
 			},
 			category:            "character",
 			members:             []int32{4},
@@ -149,11 +149,11 @@ func TestGetCharacterClass(t *testing.T) {
 			submenus:            []int32{14},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes/19",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes/19",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"members":              1,
 					"default abilities":    5,
 					"learnable abilities":  0,
@@ -163,8 +163,8 @@ func TestGetCharacterClass(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   19,
-				name: "yojimbo",
+				ID:   19,
+				Name: "yojimbo",
 			},
 			category:            "aeon",
 			members:             []int32{15},
@@ -183,36 +183,36 @@ func TestRetrieveCharacterClasses(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   22,
-			results: []int32{1, 5, 8, 12, 13, 17, 22},
+			Count:   22,
+			Results: []int32{1, 5, 8, 12, 13, 17, 22},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes?category=1",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes?category=1",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{1, 2, 3, 4},
+			Count:   4,
+			Results: []int32{1, 2, 3, 4},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes?category=character",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes?category=character",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{5, 7, 8, 9, 10, 12},
+			Count:   8,
+			Results: []int32{5, 7, 8, 9, 10, 12},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/character-classes?category=aeon",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/character-classes?category=aeon",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{13, 15, 18, 20, 21, 22},
+			Count:   10,
+			Results: []int32{13, 15, 18, 20, 21, 22},
 		},
 	}
 

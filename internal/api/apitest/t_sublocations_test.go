@@ -14,38 +14,38 @@ func TestGetSublocation(t *testing.T) {
 	t.Parallel()
 	tests := []Sublocation{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/0",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sublocation with provided id '0' doesn't exist. max id: 43",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/0",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "sublocation with provided id '0' doesn't exist. max id: 43",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/44",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sublocation with provided id '44' doesn't exist. max id: 43",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/44",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "sublocation with provided id '44' doesn't exist. max id: 43",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/a",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "sublocation not found: 'a'",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/a",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "sublocation not found: 'a'",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/35/",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/35/",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"characters": true,
 					"aeons":      true,
 					"cues music": true,
 					"fmvs music": true,
 					"fmvs":       true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected sublocations": 4,
 					"areas":                  6,
 					"characters":             0,
@@ -79,14 +79,14 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/26?rel_availability=pre-story",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/26?rel_availability=pre-story",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"music": true,
 					"fmvs":  true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected sublocations": 4,
 					"areas":                  13,
 					"characters":             0,
@@ -113,14 +113,14 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/26?rel_availability=always&rel_repeatable=true",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/26?rel_availability=always&rel_repeatable=true",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"music": true,
 					"fmvs":  true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected sublocations": 4,
 					"areas":                  13,
 					"characters":             0,
@@ -147,14 +147,14 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/26?rel_availability=always&rel_repeatable=false",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/26?rel_availability=always&rel_repeatable=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"music": true,
 					"fmvs":  true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected sublocations": 4,
 					"areas":                  13,
 					"characters":             0,
@@ -181,11 +181,11 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/14/",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/14/",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"connected sublocations": 1,
 					"areas":                  7,
 					"characters":             1,
@@ -224,14 +224,14 @@ func TestGetSublocation(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/beSaiD",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/beSaiD",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"shops":  true,
 					"quests": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"connected sublocations": 2,
 					"areas":                  16,
 					"characters":             1,
@@ -277,172 +277,172 @@ func TestRetrieveSublocations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   43,
-			results: []int32{1, 25, 43},
+			Count:   43,
+			Results: []int32{1, 25, 43},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?monsters=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?monsters=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{2, 3, 8, 19, 23, 24, 36},
+			Count:   11,
+			Results: []int32{2, 3, 8, 19, 23, 24, 36},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?characters=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?characters=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   7,
-			results: []int32{1, 7, 8, 9, 14, 17, 20},
+			Count:   7,
+			Results: []int32{1, 7, 8, 9, 14, 17, 20},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?aeons=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?aeons=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   8,
-			results: []int32{4, 7, 12, 19, 28, 33, 37, 38},
+			Count:   8,
+			Results: []int32{4, 7, 12, 19, 28, 33, 37, 38},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?key_item=36",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?key_item=36",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{8},
+			Count:   1,
+			Results: []int32{8},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?location=8",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?location=8",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{14, 15},
+			Count:   2,
+			Results: []int32{14, 15},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?item=1&methods=treasure&boss_fights=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?item=1&methods=treasure&boss_fights=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   4,
-			results: []int32{1, 7, 9, 17},
+			Count:   4,
+			Results: []int32{1, 7, 9, 17},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?shops=true&treasures=true&sidequests=true&fmvs=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?shops=true&treasures=true&sidequests=true&fmvs=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{14, 26, 32},
+			Count:   3,
+			Results: []int32{14, 26, 32},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=pre-airship&item=56&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=pre-airship&item=56&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{25, 27, 35, 38, 41},
+			Count:   5,
+			Results: []int32{25, 27, 35, 38, 41},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=post-game&item=56&methods=monster&pre_airship=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=post-game&item=56&methods=monster&pre_airship=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{25, 35, 38, 41, 43},
+			Count:   5,
+			Results: []int32{25, 35, 38, 41, 43},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=always&auto_ability=4&item=27&methods=monster",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=always&auto_ability=4&item=27&methods=monster",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{25},
+			Count:   1,
+			Results: []int32{25},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=post&monsters=true&treasures=false&item=53",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=post&monsters=true&treasures=false&item=53",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   2,
-			results: []int32{32, 39},
+			Count:   2,
+			Results: []int32{32, 39},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=pre-story&monster=31",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=pre-story&monster=31",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{15},
+			Count:   1,
+			Results: []int32{15},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=always&monster=87&repeatable=true&boss_fights=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=always&monster=87&repeatable=true&boss_fights=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{28},
+			Count:   1,
+			Results: []int32{28},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=pre-story",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=pre-story",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   6,
-			results: []int32{1, 2, 5, 6, 31, 33},
+			Count:   6,
+			Results: []int32{1, 2, 5, 6, 31, 33},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=post&sidequests=true&boss_fights=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=post&sidequests=true&boss_fights=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{30, 32, 35},
+			Count:   3,
+			Results: []int32{30, 32, 35},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=post&monsters=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=post&monsters=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   11,
-			results: []int32{4, 17, 30, 37, 41, 43},
+			Count:   11,
+			Results: []int32{4, 17, 30, 37, 41, 43},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=post&monsters=false&limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=post&monsters=false&limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   32,
-			results: []int32{1, 2, 5, 14, 21, 24, 28, 31, 40},
+			Count:   32,
+			Results: []int32{1, 2, 5, 14, 21, 24, 28, 31, 40},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=always&monster=48",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=always&monster=48",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   3,
-			results: []int32{17, 18, 20},
+			Count:   3,
+			Results: []int32{17, 18, 20},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=pre-story&shops=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=pre-story&shops=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   14,
-			results: []int32{13, 21, 28, 32, 34, 39},
+			Count:   14,
+			Results: []int32{13, 21, 28, 32, 34, 39},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations?availability=always&key_item=23",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations?availability=always&key_item=23",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   1,
-			results: []int32{30},
+			Count:   1,
+			Results: []int32{30},
 		},
 	}
 
@@ -453,88 +453,88 @@ func TestSubsectionSublocations(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/5/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/5/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/sublocations/5"),
-			results:        []int32{6, 7},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/sublocations/5"),
+			Results:        []int32{6, 7},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/12/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/12/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          1,
-			parentResource: h.GetStrPtr("/sublocations/12"),
-			results:        []int32{11},
+			Count:          1,
+			ParentResource: h.GetStrPtr("/sublocations/12"),
+			Results:        []int32{11},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/27/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/27/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          3,
-			parentResource: h.GetStrPtr("/sublocations/27"),
-			results:        []int32{26, 28, 29},
+			Count:          3,
+			ParentResource: h.GetStrPtr("/sublocations/27"),
+			Results:        []int32{26, 28, 29},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/35/connected/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/35/connected/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
 			},
-			count:          4,
-			parentResource: h.GetStrPtr("/sublocations/35"),
-			results:        []int32{26, 36, 38, 39},
+			Count:          4,
+			ParentResource: h.GetStrPtr("/sublocations/35"),
+			Results:        []int32{26, 36, 38, 39},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/simple?availability=pre-story",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/simple?availability=pre-story",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
+				DontCheck: map[string]bool{
 					"parent resource": true,
 				},
 			},
-			count:   6,
-			results: []int32{1, 2, 5, 6, 31, 33},
+			Count:   6,
+			Results: []int32{1, 2, 5, 6, 31, 33},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/sublocations/simple?availability=post&sidequests=true&boss_fights=true",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleSublocations,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/sublocations/simple?availability=post&sidequests=true&boss_fights=true",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleSublocations,
+				DontCheck: map[string]bool{
 					"parent resource": true,
 				},
 			},
-			count:   3,
-			results: []int32{30, 32, 35},
+			Count:   3,
+			Results: []int32{30, 32, 35},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/15/sublocations/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/15/sublocations/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleLocations,
 			},
-			count:          3,
-			parentResource: h.GetStrPtr("/locations/15"),
-			results:        []int32{26, 27, 28},
+			Count:          3,
+			ParentResource: h.GetStrPtr("/locations/15"),
+			Results:        []int32{26, 27, 28},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/locations/8/sublocations/",
-				expectedStatus: http.StatusOK,
-				handler:        testSrv.HandleLocations,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/locations/8/sublocations/",
+				ExpectedStatus: http.StatusOK,
+				Handler:        testSrv.HandleLocations,
 			},
-			count:          2,
-			parentResource: h.GetStrPtr("/locations/8"),
-			results:        []int32{14, 15},
+			Count:          2,
+			ParentResource: h.GetStrPtr("/locations/8"),
+			Results:        []int32{14, 15},
 		},
 	}
 

@@ -7,7 +7,7 @@ import (
 )
 
 type PlayerUnit struct {
-	testGeneral
+	TestGeneral
 	Unique
 	unitType         database.UnitType
 	typedUnit        string
@@ -16,12 +16,12 @@ type PlayerUnit struct {
 	characterClasses []int32
 }
 
-func (e PlayerUnit) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e PlayerUnit) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e PlayerUnit) Compare(test test, got apitypes.PlayerUnit) {
-	test.t.Helper()
+func (e PlayerUnit) Compare(test Test, got apitypes.PlayerUnit) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.compare("unit type", string(e.unitType), string(got.Type))
 	test.compPathAPIResource("typed unit", e.typedUnit, got.TypedUnit)

@@ -6,7 +6,7 @@ import (
 )
 
 type AutoAbility struct {
-	testGeneral
+	TestGeneral
 	Unique
 	monstersDrop     []int32
 	monstersItems    []testMonItemAmts
@@ -16,12 +16,12 @@ type AutoAbility struct {
 	equipmentTables  []int32
 }
 
-func (e AutoAbility) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e AutoAbility) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e AutoAbility) Compare(test test, got apitypes.AutoAbility) {
-	test.t.Helper()
+func (e AutoAbility) Compare(test Test, got apitypes.AutoAbility) {
+	test.T.Helper()
 	test.compareExpUnique(e.Unique, got.ID, got.Name)
 	test.checkResIDsInSlice("monsters drop", apilookups.E.Monsters.Endpoint, e.monstersDrop, got.MonstersDrop)
 	test.checkTestStructsInSlice("monsters items", e.monstersItems, got.MonstersItems)

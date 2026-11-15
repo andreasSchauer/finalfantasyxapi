@@ -8,7 +8,7 @@ import (
 )
 
 type Treasure struct {
-	testGeneral
+	TestGeneral
 	IDOnly
 	area            int32
 	availability    database.AvailabilityType
@@ -20,12 +20,12 @@ type Treasure struct {
 	equipment       *testFoundEquipment
 }
 
-func (e Treasure) GetTestGeneral() testGeneral {
-	return e.testGeneral
+func (e Treasure) GetTestGeneral() TestGeneral {
+	return e.TestGeneral
 }
 
-func (e Treasure) Compare(test test, got apitypes.Treasure) {
-	test.t.Helper()
+func (e Treasure) Compare(test Test, got apitypes.Treasure) {
+	test.T.Helper()
 	test.compareExpIDOnly(e.IDOnly, got.ID)
 	test.compIDAPIResource("area", apilookups.E.Areas.Endpoint, e.area, got.Area)
 	test.compare("availability", string(e.availability), got.Availability)
@@ -43,8 +43,8 @@ type testFoundEquipment struct {
 	emptySlotsAmount int32
 }
 
-func (e testFoundEquipment) Compare(test test, fieldName string, got apitypes.FoundEquipment) {
-	test.t.Helper()
+func (e testFoundEquipment) Compare(test Test, fieldName string, got apitypes.FoundEquipment) {
+	test.T.Helper()
 	enEndpoint := apilookups.E.Equipment.Endpoint
 	aaEndpoint := apilookups.E.AutoAbilities.Endpoint
 

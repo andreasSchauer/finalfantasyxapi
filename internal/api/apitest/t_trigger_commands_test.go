@@ -14,18 +14,18 @@ func TestGetTriggerCommand(t *testing.T) {
 	t.Parallel()
 	tests := []TriggerCommand{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands/13",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "trigger command with provided id '13' doesn't exist. max id: 12",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/trigger-commands/13",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "trigger command with provided id '13' doesn't exist. max id: 12",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands/4",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/trigger-commands/4",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions":                1,
 					"battle interactions 0 stat changes": 1,
 					"used by":                            3,
@@ -72,11 +72,11 @@ func TestGetTriggerCommand(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands/6",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/trigger-commands/6",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions":               1,
 					"battle interactions 0 mod changes": 1,
 					"used by":                           1,
@@ -123,11 +123,11 @@ func TestGetTriggerCommand(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands/12?ability_user=wakka&celestial_weapon=false",
-				expectedStatus: http.StatusOK,
-				dontCheck:      map[string]bool{},
-				expLengths: map[string]int{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/trigger-commands/12?ability_user=wakka&celestial_weapon=false",
+				ExpectedStatus: http.StatusOK,
+				DontCheck:      map[string]bool{},
+				ExpLengths: map[string]int{
 					"battle interactions": 1,
 					"used by":             3,
 					"monster-formations":  1,
@@ -187,12 +187,12 @@ func TestGetMultipleTriggerCommands(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands/talk",
-				expectedStatus: http.StatusMultipleChoices,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/trigger-commands/talk",
+				ExpectedStatus: http.StatusMultipleChoices,
 			},
-			count:   3,
-			results: []int32{4, 5, 6},
+			Count:   3,
+			Results: []int32{4, 5, 6},
 		},
 	}
 
@@ -203,34 +203,34 @@ func TestRetrieveTriggerCommands(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands?limit=max",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/trigger-commands?limit=max",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    12,
-			previous: nil,
-			next:     nil,
-			results:  []int32{1, 4, 7, 9, 11, 12},
+			Count:    12,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{1, 4, 7, 9, 11, 12},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands?related_stat=6",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/trigger-commands?related_stat=6",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    1,
-			previous: nil,
-			next:     nil,
-			results:  []int32{5},
+			Count:    1,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{5},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/trigger-commands?user=7",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/trigger-commands?user=7",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:    3,
-			previous: nil,
-			next:     nil,
-			results:  []int32{5, 10, 12},
+			Count:    3,
+			Previous: nil,
+			Next:     nil,
+			Results:  []int32{5, 10, 12},
 		},
 	}
 

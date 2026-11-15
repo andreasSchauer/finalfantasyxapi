@@ -26,8 +26,8 @@ type BattleInteraction struct {
 	modifierChanges           []ModChange
 }
 
-func (e BattleInteraction) Compare(test test, fieldName string, got apitypes.BattleInteraction) {
-	test.t.Helper()
+func (e BattleInteraction) Compare(test Test, fieldName string, got apitypes.BattleInteraction) {
+	test.T.Helper()
 	test.compare(fieldName+" target", e.target, got.Target)
 	test.compare(fieldName+" range", e.abilityRange, got.Range)
 	test.compare(fieldName+" hit amount", e.hitAmount, got.HitAmount)
@@ -53,7 +53,7 @@ type Accuracy struct {
 	accModifier *float32
 }
 
-func (e Accuracy) Compare(test test, fieldName string, got apitypes.Accuracy) {
+func (e Accuracy) Compare(test Test, fieldName string, got apitypes.Accuracy) {
 	test.compare(fieldName+" acc source", e.accSource, got.AccSource)
 	test.compare(fieldName+" hit chance", e.hitChance, got.HitChance)
 	test.compare(fieldName+" acc modifier", e.accModifier, got.AccModifier)
@@ -72,7 +72,7 @@ type Damage struct {
 	element         *int32
 }
 
-func (e Damage) Compare(test test, fieldName string, got apitypes.Damage) {
+func (e Damage) Compare(test Test, fieldName string, got apitypes.Damage) {
 	test.compare(fieldName+" attack type", string(e.attackType), got.AttackType)
 	test.compare(fieldName+" damage type", string(e.damageType), got.DamageType)
 	test.compTestStructPtrs(fieldName+" hp", e.hp, got.HP)
@@ -90,7 +90,7 @@ type ClassDamage struct {
 	damageConstant int32
 }
 
-func (e ClassDamage) Compare(test test, fieldName string, got apitypes.ClassDamage) {
+func (e ClassDamage) Compare(test Test, fieldName string, got apitypes.ClassDamage) {
 	test.compare(fieldName+" - damage formula", string(e.damageFormula), got.DamageFormula)
 	test.compare(fieldName+" - damage constant", e.damageConstant, got.DamageConstant)
 }
@@ -99,7 +99,7 @@ type InflictedDelay struct {
 	delayStrength string
 }
 
-func (e InflictedDelay) Compare(test test, fieldName string, got apitypes.InflictedDelay) {
+func (e InflictedDelay) Compare(test Test, fieldName string, got apitypes.InflictedDelay) {
 	test.compare(fieldName+" delay strength", e.delayStrength, got.DelayStrength)
 }
 
@@ -109,7 +109,7 @@ type StatChange struct {
 	value           float32
 }
 
-func (e StatChange) Compare(test test, fieldName string, got apitypes.StatChange) {
+func (e StatChange) Compare(test Test, fieldName string, got apitypes.StatChange) {
 	test.compIDAPIResource(fieldName+" - sc stat", apilookups.E.Stats.Endpoint, e.stat, got.Stat)
 	test.compare(fieldName+" - calculation type", e.calculationType, got.CalculationType)
 	test.compare(fieldName+" - value", e.value, got.Value)
@@ -121,7 +121,7 @@ type ModChange struct {
 	value           float32
 }
 
-func (e ModChange) Compare(test test, fieldName string, got apitypes.ModifierChange) {
+func (e ModChange) Compare(test Test, fieldName string, got apitypes.ModifierChange) {
 	test.compIDAPIResource(fieldName+" - mc modifier", apilookups.E.Modifiers.Endpoint, e.modifier, got.Modifier)
 	test.compare(fieldName+" - calculation type", e.calculationType, got.CalculationType)
 	test.compare(fieldName+" - value", e.value, got.Value)

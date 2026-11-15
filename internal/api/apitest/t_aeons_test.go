@@ -13,20 +13,20 @@ func TestGetAeon(t *testing.T) {
 	t.Parallel()
 	tests := []Aeon{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/11",
-				expectedStatus: http.StatusNotFound,
-				expectedErr:    "aeon with provided id '11' doesn't exist. max id: 10",
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/11",
+				ExpectedStatus: http.StatusNotFound,
+				ExpectedErr:    "aeon with provided id '11' doesn't exist. max id: 10",
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/3",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/3",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"regen amounts": true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"character classes": 3,
 					"aeon commands":     0,
 					"default abilities": 5,
@@ -36,8 +36,8 @@ func TestGetAeon(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   3,
-				name: "ixion",
+				ID:   3,
+				Name: "ixion",
 			},
 			untypedUnit:    11,
 			area:           114,
@@ -99,14 +99,14 @@ func TestGetAeon(t *testing.T) {
 			},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/9?battles=347&yuna_stats=strength:24",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/9?battles=347&yuna_stats=strength:24",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"weapon abilities": true,
 					"armor abilities":  true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"character classes": 3,
 					"aeon commands":     5,
 					"default abilities": 10,
@@ -117,8 +117,8 @@ func TestGetAeon(t *testing.T) {
 			},
 			untypedUnit: 17,
 			Unique: Unique{
-				id:   9,
-				name: "sandy",
+				ID:   9,
+				Name: "sandy",
 			},
 			area:           208,
 			battlesToRegen: 30,
@@ -169,15 +169,15 @@ func TestGetAeon(t *testing.T) {
 			overdrives:             []int32{124},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"regen amounts":    true,
 					"weapon abilities": true,
 					"armor abilities":  true,
 				},
-				expLengths: map[string]int{
+				ExpLengths: map[string]int{
 					"character classes": 3,
 					"aeon commands":     0,
 					"default abilities": 5,
@@ -185,8 +185,8 @@ func TestGetAeon(t *testing.T) {
 				},
 			},
 			Unique: Unique{
-				id:   1,
-				name: "valefor",
+				ID:   1,
+				Name: "valefor",
 			},
 			untypedUnit:    9,
 			area:           33,
@@ -216,10 +216,10 @@ func TestGetAeon(t *testing.T) {
 			overdrives:             []int32{117, 118},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15&battles=600",
-				expectedStatus: http.StatusOK,
-				dontCheck: map[string]bool{
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons/1?yuna_stats=hp:2000,mp:250,strength:10,defense:28,magic:72,magic_defense:50,agility:41,luck:25,evasion:30,accuracy:15&battles=600",
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
 					"area":                  true,
 					"battles to regenerate": true,
 					"regen amounts":         true,
@@ -231,11 +231,11 @@ func TestGetAeon(t *testing.T) {
 					"weapon abilities":      true,
 					"armor abilities":       true,
 				},
-				expLengths: map[string]int{},
+				ExpLengths: map[string]int{},
 			},
 			Unique: Unique{
-				id:   1,
-				name: "valefor",
+				ID:   1,
+				Name: "valefor",
 			},
 			untypedUnit: 9,
 			agility: testAgilityParams{
@@ -266,28 +266,28 @@ func TestRetrieveAeons(t *testing.T) {
 	t.Parallel()
 	tests := []ListIDs{
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   10,
-			results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			Count:   10,
+			Results: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons?optional=true",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons?optional=true",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{6, 7, 8, 9, 10},
+			Count:   5,
+			Results: []int32{6, 7, 8, 9, 10},
 		},
 		{
-			testGeneral: testGeneral{
-				requestURL:     "/api/aeons?optional=false",
-				expectedStatus: http.StatusOK,
+			TestGeneral: TestGeneral{
+				RequestURL:     "/api/aeons?optional=false",
+				ExpectedStatus: http.StatusOK,
 			},
-			count:   5,
-			results: []int32{1, 2, 3, 4, 5},
+			Count:   5,
+			Results: []int32{1, 2, 3, 4, 5},
 		},
 	}
 
