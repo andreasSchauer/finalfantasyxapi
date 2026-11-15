@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop5SeedSidequests(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedSidequests(qtx *database.Queries, ctx context.Context) error {
 	sidequests, err := extractSidequests()
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func completeSidequests() error {
 	return nil
 }
 
-func loop6SeedSubquests(qtx *database.Queries, ctx context.Context) error {
+func Loop6SeedSubquests(qtx *database.Queries, ctx context.Context) error {
 	subquests, err := extractSubquests()
 	if err != nil {
 		return err

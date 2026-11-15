@@ -12,7 +12,7 @@ func getTriggerCommandRelatedStats(tc seedtypes.TriggerCommand) ([]seedtypes.Sta
 	return lookup.GetResources(tc.RelatedStats, lookup.L.Stats)
 }
 
-func seedJuncTriggerCommandsRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncTriggerCommandsRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "trigger commands + related stats"
 	jParams, err := processJunctions(desc, rawJSON.triggerCommands, getTriggerCommandRelatedStats)
 	if err != nil {

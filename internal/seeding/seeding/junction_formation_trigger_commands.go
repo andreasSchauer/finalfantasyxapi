@@ -8,7 +8,6 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-
 func getFormationTriggerCommands() []seedtypes.FormationTriggerCommand {
 	commands := []seedtypes.FormationTriggerCommand{}
 
@@ -23,7 +22,7 @@ func getFormationTriggerCommandUsers(tc seedtypes.FormationTriggerCommand) ([]se
 	return lookup.GetResources(tc.Users, lookup.L.CharClasses)
 }
 
-func seedJuncFormationTriggerCommandsUsers(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncFormationTriggerCommandsUsers(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "formation trigger commands + users"
 	jParams, err := processJunctions(desc, getFormationTriggerCommands(), getFormationTriggerCommandUsers)
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedPlayerUnits(qtx *database.Queries, ctx context.Context) error {
 	units := extractPlayerUnits()
 
 	params := database.CreatePlayerUnitBulkParams{

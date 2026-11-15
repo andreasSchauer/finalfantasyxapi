@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedProperties(qtx *database.Queries, ctx context.Context) error {
 	properties, err := extractProperties()
 	if err != nil {
 		return err

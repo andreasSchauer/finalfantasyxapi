@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := extractAutoAbilities()
 	if err != nil {
 		return err

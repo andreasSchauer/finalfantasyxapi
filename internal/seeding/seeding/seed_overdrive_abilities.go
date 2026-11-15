@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := extractOverdriveAbilities()
 	if err != nil {
 		return err

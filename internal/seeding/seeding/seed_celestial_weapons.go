@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedCelestialWeapons(qtx *database.Queries, ctx context.Context) error {
 	wpns, err := extractCelestialWeapons()
 	if err != nil {
 		return err

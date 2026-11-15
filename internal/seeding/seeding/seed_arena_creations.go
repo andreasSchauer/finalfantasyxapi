@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
+func Loop7SeedArenaCreations(qtx *database.Queries, ctx context.Context) error {
 	creations, err := extractArenaCreations()
 	if err != nil {
 		return err

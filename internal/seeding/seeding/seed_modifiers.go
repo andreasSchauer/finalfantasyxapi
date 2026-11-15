@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedModifiers(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedModifiers(qtx *database.Queries, ctx context.Context) error {
 	modifiers := dedupeRows(rawJSON.modifiers, hashes)
 
 	params := database.CreateModifierBulkParams{

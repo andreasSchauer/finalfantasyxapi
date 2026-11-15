@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedInflictedStatusses(qtx *database.Queries, ctx context.Context) error {
 	statusses, err := extractInflictedStatusses()
 	if err != nil {
 		return err

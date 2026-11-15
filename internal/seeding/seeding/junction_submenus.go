@@ -12,7 +12,7 @@ func getSubmenuUsers(s seedtypes.Submenu) ([]seedtypes.CharacterClass, error) {
 	return lookup.GetResources(s.Users, lookup.L.CharClasses)
 }
 
-func seedJuncSubmenusUsers(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncSubmenusUsers(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "submenus + users"
 	jParams, err := processJunctions(desc, rawJSON.submenus, getSubmenuUsers)
 	if err != nil {

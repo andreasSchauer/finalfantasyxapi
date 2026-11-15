@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedEncounterAreas(qtx *database.Queries, ctx context.Context) error {
 	areas, err := extractEncounterAreas()
 	if err != nil {
 		return err

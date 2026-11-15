@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedMonsterEquipmentSlots(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedMonsterEquipmentSlots(qtx *database.Queries, ctx context.Context) error {
 	slots, err := extractMonsterEquipmentSlots()
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func extractMonsterEquipmentSlots() ([]seedtypes.MonsterEquipmentSlots, error) {
 	return dedupeRows(slots, hashes), nil
 }
 
-func loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedEquipmentSlotsChances(qtx *database.Queries, ctx context.Context) error {
 	chances := extractEquipmentSlotsChances()
 
 	params := database.CreateEquipmentSlotsChanceBulkParams{

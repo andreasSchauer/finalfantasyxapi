@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedAlts(qtx *database.Queries, ctx context.Context) error {
 	changes, err := extractAlts()
 	if err != nil {
 		return err

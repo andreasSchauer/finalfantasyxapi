@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop2SeedElementalResists(qtx *database.Queries, ctx context.Context) error {
+func Loop2SeedElementalResists(qtx *database.Queries, ctx context.Context) error {
 	resists, err := extractElementalResists()
 	if err != nil {
 		return err

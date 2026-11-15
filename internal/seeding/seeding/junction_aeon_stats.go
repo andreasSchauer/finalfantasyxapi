@@ -29,7 +29,7 @@ func getAeonBaseStatsA(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 	return a.BaseStats.AVals, nil
 }
 
-func seedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAeonBaseStatsA(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats a"
 	jParams, err := processJunctions(desc, rawJSON.aeons, getAeonBaseStatsA)
 	if err != nil {
@@ -47,7 +47,7 @@ func getAeonBaseStatsB(a seedtypes.Aeon) ([]seedtypes.BaseStat, error) {
 	return a.BaseStats.BVals, nil
 }
 
-func seedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats b"
 	jParams, err := processJunctions(desc, rawJSON.aeons, getAeonBaseStatsB)
 	if err != nil {
@@ -61,7 +61,7 @@ func seedJuncAeonBaseStatsB(qtx *database.Queries, ctx context.Context) error {
 	})
 }
 
-func seedJuncAeonBaseStatsX(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAeonBaseStatsX(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + base stats x"
 	params := database.CreateAeonsBaseStatXJunctionBulkParams{
 		DataHash:   make([]string, 0),

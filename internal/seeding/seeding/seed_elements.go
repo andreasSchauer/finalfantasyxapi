@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedElements(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedElements(qtx *database.Queries, ctx context.Context) error {
 	elements := dedupeRows(rawJSON.elements, hashes)
 
 	params := database.CreateElementBulkParams{

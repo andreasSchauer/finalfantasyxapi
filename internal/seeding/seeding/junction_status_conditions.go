@@ -12,7 +12,7 @@ func getStatusConditionModifierChanges(sc seedtypes.StatusCondition) ([]seedtype
 	return sc.ModifierChanges, nil
 }
 
-func seedJuncStatusConditionModifierChanges(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncStatusConditionModifierChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + modifier changes"
 	jParams, err := processJunctions(desc, rawJSON.statusConditions, getStatusConditionModifierChanges)
 	if err != nil {
@@ -30,7 +30,7 @@ func getStatusConditionRelatedStats(sc seedtypes.StatusCondition) ([]seedtypes.S
 	return lookup.GetResources(sc.RelatedStats, lookup.L.Stats)
 }
 
-func seedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncStatusConditionRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + related stats"
 	jParams, err := processJunctions(desc, rawJSON.statusConditions, getStatusConditionRelatedStats)
 	if err != nil {
@@ -48,7 +48,7 @@ func getStatusConditionRemovedConditions(sc seedtypes.StatusCondition) ([]seedty
 	return lookup.GetResources(sc.RemovedStatusConditions, lookup.L.StatusConditions)
 }
 
-func seedJuncStatusConditionRemovedConditions(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncStatusConditionRemovedConditions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + removed conditions"
 	jParams, err := processJunctions(desc, rawJSON.statusConditions, getStatusConditionRemovedConditions)
 	if err != nil {
@@ -66,7 +66,7 @@ func getStatusConditionStatChanges(sc seedtypes.StatusCondition) ([]seedtypes.St
 	return sc.StatChanges, nil
 }
 
-func seedJuncStatusConditionStatChanges(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncStatusConditionStatChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "status conditions + stat changes"
 	jParams, err := processJunctions(desc, rawJSON.statusConditions, getStatusConditionStatChanges)
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Context) error {
+func Loop2SeedMonsterEquipment(qtx *database.Queries, ctx context.Context) error {
 	equipments := extractMonsterEquipment()
 
 	params := database.CreateMonsterEquipmentBulkParams{

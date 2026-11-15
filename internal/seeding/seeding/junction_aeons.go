@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func seedJuncAeonAeonEquipment(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAeonAeonEquipment(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeons + aeon equipment"
 	jParams, err := processJunctions(desc, rawJSON.aeons, getAeonAeonEquipment)
 	if err != nil {
@@ -21,7 +21,6 @@ func seedJuncAeonAeonEquipment(qtx *database.Queries, ctx context.Context) error
 		AeonEquipmentID: jParams.ChildIDs,
 	})
 }
-
 
 func getAeonAeonEquipment(a seedtypes.Aeon) ([]seedtypes.AeonEquipment, error) {
 	return slices.Concat(a.Weapon, a.Armor), nil

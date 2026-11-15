@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedMasterItems(qtx *database.Queries, ctx context.Context) error {
 	items := extractMasterItems()
 
 	params := database.CreateMasterItemBulkParams{

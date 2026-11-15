@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedEquipmentTables(qtx *database.Queries, ctx context.Context) error {
 	tables, err := extractEquipmentTables()
 	if err != nil {
 		return err
@@ -91,7 +91,7 @@ func completeEquipment() error {
 	return nil
 }
 
-func loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
+func Loop6SeedAbilityPools(qtx *database.Queries, ctx context.Context) error {
 	pools := extractAbilityPools()
 
 	params := database.CreateAbilityPoolBulkParams{

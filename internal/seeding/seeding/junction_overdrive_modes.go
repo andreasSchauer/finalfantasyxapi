@@ -11,7 +11,7 @@ func getOverdriveModeActions(om seedtypes.OverdriveMode) ([]seedtypes.ActionToLe
 	return om.ActionsToLearn, nil
 }
 
-func seedJuncOverdriveModeActions(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncOverdriveModeActions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "overdrive modes + actions"
 	jParams, err := processJunctions(desc, rawJSON.overdriveModes, getOverdriveModeActions)
 	if err != nil {

@@ -8,13 +8,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-
-
 func getMiscAbilityLearnedBy(ua seedtypes.MiscAbility) ([]seedtypes.CharacterClass, error) {
 	return lookup.GetResources(ua.LearnedBy, lookup.L.CharClasses)
 }
 
-func seedJuncMiscAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncMiscAbilitiesLearnedBy(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "misc abilities + learned by"
 	jParams, err := processJunctions(desc, rawJSON.miscAbilities, getMiscAbilityLearnedBy)
 	if err != nil {

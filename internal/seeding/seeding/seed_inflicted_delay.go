@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedInflictedDelays(qtx *database.Queries, ctx context.Context) error {
 	delays := extractInflictedDelays()
 
 	params := database.CreateInflictedDelayBulkParams{

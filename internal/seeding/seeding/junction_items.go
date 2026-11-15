@@ -12,7 +12,7 @@ func getItemRelatedStats(i seedtypes.Item) ([]seedtypes.Stat, error) {
 	return lookup.GetResources(i.RelatedStats, lookup.L.Stats)
 }
 
-func seedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "items + related stats"
 	jParams, err := processJunctions(desc, rawJSON.items, getItemRelatedStats)
 	if err != nil {
@@ -26,12 +26,11 @@ func seedJuncItemsRelatedStats(qtx *database.Queries, ctx context.Context) error
 	})
 }
 
-
 func getItemAvailableMenus(i seedtypes.Item) ([]seedtypes.Submenu, error) {
 	return lookup.GetResources(i.AvailableMenus, lookup.L.Submenus)
 }
 
-func seedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncItemsAvailableMenus(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "items + available menus"
 	jParams, err := processJunctions(desc, rawJSON.items, getItemAvailableMenus)
 	if err != nil {

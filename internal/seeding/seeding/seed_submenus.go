@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
+func Loop2SeedSubmenus(qtx *database.Queries, ctx context.Context) error {
 	submenus, err := extractSubmenus()
 	if err != nil {
 		return err

@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) error {
 	positions := dedupeRows(rawJSON.blitzballPositions, hashes)
 
 	params := database.CreateBlitzballPositionBulkParams{
@@ -40,7 +40,7 @@ func loop1SeedBlitzballPositions(qtx *database.Queries, ctx context.Context) err
 	return nil
 }
 
-func loop4SeedBlitzballItems(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedBlitzballItems(qtx *database.Queries, ctx context.Context) error {
 	items, err := extractBlitzballItems()
 	if err != nil {
 		return err

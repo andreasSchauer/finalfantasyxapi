@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedItemAbilities(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedItemAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := extractItemAbilities()
 	if err != nil {
 		return err

@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedSpheres(qtx *database.Queries, ctx context.Context) error {
 	spheres, err := extractSpheres()
 	if err != nil {
 		return err
@@ -80,7 +80,7 @@ func extractSpheres() ([]seedtypes.Sphere, error) {
 	return dedupeRows(spheres, hashes), nil
 }
 
-func loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedCreatedNodes(qtx *database.Queries, ctx context.Context) error {
 	nodes := extractCreatedNodes()
 
 	params := database.CreateCreatedNodeBulkParams{
@@ -119,7 +119,7 @@ func extractCreatedNodes() []seedtypes.CreatedNode {
 	return dedupeRows(createdNodes, hashes)
 }
 
-func loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedTargetableNodes(qtx *database.Queries, ctx context.Context) error {
 	nodes := extractTargetableNodes()
 
 	params := database.CreateSphereTargetableNodeBulkParams{

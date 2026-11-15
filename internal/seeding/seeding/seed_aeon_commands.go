@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedAeonCommands(qtx *database.Queries, ctx context.Context) error {
 	commands, err := extractAeonCommands()
 	if err != nil {
 		return err

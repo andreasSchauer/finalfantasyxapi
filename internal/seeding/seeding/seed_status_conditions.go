@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedStatusConditions(qtx *database.Queries, ctx context.Context) error {
 	statusses, err := extractStatusConditions()
 	if err != nil {
 		return err

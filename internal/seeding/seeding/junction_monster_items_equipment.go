@@ -25,7 +25,7 @@ func getMonsterItemsOtherItems(mi seedtypes.MonsterItems) ([]seedtypes.PossibleI
 	return mi.OtherItems, nil
 }
 
-func seedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncMonsterItemsOtherItems(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster items + other items"
 	jParams, err := processJunctions(desc, getMonsterItems(), getMonsterItemsOtherItems)
 	if err != nil {
@@ -55,7 +55,7 @@ func getMonsterEquipmentEquipmentDrops(me seedtypes.MonsterEquipment) ([]seedtyp
 	return slices.Concat(me.WeaponAbilities, me.ArmorAbilities), nil
 }
 
-func seedJuncMonsterEquipmentEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncMonsterEquipmentEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster equipment + equipment drops"
 	jParams, err := processJunctions(desc, getMonsterEquipment(), getMonsterEquipmentEquipmentDrops)
 	if err != nil {
@@ -77,7 +77,7 @@ func getMonsterEquipmentSlotsSlotChances(mes seedtypes.MonsterEquipmentSlots) ([
 	return mes.Chances, nil
 }
 
-func seedJuncMonsterEquipmentSlotChances(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncMonsterEquipmentSlotChances(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster equipment + equipment slot chances"
 	jParams, err := processThreewayJunctions(desc, getMonsterEquipment(), getMonsterEquipmentEquipmentSlots, getMonsterEquipmentSlotsSlotChances)
 	if err != nil {
@@ -96,7 +96,7 @@ func getEquipmentDropCharacters(ed seedtypes.EquipmentDrop) ([]seedtypes.Charact
 	return lookup.GetResources(ed.Characters, lookup.L.Characters)
 }
 
-func seedJuncEquipmentDropsCharacters(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncEquipmentDropsCharacters(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "equipment drops + characters"
 	jParams, err := processThreewayJunctions(desc, getMonsterEquipment(), getMonsterEquipmentEquipmentDrops, getEquipmentDropCharacters)
 	if err != nil {

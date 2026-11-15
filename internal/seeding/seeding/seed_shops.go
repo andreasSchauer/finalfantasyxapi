@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop4SeedShops(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedShops(qtx *database.Queries, ctx context.Context) error {
 	shops, err := extractShops()
 	if err != nil {
 		return err

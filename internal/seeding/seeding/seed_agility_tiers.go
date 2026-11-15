@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
 	agilityTiers := dedupeRows(rawJSON.agilityTiers, hashes)
 
 	params := database.CreateAgilityTierBulkParams{
@@ -49,7 +49,7 @@ func loop1SeedAgilityTiers(qtx *database.Queries, ctx context.Context) error {
 	return nil
 }
 
-func loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Context) error {
+func Loop2SeedAgilitySubtiers(qtx *database.Queries, ctx context.Context) error {
 	subtiers := extractAgilitySubtiers()
 
 	params := database.CreateAgilitySubtierBulkParams{

@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedBackgroundMusic(qtx *database.Queries, ctx context.Context) error {
 	bm := extractBackgroundMusic()
 
 	params := database.CreateBackgroundMusicBulkParams{
@@ -48,7 +48,7 @@ func extractBackgroundMusic() []seedtypes.BackgroundMusic {
 	return dedupeRows(bgMusic, hashes)
 }
 
-func loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedCues(qtx *database.Queries, ctx context.Context) error {
 	cues, err := extractCues()
 	if err != nil {
 		return err

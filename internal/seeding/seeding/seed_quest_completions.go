@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedQuestCompletions(qtx *database.Queries, ctx context.Context) error {
 	completions, err := extractQuestCompletions()
 	if err != nil {
 		return err
@@ -89,7 +89,7 @@ func extractQuestCompletions() ([]seedtypes.QuestCompletion, error) {
 	return dedupeRows(completions, hashes), nil
 }
 
-func loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedCompletionAreas(qtx *database.Queries, ctx context.Context) error {
 	areas, err := extractCompletionAreas()
 	if err != nil {
 		return err

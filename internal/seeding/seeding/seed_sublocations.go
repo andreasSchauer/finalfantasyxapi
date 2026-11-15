@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
+func Loop2SeedSublocations(qtx *database.Queries, ctx context.Context) error {
 	sublocations := extractSublocations()
 
 	params := database.CreateSublocationBulkParams{

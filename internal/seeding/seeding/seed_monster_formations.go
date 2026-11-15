@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedMonsterFormations(qtx *database.Queries, ctx context.Context) error {
 	formations, err := extractMonsterFormations()
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func completeMonsterFormations() error {
 	return nil
 }
 
-func loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedMonsterSelections(qtx *database.Queries, ctx context.Context) error {
 	selections, err := extractMonsterSelections()
 	if err != nil {
 		return err

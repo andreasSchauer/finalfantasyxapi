@@ -11,7 +11,7 @@ func getMonsterFormationEncounterAreas(mf seedtypes.MonsterFormation) ([]seedtyp
 	return mf.EncounterAreas, nil
 }
 
-func seedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncMonsterFormationsEncounterAreas(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster-formations + encounter areas"
 	jParams, err := processJunctions(desc, rawJSON.monsterFormations, getMonsterFormationEncounterAreas)
 	if err != nil {
@@ -29,7 +29,7 @@ func getMonsterFormationTriggerCommands(mf seedtypes.MonsterFormation) ([]seedty
 	return mf.TriggerCommands, nil
 }
 
-func seedJuncMonsterFormationsTriggerCommands(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncMonsterFormationsTriggerCommands(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster-formations + trigger commands"
 	jParams, err := processJunctions(desc, rawJSON.monsterFormations, getMonsterFormationTriggerCommands)
 	if err != nil {
@@ -57,7 +57,7 @@ func getMonsterSelectionMonsterAmounts(ms seedtypes.MonsterSelection) ([]seedtyp
 	return ms.Monsters, nil
 }
 
-func seedJuncMonsterSelectionMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncMonsterSelectionMonsterAmounts(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "monster selection + monsters"
 	jParams, err := processJunctions(desc, getMonsterSelections(), getMonsterSelectionMonsterAmounts)
 	if err != nil {

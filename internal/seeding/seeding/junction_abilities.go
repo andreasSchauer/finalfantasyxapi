@@ -44,7 +44,7 @@ func getAbilityBattleInteractions(a seedtypes.Ability) ([]seedtypes.BattleIntera
 	return a.BattleInteractions, nil
 }
 
-func seedJuncAbilitiesBattleInteractions(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAbilitiesBattleInteractions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "abilities + battle interactions"
 	jParams, err := processJunctions(desc, getAbilities(), getAbilityBattleInteractions)
 	if err != nil {

@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedMonsters(qtx *database.Queries, ctx context.Context) error {
 	err := completeMonstersElements()
 	if err != nil {
 		return err

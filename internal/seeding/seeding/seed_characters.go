@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop4SeedCharacters(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedCharacters(qtx *database.Queries, ctx context.Context) error {
 	chars, err := extractCharacters()
 	if err != nil {
 		return err

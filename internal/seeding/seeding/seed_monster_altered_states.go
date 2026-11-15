@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
+func Loop2SeedAlteredStates(qtx *database.Queries, ctx context.Context) error {
 	states := extractMonsterAlteredStates()
 
 	params := database.CreateAlteredStateBulkParams{

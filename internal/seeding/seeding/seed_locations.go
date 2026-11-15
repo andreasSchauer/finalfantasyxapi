@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedLocations(qtx *database.Queries, ctx context.Context) error {
 	locations := dedupeRows(rawJSON.locations, hashes)
 
 	params := database.CreateLocationBulkParams{

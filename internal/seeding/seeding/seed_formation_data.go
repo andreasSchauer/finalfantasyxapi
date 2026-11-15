@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedFormationData(qtx *database.Queries, ctx context.Context) error {
 	data, err := extractFormationData()
 	if err != nil {
 		return err
@@ -69,7 +69,7 @@ func extractFormationData() ([]seedtypes.FormationData, error) {
 	return dedupeRows(data, hashes), nil
 }
 
-func loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedFormationBossSongs(qtx *database.Queries, ctx context.Context) error {
 	songs, err := extractFormationBossSongs()
 	if err != nil {
 		return err

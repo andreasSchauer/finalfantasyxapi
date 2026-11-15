@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
+func Loop6SeedEquipmentDrops(qtx *database.Queries, ctx context.Context) error {
 	drops, err := extractEquipmentDrops()
 	if err != nil {
 		return err

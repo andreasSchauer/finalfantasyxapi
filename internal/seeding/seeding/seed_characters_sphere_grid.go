@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedSphereGrids(qtx *database.Queries, ctx context.Context) error {
 	grids := extractSphereGrids()
 
 	params := database.CreateSphereGridBulkParams{

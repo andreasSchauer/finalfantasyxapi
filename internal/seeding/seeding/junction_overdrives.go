@@ -12,7 +12,7 @@ func getOverdriveOverdriveAbilities(o seedtypes.Overdrive) ([]seedtypes.Overdriv
 	return lookup.TypedRefsToResources(o.OverdriveAbilities, lookup.L.OverdriveAbilities)
 }
 
-func seedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "overdrives + overdrive abilities"
 	jParams, err := processJunctions(desc, rawJSON.overdrives, getOverdriveOverdriveAbilities)
 	if err != nil {
@@ -26,7 +26,7 @@ func seedJuncOverdrivesOverdriveAbilities(qtx *database.Queries, ctx context.Con
 	})
 }
 
-func seedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncDefaultOverdriveAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "default overdrive + overdrive abilities"
 	params := database.CreateDefaultOverdriveAbilityJunctionBulkParams{
 		DataHash:  make([]string, 0),

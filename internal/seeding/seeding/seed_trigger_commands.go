@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error {
+func Loop3SeedTriggerCommands(qtx *database.Queries, ctx context.Context) error {
 	commands, err := extractTriggerCommands()
 	if err != nil {
 		return err

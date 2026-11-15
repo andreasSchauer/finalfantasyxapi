@@ -8,9 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-
-
-func seedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncCharacterClassesPlayerUnits(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "character classes + player units"
 	jParams, err := processJunctions(desc, rawJSON.characterClasses, getCharacterClassPlayerUnits)
 	if err != nil {

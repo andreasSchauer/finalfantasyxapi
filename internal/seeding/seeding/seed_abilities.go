@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
+func Loop2SeedAbilities(qtx *database.Queries, ctx context.Context) error {
 	abilities, err := extractAbilities()
 	if err != nil {
 		return err
@@ -128,7 +128,7 @@ func extractAbilities() ([]seedtypes.Ability, error) {
 	return dedupeRows(abilities, hashes), nil
 }
 
-func loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedAbilityAttributes(qtx *database.Queries, ctx context.Context) error {
 	attributes := extractAbilityAttributes()
 
 	params := database.CreateAbilityAttributesBulkParams{

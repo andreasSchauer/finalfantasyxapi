@@ -26,7 +26,7 @@ func (j ShopJunction) ToHashFieldsJ(name string) []any {
 	return slices.Concat([]any{name}, j.ToHashFields())
 }
 
-func seedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncShopsShopItems(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "shops + shop items"
 	params := database.CreateShopsItemsJunctionBulkParams{
 		DataHash:   make([]string, 0),
@@ -92,7 +92,7 @@ func getShopEquipmentAutoAbilities(se seedtypes.ShopEquipment) ([]seedtypes.Auto
 	return lookup.GetResources(se.Abilities, lookup.L.AutoAbilities)
 }
 
-func seedJuncShopEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncShopEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "shop equipment + auto-abilities"
 	jParams, err := processJunctions(desc, getShopEquipment(), getShopEquipmentAutoAbilities)
 	if err != nil {

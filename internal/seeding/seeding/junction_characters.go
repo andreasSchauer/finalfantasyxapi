@@ -7,7 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func seedJuncCharactersBaseStats(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncCharactersBaseStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "characters + base stats"
 	jParams, err := processJunctions(desc, rawJSON.characters, getCharacterBaseStats)
 	if err != nil {
@@ -20,7 +20,6 @@ func seedJuncCharactersBaseStats(qtx *database.Queries, ctx context.Context) err
 		BaseStatID:  jParams.ChildIDs,
 	})
 }
-
 
 func getCharacterBaseStats(c seedtypes.Character) ([]seedtypes.BaseStat, error) {
 	return c.BaseStats, nil

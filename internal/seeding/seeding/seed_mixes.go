@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop5SeedMixes(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedMixes(qtx *database.Queries, ctx context.Context) error {
 	mixes, err := extractMixes()
 	if err != nil {
 		return err
@@ -81,7 +81,7 @@ func completeMixes() error {
 	return nil
 }
 
-func loop6SeedMixCombinations(qtx *database.Queries, ctx context.Context) error {
+func Loop6SeedMixCombinations(qtx *database.Queries, ctx context.Context) error {
 	combos, err := extractMixCombinations()
 	if err != nil {
 		return err

@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedTopmenus(qtx *database.Queries, ctx context.Context) error {
 	topmenus := dedupeRows(rawJSON.topmenus, hashes)
 
 	params := database.CreateTopmenuBulkParams{

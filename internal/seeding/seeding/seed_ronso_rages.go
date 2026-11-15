@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedRonsoRages(qtx *database.Queries, ctx context.Context) error {
 	rages := extractRonsoRages()
 
 	params := database.CreateRonsoRageBulkParams{

@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error {
+func Loop4SeedFMVs(qtx *database.Queries, ctx context.Context) error {
 	fmvs, err := extractFMVs()
 	if err != nil {
 		return err

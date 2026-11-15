@@ -8,12 +8,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-
 func getOverdriveAbilityRelatedStats(oa seedtypes.OverdriveAbility) ([]seedtypes.Stat, error) {
 	return lookup.GetResources(oa.RelatedStats, lookup.L.Stats)
 }
 
-func seedJuncOverdriveAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncOverdriveAbilitiesRelatedStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "overdrive abilities + related stats"
 	jParams, err := processJunctions(desc, rawJSON.overdriveAbilities, getOverdriveAbilityRelatedStats)
 	if err != nil {

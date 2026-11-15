@@ -12,7 +12,7 @@ func getBattleInteractionAffectedBy(bi seedtypes.BattleInteraction) ([]seedtypes
 	return lookup.GetResources(bi.AffectedBy, lookup.L.StatusConditions)
 }
 
-func seedJuncBattleInteractionsAffectedBy(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncBattleInteractionsAffectedBy(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "battle interactions + affected by"
 	jParams, err := processThreewayJunctions(desc, getAbilities(), getAbilityBattleInteractions, getBattleInteractionAffectedBy)
 	if err != nil {
@@ -31,7 +31,7 @@ func getBattleInteractionCopiedStatusConditions(bi seedtypes.BattleInteraction) 
 	return bi.CopiedStatusConditions, nil
 }
 
-func seedJuncBattleInteractionsCopiedStatusConditions(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncBattleInteractionsCopiedStatusConditions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "battle interactions + copied status conditions"
 	jParams, err := processThreewayJunctions(desc, getAbilities(), getAbilityBattleInteractions, getBattleInteractionCopiedStatusConditions)
 	if err != nil {
@@ -54,7 +54,7 @@ func getBattleInteractionDamages(bi seedtypes.BattleInteraction) ([]seedtypes.Da
 	return damages, nil
 }
 
-func seedJuncBattleInteractionsDamages(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncBattleInteractionsDamages(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "battle interactions + damages"
 	jParams, err := processThreewayJunctions(desc, getAbilities(), getAbilityBattleInteractions, getBattleInteractionDamages)
 	if err != nil {
@@ -73,7 +73,7 @@ func getBattleInteractionInflictedStatusConditions(bi seedtypes.BattleInteractio
 	return bi.InflictedStatusConditions, nil
 }
 
-func seedJuncBattleInteractionsInflictedStatusConditions(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncBattleInteractionsInflictedStatusConditions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "battle interactions + inflicted status conditions"
 	jParams, err := processThreewayJunctions(desc, getAbilities(), getAbilityBattleInteractions, getBattleInteractionInflictedStatusConditions)
 	if err != nil {
@@ -92,7 +92,7 @@ func getBattleInteractionModifierChanges(bi seedtypes.BattleInteraction) ([]seed
 	return bi.ModifierChanges, nil
 }
 
-func seedJuncBattleInteractionsModifierChanges(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncBattleInteractionsModifierChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "battle interactions + modifier changes"
 	jParams, err := processThreewayJunctions(desc, getAbilities(), getAbilityBattleInteractions, getBattleInteractionModifierChanges)
 	if err != nil {
@@ -111,7 +111,7 @@ func getBattleInteractionRemovedStatusConditions(bi seedtypes.BattleInteraction)
 	return lookup.GetResources(bi.RemovedStatusConditions, lookup.L.StatusConditions)
 }
 
-func seedJuncBattleInteractionsRemovedStatusConditions(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncBattleInteractionsRemovedStatusConditions(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "battle interactions + removed status conditions"
 	jParams, err := processThreewayJunctions(desc, getAbilities(), getAbilityBattleInteractions, getBattleInteractionRemovedStatusConditions)
 	if err != nil {
@@ -130,7 +130,7 @@ func getBattleInteractionStatChanges(bi seedtypes.BattleInteraction) ([]seedtype
 	return bi.StatChanges, nil
 }
 
-func seedJuncBattleInteractionsStatChanges(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncBattleInteractionsStatChanges(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "battle interactions + stat changes"
 	jParams, err := processThreewayJunctions(desc, getAbilities(), getAbilityBattleInteractions, getBattleInteractionStatChanges)
 	if err != nil {

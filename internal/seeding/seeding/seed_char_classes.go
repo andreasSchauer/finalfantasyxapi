@@ -9,7 +9,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedCharacterClasses(qtx *database.Queries, ctx context.Context) error {
 	classes := dedupeRows(rawJSON.characterClasses, hashes)
 
 	params := database.CreateCharacterClassBulkParams{

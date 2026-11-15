@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedOverdriveModes(qtx *database.Queries, ctx context.Context) error {
 	modes := dedupeRows(rawJSON.overdriveModes, hashes)
 
 	params := database.CreateOverdriveModeBulkParams{
@@ -64,7 +64,7 @@ func completeOverdriveModes() error {
 	return nil
 }
 
-func loop5SeedOdModeActions(qtx *database.Queries, ctx context.Context) error {
+func Loop5SeedOdModeActions(qtx *database.Queries, ctx context.Context) error {
 	actions, err := extractOdModeActions()
 	if err != nil {
 		return err

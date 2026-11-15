@@ -11,7 +11,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
+func Loop2SeedSongs(qtx *database.Queries, ctx context.Context) error {
 	songs, err := extractSongs()
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func completeSongs() error {
 	return nil
 }
 
-func loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedSongCredits(qtx *database.Queries, ctx context.Context) error {
 	credits := extractSongCredits()
 
 	params := database.CreateSongCreditBulkParams{

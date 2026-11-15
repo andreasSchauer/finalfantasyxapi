@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedClassDamages(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedClassDamages(qtx *database.Queries, ctx context.Context) error {
 	damages, err := extractClassDamages()
 	if err != nil {
 		return err

@@ -10,7 +10,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func loop1SeedAccuracies(qtx *database.Queries, ctx context.Context) error {
+func Loop1SeedAccuracies(qtx *database.Queries, ctx context.Context) error {
 	accuracies := extractAccuracies()
 
 	params := database.CreateAbilityAccuracyBulkParams{

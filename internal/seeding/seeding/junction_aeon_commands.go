@@ -30,8 +30,8 @@ func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
 
 				j := ThreeWayJunction{
 					GrandparentID: command.ID,
-					ParentID: class.ID,
-					ChildID: ability.ID,
+					ParentID:      class.ID,
+					ChildID:       ability.ID,
 				}
 				dataHash := generateJunctionHash(j, desc)
 
@@ -46,7 +46,7 @@ func processAeonCommandsPossibleAbilities(desc string) (JunctionParams, error) {
 	return params, nil
 }
 
-func seedJuncAeonCommandsPossibleAbilities(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAeonCommandsPossibleAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "aeon commands + possible abilities"
 	jParams, err := processAeonCommandsPossibleAbilities(desc)
 	if err != nil {

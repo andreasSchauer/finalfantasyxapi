@@ -8,7 +8,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func seedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncCuesIncludedAreas(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "cues + included areas"
 	jParams, err := processJunctions(desc, getCues(), getCueIncludedAreas)
 	if err != nil {

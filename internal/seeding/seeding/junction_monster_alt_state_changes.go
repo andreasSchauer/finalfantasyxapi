@@ -24,7 +24,7 @@ func getAltAutoAbilities(c seedtypes.Alt) ([]seedtypes.AutoAbility, error) {
 	return lookup.GetResources(c.AutoAbilities, lookup.L.AutoAbilities)
 }
 
-func seedJuncAltsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAltsAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + auto-abilities"
 	jParams, err := processJunctions(desc, getAlts(), getAltAutoAbilities)
 	if err != nil {
@@ -42,7 +42,7 @@ func getAltBaseStats(c seedtypes.Alt) ([]seedtypes.BaseStat, error) {
 	return c.BaseStats, nil
 }
 
-func seedJuncAltsBaseStats(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAltsBaseStats(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + base stats"
 	jParams, err := processJunctions(desc, getAlts(), getAltBaseStats)
 	if err != nil {
@@ -60,7 +60,7 @@ func getAltElementalResists(c seedtypes.Alt) ([]seedtypes.ElementalResist, error
 	return c.ElemResists, nil
 }
 
-func seedJuncAltsElementalResists(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAltsElementalResists(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + elemental resists"
 	jParams, err := processJunctions(desc, getAlts(), getAltElementalResists)
 	if err != nil {
@@ -78,7 +78,7 @@ func getAltProperties(c seedtypes.Alt) ([]seedtypes.Property, error) {
 	return lookup.GetResources(c.Properties, lookup.L.Properties)
 }
 
-func seedJuncAltsProperties(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAltsProperties(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + properties"
 	jParams, err := processJunctions(desc, getAlts(), getAltProperties)
 	if err != nil {
@@ -96,7 +96,7 @@ func getAltStatusImmunities(c seedtypes.Alt) ([]seedtypes.StatusCondition, error
 	return lookup.GetResources(c.StatusImmunities, lookup.L.StatusConditions)
 }
 
-func seedJuncAltsStatusImmunities(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAltsStatusImmunities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "alts + status immunities"
 	jParams, err := processJunctions(desc, getAlts(), getAltStatusImmunities)
 	if err != nil {

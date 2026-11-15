@@ -7,8 +7,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-
-func seedJuncAreaConnectedAreas(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncAreaConnectedAreas(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "area + area connections"
 	jParams, err := processJunctions(desc, getAreas(), GetAreaConnectedAreas)
 	if err != nil {
@@ -21,7 +20,6 @@ func seedJuncAreaConnectedAreas(qtx *database.Queries, ctx context.Context) erro
 		ConnectionID: jParams.ChildIDs,
 	})
 }
-
 
 func getAreas() []seedtypes.Area {
 	areas := []seedtypes.Area{}

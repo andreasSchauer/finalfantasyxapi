@@ -22,7 +22,7 @@ func getTreasureItems(t seedtypes.Treasure) ([]seedtypes.ItemAmount, error) {
 	return t.Items, nil
 }
 
-func seedJuncTreasuresItems(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncTreasuresItems(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "treasures + items"
 	jParams, err := processJunctions(desc, getTreasures(), getTreasureItems)
 	if err != nil {
@@ -54,7 +54,7 @@ func getTreasureEquipmentAutoAbilities(te seedtypes.TreasureEquipment) ([]seedty
 	return lookup.GetResources(te.Abilities, lookup.L.AutoAbilities)
 }
 
-func seedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
+func SeedJuncTreasureEquipmentAutoAbilities(qtx *database.Queries, ctx context.Context) error {
 	const desc string = "treasure equipment + auto-abilities"
 	jParams, err := processJunctions(desc, getTreasureEquipment(), getTreasureEquipmentAutoAbilities)
 	if err != nil {
