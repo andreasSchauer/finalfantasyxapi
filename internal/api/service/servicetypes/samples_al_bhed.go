@@ -1,35 +1,33 @@
-package initlookup
+package servicetypes
 
 import (
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
-var AlBhedParamsSamples = []handlerinput.SampleParams[servicetypes.AlBhedParams]{
+var AlBhedParamsSamples = []SampleParams[AlBhedParams]{
 	{
 		Description: "translate from english to al bhed.",
-		Params: servicetypes.AlBhedParams{
+		Params: AlBhedParams{
 			Text: "Father",
 		},
 	},
 	{
 		Description: "translate from english to al bhed, but keep the original name. You can also explicitly state the translation direction to be 'to-al-bhed', but it will be applied by default.",
-		Params: servicetypes.AlBhedParams{
+		Params: AlBhedParams{
 			Text:      "My name is [Tidus].",
 			Direction: string(database.TranslationDirectionToAlBhed),
 		},
 	},
 	{
 		Description: "translate from al bhed to english.",
-		Params: servicetypes.AlBhedParams{
+		Params: AlBhedParams{
 			Text:      "cysbma daqd",
 			Direction: string(database.TranslationDirectionToEnglish),
 		},
 	},
 	{
 		Description: "translate from al bhed to english while marking already translated letters (red letters in game).",
-		Params: servicetypes.AlBhedParams{
+		Params: AlBhedParams{
 			Text:      "am[i]q[ir]",
 			Direction: string(database.TranslationDirectionToEnglish),
 		},

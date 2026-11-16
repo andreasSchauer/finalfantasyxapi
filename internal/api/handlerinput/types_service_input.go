@@ -11,27 +11,14 @@ import (
 )
 
 
-type ServiceParams interface {
-	servicetypes.AlBhedParams | servicetypes.TurnOrderParams | servicetypes.DropChanceParams | servicetypes.CritChanceParams
-}
 
-type ServiceResponse interface {
-	servicetypes.AlBhedResponse | servicetypes.TurnOrderResponse | servicetypes.DropChanceResponse | servicetypes.CritChanceResponse
-}
-
-type SampleParams[P ServiceParams] struct {
-	Description string `json:"description"`
-	Params      P      `json:"params"`
-}
-
-
-type Service[P ServiceParams, R ServiceResponse] struct {
+type Service[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struct {
 	Endpoint  ts.EndpointName
 	Usage     []string
 	VerifyFn  func(serviceverify.ParamsVerifyer, P) (P, error)
 	ExecuteFn func(P) (R, error)
 	DocsFn    func() servicedocs.ParamsDoc
-	Samples   []SampleParams[P]
+	Samples   []servicetypes.SampleParams[P]
 }
 
 func (i Service[P, R]) ServicePost(r *http.Request) (R, error) {
