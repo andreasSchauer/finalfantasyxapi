@@ -5,7 +5,6 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 )
 
 // remove lost items and put them into defStateGain
@@ -22,10 +21,10 @@ func modifyResourcesLoss[T apiresource.HasAPIResource](items, changeItems []T) (
 		defStateGainItems = append(defStateGainItems, item)
 	}
 
-	items = handlerinput.RemoveResources(items, itemsToRemove)
+	items = apiresource.RemoveResources(items, itemsToRemove)
 
-	slices.SortStableFunc(items, handlerinput.SortAPIResources)
-	slices.SortStableFunc(defStateGainItems, handlerinput.SortAPIResources)
+	slices.SortStableFunc(items, apiresource.SortAPIResources)
+	slices.SortStableFunc(defStateGainItems, apiresource.SortAPIResources)
 
 	return items, defStateGainItems
 }
@@ -43,8 +42,8 @@ func modifyResourcesGain[T apiresource.HasAPIResource](items, changeItems []T) (
 		defStateLossItems = append(defStateLossItems, item)
 	}
 
-	slices.SortStableFunc(items, handlerinput.SortAPIResources)
-	slices.SortStableFunc(defStateLossItems, handlerinput.SortAPIResources)
+	slices.SortStableFunc(items, apiresource.SortAPIResources)
+	slices.SortStableFunc(defStateLossItems, apiresource.SortAPIResources)
 
 	return items, defStateLossItems
 }
@@ -56,10 +55,10 @@ func modifyResourcesChange[T apiresource.HasAPIResource](items, changeItems []T)
 	}
 
 	defStateChangeItems := []T{}
-	replaceMap := handlerinput.GetResourceMap(changeItems)
+	replaceMap := apiresource.GetResourceMap(changeItems)
 
 	for i, item := range items {
-		key := handlerinput.GetAPIResourceID(item)
+		key := apiresource.GetAPIResourceID(item)
 		_, ok := replaceMap[key]
 		if ok {
 			defStateChangeItems = append(defStateChangeItems, item)
@@ -79,7 +78,7 @@ func modifyGainedImmunities(mon apitypes.Monster, change, defStateGain, defState
 
 	mon.StatusImmunities, defStateLoss.StatusImmunities = modifyResourcesGain(mon.StatusImmunities, change.StatusImmunities)
 
-	keptItems, removedItems := handlerinput.SeparateResources(mon.StatusResists, change.StatusImmunities)
+	keptItems, removedItems := apiresource.SeparateResources(mon.StatusResists, change.StatusImmunities)
 
 	if len(removedItems) == 0 {
 		removedItems = nil

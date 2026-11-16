@@ -39,7 +39,7 @@ func convertXVal(x seedtypes.XVal) sectiontypes.Xval {
 
 func newAeonStatTable(baseStats []seedtypes.BaseStat) sectiontypes.AeonStatTable {
 	stats := apilookups.E.Stats.ToResAmtType(baseStats, th.NewBaseStat)
-	statMap := handlerinput.GetResAmtTypeMap(stats)
+	statMap := apiresource.GetResAmtTypeMap(stats)
 	luckPtr := h.GetInt32Ptr(statMap["luck"])
 
 	if *luckPtr == 0 {

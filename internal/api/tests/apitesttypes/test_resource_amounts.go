@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 )
 
 // expects a map[res.GetKey()]Amount and checks, if all stated resources are present and their respective amounts match. Used for pure ResourceAmount fields.
@@ -12,7 +11,7 @@ func (test Test) checkResAmts[A apiresource.APIResource](fn string, exp map[stri
 	test.T.Helper()
 	test.compLength(fn, len(got))
 
-	gotMap := handlerinput.GetResAmtMap(got)
+	gotMap := apiresource.GetResAmtMap(got)
 
 	for key, expVal := range exp {
 		gotVal, ok := gotMap[key]
@@ -27,7 +26,7 @@ func (test Test) checkResAmtsID[A apiresource.APIResource](fn string, exp map[in
 	test.T.Helper()
 	test.compLength(fn, len(got))
 
-	gotMap := handlerinput.GetResAmtIDMap(got)
+	gotMap := apiresource.GetResAmtIDMap(got)
 
 	for id, expVal := range exp {
 		gotVal, ok := gotMap[id]
@@ -41,6 +40,6 @@ func (test Test) checkResAmtsID[A apiresource.APIResource](fn string, exp map[in
 // expects a map[res.GetKey()]Amount and checks, if all stated resources are present and their respective amounts match. Used for ResourceAmount-ish types with different field names.
 func (test Test) checkResAmtTypes[T apiresource.ResourceAmountType[A], A apiresource.APIResource](fn string, exp map[string]int32, got []T) {
 	test.T.Helper()
-	gotResAmts := handlerinput.ResAmtTypesToStructs(got)
+	gotResAmts := apiresource.ResAmtTypesToStructs(got)
 	test.checkResAmts(fn, exp, gotResAmts)
 }

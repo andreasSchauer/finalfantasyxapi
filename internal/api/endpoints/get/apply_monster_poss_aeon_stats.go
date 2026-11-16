@@ -5,9 +5,9 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/typehelpers"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
@@ -32,7 +32,7 @@ func applyPossessedAeonStats(r *http.Request, mon apitypes.Monster) ([]apitypes.
 		return nil, err
 	}
 
-	aeonStatMap := handlerinput.GetResAmtTypeMap(aeon.BaseStats)
+	aeonStatMap := apiresource.GetResAmtTypeMap(aeon.BaseStats)
 	newBaseStats := th.ReplaceBaseStats(mon.BaseStats, aeonStatMap, allowedStatIDs)
 
 	return newBaseStats, nil

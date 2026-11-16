@@ -1,13 +1,11 @@
-package handlerinput
+package apiresource
 
 import (
 	"slices"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
 )
 
 // CombineResources does this: s1 [1,2,3] s2 [2,3,4,5] => [1,2,3,4,5]
-func CombineResources[T apiresource.HasAPIResource](s1, s2 []T) []T {
+func CombineResources[T HasAPIResource](s1, s2 []T) []T {
 	s1Map := GetResourceMap(s1)
 
 	for _, item := range s2 {
@@ -22,7 +20,7 @@ func CombineResources[T apiresource.HasAPIResource](s1, s2 []T) []T {
 }
 
 // SeparateResources does this: items [1,2,3,4,5] changeItems [2,4] => keptItems [1,3,5] removedItems [2,4]
-func SeparateResources[T apiresource.HasAPIResource, C apiresource.HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
+func SeparateResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
 	removeMap := GetResourceMap(itemsToRemove)
 	kept := []T{}
 	removed := []T{}
@@ -41,12 +39,12 @@ func SeparateResources[T apiresource.HasAPIResource, C apiresource.HasAPIResourc
 }
 
 // RemoveResources does this: items [1,2,3,4,5] changeItems [2,4] => [1,3,5]
-func RemoveResources[T apiresource.HasAPIResource, C apiresource.HasAPIResource](items []T, itemsToRemove []C) []T {
+func RemoveResources[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
 	keptItems, _ := SeparateResources(items, itemsToRemove)
 	return keptItems
 }
 
-func SeparateResourcesURL[T apiresource.HasAPIResource, C apiresource.HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
+func SeparateResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) ([]T, []T) {
 	removeMap := GetResourceURLMap(itemsToRemove)
 	kept := []T{}
 	removed := []T{}
@@ -64,13 +62,13 @@ func SeparateResourcesURL[T apiresource.HasAPIResource, C apiresource.HasAPIReso
 	return kept, removed
 }
 
-func RemoveResourcesURL[T apiresource.HasAPIResource, C apiresource.HasAPIResource](items []T, itemsToRemove []C) []T {
+func RemoveResourcesURL[T HasAPIResource, C HasAPIResource](items []T, itemsToRemove []C) []T {
 	keptItems, _ := SeparateResourcesURL(items, itemsToRemove)
 	return keptItems
 }
 
 // GetSharedResources does this: s1 [1,2,3,4,5] s2 [2,4,5,7,8,9] => [2,4,5]
-func GetSharedResources[T apiresource.HasAPIResource](s1, s2 []T) []T {
+func GetSharedResources[T HasAPIResource](s1, s2 []T) []T {
 	sharedItems := []T{}
 	s2map := GetResourceMap(s2)
 
@@ -85,7 +83,7 @@ func GetSharedResources[T apiresource.HasAPIResource](s1, s2 []T) []T {
 	return sharedItems
 }
 
-func ResourcesContain[T apiresource.HasAPIResource](items []T, target T) bool {
+func ResourcesContain[T HasAPIResource](items []T, target T) bool {
 	for _, item := range items {
 		if item.GetAPIResource() == target.GetAPIResource() {
 			return true
@@ -94,12 +92,12 @@ func ResourcesContain[T apiresource.HasAPIResource](items []T, target T) bool {
 	return false
 }
 
-func GetAPIResourceID[T apiresource.HasAPIResource](item T) int32 {
+func GetAPIResourceID[T HasAPIResource](item T) int32 {
 	resource := item.GetAPIResource()
 	return resource.GetID()
 }
 
-func GetResourceMap[T apiresource.HasAPIResource](items []T) map[int32]T {
+func GetResourceMap[T HasAPIResource](items []T) map[int32]T {
 	resourceMap := make(map[int32]T, len(items))
 
 	for _, item := range items {
@@ -110,7 +108,7 @@ func GetResourceMap[T apiresource.HasAPIResource](items []T) map[int32]T {
 	return resourceMap
 }
 
-func GetResourceURLMap[T apiresource.HasAPIResource](items []T) map[string]T {
+func GetResourceURLMap[T HasAPIResource](items []T) map[string]T {
 	resourceMap := make(map[string]T, len(items))
 
 	for _, item := range items {
@@ -121,7 +119,7 @@ func GetResourceURLMap[T apiresource.HasAPIResource](items []T) map[string]T {
 	return resourceMap
 }
 
-func GetSimpleResourceURLMap[T apiresource.SimpleResource](items []T) map[string]T {
+func GetSimpleResourceURLMap[T SimpleResource](items []T) map[string]T {
 	resourceMap := make(map[string]T, len(items))
 
 	for _, item := range items {
@@ -132,7 +130,7 @@ func GetSimpleResourceURLMap[T apiresource.SimpleResource](items []T) map[string
 	return resourceMap
 }
 
-func ResourceMapToSlice[T apiresource.HasAPIResource](lookup map[int32]T) []T {
+func ResourceMapToSlice[T HasAPIResource](lookup map[int32]T) []T {
 	s := []T{}
 
 	for id := range lookup {
@@ -144,7 +142,7 @@ func ResourceMapToSlice[T apiresource.HasAPIResource](lookup map[int32]T) []T {
 	return s
 }
 
-func SortAPIResources[T apiresource.HasAPIResource](a, b T) int {
+func SortAPIResources[T HasAPIResource](a, b T) int {
 	if GetAPIResourceID(a) < GetAPIResourceID(b) {
 		return -1
 	}

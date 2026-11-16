@@ -2,6 +2,7 @@ package get
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/typehelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
@@ -9,7 +10,7 @@ import (
 
 func calcRegenAmountsMonster(mon apitypes.Monster) []apitypes.RegenAmount {
 	regenRes := handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, "regen", nil)
-	if handlerinput.ResourcesContain(mon.StatusImmunities, regenRes) {
+	if apiresource.ResourcesContain(mon.StatusImmunities, regenRes) {
 		return nil
 	}
 

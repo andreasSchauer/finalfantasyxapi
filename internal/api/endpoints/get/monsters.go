@@ -154,7 +154,7 @@ func completeMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Mo
 
 func MonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.ElementalResist {
 	elemResists := th.NamesToElemResists(resists)
-	elemResistMap := handlerinput.GetResourceMap(elemResists)
+	elemResistMap := apiresource.GetResourceMap(elemResists)
 
 	for key := range lookup.L.ElementsID {
 		_, ok := elemResistMap[key]
@@ -164,7 +164,7 @@ func MonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.Elementa
 		}
 	}
 
-	return handlerinput.ResourceMapToSlice(elemResistMap)
+	return apiresource.ResourceMapToSlice(elemResistMap)
 }
 
 func getMonsterPoisonDamage(mon apitypes.Monster) (*int32, error) {
@@ -203,7 +203,7 @@ func getMonsterAgilityParams(r *http.Request, mon apitypes.Monster) (*apitypes.A
 	}
 
 	fs := handlerinput.NameToNamedAPIResource(apilookups.E.AutoAbilities, "first strike", nil)
-	if handlerinput.ResourcesContain(mon.AutoAbilities, fs) {
+	if apiresource.ResourcesContain(mon.AutoAbilities, fs) {
 		agilityParams.MinICV, agilityParams.MaxICV = th.GetEqualICVs(-1)
 	}
 
@@ -225,7 +225,7 @@ func appliedStateHaste(mon apitypes.Monster) bool {
 // HP x10 = 25%, HP x15 = 50%, HP x20 = 75%, HP x25 = 100%
 func getMonsterBribeChances(mon apitypes.Monster) ([]apitypes.BribeChance, error) {
 	bribe := handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, "bribe", nil)
-	if handlerinput.ResourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
+	if apiresource.ResourcesContain(mon.StatusImmunities, bribe) || mon.Items == nil || mon.Items.Bribe == nil {
 		return nil, nil
 	}
 

@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apitypes"
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/typehelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
@@ -76,7 +76,7 @@ func applyYunaStats(r *http.Request, aeon apitypes.Aeon, queryName ts.QueryParam
 func calcAeonStats(aeon apitypes.Aeon, yuna map[string]int32) []apitypes.BaseStat {
 	baseStats := aeon.BaseStats
 	aVals, bVals := getAeonStatTables(aeon)
-	yunaFloat := handlerinput.ResAmtMapToFloat(yuna)
+	yunaFloat := apiresource.ResAmtMapToFloat(yuna)
 	yParameter := yParamCalc(yuna)
 
 	for i, baseStat := range baseStats {
@@ -92,12 +92,12 @@ func getAeonStatTables(aeon apitypes.Aeon) (map[string]float64, map[string]float
 	aeonLookup, _ := lookup.GetResourceByID(aeon.ID, lookup.L.AeonsID)
 
 	aValsSlice := apilookups.E.Stats.ToResAmtType(aeonLookup.BaseStats.AVals, th.NewBaseStat)
-	aValsInt := handlerinput.GetResAmtTypeMap(aValsSlice)
-	aVals := handlerinput.ResAmtMapToFloat(aValsInt)
+	aValsInt := apiresource.GetResAmtTypeMap(aValsSlice)
+	aVals := apiresource.ResAmtMapToFloat(aValsInt)
 
 	bValsSlice := apilookups.E.Stats.ToResAmtType(aeonLookup.BaseStats.BVals, th.NewBaseStat)
-	bValsInt := handlerinput.GetResAmtTypeMap(bValsSlice)
-	bVals := handlerinput.ResAmtMapToFloat(bValsInt)
+	bValsInt := apiresource.GetResAmtTypeMap(bValsSlice)
+	bVals := apiresource.ResAmtMapToFloat(bValsInt)
 
 	return aVals, bVals
 }
