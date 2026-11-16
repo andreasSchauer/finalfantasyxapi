@@ -1,3 +1,4 @@
+// Package servicetypes ajsidoaüsdji
 package servicetypes
 
 import (

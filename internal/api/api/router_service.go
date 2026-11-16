@@ -5,11 +5,10 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-type routerServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struct {
+type routerServiceGet[P handlerinput.ServiceParams, R handlerinput.ServiceResponse] struct {
 	routerParams
 	i handlerinput.Service[P, R]
 }
@@ -74,14 +73,14 @@ func (r routerServiceGet[P, R]) formatError() {
 	respondWithError(r.w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: 'GET /api/%s/body', 'POST /api/%s'", r.i.Endpoint, r.i.Endpoint), nil)
 }
 
-func newRouterServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) routerServiceGet[P, R] {
+func newRouterServiceGet[P handlerinput.ServiceParams, R handlerinput.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) routerServiceGet[P, R] {
 	return routerServiceGet[P, R]{
 		routerParams: newRouterParams(w, r, i.Endpoint),
 		i:            i,
 	}
 }
 
-type routerServicePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struct {
+type routerServicePost[P handlerinput.ServiceParams, R handlerinput.ServiceResponse] struct {
 	routerParams
 	i handlerinput.Service[P, R]
 }
@@ -116,7 +115,7 @@ func (r routerServicePost[P, R]) formatError() {
 	respondWithError(r.w, http.StatusBadRequest, fmt.Sprintf("wrong format. usage: /api/%s. Use /api/%s/body to learn more about the required json format for the request body", r.i.Endpoint, r.i.Endpoint), nil)
 }
 
-func newRouterServicePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) routerServicePost[P, R] {
+func newRouterServicePost[P handlerinput.ServiceParams, R handlerinput.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) routerServicePost[P, R] {
 	return routerServicePost[P, R]{
 		routerParams: newRouterParams(w, r, i.Endpoint),
 		i:            i,

@@ -946,7 +946,7 @@ func Endpoints() {
 		VerifyFn:  serviceverify.AlBhedParams,
 		ExecuteFn: albhed.Handle,
 		DocsFn:    servicetypes.GetAlBhedParamsDoc,
-		Samples:   servicetypes.AlBhedParamsSamples,
+		Samples:   AlBhedParamsSamples,
 	}
 
 	apilookups.E.TurnOrder = handlerinput.Service[servicetypes.TurnOrderParams, servicetypes.TurnOrderResponse]{
@@ -954,7 +954,7 @@ func Endpoints() {
 		VerifyFn:  serviceverify.TurnOrderParams,
 		ExecuteFn: turnorder.Handle,
 		DocsFn:    servicetypes.GetTurnOrderParamsDoc,
-		Samples:   servicetypes.TurnOrderParamsSamples,
+		Samples:   TurnOrderParamsSamples,
 	}
 
 	apilookups.E.DropChance = handlerinput.Service[servicetypes.DropChanceParams, servicetypes.DropChanceResponse]{
@@ -962,7 +962,7 @@ func Endpoints() {
 		VerifyFn:  serviceverify.DropChanceParams,
 		ExecuteFn: dropchance.Handle,
 		DocsFn:    servicetypes.GetDropChanceParamsDoc,
-		Samples:   servicetypes.DropChanceParamsSamples,
+		Samples:   DropChanceParamsSamples,
 	}
 
 	apilookups.E.CritChance = handlerinput.Service[servicetypes.CritChanceParams, servicetypes.CritChanceResponse]{
@@ -970,7 +970,7 @@ func Endpoints() {
 		VerifyFn:  serviceverify.CritChanceParams,
 		ExecuteFn: critchance.Handle,
 		DocsFn:    servicetypes.GetCritChanceParamsDoc,
-		Samples:   servicetypes.CritChanceParamsSamples,
+		Samples:   CritChanceParamsSamples,
 	}
 
 	apilookups.E.InitializeEndpointSlice()

@@ -5,7 +5,6 @@ import (
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apiresource"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
@@ -34,12 +33,12 @@ func routeEndpoints(w http.ResponseWriter, r *http.Request, i handlerinput.Endpo
 	router.route()
 }
 
-func routeServiceGet[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) {
+func routeServiceGet[P handlerinput.ServiceParams, R handlerinput.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) {
 	router := newRouterServiceGet(w, r, i)
 	router.route()
 }
 
-func routeServicePost[P servicetypes.ServiceParams, R servicetypes.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) {
+func routeServicePost[P handlerinput.ServiceParams, R handlerinput.ServiceResponse](w http.ResponseWriter, r *http.Request, i handlerinput.Service[P, R]) {
 	router := newRouterServicePost(w, r, i)
 	router.route()
 }
