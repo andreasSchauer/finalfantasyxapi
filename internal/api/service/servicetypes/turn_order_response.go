@@ -2,8 +2,6 @@ package servicetypes
 
 import (
 	"fmt"
-
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 type TurnOrderResponse struct {
@@ -37,40 +35,6 @@ func (p Participant) GetKey() string {
 	return fmt.Sprintf("mon|%s", p.Name)
 }
 
-func (p Participant) GetTurnParams(rng string) TurnParams {
-	params := TurnParams{
-		Name:        p.Name,
-		PriorityKey: p.GetKey(),
-		Party:       p.Party,
-		Agility:     p.Agility,
-		TickSpeed:   p.TickSpeed,
-	}
-
-	switch rng {
-	case string(database.TurnOrderRngBest):
-		switch p.Party {
-		case BattlePartyPlayer:
-			params.TicksNextTurn = *p.MinICV
-
-		case BattlePartyOpponent:
-			params.TicksNextTurn = *p.MaxICV
-		}
-
-	case string(database.TurnOrderRngWorst):
-		switch p.Party {
-		case BattlePartyPlayer:
-			params.TicksNextTurn = *p.MaxICV
-
-		case BattlePartyOpponent:
-			params.TicksNextTurn = *p.MinICV
-		}
-
-	case string(database.TurnOrderRngMedian):
-		params.TicksNextTurn = (*p.MinICV + *p.MaxICV) / 2
-	}
-
-	return params
-}
 
 type BattleParty string
 

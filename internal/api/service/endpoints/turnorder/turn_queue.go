@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 )
 
 
@@ -15,12 +16,48 @@ func readyTurnQueue(participants []servicetypes.Participant, rng string) []servi
 			continue
 		}
 
-		params := participant.GetTurnParams(rng)
+		params := GetTurnParams(participant, rng)
 
 		turnQueue = append(turnQueue, params)
 	}
 
 	return sortTurnQueue(turnQueue)
+}
+
+
+func GetTurnParams(p servicetypes.Participant, rng string) servicetypes.TurnParams {
+	params := servicetypes.TurnParams{
+		Name:        p.Name,
+		PriorityKey: p.GetKey(),
+		Party:       p.Party,
+		Agility:     p.Agility,
+		TickSpeed:   p.TickSpeed,
+	}
+
+	switch rng {
+	case string(database.TurnOrderRngBest):
+		switch p.Party {
+		case servicetypes.BattlePartyPlayer:
+			params.TicksNextTurn = *p.MinICV
+
+		case servicetypes.BattlePartyOpponent:
+			params.TicksNextTurn = *p.MaxICV
+		}
+
+	case string(database.TurnOrderRngWorst):
+		switch p.Party {
+		case servicetypes.BattlePartyPlayer:
+			params.TicksNextTurn = *p.MaxICV
+
+		case servicetypes.BattlePartyOpponent:
+			params.TicksNextTurn = *p.MinICV
+		}
+
+	case string(database.TurnOrderRngMedian):
+		params.TicksNextTurn = (*p.MinICV + *p.MaxICV) / 2
+	}
+
+	return params
 }
 
 func sortTurnQueue(turnQueue []servicetypes.TurnParams) []servicetypes.TurnParams {
