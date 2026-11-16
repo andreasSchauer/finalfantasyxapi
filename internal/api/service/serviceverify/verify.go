@@ -7,16 +7,16 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
 type ParamsVerifyer struct {
-	paramsRules servicetypes.ParamsRules
+	paramsRules servicedocs.ParamsRules
 	userValues  map[ts.FieldName]any
 }
 
-func NewParamsVerifyer(paramsRules servicetypes.ParamsRules, userValues map[ts.FieldName]any) ParamsVerifyer {
+func NewParamsVerifyer(paramsRules servicedocs.ParamsRules, userValues map[ts.FieldName]any) ParamsVerifyer {
 	return ParamsVerifyer{
 		paramsRules: paramsRules,
 		userValues:  userValues,

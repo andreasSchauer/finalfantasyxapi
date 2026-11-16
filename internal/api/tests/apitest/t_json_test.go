@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 )
 
 func TestReadJsonRequest_Malformed(t *testing.T) {
@@ -15,7 +15,7 @@ func TestReadJsonRequest_Malformed(t *testing.T) {
 		Name string `json:"name"`
 	}
 
-	_, _, err := servicetypes.ReadJSONRequest(malformedData, MockPayload{}, "custom decode error")
+	_, _, err := servicedocs.ReadJSONRequest(malformedData, MockPayload{}, "custom decode error")
 	if err == nil {
 		t.Fatal("expected an error for malformed JSON, got nil")
 	}

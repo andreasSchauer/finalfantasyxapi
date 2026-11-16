@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
@@ -81,10 +82,10 @@ func (p TurnOrderMon) GetDuplicateKey() string {
 	})
 }
 
-func GetTurnOrderParamsDoc() ParamsDoc {
-	return ParamsDoc{
+func GetTurnOrderParamsDoc() servicedocs.ParamsDoc {
+	return servicedocs.ParamsDoc{
 		GeneralRules: h.GetStrPtr(""),
-		Fields: []FieldDoc{
+		Fields: []servicedocs.FieldDoc{
 			{
 				Field:       ts.PfnTurnsAmt,
 				Type:        "int",
@@ -147,8 +148,8 @@ func GetTurnOrderParamsDoc() ParamsDoc {
 	}
 }
 
-func getFieldDocTurnOrderParty() []FieldDoc {
-	return []FieldDoc{
+func getFieldDocTurnOrderParty() []servicedocs.FieldDoc {
+	return []servicedocs.FieldDoc{
 		{
 			Field:       ts.PfnUnitID,
 			Type:        "int (id: playerUnit)",
@@ -179,8 +180,8 @@ func getFieldDocTurnOrderParty() []FieldDoc {
 	}
 }
 
-func getFieldDocTurnOrderMon() []FieldDoc {
-	return []FieldDoc{
+func getFieldDocTurnOrderMon() []servicedocs.FieldDoc {
+	return []servicedocs.FieldDoc{
 		{
 			Field:         ts.PfnMonsterID,
 			Type:          "int (id: monster)",
@@ -195,7 +196,7 @@ func getFieldDocTurnOrderMon() []FieldDoc {
 			Type:          "int (idx +1: monster altered states)",
 			RequiresAll:   []ts.FieldName{ts.PfnMonsterID},
 			ParentIDField: ts.PfnPtr(ts.PfnMonsterID),
-			AllowedIDValPairs: []AllowedIDValPairs{
+			AllowedIDValPairs: []servicedocs.AllowedIDValPairs{
 				{
 					ID:     32,
 					Values: []int32{2, 3},

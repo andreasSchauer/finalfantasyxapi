@@ -2,6 +2,7 @@ package servicetypes
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
@@ -23,9 +24,9 @@ func (p DropChanceParams) GetRequiredSlots() int32 {
 	return h.Len32(p.AutoAbilities) + h.DerefInt32Ptr(p.MinEmptySlots)
 }
 
-func GetDropChanceParamsDoc() ParamsDoc {
-	return ParamsDoc{
-		Fields: []FieldDoc{
+func GetDropChanceParamsDoc() servicedocs.ParamsDoc {
+	return servicedocs.ParamsDoc{
+		Fields: []servicedocs.FieldDoc{
 			{
 				Field:       ts.PfnMonsterID,
 				Type:        "int (id: monster)",

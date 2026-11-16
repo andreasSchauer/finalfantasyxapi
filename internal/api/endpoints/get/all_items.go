@@ -33,7 +33,7 @@ func MasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, apity
 		ObtainableFrom: rel.ObtainableFrom,
 	}
 
-	return completeMasterItemResponse(r, response), nil
+	return completeMasterItemResponse(response), nil
 }
 
 func getMasterItemRelationships(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.MasterItem, error) {
@@ -74,7 +74,7 @@ func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (
 	return obtainable, nil
 }
 
-func completeMasterItemResponse(r *http.Request, masterItem apitypes.MasterItem) apitypes.MasterItem {
+func completeMasterItemResponse(masterItem apitypes.MasterItem) apitypes.MasterItem {
 	switch masterItem.Type {
 	case database.ItemTypeItem:
 		item, _ := lookup.GetResource(masterItem.Name, lookup.L.Items)

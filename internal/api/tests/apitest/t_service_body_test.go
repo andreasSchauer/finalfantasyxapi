@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/api"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/tests/apitesttypes"
 )
@@ -84,7 +85,7 @@ func TestServiceBodyDocs(t *testing.T) {
 		},
 	}
 
-	testServiceResponsesGet[servicetypes.ParamsDoc](t, tests, "ServiceBodyDocs")
+	testServiceResponsesGet[servicedocs.ParamsDoc](t, tests, "ServiceBodyDocs")
 }
 
 func TestAlBhedBodySamples(t *testing.T) {

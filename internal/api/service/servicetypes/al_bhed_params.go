@@ -2,6 +2,7 @@ package servicetypes
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/enums"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
@@ -11,9 +12,9 @@ type AlBhedParams struct {
 	Direction string `json:"direction,omitempty"`
 }
 
-func GetAlBhedParamsDoc() ParamsDoc {
-	return ParamsDoc{
-		Fields: []FieldDoc{
+func GetAlBhedParamsDoc() servicedocs.ParamsDoc {
+	return servicedocs.ParamsDoc{
+		Fields: []servicedocs.FieldDoc{
 			{
 				Field:       ts.PfnText,
 				Type:        "string",

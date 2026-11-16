@@ -1,4 +1,4 @@
-package servicetypes
+package servicedocs
 
 import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"

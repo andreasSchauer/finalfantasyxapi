@@ -1,4 +1,5 @@
-package servicetypes
+// Package servicedocs asjdkalsöd
+package servicedocs
 
 import (
 	"fmt"

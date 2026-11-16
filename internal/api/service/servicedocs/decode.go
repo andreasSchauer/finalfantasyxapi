@@ -1,4 +1,4 @@
-package servicetypes
+package servicedocs
 
 import (
 	"encoding/json"

@@ -7,7 +7,7 @@ import (
 	"slices"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
@@ -15,7 +15,7 @@ import (
 type fieldVerifyer[T any] struct {
 	fieldName    ts.FieldName
 	val          T
-	doc          servicetypes.FieldDoc
+	doc          servicedocs.FieldDoc
 	valIsPresent bool
 	ParamsVerifyer
 }
@@ -128,7 +128,7 @@ func (v fieldVerifyer[T]) allowedIDValPairs() error {
 		return nil
 	}
 
-	return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s", v.fieldName, servicetypes.FormatAllowedIDValPairs(v.doc.AllowedIDValPairs)), nil)
+	return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("field '%s' can only be used with the following id-value pairs: %s", v.fieldName, servicedocs.FormatAllowedIDValPairs(v.doc.AllowedIDValPairs)), nil)
 }
 
 func (v fieldVerifyer[T]) assignDefaultVal() T {

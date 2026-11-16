@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/serviceverify"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
@@ -14,13 +15,13 @@ type Service[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struc
 	Usage     []string
 	VerifyFn  func(serviceverify.ParamsVerifyer, P) (P, error)
 	ExecuteFn func(P) (R, error)
-	DocsFn    func() servicetypes.ParamsDoc
+	DocsFn    func() servicedocs.ParamsDoc
 	Samples   []servicetypes.SampleParams[P]
 }
 
 func (i Service[P, R]) ServicePost(r *http.Request) (R, error) {
 	var zero R
-	params, userValues, err := servicetypes.GetParamsJSONBody[P](r)
+	params, userValues, err := servicedocs.GetParamsJSONBody[P](r)
 	if err != nil {
 		return zero, err
 	}
