@@ -4,67 +4,44 @@ import (
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/typehelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func getAllAgilityTiers() []seedtypes.AgilityTier {
-	tiers := make([]seedtypes.AgilityTier, len(lookup.L.AgilityTiersID))
-
-	for _, tier := range lookup.L.AgilityTiersID {
-		tiers = append(tiers, tier)
-	}
-
-	return tiers
-}
-
-func getTierByAgility(agility int32) seedtypes.AgilityTier {
-	tiers := getAllAgilityTiers()
-	var agilityTier seedtypes.AgilityTier
-
-	for _, tier := range tiers {
-		if agility >= tier.MinAgility && agility <= tier.MaxAgility {
-			agilityTier = tier
-			break
-		}
-	}
-
-	return agilityTier
-}
-
-func extractAglTierChar(participant servicetypes.Participant, params servicetypes.TurnOrderParams) servicetypes.AgilityVals {
+func getAglValsChar(participant servicetypes.Participant, params *servicetypes.TurnOrderParams) servicetypes.AgilityVals {
 	agilityTier := getTierByAgility(participant.Agility)
 	aglVals := servicetypes.AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
-		MaxICV:    agilityTier.CharacterMaxICV,
+		MaxICV:    h.CopyPtr(agilityTier.CharacterMaxICV),
 	}
 
 	for _, subtier := range agilityTier.CharacterMinICVs {
 		if participant.Agility >= subtier.MinAgility && participant.Agility <= subtier.MaxAgility {
-			aglVals.MinICV = subtier.CharacterMinICV
+			aglVals.MinICV = h.CopyPtr(subtier.CharacterMinICV)
 			break
 		}
 	}
 
-	return calcAgilityVals(aglVals, participant, params, nil)
+	calcAgilityVals(&aglVals, participant, params, nil)
+	return aglVals
 }
 
-func extractAglTierMon(participant servicetypes.Participant, params servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) servicetypes.AgilityVals {
+func getAglValsMon(participant servicetypes.Participant, params *servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) servicetypes.AgilityVals {
 	agilityTier := getTierByAgility(participant.Agility)
 	aglVals := servicetypes.AgilityVals{
 		TickSpeed: agilityTier.TickSpeed,
-		MinICV:    agilityTier.MonsterMinICV,
-		MaxICV:    agilityTier.MonsterMaxICV,
+		MinICV:    h.CopyPtr(agilityTier.MonsterMinICV),
+		MaxICV:    h.CopyPtr(agilityTier.MonsterMaxICV),
 	}
 
-	return calcAgilityVals(aglVals, participant, params, monFirstTurnTier)
+	calcAgilityVals(&aglVals, participant, params, monFirstTurnTier)
+	return aglVals
 }
 
-func calcAgilityVals(aglVals servicetypes.AgilityVals, participant servicetypes.Participant, params servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) servicetypes.AgilityVals {
+func calcAgilityVals(aglVals *servicetypes.AgilityVals, participant servicetypes.Participant, params *servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) {
 	aglVals.TickSpeed = calcTickSpeed(aglVals.TickSpeed, participant.Status)
-	aglVals.MinICV, aglVals.MaxICV = calcICVs(aglVals.MinICV, aglVals.MaxICV, participant, params, monFirstTurnTier)
-
-	return aglVals
+	calcAglValICVs(aglVals, participant, params, monFirstTurnTier)
 }
 
 func calcTickSpeed(tickSpeed int32, statusPtr *string) int32 {
@@ -85,27 +62,30 @@ func calcTickSpeed(tickSpeed int32, statusPtr *string) int32 {
 	}
 }
 
-func calcICVs(minPtr, maxPtr *int32, participant servicetypes.Participant, params servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) (*int32, *int32) {
+func calcAglValICVs(aglVals *servicetypes.AgilityVals, participant servicetypes.Participant, params *servicetypes.TurnOrderParams, monFirstTurnTier *seedtypes.AgilityTier) {
 	if monFirstTurnTier != nil {
-		minPtr = monFirstTurnTier.MonsterMinICV
-		maxPtr = monFirstTurnTier.MonsterMaxICV
+		aglVals.MinICV = h.CopyPtr(monFirstTurnTier.MonsterMinICV)
+		aglVals.MaxICV = h.CopyPtr(monFirstTurnTier.MonsterMaxICV)
 	}
 
-	if minPtr == nil || maxPtr == nil {
-		return nil, nil
+	if aglVals.MinICV == nil || aglVals.MaxICV == nil {
+		return
 	}
 
 	if params.IgnFirstTurn {
-		return th.GetEqualICVs(0)
+		aglValsEqualICVs(aglVals, 0)
+		return
 	}
 
 	if participant.FirstStrike {
 		switch participant.Party {
 		case servicetypes.BattlePartyPlayer:
-			return th.GetEqualICVs(0)
+			aglValsEqualICVs(aglVals, 0)
+			return
 
 		case servicetypes.BattlePartyOpponent:
-			return th.GetEqualICVs(-1)
+			aglValsEqualICVs(aglVals, -1)
+			return
 		}
 	}
 
@@ -113,46 +93,67 @@ func calcICVs(minPtr, maxPtr *int32, participant servicetypes.Participant, param
 	case string(database.BattleStartAmbush):
 		switch participant.Party {
 		case servicetypes.BattlePartyPlayer:
-			return calcICVsStartFavorable(*minPtr, participant.Status)
+			calcICVsStartFavorable(aglVals, participant.Status)
+			return
 
 		case servicetypes.BattlePartyOpponent:
-			return th.GetEqualICVs(0)
+			aglValsEqualICVs(aglVals, 0)
+			return
 		}
 
 	case string(database.BattleStartPreemptive):
 		switch participant.Party {
 		case servicetypes.BattlePartyPlayer:
-			return th.GetEqualICVs(0)
+			aglValsEqualICVs(aglVals, 0)
+			return
 
 		case servicetypes.BattlePartyOpponent:
-			return calcICVsStartFavorable(*minPtr, participant.Status)
+			calcICVsStartFavorable(aglVals, participant.Status)
+			return
 		}
 	}
 
-	minICV := *minPtr
-	maxICV := *maxPtr
-
-	if participant.Status == nil {
-		return &minICV, &maxICV
+	if participant.Status != nil && *participant.Status == string(database.HasteStatusAutoHaste) {
+		*aglVals.MinICV /= 2
+		*aglVals.MaxICV /= 2
 	}
-
-	if *participant.Status == string(database.HasteStatusAutoHaste) {
-		minICV /= 2
-		maxICV /= 2
-	}
-
-	return &minICV, &maxICV
 }
 
-func calcICVsStartFavorable(minVal int32, status *string) (*int32, *int32) {
-	minPtr, maxPtr := th.GetEqualICVs(minVal * 3)
+func aglValsEqualICVs(aglVals *servicetypes.AgilityVals, icv int32) {
+	aglVals.MinICV, aglVals.MaxICV = th.GetEqualICVs(icv)
+}
+
+func calcICVsStartFavorable(aglVals *servicetypes.AgilityVals, status *string) {
+	aglValsEqualICVs(aglVals, *aglVals.MinICV*3)
 
 	if status == nil || *status != string(database.HasteStatusAutoHaste) {
-		return minPtr, maxPtr
+		return
 	}
 
-	*minPtr /= 2
-	*maxPtr /= 2
+	*aglVals.MinICV /= 2
+	*aglVals.MaxICV /= 2
+}
 
-	return minPtr, maxPtr
+func getTierByAgility(agility int32) seedtypes.AgilityTier {
+	tiers := getAllAgilityTiers()
+	var agilityTier seedtypes.AgilityTier
+
+	for _, tier := range tiers {
+		if agility >= tier.MinAgility && agility <= tier.MaxAgility {
+			agilityTier = tier
+			break
+		}
+	}
+
+	return agilityTier
+}
+
+func getAllAgilityTiers() []seedtypes.AgilityTier {
+	tiers := make([]seedtypes.AgilityTier, len(lookup.L.AgilityTiersID))
+
+	for _, tier := range lookup.L.AgilityTiersID {
+		tiers = append(tiers, tier)
+	}
+
+	return tiers
 }

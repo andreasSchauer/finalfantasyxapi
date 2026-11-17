@@ -22,7 +22,7 @@ type DropChanceParams struct {
 }
 
 func (p DropChanceParams) GetRequiredSlots() int32 {
-	return h.Len32(p.AutoAbilities) + h.DerefInt32Ptr(p.MinEmptySlots)
+	return h.Len32(p.AutoAbilities) + h.DerefPtr(p.MinEmptySlots)
 }
 
 func GetDropChanceParamsDoc() servicedocs.ParamsDoc {

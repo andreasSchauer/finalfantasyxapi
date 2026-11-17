@@ -20,31 +20,33 @@ type participantMaps struct {
 	namesCurrent map[string]int
 }
 
-func getParticipants(params servicetypes.TurnOrderParams) (servicetypes.TurnOrderParams, []servicetypes.Participant, []servicetypes.Participant, error) {
+func getParticipants(params *servicetypes.TurnOrderParams, response *servicetypes.TurnOrderResponse) error {
+	var err error
+
 	maps := &participantMaps{
 		namesTotal:   make(map[string]int),
 		namesCurrent: make(map[string]int),
 		duplicates:   make(map[string]bool),
 	}
-	params = fetchFormationMons(params)
 
-	playerParty, err := getParticipantsParty(params, maps)
+	fetchFormationMons(params)
+
+	response.PlayerParty, err = getParticipantsParty(params, maps)
 	if err != nil {
-		return servicetypes.TurnOrderParams{}, nil, nil, err
+		return err
 	}
 
-	mons, err := getParticipantsMons(params, maps)
+	response.OpponentParty, err = getParticipantsMons(params, maps)
 	if err != nil {
-		return servicetypes.TurnOrderParams{}, nil, nil, err
+		return err
 	}
 
-	opponentParty := createDuplicateNames(mons, maps)
+	createDuplicateNames(response.OpponentParty, maps)
 
-	return params, playerParty, opponentParty, nil
+	return nil
 }
 
-func getParticipantsParty(params servicetypes.TurnOrderParams, maps *participantMaps) ([]servicetypes.Participant, error) {
-	const idFormationSpectral int32 = 253
+func getParticipantsParty(params *servicetypes.TurnOrderParams, maps *participantMaps) ([]servicetypes.Participant, error) {
 	playerParty := []servicetypes.Participant{}
 
 	for i, partyMember := range params.Party {
@@ -53,20 +55,7 @@ func getParticipantsParty(params servicetypes.TurnOrderParams, maps *participant
 			return nil, errs.NewHTTPError(http.StatusBadRequest, errs.FieldErrorMsg(ts.PfnParty, fmt.Sprintf("duplicate unit id found at index %d. each party member can only appear once", i)), nil)
 		}
 
-		unit, _ := lookup.GetResourceByID(partyMember.UnitID, lookup.L.PlayerUnitsID)
-
-		participant := servicetypes.Participant{
-			Name:        unit.Name,
-			Party:       servicetypes.BattlePartyPlayer,
-			Agility:     partyMember.Agility,
-			FirstStrike: partyMember.FirstStrike,
-			Status:      partyMember.Status,
-		}
-		participant.AgilityVals = extractAglTierChar(participant, params)
-
-		if params.FormationID != nil && *params.FormationID == idFormationSpectral {
-			participant.MinICV, participant.MaxICV = th.GetEqualICVs(0)
-		}
+		participant := getPartyParticipant(params, partyMember)
 
 		playerParty = append(playerParty, participant)
 		maps.duplicates[partyMember.GetDuplicateKey()] = true
@@ -76,7 +65,31 @@ func getParticipantsParty(params servicetypes.TurnOrderParams, maps *participant
 	return playerParty, nil
 }
 
-func getParticipantsMons(params servicetypes.TurnOrderParams, maps *participantMaps) ([]servicetypes.Participant, error) {
+func getPartyParticipant(params *servicetypes.TurnOrderParams, partyMember servicetypes.TurnOrderParty) servicetypes.Participant {
+	unit, _ := lookup.GetResourceByID(partyMember.UnitID, lookup.L.PlayerUnitsID)
+
+	participant := servicetypes.Participant{
+		Name:        unit.Name,
+		Party:       servicetypes.BattlePartyPlayer,
+		Agility:     partyMember.Agility,
+		FirstStrike: partyMember.FirstStrike,
+		Status:      partyMember.Status,
+	}
+	participant.AgilityVals = getAglValsChar(participant, params)
+
+	if isSpectralKeeperFormation(params) {
+		participant.MinICV, participant.MaxICV = th.GetEqualICVs(0)
+	}
+
+	return participant
+}
+
+func isSpectralKeeperFormation(params *servicetypes.TurnOrderParams) bool {
+	const idFormationSpectral int32 = 253
+	return params.FormationID != nil && *params.FormationID == idFormationSpectral
+}
+
+func getParticipantsMons(params *servicetypes.TurnOrderParams, maps *participantMaps) ([]servicetypes.Participant, error) {
 	monParty := []servicetypes.Participant{}
 
 	for i, mon := range params.Mons {
@@ -85,12 +98,10 @@ func getParticipantsMons(params servicetypes.TurnOrderParams, maps *participantM
 			return nil, errs.NewHTTPError(http.StatusBadRequest, errs.FieldErrorMsg(ts.PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed", i)), nil)
 		}
 
-		participant, firstTurnAglTier, err := fetchTurnOrderMonster(params, mon)
+		participant, err := getMonParticipant(params, mon)
 		if err != nil {
 			return nil, err
 		}
-
-		participant = populateParticipantMon(params, participant, mon, firstTurnAglTier)
 
 		monParty = append(monParty, participant)
 		maps.duplicates[mon.GetDuplicateKey()] = true
@@ -100,7 +111,18 @@ func getParticipantsMons(params servicetypes.TurnOrderParams, maps *participantM
 	return monParty, nil
 }
 
-func fetchTurnOrderMonster(params servicetypes.TurnOrderParams, mon servicetypes.TurnOrderMon) (servicetypes.Participant, *seedtypes.AgilityTier, error) {
+func getMonParticipant(params *servicetypes.TurnOrderParams, mon servicetypes.TurnOrderMon) (servicetypes.Participant, error) {
+	participant, firstTurnAglTier, err := fetchTurnOrderMonster(params, mon)
+	if err != nil {
+		return servicetypes.Participant{}, err
+	}
+
+	participant = populateParticipantMon(params, participant, mon, firstTurnAglTier)
+
+	return participant, nil
+}
+
+func fetchTurnOrderMonster(params *servicetypes.TurnOrderParams, mon servicetypes.TurnOrderMon) (servicetypes.Participant, *seedtypes.AgilityTier, error) {
 	var err error
 
 	if mon.MonsterID == nil {
@@ -123,7 +145,8 @@ func fetchTurnOrderMonster(params servicetypes.TurnOrderParams, mon servicetypes
 	return participant, firstTurnAglTier, nil
 }
 
-func populateParticipantMon(params servicetypes.TurnOrderParams, participant servicetypes.Participant, mon servicetypes.TurnOrderMon, firstTurnAglTier *seedtypes.AgilityTier) servicetypes.Participant {
+// this will need to change anyway once the new structure in params is active
+func populateParticipantMon(params *servicetypes.TurnOrderParams, participant servicetypes.Participant, mon servicetypes.TurnOrderMon, firstTurnAglTier *seedtypes.AgilityTier) servicetypes.Participant {
 	if mon.Name != nil {
 		participant.Name = *mon.Name
 	}
@@ -141,7 +164,7 @@ func populateParticipantMon(params servicetypes.TurnOrderParams, participant ser
 	}
 
 	participant.Party = servicetypes.BattlePartyOpponent
-	participant.AgilityVals = extractAglTierMon(participant, params, firstTurnAglTier)
+	participant.AgilityVals = getAglValsMon(participant, params, firstTurnAglTier)
 
 	if mon.MonsterID == nil {
 		return participant
@@ -160,7 +183,7 @@ func isSpectralKeeperInStoryFight(monID int32, formationPtr *int32) bool {
 	return formationPtr != nil && *formationPtr == idFormationSpectral && monID == idSpectralKeeper
 }
 
-func createDuplicateNames(party []servicetypes.Participant, maps *participantMaps) []servicetypes.Participant {
+func createDuplicateNames(party []servicetypes.Participant, maps *participantMaps) {
 	for i := range party {
 		mon := &party[i]
 		key := mon.GetKey()
@@ -172,6 +195,4 @@ func createDuplicateNames(party []servicetypes.Participant, maps *participantMap
 
 		mon.Name = fmt.Sprintf("%s (%d)", mon.Name, maps.namesCurrent[key])
 	}
-
-	return party
 }

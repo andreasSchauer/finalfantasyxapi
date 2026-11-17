@@ -56,12 +56,3 @@ type BattleTurn struct {
 	Party       BattleParty `json:"party"`
 	PriorityKey string      `json:"-"`
 }
-
-type TurnParams struct {
-	Name          string
-	Party         BattleParty
-	PriorityKey   string
-	Agility       int32
-	TickSpeed     int32
-	TicksNextTurn int32
-}

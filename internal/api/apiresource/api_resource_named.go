@@ -39,5 +39,5 @@ func (r Named) GetAPIResource() APIResource {
 }
 
 func (r Named) NameIs(name string, version *int32) bool {
-	return r.Name == name && h.PtrsEqual(r.Version, version, h.DerefInt32Ptr)
+	return r.Name == name && h.PtrsEqual(r.Version, version)
 }

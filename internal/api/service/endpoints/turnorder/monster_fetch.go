@@ -13,9 +13,9 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func fetchFormationMons(params servicetypes.TurnOrderParams) servicetypes.TurnOrderParams {
+func fetchFormationMons(params *servicetypes.TurnOrderParams) {
 	if params.FormationID == nil {
-		return params
+		return
 	}
 
 	formation, _ := lookup.GetResourceByID(*params.FormationID, lookup.L.MonsterFormationsID)
@@ -33,8 +33,6 @@ func fetchFormationMons(params servicetypes.TurnOrderParams) servicetypes.TurnOr
 
 		params.Mons = append(params.Mons, mon)
 	}
-
-	return params
 }
 
 func assembleMonTurnOrder(monID int32, altState *int32) (apitypes.Monster, *seedtypes.AgilityTier) {
@@ -48,7 +46,7 @@ func assembleMonTurnOrder(monID int32, altState *int32) (apitypes.Monster, *seed
 
 	monster, _ := sh.QuickAssembleMon(monID, altState)
 
-	if slices.Contains(firstTurnAglIDs, monID) {
+	if slices.Contains(firstTurnAglIDs, monster.ID) {
 		firstTurnAglTier = getFirstTurnAglTier(monID)
 	}
 
@@ -56,7 +54,7 @@ func assembleMonTurnOrder(monID int32, altState *int32) (apitypes.Monster, *seed
 }
 
 func getFirstTurnAglTier(monID int32) *seedtypes.AgilityTier {
-	mon, _ := sh.QuickAssembleMon(monID, nil)
+	mon, _ := sh.QuickAssembleMon(monID, nil) // assemble again without alt state for consistency (first turn agl change is always first)
 	altState := mon.AlteredStates[0]
 
 	if len(altState.Alts) == 0 {

@@ -37,7 +37,7 @@ func TestNameToString(t *testing.T) {
 		got := NameToString(tc.name, tc.version, tc.spec)
 
 		if !reflect.DeepEqual(got, tc.exp) {
-			t.Errorf("NameToString: Testcase %d: name: %s, version %s, spec %v. expected: %v, got: %v", i+1, tc.name, FormatInt32Ptr(tc.version), DerefStringPtr(tc.spec), tc.exp, got)
+			t.Errorf("NameToString: Testcase %d: name: %s, version %s, spec %v. expected: %v, got: %v", i+1, tc.name, FormatInt32Ptr(tc.version), DerefPtr(tc.spec), tc.exp, got)
 		}
 	}
 }

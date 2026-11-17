@@ -283,7 +283,7 @@ func TestFoundEquipmentAbilitiesStringPtr(t *testing.T) {
 		}
 
 		if !match {
-			t.Errorf("foundEquipmentAbilitiesStringPtr: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, h.DerefStringPtr(tc.exp), h.DerefStringPtr(got))
+			t.Errorf("foundEquipmentAbilitiesStringPtr: Testcase %d: input: %v. expected: %v, got: %v", i+1, tc.input, h.DerefPtr(tc.exp), h.DerefPtr(got))
 		}
 	}
 }

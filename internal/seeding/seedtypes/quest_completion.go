@@ -28,7 +28,7 @@ func (qc QuestCompletion) GetID() int32 {
 }
 
 func (qc QuestCompletion) String() string {
-	return fmt.Sprintf("quest completion with reward item: %s, amount: %d, condition: %s", qc.Reward.ItemName, qc.Reward.Amount, h.DerefStringPtr(qc.Condition))
+	return fmt.Sprintf("quest completion with reward item: %s, amount: %d, condition: %s", qc.Reward.ItemName, qc.Reward.Amount, h.DerefPtr(qc.Condition))
 }
 
 type CompletionArea struct {

@@ -431,11 +431,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "tidus",
 						Agility: 50,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 6,
-							MinICV:    h.GetInt32Ptr(14),
-							MaxICV:    h.GetInt32Ptr(18),
-						},
+						TickSpeed: 6,
+						MinICV:    h.GetInt32Ptr(14),
+						MaxICV:    h.GetInt32Ptr(18),
 						FirstStrike:   false,
 						Status:        nil,
 						TurnsReceived: 30,
@@ -506,11 +504,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "tidus",
 						Agility: 50,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 3,
-							MinICV:    h.GetInt32Ptr(14),
-							MaxICV:    h.GetInt32Ptr(18),
-						},
+						TickSpeed: 3,
+						MinICV:    h.GetInt32Ptr(14),
+						MaxICV:    h.GetInt32Ptr(18),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusHaste)),
 						TurnsReceived: 18,
@@ -521,11 +517,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "yellow element",
 						Agility: 5,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 32,
-							MinICV:    h.GetInt32Ptr(48),
-							MaxICV:    h.GetInt32Ptr(53),
-						},
+						TickSpeed: 32,
+						MinICV:    h.GetInt32Ptr(48),
+						MaxICV:    h.GetInt32Ptr(53),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusSlow)),
 						TurnsReceived: 2,
@@ -603,11 +597,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "tidus",
 						Agility: 50,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 3,
-							MinICV:    h.GetInt32Ptr(7),
-							MaxICV:    h.GetInt32Ptr(9),
-						},
+						TickSpeed: 3,
+						MinICV:    h.GetInt32Ptr(7),
+						MaxICV:    h.GetInt32Ptr(9),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusAutoHaste)),
 						TurnsReceived: 8,
@@ -618,11 +610,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "cactuar king",
 						Agility: 80,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 10,
-							MinICV:    h.GetInt32Ptr(15),
-							MaxICV:    h.GetInt32Ptr(16),
-						},
+						TickSpeed: 10,
+						MinICV:    h.GetInt32Ptr(15),
+						MaxICV:    h.GetInt32Ptr(16),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusSlow)),
 						TurnsReceived: 2,
@@ -708,11 +698,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "tidus",
 						Agility: 50,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 3,
-							MinICV:    h.GetInt32Ptr(0),
-							MaxICV:    h.GetInt32Ptr(0),
-						},
+						TickSpeed: 3,
+						MinICV:    h.GetInt32Ptr(0),
+						MaxICV:    h.GetInt32Ptr(0),
 						FirstStrike:   true,
 						Status:        h.GetStrPtr(string(database.HasteStatusAutoHaste)),
 						TurnsReceived: 5,
@@ -723,11 +711,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "frank (1)",
 						Agility: 50,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 12,
-							MinICV:    h.GetInt32Ptr(-1),
-							MaxICV:    h.GetInt32Ptr(-1),
-						},
+						TickSpeed: 12,
+						MinICV:    h.GetInt32Ptr(-1),
+						MaxICV:    h.GetInt32Ptr(-1),
 						FirstStrike:   true,
 						Status:        h.GetStrPtr(string(database.HasteStatusSlow)),
 						TurnsReceived: 1,
@@ -736,11 +722,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "frank (2)",
 						Agility: 80,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 2,
-							MinICV:    h.GetInt32Ptr(15),
-							MaxICV:    h.GetInt32Ptr(16),
-						},
+						TickSpeed: 2,
+						MinICV:    h.GetInt32Ptr(15),
+						MaxICV:    h.GetInt32Ptr(16),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusHaste)),
 						TurnsReceived: 4,
@@ -827,11 +811,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "kimahri",
 						Agility: 255,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 1,
-							MinICV:    h.GetInt32Ptr(4),
-							MaxICV:    h.GetInt32Ptr(4),
-						},
+						TickSpeed: 1,
+						MinICV:    h.GetInt32Ptr(4),
+						MaxICV:    h.GetInt32Ptr(4),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusAutoHaste)),
 						TurnsReceived: 3,
@@ -840,11 +822,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "tidus",
 						Agility: 255,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 1,
-							MinICV:    h.GetInt32Ptr(4),
-							MaxICV:    h.GetInt32Ptr(4),
-						},
+						TickSpeed: 1,
+						MinICV:    h.GetInt32Ptr(4),
+						MaxICV:    h.GetInt32Ptr(4),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusAutoHaste)),
 						TurnsReceived: 3,
@@ -853,11 +833,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "rikku",
 						Agility: 255,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 1,
-							MinICV:    h.GetInt32Ptr(4),
-							MaxICV:    h.GetInt32Ptr(4),
-						},
+						TickSpeed: 1,
+						MinICV:    h.GetInt32Ptr(4),
+						MaxICV:    h.GetInt32Ptr(4),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusAutoHaste)),
 						TurnsReceived: 2,
@@ -868,11 +846,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "frank",
 						Agility: 255,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 3,
-							MinICV:    h.GetInt32Ptr(0),
-							MaxICV:    h.GetInt32Ptr(0),
-						},
+						TickSpeed: 3,
+						MinICV:    h.GetInt32Ptr(0),
+						MaxICV:    h.GetInt32Ptr(0),
 						FirstStrike:   false,
 						TurnsReceived: 2,
 						TurnsPercent:  20,
@@ -949,11 +925,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "anima",
 						Agility: 10,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 14,
-							MinICV:    h.GetInt32Ptr(41),
-							MaxICV:    h.GetInt32Ptr(42),
-						},
+						TickSpeed: 14,
+						MinICV:    h.GetInt32Ptr(41),
+						MaxICV:    h.GetInt32Ptr(42),
 						FirstStrike:   false,
 						TurnsReceived: 3,
 						TurnsPercent:  30,
@@ -963,11 +937,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "basilisk",
 						Agility: 9,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 15,
-							MinICV:    h.GetInt32Ptr(45),
-							MaxICV:    h.GetInt32Ptr(50),
-						},
+						TickSpeed: 15,
+						MinICV:    h.GetInt32Ptr(45),
+						MaxICV:    h.GetInt32Ptr(50),
 						FirstStrike:   false,
 						TurnsReceived: 3,
 						TurnsPercent:  30,
@@ -975,11 +947,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "bite bug",
 						Agility: 15,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 12,
-							MinICV:    h.GetInt32Ptr(36),
-							MaxICV:    h.GetInt32Ptr(40),
-						},
+						TickSpeed: 12,
+						MinICV:    h.GetInt32Ptr(36),
+						MaxICV:    h.GetInt32Ptr(40),
 						FirstStrike:   false,
 						TurnsReceived: 4,
 						TurnsPercent:  40,
@@ -1049,11 +1019,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "anima",
 						Agility: 10,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 14,
-							MinICV:    h.GetInt32Ptr(0),
-							MaxICV:    h.GetInt32Ptr(0),
-						},
+						TickSpeed: 14,
+						MinICV:    h.GetInt32Ptr(0),
+						MaxICV:    h.GetInt32Ptr(0),
 						FirstStrike:   false,
 						TurnsReceived: 5,
 						TurnsPercent:  50,
@@ -1063,11 +1031,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "basilisk",
 						Agility: 9,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 15,
-							MinICV:    h.GetInt32Ptr(135),
-							MaxICV:    h.GetInt32Ptr(135),
-						},
+						TickSpeed: 15,
+						MinICV:    h.GetInt32Ptr(135),
+						MaxICV:    h.GetInt32Ptr(135),
 						FirstStrike:   false,
 						TurnsReceived: 2,
 						TurnsPercent:  20,
@@ -1075,11 +1041,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "bite bug",
 						Agility: 15,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 12,
-							MinICV:    h.GetInt32Ptr(108),
-							MaxICV:    h.GetInt32Ptr(108),
-						},
+						TickSpeed: 12,
+						MinICV:    h.GetInt32Ptr(108),
+						MaxICV:    h.GetInt32Ptr(108),
 						FirstStrike:   false,
 						TurnsReceived: 3,
 						TurnsPercent:  30,
@@ -1162,11 +1126,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "yuna",
 						Agility: 24,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 9,
-							MinICV:    h.GetInt32Ptr(0),
-							MaxICV:    h.GetInt32Ptr(0),
-						},
+						TickSpeed: 9,
+						MinICV:    h.GetInt32Ptr(0),
+						MaxICV:    h.GetInt32Ptr(0),
 						FirstStrike:   false,
 						TurnsReceived: 5,
 						TurnsPercent:  50,
@@ -1176,11 +1138,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "sin - 1",
 						Agility: 6,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 8,
-							MinICV:    h.GetInt32Ptr(0),
-							MaxICV:    h.GetInt32Ptr(0),
-						},
+						TickSpeed: 8,
+						MinICV:    h.GetInt32Ptr(0),
+						MaxICV:    h.GetInt32Ptr(0),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusHaste)),
 						TurnsReceived: 5,
@@ -1264,11 +1224,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "oblitzerator (1)",
 						Agility: 30,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 8,
-							MinICV:    h.GetInt32Ptr(24),
-							MaxICV:    h.GetInt32Ptr(26),
-						},
+						TickSpeed: 8,
+						MinICV:    h.GetInt32Ptr(24),
+						MaxICV:    h.GetInt32Ptr(26),
 						FirstStrike:   false,
 						TurnsReceived: 4,
 						TurnsPercent:  40,
@@ -1276,11 +1234,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "oblitzerator (2)",
 						Agility: 16,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 12,
-							MinICV:    h.GetInt32Ptr(36),
-							MaxICV:    h.GetInt32Ptr(40),
-						},
+						TickSpeed: 12,
+						MinICV:    h.GetInt32Ptr(36),
+						MaxICV:    h.GetInt32Ptr(40),
 						FirstStrike:   false,
 						AltState:      h.GetInt32Ptr(2),
 						TurnsReceived: 2,
@@ -1289,11 +1245,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "oblitzerator (3)",
 						Agility: 26,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 9,
-							MinICV:    h.GetInt32Ptr(27),
-							MaxICV:    h.GetInt32Ptr(30),
-						},
+						TickSpeed: 9,
+						MinICV:    h.GetInt32Ptr(27),
+						MaxICV:    h.GetInt32Ptr(30),
 						FirstStrike:   false,
 						AltState:      h.GetInt32Ptr(3),
 						TurnsReceived: 4,
@@ -1373,11 +1327,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "seymour",
 						Agility: 55,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 6,
-							MinICV:    h.GetInt32Ptr(18),
-							MaxICV:    h.GetInt32Ptr(20),
-						},
+						TickSpeed: 6,
+						MinICV:    h.GetInt32Ptr(18),
+						MaxICV:    h.GetInt32Ptr(20),
 						FirstStrike:   false,
 						TurnsReceived: 30,
 						TurnsPercent:  100,
@@ -1419,11 +1371,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "left arm",
 						Agility: 255,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 6,
-							MinICV:    h.GetInt32Ptr(12),
-							MaxICV:    h.GetInt32Ptr(13),
-						},
+						TickSpeed: 6,
+						MinICV:    h.GetInt32Ptr(12),
+						MaxICV:    h.GetInt32Ptr(13),
 						FirstStrike:   false,
 						Status:        h.GetStrPtr(string(database.HasteStatusSlow)),
 						TurnsReceived: 30,
@@ -1460,11 +1410,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "dark yojimbo",
 						Agility: 243,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 3,
-							MinICV:    h.GetInt32Ptr(0),
-							MaxICV:    h.GetInt32Ptr(0),
-						},
+						TickSpeed: 3,
+						MinICV:    h.GetInt32Ptr(0),
+						MaxICV:    h.GetInt32Ptr(0),
 						FirstStrike:   false,
 						TurnsReceived: 30,
 						TurnsPercent:  100,
@@ -1472,11 +1420,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "dark koma inu",
 						Agility: 0,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 0,
-							MinICV:    nil,
-							MaxICV:    nil,
-						},
+						TickSpeed: 0,
+						MinICV:    nil,
+						MaxICV:    nil,
 						FirstStrike:   false,
 						TurnsReceived: 0,
 						TurnsPercent:  0,
@@ -1513,11 +1459,9 @@ func TestTurnOrder(t *testing.T) {
 					{
 						Name:    "tidus",
 						Agility: 0,
-						AgilityVals: servicetypes.AgilityVals{
-							TickSpeed: 0,
-							MinICV:    nil,
-							MaxICV:    nil,
-						},
+						TickSpeed: 0,
+						MinICV:    nil,
+						MaxICV:    nil,
 						FirstStrike:   false,
 						Status:        nil,
 						TurnsReceived: 0,

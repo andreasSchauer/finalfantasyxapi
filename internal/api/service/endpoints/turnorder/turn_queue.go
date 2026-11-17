@@ -8,15 +8,24 @@ import (
 )
 
 
-func readyTurnQueue(participants []servicetypes.Participant, rng string) []servicetypes.TurnParams {
-	var turnQueue []servicetypes.TurnParams
+type turnParams struct {
+	Name          string
+	Party         servicetypes.BattleParty
+	PriorityKey   string
+	Agility       int32
+	TickSpeed     int32
+	TicksNextTurn int32
+}
+
+func readyTurnQueue(participants []servicetypes.Participant, rng string) []turnParams {
+	var turnQueue []turnParams
 
 	for _, participant := range participants {
 		if participant.TickSpeed == 0 || participant.MinICV == nil || participant.MaxICV == nil {
 			continue
 		}
 
-		params := GetTurnParams(participant, rng)
+		params := getTurnParams(participant, rng)
 
 		turnQueue = append(turnQueue, params)
 	}
@@ -25,8 +34,8 @@ func readyTurnQueue(participants []servicetypes.Participant, rng string) []servi
 }
 
 
-func GetTurnParams(p servicetypes.Participant, rng string) servicetypes.TurnParams {
-	params := servicetypes.TurnParams{
+func getTurnParams(p servicetypes.Participant, rng string) turnParams {
+	params := turnParams{
 		Name:        p.Name,
 		PriorityKey: p.GetKey(),
 		Party:       p.Party,
@@ -60,13 +69,13 @@ func GetTurnParams(p servicetypes.Participant, rng string) servicetypes.TurnPara
 	return params
 }
 
-func sortTurnQueue(turnQueue []servicetypes.TurnParams) []servicetypes.TurnParams {
+func sortTurnQueue(turnQueue []turnParams) []turnParams {
 	slices.SortStableFunc(turnQueue, sortTurnQueueTicks)
 
 	return turnQueue
 }
 
-func sortTurnQueueTicks(a, b servicetypes.TurnParams) int {
+func sortTurnQueueTicks(a, b turnParams) int {
 	if a.TicksNextTurn < b.TicksNextTurn {
 		return -1
 	}
@@ -78,7 +87,7 @@ func sortTurnQueueTicks(a, b servicetypes.TurnParams) int {
 	return sortTurnQueueAgility(a, b)
 }
 
-func sortTurnQueueAgility(a, b servicetypes.TurnParams) int {
+func sortTurnQueueAgility(a, b turnParams) int {
 	if a.Agility > b.Agility {
 		return -1
 	}
@@ -90,7 +99,7 @@ func sortTurnQueueAgility(a, b servicetypes.TurnParams) int {
 	return sortTurnQueuePriority(a, b)
 }
 
-func sortTurnQueuePriority(a, b servicetypes.TurnParams) int {
+func sortTurnQueuePriority(a, b turnParams) int {
 	priorities := getPriorityMap()
 
 	aVal, ok := priorities[a.PriorityKey]

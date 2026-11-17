@@ -19,16 +19,16 @@ func Handle(params servicetypes.TurnOrderParams) (servicetypes.TurnOrderResponse
 		RNG:           params.RNG,
 	}
 
-	params, response.PlayerParty, response.OpponentParty, err = getParticipants(params)
+	err = getParticipants(&params, &response)
 	if err != nil {
 		return servicetypes.TurnOrderResponse{}, err
 	}
 	participants := slices.Concat(response.PlayerParty, response.OpponentParty)
-	response.BattleStart = params.BattleStart
+	response.BattleStart = params.BattleStart // forced ambushes change params.BattleStart to "ambush"
 
 	response.TurnOrder = calcTurnOrder(params, participants)
 
-	response = CompleteTurnOrderResponse(response, len(participants), params.TurnsAmt)
+	completeTurnOrderResponse(&response, len(participants), params.TurnsAmt)
 
 	return response, nil
 }
@@ -39,11 +39,7 @@ func calcTurnOrder(params servicetypes.TurnOrderParams, participants []servicety
 	var ticksTotal int32
 	var turnsTotal int32
 
-	for {
-		if len(turns) == int(params.TurnsAmt) || len(turnQueue) == 0 {
-			break
-		}
-
+	for len(turns) != int(params.TurnsAmt) && len(turnQueue) != 0 {
 		currentTurn := &turnQueue[0]
 		turnsTotal++
 		ticksPassed := currentTurn.TicksNextTurn
@@ -76,30 +72,25 @@ func calcTurnOrder(params servicetypes.TurnOrderParams, participants []servicety
 	return turns
 }
 
-func CompleteTurnOrderResponse(response servicetypes.TurnOrderResponse, participantsAmt int, turnsAmt int32) servicetypes.TurnOrderResponse {
+func completeTurnOrderResponse(response *servicetypes.TurnOrderResponse, participantsAmt int, turnsAmt int32) {
 	turnCounter := make(map[string]int32, participantsAmt)
 
 	for _, turn := range response.TurnOrder {
 		turnCounter[turn.PriorityKey]++
 	}
 
-	for i, player := range response.PlayerParty {
-		response.PlayerParty[i] = calcParticipantTurns(player, turnCounter, turnsAmt)
-	}
-
-	for i, mon := range response.OpponentParty {
-		response.OpponentParty[i] = calcParticipantTurns(mon, turnCounter, turnsAmt)
-	}
-
-	return response
+	calcParticipantsTurns(response.PlayerParty, turnCounter, turnsAmt)
+	calcParticipantsTurns(response.OpponentParty, turnCounter, turnsAmt)
 }
 
-func calcParticipantTurns(participant servicetypes.Participant, turnCounter map[string]int32, totalTurns int32) servicetypes.Participant {
-	turnsReceived := turnCounter[participant.GetKey()]
-	participant.TurnsReceived = turnsReceived
+func calcParticipantsTurns(party []servicetypes.Participant, turnCounter map[string]int32, totalTurns int32) {
+	for i := range party {
+		participant := &party[i]
 
-	turnsPercent := float64(turnsReceived) / float64(totalTurns)
-	participant.TurnsPercent = h.DecimalToPercent(turnsPercent)
+		turnsReceived := turnCounter[participant.GetKey()]
+		participant.TurnsReceived = turnsReceived
 
-	return participant
+		turnsPercent := float64(turnsReceived) / float64(totalTurns)
+		participant.TurnsPercent = h.DecimalToPercent(turnsPercent)
+	}
 }
