@@ -20,12 +20,7 @@ func Stat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat, ap
 	if err != nil {
 		return apitypes.Stat{}, err
 	}
-
-	rel, err := getStatRelationships(r, stat)
-	if err != nil {
-		return apitypes.Stat{}, err
-	}
-
+	
 	response := apitypes.Stat{
 		ID:                 stat.ID,
 		Name:               stat.Name,
@@ -34,14 +29,11 @@ func Stat(r *http.Request, i handlerinput.Main[seedtypes.Stat, apitypes.Stat, ap
 		MaxVal:             stat.MaxVal,
 		MaxVal2:            stat.MaxVal2,
 		ActivationSphere:   handlerinput.NameToNamedAPIResource(apilookups.E.Spheres, stat.ActivationSphere, nil),
-		Spheres:            rel.Spheres,
-		AutoAbilities:      rel.AutoAbilities,
-		PlayerAbilities:    rel.PlayerAbilities,
-		OverdriveAbilities: rel.OverdriveAbilities,
-		ItemAbilities:      rel.ItemAbilities,
-		TriggerCommands:    rel.TriggerCommands,
-		StatusConditions:   rel.StatusConditions,
-		Properties:         rel.Properties,
+	}
+
+	err = getStatRelationships(r, stat, &response)
+	if err != nil {
+		return apitypes.Stat{}, err
 	}
 
 	return response, nil
@@ -57,72 +49,66 @@ type statQueries struct {
 	properties         handlerinput.DBQueryIntMany
 }
 
-func getStatRelationships(r *http.Request, stat seedtypes.Stat) (apitypes.Stat, error) {
-	var rel apitypes.Stat
+func getStatRelationships(r *http.Request, stat seedtypes.Stat, response *apitypes.Stat) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	queries, err := getStatQueries(r)
 	if err != nil {
-		return apitypes.Stat{}, err
+		return err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Spheres, err = apilookups.E.Spheres.DBGetRelations(ctx, stat, config.Cfg.DB.GetStatSphereIDs)
+		response.Spheres, err = apilookups.E.Spheres.DBGetRelations(ctx, stat, config.Cfg.DB.GetStatSphereIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, stat, queries.autoAbilities)
+		response.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, stat, queries.autoAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, stat, queries.playerAbilities)
+		response.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, stat, queries.playerAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = apilookups.E.OverdriveAbilities.DBGetRelations(ctx, stat, queries.overdriveAbilities)
+		response.OverdriveAbilities, err = apilookups.E.OverdriveAbilities.DBGetRelations(ctx, stat, queries.overdriveAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = apilookups.E.ItemAbilities.DBGetRelations(ctx, stat, queries.itemAbilities)
+		response.ItemAbilities, err = apilookups.E.ItemAbilities.DBGetRelations(ctx, stat, queries.itemAbilities)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = apilookups.E.TriggerCommands.DBGetRelations(ctx, stat, queries.triggerCommands)
+		response.TriggerCommands, err = apilookups.E.TriggerCommands.DBGetRelations(ctx, stat, queries.triggerCommands)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, stat, queries.statusConditions)
+		response.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, stat, queries.statusConditions)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		if queries.properties != nil {
-			rel.Properties, err = apilookups.E.Properties.DBGetRelations(ctx, stat, queries.properties)
+			response.Properties, err = apilookups.E.Properties.DBGetRelations(ctx, stat, queries.properties)
 			return err
 		}
 		return nil
 	})
 
-	err = g.Wait()
-	if err != nil {
-		return apitypes.Stat{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }
 
 func getStatQueries(r *http.Request) (statQueries, error) {

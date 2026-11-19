@@ -22,12 +22,7 @@ func Item(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item, ap
 	if err != nil {
 		return apitypes.Item{}, err
 	}
-
-	rel, err := getItemRelationships(r, item)
-	if err != nil {
-		return apitypes.Item{}, err
-	}
-
+	
 	response := apitypes.Item{
 		ID:                 item.ID,
 		Name:               item.Name,
@@ -39,37 +34,32 @@ func Item(r *http.Request, i handlerinput.Main[seedtypes.Item, apitypes.Item, ap
 		Usability:          item.Usability,
 		BasePrice:          item.BasePrice,
 		SellValue:          item.SellValue,
-		ItemAbility:        rel.ItemAbility,
-		Sphere:             rel.Sphere,
 		AvailableMenus:     handlerinput.NamesToNamedAPIResources(apilookups.E.Submenus, item.AvailableMenus),
 		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, item.RelatedStats),
-		Monsters:           rel.Monsters,
-		Treasures:          rel.Treasures,
-		Shops:              rel.Shops,
-		Quests:             rel.Quests,
-		BlitzballPrizes:    rel.BlitzballPrizes,
-		AeonLearnAbilities: rel.AeonLearnAbilities,
-		AutoAbilities:      rel.AutoAbilities,
-		Mixes:              rel.Mixes,
+	}
+
+	err = getItemRelationships(r, item, &response)
+	if err != nil {
+		return apitypes.Item{}, err
 	}
 
 	return response, nil
 }
 
-func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, error) {
+func getItemRelationships(r *http.Request, item seedtypes.Item, response *apitypes.Item) error {
 	availabilityParams, err := apilookups.E.Items.QueryAvlRelGetParams(r, item.ID)
 	if err != nil {
-		return apitypes.Item{}, err
+		return err
 	}
 
-	rel, err := runItemRelQueries(r, item, availabilityParams)
+	err = runItemRelQueries(r, item, response, availabilityParams)
 	if err != nil {
-		return apitypes.Item{}, err
+		return err
 	}
 
 	if item.Category == string(database.ItemCategorySphere) {
 		sphereRes := handlerinput.NameToNamedAPIResource(apilookups.E.Spheres, item.Name, nil)
-		rel.Sphere = &sphereRes
+		response.Sphere = &sphereRes
 	}
 
 	var itemAbilityNamePtr *string
@@ -77,13 +67,12 @@ func getItemRelationships(r *http.Request, item seedtypes.Item) (apitypes.Item, 
 		itemAbilityNamePtr = &item.Name
 	}
 
-	rel.ItemAbility = handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ItemAbilities, itemAbilityNamePtr, nil)
+	response.ItemAbility = handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ItemAbilities, itemAbilityNamePtr, nil)
 
-	return rel, nil
+	return nil
 }
 
-func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams handlerinput.RelAvlParams) (apitypes.Item, error) {
-	var rel apitypes.Item
+func runItemRelQueries(r *http.Request, item seedtypes.Item, response *apitypes.Item, availabilityParams handlerinput.RelAvlParams) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -91,7 +80,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.Monsters = getMonItemAmts(monsters, item.Name)
+		response.Monsters = getMonItemAmts(monsters, item.Name)
 		return nil
 	})
 
@@ -100,13 +89,13 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.Treasures = handlerinput.ItemAmtsToChildResAmts2(apilookups.E.Treasures, treasures, item.ID)
+		response.Treasures = handlerinput.ItemAmtsToChildResAmts2(apilookups.E.Treasures, treasures, item.ID)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ts.VstShop))
+		response.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, item, availabilityParams, getItemSourceIDs(ts.VstShop))
 		return err
 	})
 
@@ -115,7 +104,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.Quests = handlerinput.ItemAmtsToChildResAmts(apilookups.E.Quests, quests)
+		response.Quests = handlerinput.ItemAmtsToChildResAmts(apilookups.E.Quests, quests)
 		return nil
 	})
 
@@ -124,7 +113,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.BlitzballPrizes = handlerinput.ItemAmtsToChildResAmts2(apilookups.E.BlitzballPrizes, blitzballPrizes, item.ID)
+		response.BlitzballPrizes = handlerinput.ItemAmtsToChildResAmts2(apilookups.E.BlitzballPrizes, blitzballPrizes, item.ID)
 		return nil
 	})
 
@@ -133,7 +122,7 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.AeonLearnAbilities = handlerinput.ItemAmtsToChildResAmts(apilookups.E.PlayerAbilities, playerAbilities)
+		response.AeonLearnAbilities = handlerinput.ItemAmtsToChildResAmts(apilookups.E.PlayerAbilities, playerAbilities)
 		return nil
 	})
 
@@ -142,22 +131,17 @@ func runItemRelQueries(r *http.Request, item seedtypes.Item, availabilityParams 
 		if err != nil {
 			return err
 		}
-		rel.AutoAbilities = handlerinput.ItemAmtsToChildResAmts(apilookups.E.AutoAbilities, autoAbilities)
+		response.AutoAbilities = handlerinput.ItemAmtsToChildResAmts(apilookups.E.AutoAbilities, autoAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Mixes, err = apilookups.E.Mixes.DBGetRelations(ctx, item, config.Cfg.DB.GetItemMixIDs)
+		response.Mixes, err = apilookups.E.Mixes.DBGetRelations(ctx, item, config.Cfg.DB.GetItemMixIDs)
 		return err
 	})
 
-	err := g.Wait()
-	if err != nil {
-		return apitypes.Item{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }
 
 func getMonItemAmts(monsters []apiresource.Named, itemName string) []apitypes.MonItemAmts {

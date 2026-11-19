@@ -21,31 +21,31 @@ func MasterItem(r *http.Request, i handlerinput.Main[seedtypes.MasterItem, apity
 		return apitypes.MasterItem{}, err
 	}
 
-	rel, err := getMasterItemRelationships(r, masterItem)
-	if err != nil {
-		return apitypes.MasterItem{}, err
-	}
-
 	response := apitypes.MasterItem{
 		ID:             masterItem.ID,
 		Name:           masterItem.Name,
 		Type:           masterItem.Type,
-		ObtainableFrom: rel.ObtainableFrom,
 	}
 
-	return completeMasterItemResponse(response), nil
-}
-
-func getMasterItemRelationships(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.MasterItem, error) {
-	var rel apitypes.MasterItem
-	var err error
-
-	rel.ObtainableFrom, err = getMasterItemObtainable(r, masterItem)
+	err = getMasterItemRelationships(r, masterItem, &response)
 	if err != nil {
 		return apitypes.MasterItem{}, err
 	}
 
-	return rel, nil
+	completeMasterItemResponse(&response)
+
+	return response, nil
+}
+
+func getMasterItemRelationships(r *http.Request, masterItem seedtypes.MasterItem, response *apitypes.MasterItem) error {
+	var err error
+
+	response.ObtainableFrom, err = getMasterItemObtainable(r, masterItem)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (apitypes.ObtainableFrom, error) {
@@ -74,7 +74,7 @@ func getMasterItemObtainable(r *http.Request, masterItem seedtypes.MasterItem) (
 	return obtainable, nil
 }
 
-func completeMasterItemResponse(masterItem apitypes.MasterItem) apitypes.MasterItem {
+func completeMasterItemResponse(masterItem *apitypes.MasterItem) {
 	switch masterItem.Type {
 	case database.ItemTypeItem:
 		item, _ := lookup.GetResource(masterItem.Name, lookup.L.Items)
@@ -90,6 +90,4 @@ func completeMasterItemResponse(masterItem apitypes.MasterItem) apitypes.MasterI
 		masterItem.Effect = keyItem.Effect
 		masterItem.TypedItem = handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil)
 	}
-
-	return masterItem
 }

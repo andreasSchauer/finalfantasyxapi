@@ -19,12 +19,7 @@ func Sidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apitype
 	if err != nil {
 		return apitypes.Sidequest{}, err
 	}
-
-	rel, err := getSidequestRelationships(r, sidequest)
-	if err != nil {
-		return apitypes.Sidequest{}, err
-	}
-
+	
 	response := apitypes.Sidequest{
 		ID:           sidequest.ID,
 		Name:         sidequest.Name,
@@ -32,28 +27,23 @@ func Sidequest(r *http.Request, i handlerinput.Main[seedtypes.Sidequest, apitype
 		Availability: sidequest.Availability,
 		IsRepeatable: sidequest.IsRepeatable,
 		Completion:   ah.ConvertObjPtr(sidequest.Completion, apiconvert.QuestCompletion),
-		Subquests:    rel.Subquests,
+	}
+
+	err = getSidequestRelationships(r, sidequest, &response)
+	if err != nil {
+		return apitypes.Sidequest{}, err
 	}
 
 	return response, nil
 }
 
-func getSidequestRelationships(r *http.Request, sidequest seedtypes.Sidequest) (apitypes.Sidequest, error) {
-	var rel apitypes.Sidequest
+func getSidequestRelationships(r *http.Request, sidequest seedtypes.Sidequest, response *apitypes.Sidequest) error {
 	var err error
 
-	rel.Subquests, err = apilookups.E.Subquests.DBGetRelations(r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
+	response.Subquests, err = apilookups.E.Subquests.DBGetRelations(r.Context(), sidequest, config.Cfg.DB.GetSidequestSubquestIDs)
 	if err != nil {
-		return apitypes.Sidequest{}, err
+		return err
 	}
 
-	return rel, nil
-}
-
-func completeSubquestResponse(subquest apitypes.Subquest) apitypes.Subquest {
-	if subquest.ParentSidequest.Sidequest == "monster arena" {
-		subquest.ArenaCreation = handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.ArenaCreations, &subquest.Name, nil)
-	}
-
-	return subquest
+	return nil
 }

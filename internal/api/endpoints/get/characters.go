@@ -26,11 +26,6 @@ func Character(r *http.Request, i handlerinput.Main[seedtypes.Character, apitype
 		return apitypes.Character{}, err
 	}
 
-	rel, err := getCharacterRelationships(r, character)
-	if err != nil {
-		return apitypes.Character{}, err
-	}
-
 	response := apitypes.Character{
 		ID:                     character.ID,
 		Name:                   character.Name,
@@ -41,71 +36,67 @@ func Character(r *http.Request, i handlerinput.Main[seedtypes.Character, apitype
 		PhysAtkRange:           character.PhysAtkRange,
 		WeaponType:             character.WeaponType,
 		ArmorType:              character.ArmorType,
-		CelestialWeapon:        rel.CelestialWeapon,
-		OverdriveCommand:       rel.OverdriveCommand,
-		CharacterClasses:       rel.CharacterClasses,
 		BaseStats:              apilookups.E.Stats.ToResAmtType(character.BaseStats, th.NewBaseStat),
-		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
-		StdSphereGrid:          rel.StdSphereGrid,
-		ExpSphereGrid:          rel.ExpSphereGrid,
-		OverdriveModes:         rel.OverdriveModes,
 	}
 
-	return completeCharacterResponse(r, response)
+	err = getCharacterRelationships(r, character, &response)
+	if err != nil {
+		return apitypes.Character{}, err
+	}
+
+	err = completeCharacterResponse(r, &response)
+	if err != nil {
+		return apitypes.Character{}, err
+	}
+
+	return response, nil
 }
 
-func getCharacterRelationships(r *http.Request, char seedtypes.Character) (apitypes.Character, error) {
-	rel := apitypes.Character{
-		OverdriveModes: getCharacterModeAmts(char),
-	}
+func getCharacterRelationships(r *http.Request, char seedtypes.Character, response *apitypes.Character) error {
+	response.OverdriveModes = getCharacterModeAmts(char)
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(ctx, char, config.Cfg.DB.GetCharacterCelestialWeaponID)
+		response.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(ctx, char, config.Cfg.DB.GetCharacterCelestialWeaponID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveCommand, err = apilookups.E.OverdriveCommands.DBGetRelationPtr(ctx, char, config.Cfg.DB.GetCharacterOverdriveCommandID)
+		response.OverdriveCommand, err = apilookups.E.OverdriveCommands.DBGetRelationPtr(ctx, char, config.Cfg.DB.GetCharacterOverdriveCommandID)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CharacterClasses, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterCharClassIDs)
+		response.CharacterClasses, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterCharClassIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.DefaultPlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterDefaultAbilityIDs)
+		response.DefaultPlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterDefaultAbilityIDs)
 		return err
 	})
 
 	if !char.IsStoryBased {
 		g.Go(func() error {
 			var err error
-			rel.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, apiconvert.SphereGrid)
-			rel.StdSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
+			response.StdSphereGrid = ah.ConvertObjPtr(char.StdSphereGrid, apiconvert.SphereGrid)
+			response.StdSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterSgAbilityIDs)
 			return err
 		})
 
 		g.Go(func() error {
 			var err error
-			rel.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, apiconvert.SphereGrid)
-			rel.ExpSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
+			response.ExpSphereGrid = ah.ConvertObjPtr(char.ExpSphereGrid, apiconvert.SphereGrid)
+			response.ExpSphereGrid.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, char, config.Cfg.DB.GetCharacterEgAbilityIDs)
 			return err
 		})
 	}
 
-	err := g.Wait()
-	if err != nil {
-		return apitypes.Character{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }
 
 func getCharacterClstlFormula(char apitypes.Character) *string {
@@ -150,19 +141,20 @@ func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.Resource
 	return modeAmount, nil
 }
 
-func completeCharacterResponse(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
-	char, err := applyOsgStats(r, char)
+func completeCharacterResponse(r *http.Request, char *apitypes.Character) error {
+	var err error
+	*char, err = applyOsgStats(r, *char)
 	if err != nil {
-		return apitypes.Character{}, err
+		return err
 	}
 
 	char.RegenAmounts = calcRegenAmounts(char.BaseStats)
-	char.CelestialFormula = getCharacterClstlFormula(char)
+	char.CelestialFormula = getCharacterClstlFormula(*char)
 
 	char.AgilityParameters, err = getUnitAgilityParams(r, char.BaseStats)
 	if err != nil {
-		return apitypes.Character{}, err
+		return err
 	}
 
-	return char, nil
+	return nil
 }

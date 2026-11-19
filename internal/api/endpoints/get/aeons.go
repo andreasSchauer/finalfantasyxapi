@@ -23,11 +23,6 @@ func Aeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, ap
 		return apitypes.Aeon{}, err
 	}
 
-	rel, err := getAeonRelationships(r, aeon)
-	if err != nil {
-		return apitypes.Aeon{}, err
-	}
-
 	response := apitypes.Aeon{
 		ID:                     aeon.ID,
 		Name:                   aeon.Name,
@@ -40,73 +35,74 @@ func Aeon(r *http.Request, i handlerinput.Main[seedtypes.Aeon, apitypes.Aeon, ap
 		PhysAtkRange:           aeon.PhysAtkRange,
 		PhysAtkShatterRate:     aeon.PhysAtkShatterRate,
 		PhysAtkAccuracy:        ah.ConvertObjPtr(aeon.PhysAtkAccuracy, apiconvert.Accuracy),
-		CelestialWeapon:        rel.CelestialWeapon,
-		CharacterClasses:       rel.CharacterClasses,
 		BaseStats:              th.GetAeonBaseStats(aeon),
-		AeonCommands:           rel.AeonCommands,
-		DefaultPlayerAbilities: rel.DefaultPlayerAbilities,
-		Overdrives:             rel.Overdrives,
 		WeaponAbilities:        ah.ConvertObjSlice(aeon.Weapon, apiconvert.AeonEquipment),
 		ArmorAbilities:         ah.ConvertObjSlice(aeon.Armor, apiconvert.AeonEquipment),
 	}
 
-	return completeAeonResponse(r, response)
-}
-
-func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon) (apitypes.Aeon, error) {
-	var rel apitypes.Aeon
-	g, ctx := errgroup.WithContext(r.Context())
-
-	g.Go(func() error {
-		var err error
-		rel.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(ctx, aeon, config.Cfg.DB.GetAeonCelestialWeaponID)
-		return err
-	})
-
-	g.Go(func() error {
-		var err error
-		rel.CharacterClasses, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonCharClassIDs)
-		return err
-	})
-
-	g.Go(func() error {
-		var err error
-		rel.AeonCommands, err = apilookups.E.AeonCommands.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonAeonCommandIDs)
-		return err
-	})
-
-	g.Go(func() error {
-		var err error
-		rel.Overdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonOverdriveIDs)
-		return err
-	})
-
-	g.Go(func() error {
-		var err error
-		rel.DefaultPlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonDefaultAbilityIDs)
-		return err
-	})
-
-	err := g.Wait()
+	err = getAeonRelationships(r, aeon, &response)
 	if err != nil {
 		return apitypes.Aeon{}, err
 	}
 
-	return rel, nil
-}
-
-func completeAeonResponse(r *http.Request, aeon apitypes.Aeon) (apitypes.Aeon, error) {
-	aeon, err := applyAeonStats(r, aeon, nil)
+	err = completeAeonResponse(r, &response)
 	if err != nil {
 		return apitypes.Aeon{}, err
+	}
+
+	return response, nil
+}
+
+func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon, response *apitypes.Aeon) error {
+	g, ctx := errgroup.WithContext(r.Context())
+
+	g.Go(func() error {
+		var err error
+		response.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(ctx, aeon, config.Cfg.DB.GetAeonCelestialWeaponID)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		response.CharacterClasses, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonCharClassIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		response.AeonCommands, err = apilookups.E.AeonCommands.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonAeonCommandIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		response.Overdrives, err = apilookups.E.Overdrives.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonOverdriveIDs)
+		return err
+	})
+
+	g.Go(func() error {
+		var err error
+		response.DefaultPlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, aeon, config.Cfg.DB.GetAeonDefaultAbilityIDs)
+		return err
+	})
+
+	return g.Wait()
+}
+
+func completeAeonResponse(r *http.Request, aeon *apitypes.Aeon) error {
+	var err error
+
+	*aeon, err = applyAeonStats(r, *aeon, nil)
+	if err != nil {
+		return err
 	}
 
 	aeon.RegenAmounts = calcRegenAmounts(aeon.BaseStats)
 
 	aeon.AgilityParameters, err = getUnitAgilityParams(r, aeon.BaseStats)
 	if err != nil {
-		return apitypes.Aeon{}, err
+		return err
 	}
 
-	return aeon, nil
+	return nil
 }

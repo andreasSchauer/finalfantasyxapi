@@ -21,12 +21,7 @@ func PlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbility,
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}
-
-	rel, err := getPlayerAbilityRelationships(r, ability)
-	if err != nil {
-		return apitypes.PlayerAbility{}, err
-	}
-
+	
 	response := apitypes.PlayerAbility{
 		ID:                    ability.ID,
 		Name:                  ability.Name,
@@ -50,10 +45,14 @@ func PlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbility,
 		Submenu:               handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.Submenu, nil),
 		OpenSubmenu:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Submenus, ability.OpenSubmenu, nil),
 		Cursor:                ability.Cursor,
-		Monsters:              rel.Monsters,
 		BattleInteractions:    ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
+	err = getPlayerAbilityRelationships(r, ability, &response)
+	if err != nil {
+		return apitypes.PlayerAbility{}, err
+	}
+	
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
@@ -63,14 +62,13 @@ func PlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbility,
 	return response, nil
 }
 
-func getPlayerAbilityRelationships(r *http.Request, ability seedtypes.PlayerAbility) (apitypes.PlayerAbility, error) {
-	var rel apitypes.PlayerAbility
+func getPlayerAbilityRelationships(r *http.Request, ability seedtypes.PlayerAbility, response *apitypes.PlayerAbility) error {
 	var err error
 
-	rel.Monsters, err = apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetPlayerAbilityMonsterIDs)
+	response.Monsters, err = apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetPlayerAbilityMonsterIDs)
 	if err != nil {
-		return apitypes.PlayerAbility{}, err
+		return err
 	}
 
-	return rel, nil
+	return nil
 }

@@ -23,41 +23,35 @@ func Mix(r *http.Request, i handlerinput.Main[seedtypes.Mix, apitypes.Mix, apire
 	if err != nil {
 		return apitypes.Mix{}, err
 	}
-
-	rel, err := getMixRelationships(r, mix)
-	if err != nil {
-		return apitypes.Mix{}, err
-	}
-
+	
 	response := apitypes.Mix{
 		ID:           mix.ID,
 		Name:         mix.Name,
 		Category:     mix.Category,
-		Overdrive:    rel.Overdrive,
-		Description:  rel.Description,
-		Effect:       rel.Effect,
-		Combinations: rel.Combinations,
+	}
+
+	err = getMixRelationships(r, mix, &response)
+	if err != nil {
+		return apitypes.Mix{}, err
 	}
 
 	return response, nil
 }
 
-func getMixRelationships(r *http.Request, mix seedtypes.Mix) (apitypes.Mix, error) {
+func getMixRelationships(r *http.Request, mix seedtypes.Mix, response *apitypes.Mix) error {
 	overdrive, _ := lookup.GetResourceByID(mix.OverdriveID, lookup.L.OverdrivesID)
 	var err error
 
-	rel := apitypes.Mix{
-		Overdrive:   handlerinput.NameToNamedAPIResource(apilookups.E.Overdrives, overdrive.Name, nil),
-		Description: overdrive.Description,
-		Effect:      overdrive.Effect,
-	}
+	response.Overdrive = handlerinput.NameToNamedAPIResource(apilookups.E.Overdrives, overdrive.Name, nil)
+	response.Description = overdrive.Description
+	response.Effect = overdrive.Effect
 
-	rel.Combinations, err = getMixCombinations(r, mix)
+	response.Combinations, err = getMixCombinations(r, mix)
 	if err != nil {
-		return apitypes.Mix{}, err
+		return err
 	}
 
-	return rel, nil
+	return nil
 }
 
 func getMixCombinations(r *http.Request, mix seedtypes.Mix) ([]apitypes.MixCombination, error) {

@@ -22,43 +22,32 @@ func ItemAbility(r *http.Request, i handlerinput.Main[seedtypes.ItemAbility, api
 		return apitypes.ItemAbility{}, err
 	}
 
-	rel := getItemAbilityRelationships(ability)
-
 	response := apitypes.ItemAbility{
 		ID:                  ability.ID,
 		Name:                ability.Name,
-		Item:                rel.Item,
 		UntypedAbility:      handlerinput.IDToTypedAPIResource(apilookups.E.Abilities, ability.Ability.ID),
-		Description:         rel.Description,
-		Effect:              rel.Effect,
-		Category:            rel.Category,
-		CanUseOutsideBattle: rel.CanUseOutsideBattle,
 		Rank:                ability.Rank,
 		AppearsInHelpBar:    ability.AppearsInHelpBar,
 		CanCopycat:          ability.CanCopycat,
-		RelatedStats:        rel.RelatedStats,
-		Cursor:              rel.Cursor,
 		BattleInteractions:  ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
+
+	getItemAbilityRelationships(ability, &response)
 
 	return response, nil
 }
 
-func getItemAbilityRelationships(ability seedtypes.ItemAbility) apitypes.ItemAbility {
+func getItemAbilityRelationships(ability seedtypes.ItemAbility, response *apitypes.ItemAbility) {
 	item, _ := lookup.GetResourceByID(ability.ID, lookup.L.ItemsID)
 
-	rel := apitypes.ItemAbility{
-		Item:         handlerinput.IDToNamedAPIResource(apilookups.E.Items, item.ID),
-		Description:  item.Description,
-		Effect:       item.Effect,
-		Category:     item.Category,
-		RelatedStats: handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, item.RelatedStats),
-		Cursor:       item.Cursor,
-	}
+	response.Item = handlerinput.IDToNamedAPIResource(apilookups.E.Items, item.ID)
+	response.Description = item.Description
+	response.Effect = item.Effect
+	response.Category = item.Category
+	response.RelatedStats = handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, item.RelatedStats)
+	response.Cursor = item.Cursor
 
 	if item.Usability == string(database.ItemUsabilityOutsideBattle) || item.Usability == string(database.ItemUsabilityAlways) {
-		rel.CanUseOutsideBattle = true
+		response.CanUseOutsideBattle = true
 	}
-
-	return rel
 }

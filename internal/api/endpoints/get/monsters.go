@@ -24,11 +24,6 @@ func Monster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes.Mo
 		return apitypes.Monster{}, err
 	}
 
-	rel, err := getMonsterRelationships(r, monster)
-	if err != nil {
-		return apitypes.Monster{}, err
-	}
-
 	response := apitypes.Monster{
 		ID:                   monster.ID,
 		Name:                 monster.Name,
@@ -61,95 +56,96 @@ func Monster(r *http.Request, i handlerinput.Main[seedtypes.Monster, apitypes.Mo
 		MonsterArenaPrice:    monster.MonsterArenaPrice,
 		SensorText:           monster.SensorText,
 		ScanText:             monster.ScanText,
-		Areas:                rel.Areas,
-		Formations:           rel.Formations,
 		BaseStats:            apilookups.E.Stats.ToResAmtType(monster.BaseStats, th.NewBaseStat),
 		Items:                ah.ConvertObjPtr(monster.Items, apiconvert.MonsterItems),
 		Equipment:            ah.ConvertObjPtr(monster.Equipment, apiconvert.MonsterEquipment),
-		ElemResists:          rel.ElemResists,
 		StatusImmunities:     handlerinput.NamesToNamedAPIResources(apilookups.E.StatusConditions, monster.StatusImmunities),
 		StatusResists:        apilookups.E.StatusConditions.ToResAmtType(monster.StatusResists, th.NewStatusResist),
 		Abilities:            ah.ConvertObjSlice(monster.Abilities, apiconvert.MonsterAbility),
-		AlteredStates:        rel.AlteredStates,
 	}
 
-	return completeMonsterResponse(r, response)
+	err = getMonsterRelationships(r, monster, &response)
+	if err != nil {
+		return apitypes.Monster{}, err
+	}
+
+	err = completeMonsterResponse(r, &response)
+	if err != nil {
+		return apitypes.Monster{}, err
+	}
+
+	return response, nil
 }
 
-func getMonsterRelationships(r *http.Request, monster seedtypes.Monster) (apitypes.Monster, error) {
-	rel := apitypes.Monster{
-		ElemResists:   MonsterElemResists(monster.ElemResists),
-		AlteredStates: MonsterAlteredStates(r, monster),
-	}
+func getMonsterRelationships(r *http.Request, monster seedtypes.Monster, response *apitypes.Monster) error {
+	response.ElemResists = MonsterElemResists(monster.ElemResists)
+	response.AlteredStates = MonsterAlteredStates(r, monster)
 
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := apilookups.E.Monsters.QueryAvlRelGetParams(r, monster.ID)
 	if err != nil {
-		return apitypes.Monster{}, err
+		return err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = apilookups.E.Areas.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterAreaIDs())
+		response.Areas, err = apilookups.E.Areas.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterAreaIDs())
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = apilookups.E.MonsterFormations.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterMonsterFormationIDs())
+		response.Formations, err = apilookups.E.MonsterFormations.QueryAvlRelRun(ctx, monster, availabilityParams, getMonsterMonsterFormationIDs())
 		return err
 	})
 
-	err = g.Wait()
-	if err != nil {
-		return apitypes.Monster{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }
 
-func completeMonsterResponse(r *http.Request, mon apitypes.Monster) (apitypes.Monster, error) {
-	mon, err := applyAlteredStateFromQuery(r, mon, ts.QpnAlteredState)
+func completeMonsterResponse(r *http.Request, mon *apitypes.Monster) error {
+	var err error
+	
+	*mon, err = applyAlteredStateFromQuery(r, *mon, ts.QpnAlteredState)
 	if err != nil {
-		return apitypes.Monster{}, err
+		return err
 	}
 
-	mon.BaseStats, err = applyPossessedAeonStats(r, mon)
+	mon.BaseStats, err = applyPossessedAeonStats(r, *mon)
 	if err != nil {
-		return apitypes.Monster{}, err
+		return err
 	}
 
-	mon.BaseStats, err = applyRonsoStats(r, mon, ts.QpnKimahriStats)
+	mon.BaseStats, err = applyRonsoStats(r, *mon, ts.QpnKimahriStats)
 	if err != nil {
-		return apitypes.Monster{}, err
+		return err
 	}
 
-	mon.RegenAmounts = calcRegenAmountsMonster(mon)
+	mon.RegenAmounts = calcRegenAmountsMonster(*mon)
 
-	mon.ElemResists, err = applyOmnisElements(r, mon, ts.QpnOmnisElements)
+	mon.ElemResists, err = applyOmnisElements(r, *mon, ts.QpnOmnisElements)
 	if err != nil {
-		return apitypes.Monster{}, err
+		return err
 	}
 
-	mon.BribeChances, err = getMonsterBribeChances(mon)
+	mon.BribeChances, err = getMonsterBribeChances(*mon)
 	if err != nil {
-		return apitypes.Monster{}, err
+		return err
 	}
 
-	mon.PoisonDamage, err = getMonsterPoisonDamage(mon)
+	mon.PoisonDamage, err = getMonsterPoisonDamage(*mon)
 	if err != nil {
-		return apitypes.Monster{}, err
+		return err
 	}
 
-	mon.AgilityParameters, err = getMonsterAgilityParams(r, mon)
+	mon.AgilityParameters, err = getMonsterAgilityParams(r, *mon)
 	if err != nil {
-		return apitypes.Monster{}, err
+		return err
 	}
 
 	mon.AlteredStates = getAlteredStatesAlterations(mon.AlteredStates)
 
-	return mon, nil
+	return nil
 }
 
 func MonsterElemResists(resists []seedtypes.ElementalResist) []apitypes.ElementalResist {

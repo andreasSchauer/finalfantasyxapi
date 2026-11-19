@@ -22,11 +22,6 @@ func AutoAbility(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, api
 		return apitypes.AutoAbility{}, err
 	}
 
-	rel, err := getAutoAbilityRelationships(r, autoAbility)
-	if err != nil {
-		return apitypes.AutoAbility{}, err
-	}
-
 	response := apitypes.AutoAbility{
 		ID:                     autoAbility.ID,
 		Name:                   autoAbility.Name,
@@ -51,25 +46,23 @@ func AutoAbility(r *http.Request, i handlerinput.Main[seedtypes.AutoAbility, api
 		ConversionTo:           handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Modifiers, autoAbility.ConversionTo, nil),
 		StatChanges:            ah.ConvertObjSlice(autoAbility.StatChanges, apiconvert.StatChange),
 		ModifierChanges:        ah.ConvertObjSlice(autoAbility.ModifierChanges, apiconvert.ModifierChange),
-		MonstersDrop:           rel.MonstersDrop,
-		MonstersItems:          rel.MonstersItems,
-		ShopsPreAirship:        rel.ShopsPreAirship,
-		ShopsPostAirship:       rel.ShopsPostAirship,
-		Treasures:              rel.Treasures,
-		EquipmentTables:        rel.EquipmentTables,
+	}
+
+	err = getAutoAbilityRelationships(r, autoAbility, &response)
+	if err != nil {
+		return apitypes.AutoAbility{}, err
 	}
 
 	return response, nil
 }
 
-func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbility) (apitypes.AutoAbility, error) {
-	var rel apitypes.AutoAbility
+func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbility, response *apitypes.AutoAbility) error {
 	g, ctx := errgroup.WithContext(r.Context())
 	var monsterItems []apiresource.Named
 
 	availabilityParams, err := apilookups.E.AutoAbilities.QueryAvlRelGetParams(r, autoAbility.ID)
 	if err != nil {
-		return apitypes.AutoAbility{}, err
+		return err
 	}
 
 	g.Go(func() error {
@@ -80,44 +73,44 @@ func getAutoAbilityRelationships(r *http.Request, autoAbility seedtypes.AutoAbil
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersDrop, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstMonster, nil))
+		response.MonstersDrop, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstMonster, nil))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		preAirship := database.ShopTypePreAirship
-		rel.ShopsPreAirship, err = apilookups.E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstShop, &preAirship))
+		response.ShopsPreAirship, err = apilookups.E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstShop, &preAirship))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
 		postAirship := database.ShopTypePostAirship
-		rel.ShopsPostAirship, err = apilookups.E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstShop, &postAirship))
+		response.ShopsPostAirship, err = apilookups.E.Shops.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstShop, &postAirship))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstTreasure, nil))
+		response.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, autoAbility, availabilityParams, getAutoAbilitySourceIDs(ts.VstTreasure, nil))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EquipmentTables, err = apilookups.E.EquipmentTables.DBGetRelations(ctx, autoAbility, config.Cfg.DB.GetAutoAbilityEquipmentTableIDs)
+		response.EquipmentTables, err = apilookups.E.EquipmentTables.DBGetRelations(ctx, autoAbility, config.Cfg.DB.GetAutoAbilityEquipmentTableIDs)
 		return err
 	})
 
 	err = g.Wait()
 	if err != nil {
-		return apitypes.AutoAbility{}, err
+		return err
 	}
 
 	if autoAbility.RequiredItem != nil {
-		rel.MonstersItems = getMonItemAmts(monsterItems, autoAbility.RequiredItem.ItemName)
+		response.MonstersItems = getMonItemAmts(monsterItems, autoAbility.RequiredItem.ItemName)
 	}
 
-	return rel, nil
+	return nil
 }

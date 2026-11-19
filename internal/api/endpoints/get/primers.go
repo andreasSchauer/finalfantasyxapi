@@ -19,51 +19,41 @@ func Primer(r *http.Request, i handlerinput.Main[seedtypes.Primer, apitypes.Prim
 	if err != nil {
 		return apitypes.Primer{}, err
 	}
-
-	rel, err := getPrimerRelationships(r, primer)
-	if err != nil {
-		return apitypes.Primer{}, err
-	}
-
+	
 	response := apitypes.Primer{
 		ID:            primer.ID,
 		Name:          primer.Name,
-		KeyItem:       rel.KeyItem,
-		Description:   rel.Description,
 		AlBhedLetter:  primer.AlBhedLetter,
 		EnglishLetter: primer.EnglishLetter,
-		Treasures:     rel.Treasures,
-		Areas:         rel.Areas,
+	}
+
+	err = getPrimerRelationships(r, primer, &response)
+	if err != nil {
+		return apitypes.Primer{}, err
 	}
 
 	return response, nil
 }
 
-func getPrimerRelationships(r *http.Request, primer seedtypes.Primer) (apitypes.Primer, error) {
+func getPrimerRelationships(r *http.Request, primer seedtypes.Primer, response *apitypes.Primer) error {
 	keyItem, _ := lookup.GetResource(primer, lookup.L.KeyItems)
 
-	rel := apitypes.Primer{
-		KeyItem:     handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil),
-		Description: keyItem.Description,
-	}
+	response.KeyItem = handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, keyItem.Name, nil)
+	response.Description = keyItem.Description
+
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = apilookups.E.Treasures.DBGetRelations(ctx, primer, config.Cfg.DB.GetPrimerTreasureIDs)
+		response.Treasures, err = apilookups.E.Treasures.DBGetRelations(ctx, primer, config.Cfg.DB.GetPrimerTreasureIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = apilookups.E.Areas.DBGetRelations(ctx, primer, config.Cfg.DB.GetPrimerAreaIDs)
+		response.Areas, err = apilookups.E.Areas.DBGetRelations(ctx, primer, config.Cfg.DB.GetPrimerAreaIDs)
 		return err
 	})
 
-	err := g.Wait()
-	if err != nil {
-		return apitypes.Primer{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }

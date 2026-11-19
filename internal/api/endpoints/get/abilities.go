@@ -22,11 +22,6 @@ func Ability(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes.Ab
 		return apitypes.Ability{}, err
 	}
 
-	rel, err := getAbilityRelationships(r, ability)
-	if err != nil {
-		return apitypes.Ability{}, err
-	}
-
 	response := apitypes.Ability{
 		ID:                 ability.ID,
 		Name:               ability.Name,
@@ -37,21 +32,24 @@ func Ability(r *http.Request, i handlerinput.Main[seedtypes.Ability, apitypes.Ab
 		CanCopycat:         ability.CanCopycat,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		TypedAbility:       apiconvert.RefToNamedAPIResource(ability.GetAbilityRef()),
-		Monsters:           rel.Monsters,
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
+	}
+
+	err = getAbilityRelationships(r, ability, &response)
+	if err != nil {
+		return apitypes.Ability{}, err
 	}
 
 	return response, nil
 }
 
-func getAbilityRelationships(r *http.Request, ability seedtypes.Ability) (apitypes.Ability, error) {
+func getAbilityRelationships(r *http.Request, ability seedtypes.Ability, response *apitypes.Ability) error {
 	var err error
-	var rel apitypes.Ability
 
-	rel.Monsters, err = apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetAbilityMonsterIDs)
+	response.Monsters, err = apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetAbilityMonsterIDs)
 	if err != nil {
-		return apitypes.Ability{}, err
+		return err
 	}
 
-	return rel, nil
+	return nil
 }

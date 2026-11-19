@@ -20,12 +20,7 @@ func Property(r *http.Request, i handlerinput.Main[seedtypes.Property, apitypes.
 	if err != nil {
 		return apitypes.Property{}, err
 	}
-
-	rel, err := getPropertyRelationships(r, property)
-	if err != nil {
-		return apitypes.Property{}, err
-	}
-
+	
 	response := apitypes.Property{
 		ID:             property.ID,
 		Name:           property.Name,
@@ -33,33 +28,30 @@ func Property(r *http.Request, i handlerinput.Main[seedtypes.Property, apitypes.
 		NullifyArmored: property.NullifyArmored,
 		RelatedStats:   handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, property.RelatedStats),
 		ModifierChange: ah.ConvertObjPtr(property.ModifierChange, apiconvert.ModifierChange),
-		AutoAbilities:  rel.AutoAbilities,
-		Monsters:       rel.Monsters,
+	}
+
+	err = getPropertyRelationships(r, property, &response)
+	if err != nil {
+		return apitypes.Property{}, err
 	}
 
 	return response, nil
 }
 
-func getPropertyRelationships(r *http.Request, property seedtypes.Property) (apitypes.Property, error) {
-	var rel apitypes.Property
+func getPropertyRelationships(r *http.Request, property seedtypes.Property, response *apitypes.Property) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, property, handlerinput.ToIntManyNull(config.Cfg.DB.GetPropertyAutoAbilityIDs))
+		response.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, property, handlerinput.ToIntManyNull(config.Cfg.DB.GetPropertyAutoAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Monsters, err = apilookups.E.Monsters.DBGetRelations(ctx, property, config.Cfg.DB.GetPropertyMonsterIDs)
+		response.Monsters, err = apilookups.E.Monsters.DBGetRelations(ctx, property, config.Cfg.DB.GetPropertyMonsterIDs)
 		return err
 	})
 
-	err := g.Wait()
-	if err != nil {
-		return apitypes.Property{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }

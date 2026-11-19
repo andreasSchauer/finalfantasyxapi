@@ -24,12 +24,13 @@ func PlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, apity
 	switch unit.Type {
 	case database.UnitTypeCharacter:
 		character, _ := lookup.GetResource(unit, lookup.L.Characters)
+		var rel apitypes.Character
 
-		rel, err := getCharacterRelationships(r, character)
+		err = getCharacterRelationships(r, character, &rel)
 		if err != nil {
 			return apitypes.PlayerUnit{}, err
 		}
-
+		
 		response = apitypes.PlayerUnit{
 			ID:               unit.ID,
 			Name:             unit.Name,
@@ -42,8 +43,9 @@ func PlayerUnit(r *http.Request, i handlerinput.Main[seedtypes.PlayerUnit, apity
 
 	case database.UnitTypeAeon:
 		aeon, _ := lookup.GetResource(unit, lookup.L.Aeons)
+		var rel apitypes.Aeon
 
-		rel, err := getAeonRelationships(r, aeon)
+		err = getAeonRelationships(r, aeon, &rel)
 		if err != nil {
 			return apitypes.PlayerUnit{}, err
 		}

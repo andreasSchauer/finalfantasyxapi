@@ -19,87 +19,73 @@ func Modifier(r *http.Request, i handlerinput.Main[seedtypes.Modifier, apitypes.
 	if err != nil {
 		return apitypes.Modifier{}, err
 	}
-
-	rel, err := getModifierRelationships(r, modifier)
-	if err != nil {
-		return apitypes.Modifier{}, err
-	}
-
+	
 	response := apitypes.Modifier{
 		ID:                 modifier.ID,
 		Name:               modifier.Name,
 		Effect:             modifier.Effect,
 		Category:           modifier.Category,
 		DefaultValue:       modifier.DefaultValue,
-		AutoAbilities:      rel.AutoAbilities,
-		PlayerAbilities:    rel.PlayerAbilities,
-		OverdriveAbilities: rel.OverdriveAbilities,
-		ItemAbilities:      rel.ItemAbilities,
-		TriggerCommands:    rel.TriggerCommands,
-		EnemyAbilities:     rel.EnemyAbilities,
-		StatusConditions:   rel.StatusConditions,
-		Properties:         rel.Properties,
 	}
 
+	err = getModifierRelationships(r, modifier, &response)
+	if err != nil {
+		return apitypes.Modifier{}, err
+	}
+	
 	return response, nil
 }
 
-func getModifierRelationships(r *http.Request, modifier seedtypes.Modifier) (apitypes.Modifier, error) {
-	var rel apitypes.Modifier
+func getModifierRelationships(r *http.Request, modifier seedtypes.Modifier, response *apitypes.Modifier) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierAutoAbilityIDs)
+		response.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierPlayerAbilityIDs)
+		response.PlayerAbilities, err = apilookups.E.PlayerAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierPlayerAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OverdriveAbilities, err = apilookups.E.OverdriveAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierOverdriveAbilityIDs)
+		response.OverdriveAbilities, err = apilookups.E.OverdriveAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierOverdriveAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.ItemAbilities, err = apilookups.E.ItemAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierItemAbilityIDs)
+		response.ItemAbilities, err = apilookups.E.ItemAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierItemAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.TriggerCommands, err = apilookups.E.TriggerCommands.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierTriggerCommandIDs)
+		response.TriggerCommands, err = apilookups.E.TriggerCommands.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierTriggerCommandIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EnemyAbilities, err = apilookups.E.EnemyAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierEnemyAbilityIDs)
+		response.EnemyAbilities, err = apilookups.E.EnemyAbilities.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierEnemyAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierStatusConditionIDs)
+		response.StatusConditions, err = apilookups.E.StatusConditions.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierStatusConditionIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Properties, err = apilookups.E.Properties.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierPropertyIDs)
+		response.Properties, err = apilookups.E.Properties.DBGetRelations(ctx, modifier, config.Cfg.DB.GetModifierPropertyIDs)
 		return err
 	})
 
-	err := g.Wait()
-	if err != nil {
-		return apitypes.Modifier{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }

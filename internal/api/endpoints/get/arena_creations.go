@@ -23,40 +23,37 @@ func ArenaCreation(r *http.Request, i handlerinput.Main[seedtypes.ArenaCreation,
 		return apitypes.ArenaCreation{}, err
 	}
 
-	rel, err := getArenaCreationRelationships(r, creation)
-	if err != nil {
-		return apitypes.ArenaCreation{}, err
-	}
-
 	response := apitypes.ArenaCreation{
 		ID:                        creation.ID,
 		Name:                      creation.Name,
 		Category:                  creation.Category,
 		Monster:                   handlerinput.IDToNamedAPIResource(apilookups.E.Monsters, *creation.MonsterID),
 		ParentSubquest:            handlerinput.IDToQuestAPIResource(apilookups.E.Subquests, creation.SubquestID),
-		Reward:                    rel.Reward,
 		RequiredCatchAmount:       creation.Amount,
 		UnlockedCreationsCategory: creation.CreationsUnlockedCategory,
-		RequiredMonsters:          rel.RequiredMonsters,
+	}
+
+	err = getArenaCreationRelationships(r, creation, &response)
+	if err != nil {
+		return apitypes.ArenaCreation{}, err
 	}
 
 	return response, nil
 }
 
-func getArenaCreationRelationships(r *http.Request, creation seedtypes.ArenaCreation) (apitypes.ArenaCreation, error) {
-	var rel apitypes.ArenaCreation
+func getArenaCreationRelationships(r *http.Request, creation seedtypes.ArenaCreation, response *apitypes.ArenaCreation) error {
 	var err error
 
 	subquest, _ := lookup.GetResourceByID(creation.SubquestID, lookup.L.SubquestsID)
 	ia := subquest.Completion.Reward
-	rel.Reward = apilookups.E.AllItems.ToResAmtFromName(ia)
+	response.Reward = apilookups.E.AllItems.ToResAmtFromName(ia)
 
-	rel.RequiredMonsters, err = getArenaCreationMonsters(r, creation)
+	response.RequiredMonsters, err = getArenaCreationMonsters(r, creation)
 	if err != nil {
-		return apitypes.ArenaCreation{}, err
+		return err
 	}
 
-	return rel, nil
+	return nil
 }
 
 func getArenaCreationMonsters(r *http.Request, creation seedtypes.ArenaCreation) ([]apiresource.Named, error) {

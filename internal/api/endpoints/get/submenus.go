@@ -20,12 +20,7 @@ func Submenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Su
 	if err != nil {
 		return apitypes.Submenu{}, err
 	}
-
-	rel, err := getSubmenuRelationships(r, submenu)
-	if err != nil {
-		return apitypes.Submenu{}, err
-	}
-
+	
 	response := apitypes.Submenu{
 		ID:          submenu.ID,
 		Name:        submenu.Name,
@@ -33,35 +28,37 @@ func Submenu(r *http.Request, i handlerinput.Main[seedtypes.Submenu, apitypes.Su
 		Effect:      submenu.Effect,
 		Topmenu:     handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, submenu.Topmenu, nil),
 		Users:       handlerinput.NamesToNamedAPIResources(apilookups.E.CharacterClasses, submenu.Users),
-		OpenedBy:    rel.OpenedBy,
-		Abilities:   rel.Abilities,
+	}
+
+	err = getSubmenuRelationships(r, submenu, &response)
+	if err != nil {
+		return apitypes.Submenu{}, err
 	}
 
 	return response, nil
 }
 
-func getSubmenuRelationships(r *http.Request, submenu seedtypes.Submenu) (apitypes.Submenu, error) {
-	var rel apitypes.Submenu
+func getSubmenuRelationships(r *http.Request, submenu seedtypes.Submenu, response *apitypes.Submenu) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.Abilities, err = apilookups.E.Abilities.DBGetRelations(ctx, submenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs))
+		response.Abilities, err = apilookups.E.Abilities.DBGetRelations(ctx, submenu, handlerinput.ToIntManyNull(config.Cfg.DB.GetSubmenuAbilityIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.OpenedBy, err = createSubmenuOpenedBy(ctx, submenu)
+		response.OpenedBy, err = createSubmenuOpenedBy(ctx, submenu)
 		return err
 	})
 
 	err := g.Wait()
 	if err != nil {
-		return apitypes.Submenu{}, err
+		return err
 	}
 
-	return rel, nil
+	return nil
 }
 
 func createSubmenuOpenedBy(ctx context.Context, submenu seedtypes.Submenu) (*apitypes.MenuOpen, error) {

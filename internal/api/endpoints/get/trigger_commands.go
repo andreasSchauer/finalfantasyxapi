@@ -22,12 +22,7 @@ func TriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerComman
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
 	}
-
-	rel, err := getTriggerCommandRelationships(r, command)
-	if err != nil {
-		return apitypes.TriggerCommand{}, err
-	}
-
+	
 	response := apitypes.TriggerCommand{
 		ID:                 command.ID,
 		Name:               command.Name,
@@ -39,14 +34,17 @@ func TriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerComman
 		Rank:               command.Rank,
 		AppearsInHelpBar:   command.AppearsInHelpBar,
 		CanCopycat:         command.CanCopycat,
-		UsedBy:             rel.UsedBy,
 		RelatedStats:       handlerinput.NamesToNamedAPIResources(apilookups.E.Stats, command.RelatedStats),
 		Topmenu:            handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Topmenus, command.Topmenu, nil),
 		Cursor:             command.Cursor,
-		MonsterFormations:  rel.MonsterFormations,
 		BattleInteractions: ah.ConvertObjSlice(command.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
+	err = getTriggerCommandRelationships(r, command, &response)
+	if err != nil {
+		return apitypes.TriggerCommand{}, err
+	}
+	
 	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
@@ -56,26 +54,25 @@ func TriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerComman
 	return response, nil
 }
 
-func getTriggerCommandRelationships(r *http.Request, command seedtypes.TriggerCommand) (apitypes.TriggerCommand, error) {
-	var rel apitypes.TriggerCommand
+func getTriggerCommandRelationships(r *http.Request, command seedtypes.TriggerCommand, response *apitypes.TriggerCommand) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.MonsterFormations, err = apilookups.E.MonsterFormations.DBGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandMonsterFormationIDs)
+		response.MonsterFormations, err = apilookups.E.MonsterFormations.DBGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandMonsterFormationIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.UsedBy, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandCharClassIDs)
+		response.UsedBy, err = apilookups.E.CharacterClasses.DBGetRelations(ctx, command, config.Cfg.DB.GetTriggerCommandCharClassIDs)
 		return err
 	})
 
 	err := g.Wait()
 	if err != nil {
-		return apitypes.TriggerCommand{}, err
+		return err
 	}
 
-	return rel, nil
+	return nil
 }

@@ -23,12 +23,7 @@ func KeyItem(r *http.Request, i handlerinput.Main[seedtypes.KeyItem, apitypes.Ke
 	if err != nil {
 		return apitypes.KeyItem{}, err
 	}
-
-	rel, err := getKeyItemRelationships(r, keyItem)
-	if err != nil {
-		return apitypes.KeyItem{}, err
-	}
-
+	
 	response := apitypes.KeyItem{
 		ID:              keyItem.ID,
 		Name:            keyItem.Name,
@@ -36,46 +31,45 @@ func KeyItem(r *http.Request, i handlerinput.Main[seedtypes.KeyItem, apitypes.Ke
 		Category:        keyItem.Category,
 		Description:     keyItem.Description,
 		Effect:          keyItem.Effect,
-		Primer:          rel.Primer,
-		CelestialWeapon: rel.CelestialWeapon,
-		Treasures:       rel.Treasures,
-		Quests:          rel.Quests,
-		Areas:           rel.Areas,
+	}
+	
+	err = getKeyItemRelationships(r, keyItem, &response)
+	if err != nil {
+		return apitypes.KeyItem{}, err
 	}
 
 	return response, nil
 }
 
-func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apitypes.KeyItem, error) {
-	var rel apitypes.KeyItem
+func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem, response *apitypes.KeyItem) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := apilookups.E.KeyItems.QueryAvlRelGetParams(r, keyItem.ID)
 	if err != nil {
-		return apitypes.KeyItem{}, err
+		return err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ts.VstTreasure))
+		response.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ts.VstTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = apilookups.E.Quests.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ts.VstQuest))
+		response.Quests, err = apilookups.E.Quests.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemSourceIDs(ts.VstQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Areas, err = apilookups.E.Areas.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemAreaIDs())
+		response.Areas, err = apilookups.E.Areas.QueryAvlRelRun(ctx, keyItem, availabilityParams, getKeyItemAreaIDs())
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.CelestialWeapon, err = getKeyItemCelestialWeapon(ctx, keyItem)
+		response.CelestialWeapon, err = getKeyItemCelestialWeapon(ctx, keyItem)
 		return err
 	})
 
@@ -84,14 +78,9 @@ func getKeyItemRelationships(r *http.Request, keyItem seedtypes.KeyItem) (apityp
 		primerRes := handlerinput.NameToNamedAPIResource(apilookups.E.Primers, keyItem.Name, nil)
 		primer = &primerRes
 	}
-	rel.Primer = primer
+	response.Primer = primer
 
-	err = g.Wait()
-	if err != nil {
-		return apitypes.KeyItem{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }
 
 func getKeyItemCelestialWeapon(ctx context.Context, keyItem seedtypes.KeyItem) (*apiresource.Named, error) {

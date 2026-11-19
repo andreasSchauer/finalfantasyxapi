@@ -21,12 +21,7 @@ func Song(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, ap
 	if err != nil {
 		return apitypes.Song{}, err
 	}
-
-	rel, err := getSongRelationships(r, song)
-	if err != nil {
-		return apitypes.Song{}, err
-	}
-
+	
 	response := apitypes.Song{
 		ID:                   song.ID,
 		Name:                 song.Name,
@@ -34,10 +29,6 @@ func Song(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, ap
 		InGameName:           song.InGameName,
 		OstName:              song.OSTName,
 		Translation:          song.Translation,
-		Composer:             rel.Composer,
-		Arranger:             rel.Arranger,
-		Performer:            rel.Performer,
-		Lyricist:             rel.Lyricist,
 		DurationInSeconds:    song.DurationInSeconds,
 		CanLoop:              song.CanLoop,
 		SpecialUseCase:       song.SpecialUseCase,
@@ -47,40 +38,42 @@ func Song(r *http.Request, i handlerinput.Main[seedtypes.Song, apitypes.Song, ap
 		OstTrackNumber:       song.OSTTrackNumber,
 		BackgroundMusic:      ah.ConvertObjSlice(song.BackgroundMusic, apiconvert.BackgroundMusic),
 		Cues:                 ah.ConvertObjSlice(song.Cues, apiconvert.Cue),
-		BossFights:           rel.BossFights,
-		FMVs:                 rel.FMVs,
+	}
+
+	err = getSongRelationships(r, song, &response)
+	if err != nil {
+		return apitypes.Song{}, err
 	}
 
 	return response, nil
 }
 
-func getSongRelationships(r *http.Request, song seedtypes.Song) (apitypes.Song, error) {
-	var rel apitypes.Song
+func getSongRelationships(r *http.Request, song seedtypes.Song, response *apitypes.Song) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
 		var err error
-		rel.BossFights, err = apilookups.E.MonsterFormations.DBGetRelations(ctx, song, handlerinput.ToIntManyNull(config.Cfg.DB.GetSongMonsterFormationIDs))
+		response.BossFights, err = apilookups.E.MonsterFormations.DBGetRelations(ctx, song, handlerinput.ToIntManyNull(config.Cfg.DB.GetSongMonsterFormationIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = apilookups.E.FMVs.DBGetRelations(ctx, song, handlerinput.ToIntManyNull(config.Cfg.DB.GetSongFmvIDs))
+		response.FMVs, err = apilookups.E.FMVs.DBGetRelations(ctx, song, handlerinput.ToIntManyNull(config.Cfg.DB.GetSongFmvIDs))
 		return err
 	})
 
 	err := g.Wait()
 	if err != nil {
-		return apitypes.Song{}, err
+		return err
 	}
 
 	if song.Credits != nil {
-		rel.Composer = song.Credits.Composer
-		rel.Arranger = song.Credits.Arranger
-		rel.Performer = song.Credits.Performer
-		rel.Lyricist = song.Credits.Lyricist
+		response.Composer = song.Credits.Composer
+		response.Arranger = song.Credits.Arranger
+		response.Performer = song.Credits.Performer
+		response.Lyricist = song.Credits.Lyricist
 	}
 
-	return rel, nil
+	return nil
 }

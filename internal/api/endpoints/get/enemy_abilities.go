@@ -20,12 +20,7 @@ func EnemyAbility(r *http.Request, i handlerinput.Main[seedtypes.EnemyAbility, a
 	if err != nil {
 		return apitypes.EnemyAbility{}, err
 	}
-
-	rel, err := getEnemyAbilityRelationships(r, ability)
-	if err != nil {
-		return apitypes.EnemyAbility{}, err
-	}
-
+	
 	response := apitypes.EnemyAbility{
 		ID:                 ability.ID,
 		Name:               ability.Name,
@@ -36,21 +31,24 @@ func EnemyAbility(r *http.Request, i handlerinput.Main[seedtypes.EnemyAbility, a
 		Rank:               ability.Rank,
 		AppearsInHelpBar:   ability.AppearsInHelpBar,
 		CanCopycat:         ability.CanCopycat,
-		Monsters:           rel.Monsters,
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
-	return response, nil
-}
-
-func getEnemyAbilityRelationships(r *http.Request, ability seedtypes.EnemyAbility) (apitypes.EnemyAbility, error) {
-	var err error
-	var rel apitypes.EnemyAbility
-
-	rel.Monsters, err = apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetEnemyAbilityMonsterIDs)
+	err = getEnemyAbilityRelationships(r, ability, &response)
 	if err != nil {
 		return apitypes.EnemyAbility{}, err
 	}
+	
+	return response, nil
+}
 
-	return rel, nil
+func getEnemyAbilityRelationships(r *http.Request, ability seedtypes.EnemyAbility, response *apitypes.EnemyAbility) error {
+	var err error
+
+	response.Monsters, err = apilookups.E.Monsters.DBGetRelations(r.Context(), ability, config.Cfg.DB.GetEnemyAbilityMonsterIDs)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -19,18 +19,10 @@ func Sphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.Sphe
 	if err != nil {
 		return apitypes.Sphere{}, err
 	}
-
-	rel, err := getSphereRelationships(r, sphere)
-	if err != nil {
-		return apitypes.Sphere{}, err
-	}
-
+	
 	response := apitypes.Sphere{
 		ID:                 sphere.ID,
 		Name:               sphere.Name,
-		Item:               rel.Item,
-		Description:        rel.Description,
-		Effect:             rel.Effect,
 		SgDescription:      sphere.SgDescription,
 		SphereColor:        sphere.SphereColor,
 		SphereEffect:       sphere.SphereEffect,
@@ -38,39 +30,38 @@ func Sphere(r *http.Request, i handlerinput.Main[seedtypes.Sphere, apitypes.Sphe
 		TargetNodeState:    sphere.TargetNodeState,
 		TargetableNodes:    sphere.TargetableNodes,
 		CreatedNode:        ah.ConvertObjPtr(sphere.CreatedNode, apiconvert.CreatedNode),
-		Monsters:           rel.Monsters,
-		Treasures:          rel.Treasures,
-		Shops:              rel.Shops,
-		Quests:             rel.Quests,
-		BlitzballPrizes:    rel.BlitzballPrizes,
+	}
+
+	err = getSphereRelationships(r, sphere, &response)
+	if err != nil {
+		return apitypes.Sphere{}, err
 	}
 
 	return response, nil
 }
 
-func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere) (apitypes.Sphere, error) {
+func getSphereRelationships(r *http.Request, sphere seedtypes.Sphere, response *apitypes.Sphere) error {
 	item, _ := lookup.GetResourceByID(sphere.ItemID, lookup.L.ItemsID)
 
 	availabilityParams, err := apilookups.E.Spheres.QueryAvlRelGetParams(r, item.ID)
 	if err != nil {
-		return apitypes.Sphere{}, err
+		return err
 	}
 
-	itemRel, err := runItemRelQueries(r, item, availabilityParams)
+	var itemRel apitypes.Item
+	err = runItemRelQueries(r, item, &itemRel, availabilityParams)
 	if err != nil {
-		return apitypes.Sphere{}, err
+		return err
 	}
 
-	rel := apitypes.Sphere{
-		Item:            handlerinput.NameToNamedAPIResource(apilookups.E.Items, item.Name, nil),
-		Description:     item.Description,
-		Effect:          item.Effect,
-		Monsters:        itemRel.Monsters,
-		Treasures:       itemRel.Treasures,
-		Shops:           itemRel.Shops,
-		Quests:          itemRel.Quests,
-		BlitzballPrizes: itemRel.BlitzballPrizes,
-	}
+	response.Item = handlerinput.NameToNamedAPIResource(apilookups.E.Items, item.Name, nil)
+	response.Description = item.Description
+	response.Effect = item.Effect
+	response.Monsters = itemRel.Monsters
+	response.Treasures = itemRel.Treasures
+	response.Shops = itemRel.Shops
+	response.Quests = itemRel.Quests
+	response.BlitzballPrizes = itemRel.BlitzballPrizes
 
-	return rel, nil
+	return nil
 }

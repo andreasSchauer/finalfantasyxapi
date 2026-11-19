@@ -24,12 +24,7 @@ func StatusCondition(r *http.Request, i handlerinput.Main[seedtypes.StatusCondit
 	if err != nil {
 		return apitypes.StatusCondition{}, err
 	}
-
-	rel, err := getStatusConditionRelationships(r, status)
-	if err != nil {
-		return apitypes.StatusCondition{}, err
-	}
-
+	
 	response := apitypes.StatusCondition{
 		ID:                      status.ID,
 		Name:                    status.Name,
@@ -43,39 +38,39 @@ func StatusCondition(r *http.Request, i handlerinput.Main[seedtypes.StatusCondit
 		AddedElemResist:         ah.ConvertObjPtr(status.AddedElemResist, apiconvert.ElemResist),
 		StatChanges:             ah.ConvertObjSlice(status.StatChanges, apiconvert.StatChange),
 		ModifierChanges:         ah.ConvertObjSlice(status.ModifierChanges, apiconvert.ModifierChange),
-		AutoAbilities:           rel.AutoAbilities,
-		InflictedBy:             rel.InflictedBy,
-		RemovedBy:               rel.RemovedBy,
-		MonstersResistance:      rel.MonstersResistance,
+	}
+
+	err = getStatusConditionRelationships(r, status, &response)
+	if err != nil {
+		return apitypes.StatusCondition{}, err
 	}
 
 	return response, nil
 }
 
-func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCondition) (apitypes.StatusCondition, error) {
-	var rel apitypes.StatusCondition
+func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCondition, response *apitypes.StatusCondition) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	res, err := getStatusQueryResistance(r)
 	if err != nil {
-		return apitypes.StatusCondition{}, err
+		return err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
+		response.AutoAbilities, err = apilookups.E.AutoAbilities.DBGetRelations(ctx, status, config.Cfg.DB.GetStatusConditionAutoAbilityIDs)
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.MonstersResistance, err = apilookups.E.Monsters.DBGetRelations(ctx, status, getStatusConditionResistingMonsterIDs(res.resistance))
+		response.MonstersResistance, err = apilookups.E.Monsters.DBGetRelations(ctx, status, getStatusConditionResistingMonsterIDs(res.resistance))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.InflictedBy, err = getStatusInfliction(ctx, status, statusInteractionQueries{
+		response.InflictedBy, err = getStatusInfliction(ctx, status, statusInteractionQueries{
 			abilities: getStatusConditionAbilityIDsInflicted(res.minRate, res.maxRate),
 		})
 		return err
@@ -83,19 +78,14 @@ func getStatusConditionRelationships(r *http.Request, status seedtypes.StatusCon
 
 	g.Go(func() error {
 		var err error
-		rel.RemovedBy, err = getStatusRemoval(ctx, status, statusInteractionQueries{
+		response.RemovedBy, err = getStatusRemoval(ctx, status, statusInteractionQueries{
 			abilities:        config.Cfg.DB.GetStatusConditionAbilityIDsRemoved,
 			statusConditions: config.Cfg.DB.GetStatusConditionRemovedConditionIDs,
 		})
 		return err
 	})
 
-	err = g.Wait()
-	if err != nil {
-		return apitypes.StatusCondition{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }
 
 type statusQueryResistance struct {

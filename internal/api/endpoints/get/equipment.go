@@ -28,87 +28,75 @@ func Equipment(r *http.Request, i handlerinput.Main[seedtypes.EquipmentName, api
 		return apitypes.EquipmentName{}, err
 	}
 
-	rel, err := getEquipmentRelationships(r, equipment)
-	if err != nil {
-		return apitypes.EquipmentName{}, err
-	}
-
 	response := apitypes.EquipmentName{
 		ID:                      equipment.ID,
 		Name:                    equipment.Name,
-		Character:               rel.Character,
-		EquipmentTable:          rel.EquipmentTable,
-		Type:                    rel.Type,
-		Classification:          rel.Classification,
-		Priority:                rel.Priority,
-		CelestialWeapon:         rel.CelestialWeapon,
-		RequiredAutoAbilities:   rel.RequiredAutoAbilities,
-		SelectableAutoAbilities: rel.SelectableAutoAbilities,
-		RequiredSlots:           rel.RequiredSlots,
-		Treasures:               rel.Treasures,
-		Shops:                   rel.Shops,
 	}
 
+	err = getEquipmentRelationships(r, equipment, &response)
+	if err != nil {
+		return apitypes.EquipmentName{}, err
+	}
+	
 	return response, nil
 }
 
-func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentName) (apitypes.EquipmentName, error) {
+func getEquipmentRelationships(r *http.Request, equipment seedtypes.EquipmentName, response *apitypes.EquipmentName) error {
 	i := apilookups.E.Equipment
 	var table seedtypes.EquipmentTable
 
-	rel := apitypes.EquipmentName{
-		Character: handlerinput.NameToNamedAPIResource(apilookups.E.Characters, equipment.CharacterName, nil),
-	}
+	response.Character = handlerinput.NameToNamedAPIResource(apilookups.E.Characters, equipment.CharacterName, nil)
+
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := i.QueryAvlRelGetParams(r, equipment.ID)
 	if err != nil {
-		return apitypes.EquipmentName{}, err
+		return err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, equipment, availabilityParams, getEquipmentSourceIDs(ts.VstTreasure))
+		response.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, equipment, availabilityParams, getEquipmentSourceIDs(ts.VstTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, equipment, availabilityParams, getEquipmentSourceIDs(ts.VstShop))
+		response.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, equipment, availabilityParams, getEquipmentSourceIDs(ts.VstShop))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.EquipmentTable, err = getEquipmentTableRef(r, ctx, i.QueryLookup[ts.QpnTable], equipment)
+		response.EquipmentTable, err = getEquipmentTableRef(r, ctx, i.QueryLookup[ts.QpnTable], equipment)
 		if err != nil {
 			return err
 		}
-		table, _ = lookup.GetResourceByID(rel.EquipmentTable.ID, lookup.L.EquipmentTablesID)
-		rel.Type = table.Type
-		rel.Classification = table.Classification
-		rel.Priority = table.Priority
-		rel.RequiredSlots = table.RequiredSlots
-		rel.RequiredAutoAbilities = handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities)
-		rel.SelectableAutoAbilities = ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconvert.AbilityPool)
+		table, _ = lookup.GetResourceByID(response.EquipmentTable.ID, lookup.L.EquipmentTablesID)
+		response.Type = table.Type
+		response.Classification = table.Classification
+		response.Priority = table.Priority
+		response.RequiredSlots = table.RequiredSlots
+		response.RequiredAutoAbilities = handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities)
+		response.SelectableAutoAbilities = ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconvert.AbilityPool)
 		return nil
 	})
 
 	err = g.Wait()
 	if err != nil {
-		return apitypes.EquipmentName{}, err
+		return err
 	}
 
 	if table.Classification == string(database.EquipClassCelestialWeapon) {
 		char, _ := lookup.GetResource(equipment.CharacterName, lookup.L.Characters)
 		cwRes, err := apilookups.E.CelestialWeapons.DBGetRelationPtr(r.Context(), char, config.Cfg.DB.GetCharacterCelestialWeaponID)
 		if err != nil {
-			return apitypes.EquipmentName{}, err
+			return err
 		}
-		rel.CelestialWeapon = cwRes
+		response.CelestialWeapon = cwRes
 	}
 
-	return rel, nil
+	return nil
 }
 
 func getEquipmentTableRef(r *http.Request, ctx context.Context, queryParam queryparam.QueryParam, equipment seedtypes.EquipmentName) (apiresource.Unnamed, error) {

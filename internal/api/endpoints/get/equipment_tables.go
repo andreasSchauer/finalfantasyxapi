@@ -22,39 +22,37 @@ func EquipmentTable(r *http.Request, i handlerinput.Main[seedtypes.EquipmentTabl
 		return apitypes.EquipmentTable{}, err
 	}
 
-	rel, err := getEquipmentTableRelationships(r, table)
-	if err != nil {
-		return apitypes.EquipmentTable{}, err
-	}
-
 	response := apitypes.EquipmentTable{
 		ID:                      table.ID,
 		Type:                    table.Type,
 		Classification:          table.Classification,
 		SpecificCharacter:       handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Characters, table.SpecificCharacter, nil),
 		Priority:                table.Priority,
-		CelestialWeapon:         rel.CelestialWeapon,
 		RequiredAutoAbilities:   handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities),
 		SelectableAutoAbilities: ah.ConvertObjSlice(table.SelectableAutoAbilities, apiconvert.AbilityPool),
 		RequiredSlots:           table.RequiredSlots,
 		Equipment:               ah.ConvertObjSlice(table.EquipmentNames, apiconvert.EquipmentName),
 	}
 
-	return response, nil
-}
-
-func getEquipmentTableRelationships(r *http.Request, table seedtypes.EquipmentTable) (apitypes.EquipmentTable, error) {
-	var rel apitypes.EquipmentTable
-	var err error
-
-	if table.SpecificCharacter == nil || table.Classification != string(database.EquipClassCelestialWeapon) {
-		return rel, nil
-	}
-
-	rel.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(r.Context(), table, config.Cfg.DB.GetEquipmentTableCelestialWeaponID)
+	err = getEquipmentTableRelationships(r, table, &response)
 	if err != nil {
 		return apitypes.EquipmentTable{}, err
 	}
+	
+	return response, nil
+}
 
-	return rel, nil
+func getEquipmentTableRelationships(r *http.Request, table seedtypes.EquipmentTable, response *apitypes.EquipmentTable) error {
+	var err error
+
+	if table.SpecificCharacter == nil || table.Classification != string(database.EquipClassCelestialWeapon) {
+		return nil
+	}
+
+	response.CelestialWeapon, err = apilookups.E.CelestialWeapons.DBGetRelationPtr(r.Context(), table, config.Cfg.DB.GetEquipmentTableCelestialWeaponID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

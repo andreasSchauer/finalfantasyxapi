@@ -25,11 +25,6 @@ func Area(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, ap
 		return apitypes.Area{}, err
 	}
 
-	rel, err := getAreaRelationships(r, area)
-	if err != nil {
-		return apitypes.Area{}, err
-	}
-
 	response := apitypes.Area{
 		ID:                area.ID,
 		Name:              area.Name,
@@ -44,66 +39,69 @@ func Area(r *http.Request, i handlerinput.Main[seedtypes.Area, apitypes.Area, ap
 		HasCompSphere:     area.HasCompilationSphere,
 		CanRideChocobo:    area.CanRideChocobo,
 		ConnectedAreas:    connections,
-		LocRel:            rel,
+	}
+
+	err = getAreaRelationships(r, area, &response)
+	if err != nil {
+		return apitypes.Area{}, err
 	}
 
 	return response, nil
 }
 
-func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel, error) {
-	var rel apitypes.LocRel
+func getAreaRelationships(r *http.Request, area seedtypes.Area, response *apitypes.Area) error {
 	g, ctx := errgroup.WithContext(r.Context())
 
 	availabilityParams, err := apilookups.E.Areas.QueryAvlRelGetParams(r, area.ID)
 	if err != nil {
-		return apitypes.LocRel{}, err
+		return err
 	}
 
 	g.Go(func() error {
 		var err error
-		rel.Characters, err = apilookups.E.Characters.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCharacterIDs))
+		response.Characters, err = apilookups.E.Characters.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCharacterIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Aeons, err = apilookups.E.Aeons.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaAeonIDs))
+		response.Aeons, err = apilookups.E.Aeons.DBGetRelations(ctx, area, handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaAeonIDs))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstShop))
+		response.Shops, err = apilookups.E.Shops.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstShop))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstTreasure))
+		response.Treasures, err = apilookups.E.Treasures.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstTreasure))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Monsters, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstMonster))
+		response.Monsters, err = apilookups.E.Monsters.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstMonster))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Formations, err = apilookups.E.MonsterFormations.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstMonsterFormation))
+		response.Formations, err = apilookups.E.MonsterFormations.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstMonsterFormation))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Quests, err = apilookups.E.Quests.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstQuest))
+		response.Quests, err = apilookups.E.Quests.QueryAvlRelRun(ctx, area, availabilityParams, getAreaRelSourceIDs(ts.VstQuest))
 		return err
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.Music, err = getMusicLocBased(ctx, area, locBasedMusicQueries{
+		response.Music, err = getMusicLocBased(ctx, area, locBasedMusicQueries{
 			cueSongs:  handlerinput.ToIntManyNull(config.Cfg.DB.GetAreaCueSongIDs),
 			bmSongs:   config.Cfg.DB.GetAreaBackgroundMusicSongIDs,
 			fmvSongs:  config.Cfg.DB.GetAreaFMVSongIDs,
@@ -114,16 +112,11 @@ func getAreaRelationships(r *http.Request, area seedtypes.Area) (apitypes.LocRel
 
 	g.Go(func() error {
 		var err error
-		rel.FMVs, err = apilookups.E.FMVs.DBGetRelations(ctx, area, config.Cfg.DB.GetAreaFmvIDs)
+		response.FMVs, err = apilookups.E.FMVs.DBGetRelations(ctx, area, config.Cfg.DB.GetAreaFmvIDs)
 		return err
 	})
 
-	err = g.Wait()
-	if err != nil {
-		return apitypes.LocRel{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }
 
 func getAreaConnectedAreas(area seedtypes.Area) ([]apitypes.AreaConnection, error) {

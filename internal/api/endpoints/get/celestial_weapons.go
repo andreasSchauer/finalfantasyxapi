@@ -21,39 +21,32 @@ func CelestialWeapon(r *http.Request, i handlerinput.Main[seedtypes.CelestialWea
 		return apitypes.CelestialWeapon{}, err
 	}
 
-	rel, err := getCelestialWeaponRelationships(r, celestialWeapon)
-	if err != nil {
-		return apitypes.CelestialWeapon{}, err
-	}
-
 	response := apitypes.CelestialWeapon{
 		ID:            celestialWeapon.ID,
 		Name:          celestialWeapon.Name,
 		Formula:       celestialWeapon.Formula,
 		Character:     handlerinput.NameToNamedAPIResource(apilookups.E.Characters, celestialWeapon.Character, nil),
 		Aeon:          handlerinput.NamePtrToNamedAPIResPtr(apilookups.E.Aeons, celestialWeapon.Aeon, nil),
-		AutoAbilities: rel.AutoAbilities,
-		Equipment:     rel.Equipment,
-		Crest:         rel.Crest,
-		Sigil:         rel.Sigil,
-		WpnTreasure:   rel.WpnTreasure,
-		CrestTreasure: rel.CrestTreasure,
-		SigilQuest:    rel.SigilQuest,
+	}
+
+	err = getCelestialWeaponRelationships(r, celestialWeapon, &response)
+	if err != nil {
+		return apitypes.CelestialWeapon{}, err
 	}
 
 	return response, nil
 }
 
-func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeapon) (apitypes.CelestialWeapon, error) {
+func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeapon, response *apitypes.CelestialWeapon) error {
 	crest, _ := lookup.GetResource(cw.KeyItemBase+" crest", lookup.L.KeyItems)
 	sigil, _ := lookup.GetResource(cw.KeyItemBase+" sigil", lookup.L.KeyItems)
 	equipment, _ := lookup.GetResource(cw, lookup.L.EquipmentNames)
 
-	rel := apitypes.CelestialWeapon{
-		Equipment: handlerinput.NameToNamedAPIResource(apilookups.E.Equipment, equipment.Name, nil),
-		Crest:     handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, crest.Name, nil),
-		Sigil:     handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, sigil.Name, nil),
-	}
+
+	response.Equipment = handlerinput.NameToNamedAPIResource(apilookups.E.Equipment, equipment.Name, nil)
+	response.Crest = handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, crest.Name, nil)
+	response.Sigil = handlerinput.NameToNamedAPIResource(apilookups.E.KeyItems, sigil.Name, nil)
+	
 	g, ctx := errgroup.WithContext(r.Context())
 
 	g.Go(func() error {
@@ -62,13 +55,13 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 			return err
 		}
 		table, _ := lookup.GetResourceByID(tables[0].ID, lookup.L.EquipmentTablesID)
-		rel.AutoAbilities = handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities)
+		response.AutoAbilities = handlerinput.NamesToNamedAPIResources(apilookups.E.AutoAbilities, table.RequiredAutoAbilities)
 		return nil
 	})
 
 	g.Go(func() error {
 		var err error
-		rel.WpnTreasure, err = apilookups.E.Treasures.DBGetRelation(ctx, cw, handlerinput.ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
+		response.WpnTreasure, err = apilookups.E.Treasures.DBGetRelation(ctx, cw, handlerinput.ToIntOneNull(config.Cfg.DB.GetCelestialWeaponTreasureID))
 		return err
 	})
 
@@ -77,7 +70,7 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 		if err != nil {
 			return err
 		}
-		rel.CrestTreasure = crestTreasures[0]
+		response.CrestTreasure = crestTreasures[0]
 		return nil
 	})
 
@@ -86,14 +79,9 @@ func getCelestialWeaponRelationships(r *http.Request, cw seedtypes.CelestialWeap
 		if err != nil {
 			return err
 		}
-		rel.SigilQuest = sigilQuests[0]
+		response.SigilQuest = sigilQuests[0]
 		return nil
 	})
 
-	err := g.Wait()
-	if err != nil {
-		return apitypes.CelestialWeapon{}, err
-	}
-
-	return rel, nil
+	return g.Wait()
 }
