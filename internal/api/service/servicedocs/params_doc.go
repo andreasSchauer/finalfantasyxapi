@@ -35,6 +35,7 @@ type FieldDoc struct {
 	ParentIDField     *ts.FieldName       `json:"parent_id_field,omitempty"`
 	AllowedIDValPairs []AllowedIDValPairs `json:"allowed_id_val_pairs"`
 	EnumValues        []string            `json:"enum_values,omitempty"`
+	NoneEnum		  bool				  `json:"none_enum,omitempty"`
 	Description       string              `json:"description"`
 	ChildProps        []FieldDoc          `json:"child_properties,omitempty"`
 	ChildMinVal       *int32              `json:"child_min_val,omitempty"`

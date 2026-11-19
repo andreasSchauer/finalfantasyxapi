@@ -70,3 +70,8 @@ func (e EnumType[E, N]) Strings() []string {
 
 	return strings
 }
+
+func (e EnumType[E, N]) StringsNone() []string {
+	strings := e.Strings()
+	return append(strings, "none")
+}

@@ -19,6 +19,12 @@ func vfEnum(v ParamsVerifyer, typedVal string, fieldName ts.FieldName) (string, 
 		return typedVal, nil
 	}
 
+	/*
+	if doc.NoneEnum && typedVal == "none" {
+		return typedVal, nil
+	}
+	*/
+
 	if !slices.Contains(doc.EnumValues, typedVal) {
 		return "", errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("value '%s' of field '%s' is not a valid enum value. allowed values: %s", typedVal, fieldName, h.FormatStringSlice(doc.EnumValues)), nil)
 	}

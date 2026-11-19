@@ -36,50 +36,28 @@ func (p TurnOrderParty) GetDuplicateKey() string {
 	})
 }
 
-/*
-
-turnOrderMon
-- *turnOrderMonLookup
-	- monsterID
-	- *altState
-	- *turnOderMonOverrides
-		- *agility
-		- *firstStrike
-- *turnOrderMonCustom
-	- name
-	- agility
-	- firstStrike
-- *status
-
-- look up the monster and assign name, agility, firstStrike via id and altState
-- override those values based on overrides
-- do the other path where you can directly assign the three values
-- add the status
-- I could make some of the functions also methods of turnorderparams
-
-*/
-
-// use the same separation that is used for crit chance
-
 type TurnOrderMon struct {
-	MonsterID   *int32  `json:"monster_id,omitempty"`
-	AltState    *int32  `json:"alt_state,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	Lookup *TurnOrderMonLookup `json:"lookup,omitempty"`
+	Custom *TurnOrderMonCustom `json:"custom,omitempty"`
+}
+
+type TurnOrderMonLookup struct {
+	MonsterID int32                  `json:"monster_id"`
+	AltState  *int32                 `json:"alt_state"`
+	Overrides *TurnOrderMonOverrides `json:"overrides,omitempty"`
+}
+
+type TurnOrderMonOverrides struct {
 	Agility     *int32  `json:"agility,omitempty"`
 	FirstStrike *bool   `json:"first_strike,omitempty"`
 	Status      *string `json:"status,omitempty"`
 }
 
-func (p TurnOrderMon) GetDuplicateKey() string {
-	return h.CombineFields([]any{
-		fmt.Sprintf("%T", p),
-		h.DerefOrNil(p.MonsterID),
-		h.DerefOrNil(p.AltState),
-		h.DerefOrNil(p.Name),
-		h.DerefOrNil(p.Agility),
-		h.DerefOrNil(p.FirstStrike),
-		h.DerefOrNil(p.Status),
-	})
+type TurnOrderMonCustom struct {
+	Name        string  `json:"name"`
+	Agility     int32   `json:"agility"`
+	FirstStrike bool    `json:"first_strike"`
+	Status      *string `json:"status,omitempty"`
 }
 
 func GetTurnOrderParamsDoc() servicedocs.ParamsDoc {
@@ -137,7 +115,7 @@ func GetTurnOrderParamsDoc() servicedocs.ParamsDoc {
 			},
 			{
 				Field:         ts.PfnMons,
-				Type:          "array[turnOrderMon]",
+				Type:          "array[turnOrderMon2]",
 				RequiredOr:    []ts.FieldName{ts.PfnFormationID, ts.PfnParty},
 				ConflictsWith: []ts.FieldName{ts.PfnFormationID},
 				MaxArrayLen:   h.GetIntPtr(10),
@@ -175,21 +153,44 @@ func getFieldDocTurnOrderParty() []servicedocs.FieldDoc {
 			Field:       ts.PfnStatus,
 			Type:        "string (enum: hasteStatus)",
 			EnumValues:  enums.T.HasteStatus.Strings(),
-			Description: "Specify, whether a party member carries the 'haste' or 'slow' status. If 'haste' or 'slow' are selected, it is assumed, that the party member gets this status on the first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the party member starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation. 'Haste' halves the bearer's tick speed, while 'slow' doubles it.",
+			Description: "Specify, whether a party member carries the 'haste' or 'slow' status. 'Haste' halves the bearer's tick speed value, while 'slow' doubles it. If 'haste' or 'slow' are selected, it is assumed, that the party member gets this status on the first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the party member starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation.",
 		},
 	}
+}
+
+func getLenMonAltStates(id int32) int32 {
+	mon, _ := lookup.GetResourceByID(id, lookup.L.MonstersID)
+	return h.Len32(mon.AlteredStates)
 }
 
 func getFieldDocTurnOrderMon() []servicedocs.FieldDoc {
 	return []servicedocs.FieldDoc{
 		{
-			Field:         ts.PfnMonsterID,
-			Type:          "int (id: monster)",
-			RequiredOr:    []ts.FieldName{ts.PfnName},
-			ConflictsWith: []ts.FieldName{ts.PfnName},
-			MinVal:        h.GetInt32Ptr(1),
-			MaxVal:        h.GetInt32Ptr(int32(len(lookup.L.Monsters))),
-			Description:   "To define a monster, you can specify an ID and look up the corresponding monster. Its agility stat, first strike, as well as its innate 'haste' status will be applied automatically. These values can be overridden however, through the use of the other fields.",
+			Field:       ts.PfnLookup,
+			Type:        "obj (turnOrderMonLookup)",
+			RequiredOr:  []ts.FieldName{ts.PfnCustom},
+			Description: "Define the monster via lookup. You can override calculation-relevant values as well.",
+			ChildProps:  getFieldDocTurnOrderMonLookup(),
+		},
+		{
+			Field:       ts.PfnCustom,
+			Type:        "obj (turnOrderMonCustom)",
+			RequiredOr:  []ts.FieldName{ts.PfnLookup},
+			Description: "Define a custom monster.",
+			ChildProps:  getFieldDocTurnOrderMonCustom(),
+		},
+	}
+}
+
+func getFieldDocTurnOrderMonLookup() []servicedocs.FieldDoc {
+	return []servicedocs.FieldDoc{
+		{
+			Field:       ts.PfnMonsterID,
+			Type:        "int (id: monster)",
+			Required:    true,
+			MinVal:      h.GetInt32Ptr(1),
+			MaxVal:      h.GetInt32Ptr(int32(len(lookup.L.Monsters))),
+			Description: "To define a monster, you can specify a monster ID and look up the corresponding monster. Its calculation-relevant values will be applied automatically. These values can be overridden however, through the use of the 'overrides' field.",
 		},
 		{
 			Field:         ts.PfnAltState,
@@ -228,38 +229,67 @@ func getFieldDocTurnOrderMon() []servicedocs.FieldDoc {
 					MaxVal: getLenMonAltStates(287),
 				},
 			},
-			Description: "If the looked up monster has altered states, they can be applied, but will only have an effect, if they change its agility stat, or apply 'haste'. If a monster has a different agility stat on only its first turn, this altered state is applied automatically, except when 'ign_first_turn' is true. Specifying that specific altered state won't have any effect, nor will it result in an error. The same is true for Penance's arms who get the 'haste' status only during their own turns. Returns an error, if the monster doesn't have as many altered states as given. The maxVal of this field is always the total amount of the monster's altered states.",
+			Description: "If the looked up monster has altered states, an alt state can be applied, but will only have an effect, if it changes the monster's agility stat, or applies 'haste'. If a monster has a different agility stat on only its first turn, this altered state is applied automatically, except when 'ign_first_turn' is true. Specifying that specific altered state won't have any effect, nor will it result in an error. The same is true for Penance's arms who get the 'haste' status only during their own turns. Returns an error, if the monster doesn't have as many altered states as given. The maxVal of this field is always the total amount of the monster's altered states.",
 		},
 		{
-			Field:         ts.PfnName,
-			Type:          "string",
-			RequiredOr:    []ts.FieldName{ts.PfnMonsterID},
-			ConflictsWith: []ts.FieldName{ts.PfnMonsterID},
-			RequiresAll:   []ts.FieldName{ts.PfnAgility},
-			Description:   "Use this field, if you want to define a custom monster. The given name will show up in the list to represent it. Multiple monsters with the same name will be numbered automatically.",
+			Field:       ts.PfnOverrides,
+			Type:        "obj (turnOrderMonOverrides)",
+			Description: "Override the looked up monster's calculation-relevant values.",
+			ChildProps:  getFieldDocTurnOrderMonOverrides(),
 		},
+	}
+}
+
+func getFieldDocTurnOrderMonOverrides() []servicedocs.FieldDoc {
+	return []servicedocs.FieldDoc{
 		{
 			Field:       ts.PfnAgility,
 			Type:        "int",
 			MinVal:      h.GetInt32Ptr(0),
 			MaxVal:      h.GetInt32Ptr(255),
-			Description: "The monsters's agility stat. If a monster was looked up, and this field is active, this value will override the monster's original agility stat.",
+			Description: "Override the looked up monsters's agility stat.",
 		},
 		{
 			Field:       ts.PfnFirstStrike,
 			Type:        "bool",
-			Description: "If this field is true, the monster will have the 'first strike' auto-ability, which sets its ICV to -1. If a monster was looked up, and this field is active, this value will override the monster's original (lack of) access to this ability. 'First strike' won't have an effect, if 'ign_first_turn' is set to true.",
+			Description: "Override the looked up monster's access to the 'first strike' auto-ability or lack thereof.",
+		},
+		{
+			Field:       ts.PfnStatus,
+			Type:        "string (enum: hasteStatus)",
+			EnumValues:  enums.T.HasteStatus.StringsNone(),
+			NoneEnum:    true,
+			Description: "Specify or override the monster's haste/slow status. In practice, only Penance's arms (IDs 306/307) can have 'haste' applied to them automatically to be overridden. 'Haste' halves the bearer's tick speed value, while 'slow' doubles it. If 'haste' or 'slow' are selected, it is assumed, that the monster gets this status on its first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the monster starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation.",
+		},
+	}
+}
+
+func getFieldDocTurnOrderMonCustom() []servicedocs.FieldDoc {
+	return []servicedocs.FieldDoc{
+		{
+			Field:       ts.PfnName,
+			Type:        "string",
+			Required:    true,
+			Description: "Specify the monster's name. The given name will show up in the list to represent it. Multiple monsters with the same name will be numbered automatically.",
+		},
+		{
+			Field:       ts.PfnAgility,
+			Type:        "int",
+			Required:    true,
+			MinVal:      h.GetInt32Ptr(0),
+			MaxVal:      h.GetInt32Ptr(255),
+			Description: "Specify the monsters's agility stat.",
+		},
+		{
+			Field:       ts.PfnFirstStrike,
+			Type:        "bool",
+			Description: "If this field is true, the monster will have the 'first strike' auto-ability, which sets its ICV to -1. 'First strike' won't have an effect, if 'ign_first_turn' is true.",
 		},
 		{
 			Field:       ts.PfnStatus,
 			Type:        "string (enum: hasteStatus)",
 			EnumValues:  enums.T.HasteStatus.Strings(),
-			Description: "Specify, whether the monster carries the 'haste' or 'slow' status. If 'haste' or 'slow' are selected, it is assumed, that the monster gets this status on its first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the monster starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation. If a monster was looked up, and this field is active, this value will override the monster's original haste status, though in practice, this will only affect Penance's arms (IDs 306/307). 'Haste' halves the bearer's tick speed, while 'slow' doubles it.",
+			Description: "Specify, whether the monster carries the 'haste' or 'slow' status. 'Haste' halves the bearer's tick speed value, while 'slow' doubles it. If 'haste' or 'slow' are selected, it is assumed, that the monster gets this status on its first turn, so ICV calculation is unaffected. The ctb alterations that come from applying 'haste' or 'slow' are ignored. If 'auto-haste' is selected, the monster starts this battle with 'haste' (due to 'auto-haste', or 'sos-haste') which will affect ICV calculation.",
 		},
 	}
-}
-
-func getLenMonAltStates(id int32) int32 {
-	mon, _ := lookup.GetResourceByID(id, lookup.L.MonstersID)
-	return h.Len32(mon.AlteredStates)
 }

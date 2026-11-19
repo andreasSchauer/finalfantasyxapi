@@ -80,34 +80,82 @@ func vfTurnOrderParty(v ParamsVerifyer, item servicetypes.TurnOrderParty, _ ts.F
 func vfTurnOrderMon(v ParamsVerifyer, item servicetypes.TurnOrderMon, _ ts.FieldName) (servicetypes.TurnOrderMon, error) {
 	var err error
 
-	item.MonsterID, err = v.idPtr(item.MonsterID, ts.PfnUnitID)
+	item.Lookup, err = v.objPtr(item.Lookup, ts.PfnLookup, vfTurnOrderMonLookup)
 	if err != nil {
 		return servicetypes.TurnOrderMon{}, err
+	}
+
+	item.Custom, err = v.objPtr(item.Custom, ts.PfnCustom, verifyFn[servicetypes.TurnOrderMonCustom](vfTurnOrderMonCustom))
+	if err != nil {
+		return servicetypes.TurnOrderMon{}, err
+	}
+
+	return item, nil
+}
+
+func vfTurnOrderMonLookup(v ParamsVerifyer, item servicetypes.TurnOrderMonLookup, _ ts.FieldName) (servicetypes.TurnOrderMonLookup, error) {
+	var err error
+
+	item.MonsterID, err = v.id(item.MonsterID, ts.PfnMonsterID)
+	if err != nil {
+		return servicetypes.TurnOrderMonLookup{}, err
 	}
 
 	item.AltState, err = v.intPtr(item.AltState, ts.PfnAltState)
 	if err != nil {
-		return servicetypes.TurnOrderMon{}, err
+		return servicetypes.TurnOrderMonLookup{}, err
 	}
 
-	item.Name, err = v.stringPtr(item.Name, ts.PfnName)
+	item.Overrides, err = v.objPtr(item.Overrides, ts.PfnOverrides, vfTurnOrderMonOverrides)
 	if err != nil {
-		return servicetypes.TurnOrderMon{}, err
+		return servicetypes.TurnOrderMonLookup{}, err
 	}
+
+	return item, nil
+}
+
+func vfTurnOrderMonOverrides(v ParamsVerifyer, item servicetypes.TurnOrderMonOverrides, _ ts.FieldName) (servicetypes.TurnOrderMonOverrides, error) {
+	var err error
 
 	item.Agility, err = v.intPtr(item.Agility, ts.PfnAgility)
 	if err != nil {
-		return servicetypes.TurnOrderMon{}, err
+		return servicetypes.TurnOrderMonOverrides{}, err
 	}
 
 	item.FirstStrike, err = v.boolPtr(item.FirstStrike, ts.PfnFirstStrike)
 	if err != nil {
-		return servicetypes.TurnOrderMon{}, err
+		return servicetypes.TurnOrderMonOverrides{}, err
 	}
 
 	item.Status, err = v.enumPtr(item.Status, ts.PfnStatus)
 	if err != nil {
-		return servicetypes.TurnOrderMon{}, err
+		return servicetypes.TurnOrderMonOverrides{}, err
+	}
+
+	return item, nil
+}
+
+func vfTurnOrderMonCustom(v ParamsVerifyer, item servicetypes.TurnOrderMonCustom, _ ts.FieldName) (servicetypes.TurnOrderMonCustom, error) {
+	var err error
+
+	item.Name, err = v.string(item.Name, ts.PfnName)
+	if err != nil {
+		return servicetypes.TurnOrderMonCustom{}, err
+	}
+
+	item.Agility, err = v.int(item.Agility, ts.PfnAgility)
+	if err != nil {
+		return servicetypes.TurnOrderMonCustom{}, err
+	}
+
+	item.FirstStrike, err = v.bool(item.FirstStrike, ts.PfnFirstStrike)
+	if err != nil {
+		return servicetypes.TurnOrderMonCustom{}, err
+	}
+
+	item.Status, err = v.enumPtr(item.Status, ts.PfnStatus)
+	if err != nil {
+		return servicetypes.TurnOrderMonCustom{}, err
 	}
 
 	return item, nil

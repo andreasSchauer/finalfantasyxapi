@@ -89,7 +89,7 @@ func TestTurnOrder(t *testing.T) {
 				ExpectedErr:    "field 'formation_id' can't be used in combination with field 'mons'",
 				RequestBody: map[ts.FieldName]any{
 					ts.PfnFormationID: 0,
-					ts.PfnMons:        []map[ts.FieldName]any{{}, {}, {}, {}},
+					ts.PfnMons: []map[ts.FieldName]any{{}, {}, {}, {}},
 				},
 			},
 		},
@@ -232,11 +232,29 @@ func TestTurnOrder(t *testing.T) {
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "index 0 of array at field 'mons': at least one of these fields must have a value: 'monster_id', 'name'",
+				ExpectedErr:    "index 2 of array at field 'mons': object at field 'lookup': field 'alt_state' can only be used with the following id-value pairs: id: 32, vals: 2, 3 | id: 139, vals: 1, 2, 3 | id: 160, vals: 1 | id: 198, vals: 1 | id: 285, vals: 1 | id: 287, vals: 2",
 				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnAgility: 25,
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 23,
+							},
+						},
+						{
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 15,
+							},
+						},
+						{
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 12,
+								ts.PfnAltState:  2,
+							},
+						},
+						{
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 15,
+							},
 						},
 					},
 				},
@@ -247,11 +265,14 @@ func TestTurnOrder(t *testing.T) {
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "index 0 of array at field 'mons': field 'name' requires the following fields to have a value: 'agility'",
+				ExpectedErr:    "index 0 of array at field 'mons': object at field 'lookup': provided value '1' used for 'alt_state' is not available for id '32'. allowed vals: 2, 3",
 				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnName: "frank",
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 32,
+								ts.PfnAltState:  1,
+							},
 						},
 					},
 				},
@@ -262,15 +283,14 @@ func TestTurnOrder(t *testing.T) {
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "index 1 of array at field 'mons': field 'name' can't be used in combination with field 'monster_id'",
+				ExpectedErr:    "index 0 of array at field 'mons': object at field 'lookup': provided value '0' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
 				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID: 23,
-						},
-						{
-							ts.PfnName:      "frank",
-							ts.PfnMonsterID: 23,
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 32,
+								ts.PfnAltState:  0,
+							},
 						},
 					},
 				},
@@ -281,106 +301,14 @@ func TestTurnOrder(t *testing.T) {
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "index 1 of array at field 'mons': field 'alt_state' requires the following fields to have a value: 'monster_id'",
+				ExpectedErr:    "index 0 of array at field 'mons': object at field 'lookup': provided value '4' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
 				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID: 23,
-						},
-						{
-							ts.PfnName:     "frank",
-							ts.PfnAltState: 2,
-						},
-					},
-				},
-			},
-		},
-		{
-			TestGeneral: apitesttypes.TestGeneral{
-				RequestURL:     requestURL,
-				Method:         http.MethodPost,
-				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "index 2 of array at field 'mons': field 'alt_state' can only be used with the following id-value pairs: id: 32, vals: 2, 3 | id: 139, vals: 1, 2, 3 | id: 160, vals: 1 | id: 198, vals: 1 | id: 285, vals: 1 | id: 287, vals: 2",
-				RequestBody: map[ts.FieldName]any{
-					ts.PfnMons: []map[ts.FieldName]any{
-						{
-							ts.PfnMonsterID: 23,
-						},
-						{
-							ts.PfnMonsterID: 15,
-						},
-						{
-							ts.PfnMonsterID: 12,
-							ts.PfnAltState:  2,
-						},
-						{
-							ts.PfnMonsterID: 15,
-						},
-					},
-				},
-			},
-		},
-		{
-			TestGeneral: apitesttypes.TestGeneral{
-				RequestURL:     requestURL,
-				Method:         http.MethodPost,
-				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "index 0 of array at field 'mons': provided value '1' used for 'alt_state' is not available for id '32'. allowed vals: 2, 3",
-				RequestBody: map[ts.FieldName]any{
-					ts.PfnMons: []map[ts.FieldName]any{
-						{
-							ts.PfnMonsterID: 32,
-							ts.PfnAltState:  1,
-						},
-					},
-				},
-			},
-		},
-		{
-			TestGeneral: apitesttypes.TestGeneral{
-				RequestURL:     requestURL,
-				Method:         http.MethodPost,
-				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "index 0 of array at field 'mons': provided value '0' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
-				RequestBody: map[ts.FieldName]any{
-					ts.PfnMons: []map[ts.FieldName]any{
-						{
-							ts.PfnMonsterID: 32,
-							ts.PfnAltState:  0,
-						},
-					},
-				},
-			},
-		},
-		{
-			TestGeneral: apitesttypes.TestGeneral{
-				RequestURL:     requestURL,
-				Method:         http.MethodPost,
-				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "index 0 of array at field 'mons': provided value '4' used for 'alt_state' is out of range for id '32'. max val: 3. allowed vals: 2, 3",
-				RequestBody: map[ts.FieldName]any{
-					ts.PfnMons: []map[ts.FieldName]any{
-						{
-							ts.PfnMonsterID: 32,
-							ts.PfnAltState:  4,
-						},
-					},
-				},
-			},
-		},
-		{
-			TestGeneral: apitesttypes.TestGeneral{
-				RequestURL:     requestURL,
-				Method:         http.MethodPost,
-				ExpectedStatus: http.StatusBadRequest,
-				ExpectedErr:    "field 'mons': duplicate monster found at index 1. exact duplicate monsters are not allowed",
-				RequestBody: map[ts.FieldName]any{
-					ts.PfnMons: []map[ts.FieldName]any{
-						{
-							ts.PfnMonsterID: 32,
-						},
-						{
-							ts.PfnMonsterID: 32,
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 32,
+								ts.PfnAltState: 4,
+							},
 						},
 					},
 				},
@@ -395,8 +323,12 @@ func TestTurnOrder(t *testing.T) {
 				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID: 305,
-							ts.PfnStatus:    string(database.HasteStatusSlow),
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 305,
+								ts.PfnOverrides: map[ts.FieldName]any{
+									ts.PfnStatus: string(database.HasteStatusSlow),
+								},
+							},
 						},
 					},
 				},
@@ -488,8 +420,12 @@ func TestTurnOrder(t *testing.T) {
 					},
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID: 27,
-							ts.PfnStatus:    string(database.HasteStatusSlow),
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 27,
+								ts.PfnOverrides: map[ts.FieldName]any{
+									ts.PfnStatus: string(database.HasteStatusSlow),
+								},
+							},
 						},
 					},
 				},
@@ -581,8 +517,12 @@ func TestTurnOrder(t *testing.T) {
 					},
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID: 261,
-							ts.PfnStatus:    string(database.HasteStatusSlow),
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 261,
+								ts.PfnOverrides: map[ts.FieldName]any{
+									ts.PfnStatus: string(database.HasteStatusSlow),
+								},
+							},
 						},
 					},
 				},
@@ -675,15 +615,19 @@ func TestTurnOrder(t *testing.T) {
 					},
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnName:        "frank",
-							ts.PfnAgility:     50,
-							ts.PfnFirstStrike: true,
-							ts.PfnStatus:      string(database.HasteStatusSlow),
+							ts.PfnCustom: map[ts.FieldName]any{
+								ts.PfnName:        "frank",
+								ts.PfnAgility:     50,
+								ts.PfnFirstStrike: true,
+								ts.PfnStatus:      string(database.HasteStatusSlow),
+							},
 						},
 						{
-							ts.PfnName:    "frank",
-							ts.PfnAgility: 80,
-							ts.PfnStatus:  string(database.HasteStatusHaste),
+							ts.PfnCustom: map[ts.FieldName]any{
+								ts.PfnName:        "frank",
+								ts.PfnAgility:     80,
+								ts.PfnStatus:      string(database.HasteStatusHaste),
+							},
 						},
 					},
 				},
@@ -795,8 +739,10 @@ func TestTurnOrder(t *testing.T) {
 					},
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnName:    "frank",
-							ts.PfnAgility: 255,
+							ts.PfnCustom: map[ts.FieldName]any{
+								ts.PfnName:        "frank",
+								ts.PfnAgility:     255,
+							},
 						},
 					},
 				},
@@ -1110,8 +1056,12 @@ func TestTurnOrder(t *testing.T) {
 					},
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID: 19,
-							ts.PfnStatus:    string(database.HasteStatusHaste),
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 19,
+								ts.PfnOverrides: map[ts.FieldName]any{
+									ts.PfnStatus:    string(database.HasteStatusHaste),
+								},
+							},
 						},
 					},
 				},
@@ -1200,15 +1150,21 @@ func TestTurnOrder(t *testing.T) {
 					ts.PfnTurnsAmt: 10,
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID: 32,
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 32,
+							},
 						},
 						{
-							ts.PfnMonsterID: 32,
-							ts.PfnAltState:  2,
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 32,
+								ts.PfnAltState: 2,
+							},
 						},
 						{
-							ts.PfnMonsterID: 32,
-							ts.PfnAltState:  3,
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 32,
+								ts.PfnAltState: 3,
+							},
 						},
 					},
 				},
@@ -1309,10 +1265,15 @@ func TestTurnOrder(t *testing.T) {
 				RequestBody: map[ts.FieldName]any{
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID:   93,
-							ts.PfnAgility:     55,
-							ts.PfnFirstStrike: false,
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 93,
+								ts.PfnOverrides: map[ts.FieldName]any{
+									ts.PfnAgility: 55,
+									ts.PfnFirstStrike: false,
+								},
+							},
 						},
+						
 					},
 				},
 			},
@@ -1354,8 +1315,12 @@ func TestTurnOrder(t *testing.T) {
 					ts.PfnIgnImmunities: true,
 					ts.PfnMons: []map[ts.FieldName]any{
 						{
-							ts.PfnMonsterID: 306,
-							ts.PfnStatus:    string(database.HasteStatusSlow),
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 306,
+								ts.PfnOverrides: map[ts.FieldName]any{
+									ts.PfnStatus:    string(database.HasteStatusSlow),
+								},
+							},
 						},
 					},
 				},
@@ -1378,6 +1343,70 @@ func TestTurnOrder(t *testing.T) {
 						Status:        h.GetStrPtr(string(database.HasteStatusSlow)),
 						TurnsReceived: 30,
 						TurnsPercent:  100,
+					},
+				},
+			},
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusOK,
+				DontCheck: map[string]bool{
+					"turn order": true,
+				},
+				ExpLengths: map[string]int{
+					"turn order":     30,
+					"player party":   0,
+					"opponent party": 2,
+				},
+				RequestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
+						{
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 306,
+							},
+						},
+						{
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 306,
+								ts.PfnOverrides: map[ts.FieldName]any{
+									ts.PfnStatus:    "none",
+								},
+							},
+						},
+					},
+				},
+			},
+			TurnOrderResponse: servicetypes.TurnOrderResponse{
+				TurnsAmt:      30,
+				IgnFirstTurn:  false,
+				IgnImmunities: false,
+				BattleStart:   string(database.BattleStartNormal),
+				RNG:           string(database.TurnOrderRngMedian),
+				PlayerParty:   []servicetypes.Participant{},
+				OpponentParty: []servicetypes.Participant{
+					{
+						Name:    "left arm (1)",
+						Agility: 255,
+						TickSpeed: 1,
+						MinICV:    h.GetInt32Ptr(12),
+						MaxICV:    h.GetInt32Ptr(13),
+						FirstStrike:   false,
+						Status:        h.GetStrPtr(string(database.HasteStatusHaste)),
+						TurnsReceived: 7,
+						TurnsPercent:  70,
+					},
+					{
+						Name:    "left arm (2)",
+						Agility: 255,
+						TickSpeed: 3,
+						MinICV:    h.GetInt32Ptr(12),
+						MaxICV:    h.GetInt32Ptr(13),
+						FirstStrike:   false,
+						Status:        nil,
+						TurnsReceived: 3,
+						TurnsPercent:  30,
 					},
 				},
 			},

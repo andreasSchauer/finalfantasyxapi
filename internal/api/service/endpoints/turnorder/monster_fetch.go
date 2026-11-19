@@ -28,7 +28,9 @@ func fetchFormationMons(params *servicetypes.TurnOrderParams) {
 		monID := monAmt.MonsterID
 
 		mon := servicetypes.TurnOrderMon{
-			MonsterID: &monID,
+			Lookup: &servicetypes.TurnOrderMonLookup{
+				MonsterID: monID,
+			},
 		}
 
 		params.Mons = append(params.Mons, mon)
@@ -54,7 +56,7 @@ func assembleMonTurnOrder(monID int32, altState *int32) (apitypes.Monster, *seed
 }
 
 func getFirstTurnAglTier(monID int32) *seedtypes.AgilityTier {
-	mon, _ := sh.QuickAssembleMon(monID, nil) // assemble again without alt state for consistency (first turn agl change is always first)
+	mon, _ := sh.QuickAssembleMon(monID, nil) // assemble again without alt state for consistency (first turn agl change is always first alt state)
 	altState := mon.AlteredStates[0]
 
 	if len(altState.Alts) == 0 {

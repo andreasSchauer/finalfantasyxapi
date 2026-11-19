@@ -92,11 +92,13 @@ func isSpectralKeeperFormation(params *servicetypes.TurnOrderParams) bool {
 func getParticipantsMons(params *servicetypes.TurnOrderParams, maps *participantMaps) ([]servicetypes.Participant, error) {
 	monParty := []servicetypes.Participant{}
 
-	for i, mon := range params.Mons {
-		isDupe := maps.duplicates[mon.GetDuplicateKey()]
-		if isDupe {
-			return nil, errs.NewHTTPError(http.StatusBadRequest, errs.FieldErrorMsg(ts.PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed", i)), nil)
-		}
+	for _, mon := range params.Mons {
+		/*
+			isDupe := maps.duplicates[mon.GetDuplicateKey()]
+			if isDupe {
+				return nil, errs.NewHTTPError(http.StatusBadRequest, errs.FieldErrorMsg(ts.PfnMons, fmt.Sprintf("duplicate monster found at index %d. exact duplicate monsters are not allowed", i)), nil)
+			}
+		*/
 
 		participant, err := getMonParticipant(params, mon)
 		if err != nil {
@@ -104,7 +106,7 @@ func getParticipantsMons(params *servicetypes.TurnOrderParams, maps *participant
 		}
 
 		monParty = append(monParty, participant)
-		maps.duplicates[mon.GetDuplicateKey()] = true
+		//maps.duplicates[mon.GetDuplicateKey()] = true
 		maps.namesTotal[participant.GetKey()]++
 	}
 
@@ -112,32 +114,51 @@ func getParticipantsMons(params *servicetypes.TurnOrderParams, maps *participant
 }
 
 func getMonParticipant(params *servicetypes.TurnOrderParams, mon servicetypes.TurnOrderMon) (servicetypes.Participant, error) {
-	participant, firstTurnAglTier, err := fetchTurnOrderMonster(params, mon)
-	if err != nil {
-		return servicetypes.Participant{}, err
+	var participant servicetypes.Participant
+
+	if mon.Custom != nil {
+		participant = servicetypes.Participant{
+			Name:        mon.Custom.Name,
+			Agility:     mon.Custom.Agility,
+			FirstStrike: mon.Custom.FirstStrike,
+			Status:      mon.Custom.Status,
+			Party:       servicetypes.BattlePartyOpponent,
+		}
+		participant.AgilityVals = getAglValsMon(participant, params, nil)
 	}
 
-	participant = populateParticipantMon(params, participant, mon, firstTurnAglTier)
+	if mon.Lookup != nil {
+		var firstTurnAglTier *seedtypes.AgilityTier
+		var err error
+
+		participant, firstTurnAglTier, err = fetchTurnOrderMonster(params, *mon.Lookup)
+		if err != nil {
+			return servicetypes.Participant{}, err
+		}
+		participant = populateParticipantMonLookup(params, participant, *mon.Lookup, firstTurnAglTier)
+	}
 
 	return participant, nil
 }
 
-func fetchTurnOrderMonster(params *servicetypes.TurnOrderParams, mon servicetypes.TurnOrderMon) (servicetypes.Participant, *seedtypes.AgilityTier, error) {
+func fetchTurnOrderMonster(params *servicetypes.TurnOrderParams, mon servicetypes.TurnOrderMonLookup) (servicetypes.Participant, *seedtypes.AgilityTier, error) {
 	var err error
+	var statusPtr *string
 
-	if mon.MonsterID == nil {
-		return servicetypes.Participant{}, nil, nil
-	}
-
-	monster, firstTurnAglTier := assembleMonTurnOrder(*mon.MonsterID, mon.AltState)
+	monster, firstTurnAglTier := assembleMonTurnOrder(mon.MonsterID, mon.AltState)
+	
 	participant := servicetypes.Participant{
 		Name:        h.NameToString(monster.Name, monster.Version, nil),
-		Agility:     getTurnOrderMonAgility(*mon.MonsterID, monster),
+		Agility:     getTurnOrderMonAgility(mon.MonsterID, monster),
 		FirstStrike: sh.MonsterHasFirstStrike(monster),
 		AltState:    mon.AltState,
 	}
 
-	participant.Status, err = sh.FetchMonsterHasteStatus(monster, mon.Status, params.IgnImmunities)
+	if mon.Overrides != nil {
+		statusPtr = mon.Overrides.Status
+	}
+
+	participant.Status, err = sh.FetchMonsterHasteStatus(monster, statusPtr, params.IgnImmunities)
 	if err != nil {
 		return servicetypes.Participant{}, nil, err
 	}
@@ -146,11 +167,22 @@ func fetchTurnOrderMonster(params *servicetypes.TurnOrderParams, mon servicetype
 }
 
 // this will need to change anyway once the new structure in params is active
-func populateParticipantMon(params *servicetypes.TurnOrderParams, participant servicetypes.Participant, mon servicetypes.TurnOrderMon, firstTurnAglTier *seedtypes.AgilityTier) servicetypes.Participant {
-	if mon.Name != nil {
-		participant.Name = *mon.Name
+func populateParticipantMonLookup(params *servicetypes.TurnOrderParams, participant servicetypes.Participant, mon servicetypes.TurnOrderMonLookup, firstTurnAglTier *seedtypes.AgilityTier) servicetypes.Participant {
+	if mon.Overrides != nil {
+		participant = applyParticipantOverrides(participant, *mon.Overrides)
 	}
 
+	participant.Party = servicetypes.BattlePartyOpponent
+	participant.AgilityVals = getAglValsMon(participant, params, firstTurnAglTier)
+
+	if isSpectralKeeperInStoryFight(mon.MonsterID, params.FormationID) {
+		participant.MinICV, participant.MaxICV = th.GetEqualICVs(21)
+	}
+
+	return participant
+}
+
+func applyParticipantOverrides(participant servicetypes.Participant, mon servicetypes.TurnOrderMonOverrides) servicetypes.Participant {
 	if mon.Agility != nil {
 		participant.Agility = *mon.Agility
 	}
@@ -160,22 +192,12 @@ func populateParticipantMon(params *servicetypes.TurnOrderParams, participant se
 	}
 
 	if mon.Status != nil {
-		participant.Status = mon.Status
-	}
-
-	participant.Party = servicetypes.BattlePartyOpponent
-	participant.AgilityVals = getAglValsMon(participant, params, firstTurnAglTier)
-
-	if mon.MonsterID == nil {
-		return participant
-	}
-
-	if isSpectralKeeperInStoryFight(*mon.MonsterID, params.FormationID) {
-		participant.MinICV, participant.MaxICV = th.GetEqualICVs(21)
+		participant.Status = sh.OverrideNonePtr(mon.Status)
 	}
 
 	return participant
 }
+
 
 func isSpectralKeeperInStoryFight(monID int32, formationPtr *int32) bool {
 	const idSpectralKeeper int32 = 193

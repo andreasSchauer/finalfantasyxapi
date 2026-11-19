@@ -52,15 +52,23 @@ var TurnOrderParamsSamples = []SampleParams[TurnOrderParams]{
 			},
 			Mons: []TurnOrderMon{
 				{
-					MonsterID: h.GetInt32Ptr(140),
-					Status:    h.GetStrPtr(string(database.HasteStatusSlow)),
+					Lookup: &TurnOrderMonLookup{
+						MonsterID: 140,
+						Overrides: &TurnOrderMonOverrides{
+							Status: h.GetStrPtr(string(database.HasteStatusSlow)),
+						},
+					},
 				},
 				{
-					MonsterID: h.GetInt32Ptr(139),
-					AltState:  h.GetInt32Ptr(1),
+					Lookup: &TurnOrderMonLookup{
+						MonsterID: 139,
+						AltState:  h.GetInt32Ptr(1),
+					},
 				},
 				{
-					MonsterID: h.GetInt32Ptr(141),
+					Lookup: &TurnOrderMonLookup{
+						MonsterID: 141,
+					},
 				},
 			},
 		},
@@ -85,12 +93,18 @@ var TurnOrderParamsSamples = []SampleParams[TurnOrderParams]{
 			},
 			Mons: []TurnOrderMon{
 				{
-					MonsterID: h.GetInt32Ptr(140),
-					Agility:   h.GetInt32Ptr(75),
+					Lookup: &TurnOrderMonLookup{
+						MonsterID: 140,
+						Overrides: &TurnOrderMonOverrides{
+							Agility: h.GetInt32Ptr(75),
+						},
+					},
 				},
 				{
-					Name:    h.GetStrPtr("fast boi"),
-					Agility: h.GetInt32Ptr(200),
+					Custom: &TurnOrderMonCustom{
+						Name:    "fast boi",
+						Agility: 200,
+					},
 				},
 			},
 		},
@@ -118,7 +132,9 @@ var TurnOrderParamsSamples = []SampleParams[TurnOrderParams]{
 			},
 			Mons: []TurnOrderMon{
 				{
-					MonsterID: h.GetInt32Ptr(292),
+					Lookup: &TurnOrderMonLookup{
+						MonsterID: 292,
+					},
 				},
 			},
 		},
