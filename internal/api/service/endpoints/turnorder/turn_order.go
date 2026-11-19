@@ -24,7 +24,6 @@ func Handle(params servicetypes.TurnOrderParams) (servicetypes.TurnOrderResponse
 		return servicetypes.TurnOrderResponse{}, err
 	}
 	participants := slices.Concat(response.PlayerParty, response.OpponentParty)
-	response.BattleStart = params.BattleStart // forced ambushes change params.BattleStart to "ambush"
 
 	response.TurnOrder = calcTurnOrder(params, participants)
 

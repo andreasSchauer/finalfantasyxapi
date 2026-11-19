@@ -86,3 +86,35 @@ func handleNoTurnMons(monID, agility int32) int32 {
 
 	return agility
 }
+
+// need to see, if I need this in servicehelpers, or if it's enough to have it here
+func fetchMonsterHasteStatus(mon apitypes.Monster, statusPtr *string, ignImmunities bool) (*string, error) {
+	const statusSlow = string(database.HasteStatusSlow)
+	const statusHaste = string(database.HasteStatusHaste)
+	const statusAutoHaste = string(database.HasteStatusAutoHaste)
+
+	if sh.MonHasAppliedStatus(mon) {
+		monStatus := mon.AppliedState.AppliedStatus.StatusCondition.Name
+
+		if statusPtr == nil && (monStatus == statusHaste || monStatus == statusSlow) {
+			statusPtr = &monStatus
+		}
+	}
+
+	if statusPtr == nil {
+		return nil, nil
+	}
+
+	status := *statusPtr
+
+	if status == statusAutoHaste {
+		status = statusHaste
+	}
+
+	err := sh.EnforceMonImmunity(status, mon, ignImmunities)
+	if err != nil {
+		return nil, err
+	}
+
+	return &status, nil
+}

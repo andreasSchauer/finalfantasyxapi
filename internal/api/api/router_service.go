@@ -57,7 +57,7 @@ func (r routerServiceGet[P, R]) subsections() {
 
 	switch r.segments[1] {
 	case string(ts.SnDocs):
-		respondWithJSON(r.w, http.StatusOK, r.i.DocsFn())
+		respondWithJSON(r.w, http.StatusOK, r.i.Docs)
 		return
 
 	case string(ts.SnSamples):

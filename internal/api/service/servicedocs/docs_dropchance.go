@@ -1,33 +1,17 @@
-// Package servicetypes ajsidoaüsdji
-package servicetypes
+package servicedocs
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-type DropChanceParams struct {
-	Monster           int32   `json:"monster_id,omitempty"`
-	CharacterID       *int32  `json:"character_id,omitempty"`
-	PartyMembers      []int32 `json:"party_members,omitempty"`
-	AutoAbilities     []int32 `json:"auto_abilities,omitempty"`
-	OptionalAbilities bool    `json:"optional_abilities,omitempty"`
-	EquipType         *string `json:"equip_type,omitempty"`
-	MinEmptySlots     *int32  `json:"min_empty_slots,omitempty"`
-	TotalSlots        *int32  `json:"total_slots,omitempty"`
-	Decimals          bool    `json:"decimals,omitempty"`
-}
+var DropChance ParamsDoc
 
-func (p DropChanceParams) GetRequiredSlots() int32 {
-	return h.Len32(p.AutoAbilities) + h.DerefPtr(p.MinEmptySlots)
-}
-
-func GetDropChanceParamsDoc() servicedocs.ParamsDoc {
-	return servicedocs.ParamsDoc{
-		Fields: []servicedocs.FieldDoc{
+func GetDropChanceParamsDoc() ParamsDoc {
+	return ParamsDoc{
+		Fields: []FieldDoc{
 			{
 				Field:       ts.PfnMonsterID,
 				Type:        "int (id: monster)",

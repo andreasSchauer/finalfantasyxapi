@@ -4,6 +4,7 @@ package api
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/enums"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/initlookup"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/general/config"
 )
 
@@ -22,6 +23,7 @@ func (srv *Server) Init() error {
 
 func (srv *Server) InitGlobals() {
 	enums.InitEnums()
+	servicedocs.InitDocs()
 	initlookup.Endpoints()
 	initlookup.Queries()
 }

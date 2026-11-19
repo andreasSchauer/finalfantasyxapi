@@ -14,6 +14,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/endpoints/critchance"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/endpoints/dropchance"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/endpoints/turnorder"
+	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicetypes"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/serviceverify"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
@@ -945,7 +946,7 @@ func Endpoints() {
 		Endpoint:  ts.EpAlBhed,
 		VerifyFn:  serviceverify.AlBhedParams,
 		ExecuteFn: albhed.Handle,
-		DocsFn:    servicetypes.GetAlBhedParamsDoc,
+		Docs:      servicedocs.AlBhed,
 		Samples:   servicetypes.AlBhedParamsSamples,
 	}
 
@@ -953,7 +954,7 @@ func Endpoints() {
 		Endpoint:  ts.EpTurnOrder,
 		VerifyFn:  serviceverify.TurnOrderParams,
 		ExecuteFn: turnorder.Handle,
-		DocsFn:    servicetypes.GetTurnOrderParamsDoc,
+		Docs:      servicedocs.TurnOrder,
 		Samples:   servicetypes.TurnOrderParamsSamples,
 	}
 
@@ -961,7 +962,7 @@ func Endpoints() {
 		Endpoint:  ts.EpDropChance,
 		VerifyFn:  serviceverify.DropChanceParams,
 		ExecuteFn: dropchance.Handle,
-		DocsFn:    servicetypes.GetDropChanceParamsDoc,
+		Docs:      servicedocs.DropChance,
 		Samples:   servicetypes.DropChanceParamsSamples,
 	}
 
@@ -969,7 +970,7 @@ func Endpoints() {
 		Endpoint:  ts.EpCritChance,
 		VerifyFn:  serviceverify.CritChanceParams,
 		ExecuteFn: critchance.Handle,
-		DocsFn:    servicetypes.GetCritChanceParamsDoc,
+		Docs:      servicedocs.CritChance,
 		Samples:   servicetypes.CritChanceParamsSamples,
 	}
 

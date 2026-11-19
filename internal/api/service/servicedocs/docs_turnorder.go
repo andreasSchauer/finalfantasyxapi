@@ -1,69 +1,20 @@
-package servicetypes
+package servicedocs
 
 import (
-	"fmt"
-
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-type TurnOrderParams struct {
-	TurnsAmt      int32            `json:"turns_amt,omitempty"`
-	IgnFirstTurn  bool             `json:"ign_first_turn,omitempty"`
-	IgnImmunities bool             `json:"ign_immunities,omitempty"`
-	RNG           string           `json:"rng,omitempty"`
-	BattleStart   string           `json:"battle_start,omitempty"`
-	FormationID   *int32           `json:"formation_id,omitempty"`
-	Party         []TurnOrderParty `json:"party,omitempty"`
-	Mons          []TurnOrderMon   `json:"mons,omitempty"`
-}
+var TurnOrder ParamsDoc
 
-type TurnOrderParty struct {
-	UnitID      int32   `json:"unit_id,omitempty"`
-	Agility     int32   `json:"agility,omitempty"`
-	FirstStrike bool    `json:"first_strike,omitempty"`
-	Status      *string `json:"status,omitempty"`
-}
 
-func (p TurnOrderParty) GetDuplicateKey() string {
-	return h.CombineFields([]any{
-		fmt.Sprintf("%T", p),
-		p.UnitID,
-	})
-}
-
-type TurnOrderMon struct {
-	Lookup *TurnOrderMonLookup `json:"lookup,omitempty"`
-	Custom *TurnOrderMonCustom `json:"custom,omitempty"`
-}
-
-type TurnOrderMonLookup struct {
-	MonsterID int32                  `json:"monster_id"`
-	AltState  *int32                 `json:"alt_state"`
-	Overrides *TurnOrderMonOverrides `json:"overrides,omitempty"`
-}
-
-type TurnOrderMonOverrides struct {
-	Agility     *int32  `json:"agility,omitempty"`
-	FirstStrike *bool   `json:"first_strike,omitempty"`
-	Status      *string `json:"status,omitempty"`
-}
-
-type TurnOrderMonCustom struct {
-	Name        string  `json:"name"`
-	Agility     int32   `json:"agility"`
-	FirstStrike bool    `json:"first_strike"`
-	Status      *string `json:"status,omitempty"`
-}
-
-func GetTurnOrderParamsDoc() servicedocs.ParamsDoc {
-	return servicedocs.ParamsDoc{
+func GetTurnOrderParamsDoc() ParamsDoc {
+	return ParamsDoc{
 		GeneralRules: h.GetStrPtr(""),
-		Fields: []servicedocs.FieldDoc{
+		Fields: []FieldDoc{
 			{
 				Field:       ts.PfnTurnsAmt,
 				Type:        "int",
@@ -103,7 +54,7 @@ func GetTurnOrderParamsDoc() servicedocs.ParamsDoc {
 				ConflictsWith: []ts.FieldName{ts.PfnMons},
 				MinVal:        h.GetInt32Ptr(1),
 				MaxVal:        h.GetInt32Ptr(int32(len(lookup.L.MonsterFormations))),
-				Description:   "Instead of manually selecting monsters, you can look up a monster-formation via id. The monster(s) it contains will automatically get added as participants, along with their agility and first-strike values.",
+				Description:   "Instead of manually selecting monsters, you can look up a monster-formation via id. The monster(s) it contains will automatically get added as participants, along with their agility and first-strike values. If the formation is a forced ambush, the 'battle_start' field will be overridden to be an ambush.",
 			},
 			{
 				Field:       ts.PfnParty,
@@ -126,8 +77,8 @@ func GetTurnOrderParamsDoc() servicedocs.ParamsDoc {
 	}
 }
 
-func getFieldDocTurnOrderParty() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTurnOrderParty() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnUnitID,
 			Type:        "int (id: playerUnit)",
@@ -163,8 +114,8 @@ func getLenMonAltStates(id int32) int32 {
 	return h.Len32(mon.AlteredStates)
 }
 
-func getFieldDocTurnOrderMon() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTurnOrderMon() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnLookup,
 			Type:        "obj (turnOrderMonLookup)",
@@ -182,8 +133,8 @@ func getFieldDocTurnOrderMon() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocTurnOrderMonLookup() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTurnOrderMonLookup() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnMonsterID,
 			Type:        "int (id: monster)",
@@ -197,7 +148,7 @@ func getFieldDocTurnOrderMonLookup() []servicedocs.FieldDoc {
 			Type:          "int (idx +1: monster altered states)",
 			RequiresAll:   []ts.FieldName{ts.PfnMonsterID},
 			ParentIDField: ts.PfnPtr(ts.PfnMonsterID),
-			AllowedIDValPairs: []servicedocs.AllowedIDValPairs{
+			AllowedIDValPairs: []AllowedIDValPairs{
 				{
 					ID:     32,
 					Values: []int32{2, 3},
@@ -240,8 +191,8 @@ func getFieldDocTurnOrderMonLookup() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocTurnOrderMonOverrides() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTurnOrderMonOverrides() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnAgility,
 			Type:        "int",
@@ -264,8 +215,8 @@ func getFieldDocTurnOrderMonOverrides() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocTurnOrderMonCustom() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTurnOrderMonCustom() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnName,
 			Type:        "string",

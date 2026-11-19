@@ -1,90 +1,18 @@
-package servicetypes
+package servicedocs
 
 import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/enums"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/api/service/servicedocs"
 	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-type CritChanceParams struct {
-	Ability AbilityCritChance `json:"ability"`
-	User    UserCritChance    `json:"user"`
-	Target  TargetCritChance  `json:"target"`
-}
+var CritChance ParamsDoc
 
-// ======== ability ========
-
-type AbilityCritChance struct {
-	Lookup *AbilityLookupCritChance `json:"lookup,omitempty"`
-	Custom *AbilityCustomCritChance `json:"custom,omitempty"`
-}
-
-type AbilityLookupCritChance struct {
-	AbilityID   int32                       `json:"ability_id"`
-	Interaction *int32                      `json:"interaction"`
-	Overrides   *AbilityOverridesCritChance `json:"overrides,omitempty"`
-}
-
-type AbilityOverridesCritChance struct {
-	Critical        *string `json:"critical,omitempty"`
-	CriticalPlusVal *int32  `json:"critical_plus_val,omitempty"`
-}
-
-type AbilityCustomCritChance struct {
-	Critical        string `json:"critical"`
-	CriticalPlusVal int32  `json:"critical_plus_val"`
-}
-
-// ======== user ========
-
-type UserCritChance struct {
-	Lookup     *UserLookupCritChance `json:"lookup,omitempty"`
-	Custom     *UserCustomCritChance `json:"custom,omitempty"`
-	LuckStacks int32                 `json:"luck_stacks"`
-}
-
-type UserLookupCritChance struct {
-	MonsterID int32                    `json:"monster_id"`
-	Overrides *UserOverridesCritChance `json:"overrides,omitempty"`
-}
-
-type UserOverridesCritChance struct {
-	Luck            *int32 `json:"luck,omitempty"`
-	CriticalPlusVal *int32 `json:"critical_plus_val,omitempty"`
-}
-
-type UserCustomCritChance struct {
-	Luck            int32 `json:"luck"`
-	CriticalPlusVal int32 `json:"critical_plus_val"`
-}
-
-// ======== target ========
-
-type TargetCritChance struct {
-	Lookup     *TargetLookupCritChance `json:"lookup,omitempty"`
-	Custom     *TargetCustomCritChance `json:"custom,omitempty"`
-	JinxStacks int32                   `json:"jinx_stacks"`
-}
-
-type TargetLookupCritChance struct {
-	MonsterID int32                      `json:"monster_id"`
-	Overrides *TargetOverridesCritChance `json:"overrides,omitempty"`
-}
-
-type TargetOverridesCritChance struct {
-	Luck *int32 `json:"luck,omitempty"`
-}
-
-type TargetCustomCritChance struct {
-	Luck int32 `json:"luck"`
-}
-
-func GetCritChanceParamsDoc() servicedocs.ParamsDoc {
-	return servicedocs.ParamsDoc{
+func GetCritChanceParamsDoc() ParamsDoc {
+	return ParamsDoc{
 		GeneralRules: h.GetStrPtr(""),
-		Fields: []servicedocs.FieldDoc{
+		Fields: []FieldDoc{
 			{
 				Field:       ts.PfnAbility,
 				Type:        "obj (abilityCritChance)",
@@ -110,8 +38,8 @@ func GetCritChanceParamsDoc() servicedocs.ParamsDoc {
 	}
 }
 
-func getFieldDocAbilityCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocAbilityCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnLookup,
 			Type:        "obj (abilityLookupCritChance)",
@@ -129,8 +57,8 @@ func getFieldDocAbilityCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocAbilityLookupCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocAbilityLookupCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnAbilityID,
 			Type:        "int (id: ability)",
@@ -154,8 +82,8 @@ func getFieldDocAbilityLookupCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocAbilityOverridesCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocAbilityOverridesCritChance() []FieldDoc {
+	return []FieldDoc{
 
 		{
 			Field:       ts.PfnCritical,
@@ -173,8 +101,8 @@ func getFieldDocAbilityOverridesCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocAbilityCustomCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocAbilityCustomCritChance() []FieldDoc {
+	return []FieldDoc{
 
 		{
 			Field:       ts.PfnCritical,
@@ -194,8 +122,8 @@ func getFieldDocAbilityCustomCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocUserCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocUserCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnLookup,
 			Type:        "obj (userLookupCritChance)",
@@ -221,8 +149,8 @@ func getFieldDocUserCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocUserLookupCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocUserLookupCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnMonsterID,
 			Type:        "int (id: monster)",
@@ -240,8 +168,8 @@ func getFieldDocUserLookupCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocUserOverridesCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocUserOverridesCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnLuck,
 			Type:        "int",
@@ -259,8 +187,8 @@ func getFieldDocUserOverridesCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocUserCustomCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocUserCustomCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnLuck,
 			Type:        "int",
@@ -280,8 +208,8 @@ func getFieldDocUserCustomCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocTargetCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTargetCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnLookup,
 			Type:        "obj (targetLookupCritChance)",
@@ -307,8 +235,8 @@ func getFieldDocTargetCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocTargetLookupCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTargetLookupCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnMonsterID,
 			Type:        "int (id: monster)",
@@ -326,8 +254,8 @@ func getFieldDocTargetLookupCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocTargetOverridesCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTargetOverridesCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnLuck,
 			Type:        "int",
@@ -338,8 +266,8 @@ func getFieldDocTargetOverridesCritChance() []servicedocs.FieldDoc {
 	}
 }
 
-func getFieldDocTargetCustomCritChance() []servicedocs.FieldDoc {
-	return []servicedocs.FieldDoc{
+func getFieldDocTargetCustomCritChance() []FieldDoc {
+	return []FieldDoc{
 		{
 			Field:       ts.PfnLuck,
 			Type:        "int",

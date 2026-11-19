@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	ah "github.com/andreasSchauer/finalfantasyxapi/internal/api/apihelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/apilookups"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/apiconvert"
@@ -12,8 +13,6 @@ import (
 	th "github.com/andreasSchauer/finalfantasyxapi/internal/api/endpoints/typehelpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/errs"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
-	"github.com/andreasSchauer/finalfantasyxapi/internal/database"
-	h "github.com/andreasSchauer/finalfantasyxapi/internal/general/helpers"
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
@@ -62,19 +61,12 @@ func MonsterHasFirstStrike(mon apitypes.Monster) bool {
 	return false
 }
 
-func monHasAppliedStatus(mon apitypes.Monster) bool {
+func MonHasAppliedStatus(mon apitypes.Monster) bool {
 	return mon.AppliedState != nil && mon.AppliedState.AppliedStatus != nil
 }
 
-func enforceMonImmunity(status string, mon apitypes.Monster, ignImmunities bool) error {
-	if !ignImmunities && monImmuneToStatus(status, mon) {
-		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to '%s'", h.NameToString(mon.Name, mon.Version, nil), status), nil)
-	}
 
-	return nil
-}
-
-func monImmuneToStatus(status string, mon apitypes.Monster) bool {
+func MonImmuneToStatus(status string, mon apitypes.Monster) bool {
 	for _, condition := range mon.StatusImmunities {
 		if condition.Name == status {
 			return true
@@ -84,33 +76,11 @@ func monImmuneToStatus(status string, mon apitypes.Monster) bool {
 	return false
 }
 
-func FetchMonsterHasteStatus(mon apitypes.Monster, statusPtr *string, ignImmunities bool) (*string, error) {
-	const statusSlow = string(database.HasteStatusSlow)
-	const statusHaste = string(database.HasteStatusHaste)
-	const statusAutoHaste = string(database.HasteStatusAutoHaste)
 
-	if monHasAppliedStatus(mon) {
-		monStatus := mon.AppliedState.AppliedStatus.StatusCondition.Name
-
-		if statusPtr == nil && (monStatus == statusHaste || monStatus == statusSlow) {
-			statusPtr = &monStatus
-		}
+func EnforceMonImmunity(status string, mon apitypes.Monster, ignImmunities bool) error {
+	if !ignImmunities && MonImmuneToStatus(status, mon) {
+		return errs.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("monster '%s' is immune to '%s'", h.NameToString(mon.Name, mon.Version, nil), status), nil)
 	}
 
-	if statusPtr == nil {
-		return nil, nil
-	}
-
-	status := *statusPtr
-
-	if status == statusAutoHaste {
-		status = statusHaste
-	}
-
-	err := enforceMonImmunity(status, mon, ignImmunities)
-	if err != nil {
-		return nil, err
-	}
-
-	return &status, nil
+	return nil
 }

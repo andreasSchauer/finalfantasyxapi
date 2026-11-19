@@ -10,14 +10,12 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-
-
 type Service[P servicetypes.ServiceParams, R servicetypes.ServiceResponse] struct {
 	Endpoint  ts.EndpointName
 	Usage     []string
 	VerifyFn  func(serviceverify.ParamsVerifyer, P) (P, error)
 	ExecuteFn func(P) (R, error)
-	DocsFn    func() servicedocs.ParamsDoc
+	Docs      servicedocs.ParamsDoc
 	Samples   []servicetypes.SampleParams[P]
 }
 
@@ -44,7 +42,7 @@ func (i Service[P, R]) compute(params P, userValues map[ts.FieldName]any) (R, er
 
 func (i Service[P, R]) verifyJSONParams(params P, userValues map[ts.FieldName]any) (P, error) {
 	var zero P
-	docs := i.DocsFn()
+	docs := i.Docs
 
 	v := serviceverify.NewParamsVerifyer(docs.CompileRules(), userValues)
 
