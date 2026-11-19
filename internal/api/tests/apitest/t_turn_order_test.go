@@ -191,6 +191,28 @@ func TestTurnOrder(t *testing.T) {
 				RequestURL:     requestURL,
 				Method:         http.MethodPost,
 				ExpectedStatus: http.StatusBadRequest,
+				ExpectedErr:    "field 'mons': duplicate monster found at index 1. exact duplicate monsters are not allowed",
+				RequestBody: map[ts.FieldName]any{
+					ts.PfnMons: []map[ts.FieldName]any{
+						{
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 32,
+							},
+						},
+						{
+							ts.PfnLookup: map[ts.FieldName]any{
+								ts.PfnMonsterID: 32,
+							},
+						},
+					},
+				},
+			},
+		},
+		{
+			TestGeneral: apitesttypes.TestGeneral{
+				RequestURL:     requestURL,
+				Method:         http.MethodPost,
+				ExpectedStatus: http.StatusBadRequest,
 				ExpectedErr:    "index 0 of array at field 'party': value 'hapfte' of field 'status' is not a valid enum value. allowed values: 'haste', 'slow', 'auto-haste'",
 				RequestBody: map[ts.FieldName]any{
 					ts.PfnParty: []map[ts.FieldName]any{
