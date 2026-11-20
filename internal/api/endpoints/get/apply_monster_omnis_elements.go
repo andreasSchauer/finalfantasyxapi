@@ -13,7 +13,7 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-func applyOmnisElements(r *http.Request, mon apitypes.Monster, queryName ts.QueryParamName) ([]apitypes.ElementalResist, error) {
+func applyOmnisElements(r *http.Request, mon *apitypes.Monster, queryName ts.QueryParamName) error {
 	circlesAffinity := map[int]string{
 		0: string(database.ElementalAffinityNeutral),
 		1: string(database.ElementalAffinityHalved),
@@ -24,10 +24,10 @@ func applyOmnisElements(r *http.Request, mon apitypes.Monster, queryName ts.Quer
 
 	circleCounts, err := parseOmnisQuery(r, queryName)
 	if errs.QueryIsEmpty(err) {
-		return mon.ElemResists, nil
+		return nil
 	}
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	for i, elemResist := range mon.ElemResists {
@@ -40,7 +40,7 @@ func applyOmnisElements(r *http.Request, mon apitypes.Monster, queryName ts.Quer
 		// lookup element to find out the opposite element
 		elementLookup, err := lookup.GetResource(elementName, lookup.L.Elements)
 		if err != nil {
-			return nil, errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'", elementName), err)
+			return errs.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("couldn't get element '%s'", elementName), err)
 		}
 		oppositeElementName := *elementLookup.OppositeElement // safe, because holy continues
 
@@ -57,7 +57,7 @@ func applyOmnisElements(r *http.Request, mon apitypes.Monster, queryName ts.Quer
 		mon.ElemResists[i] = th.NewElemResist(elementName, circlesAffinity[circleCount])
 	}
 
-	return mon.ElemResists, nil
+	return nil
 }
 
 // verifies the input and counts the amounts of circles pointing to each element

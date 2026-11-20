@@ -8,13 +8,13 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/api/handlerinput"
 )
 
-func calcRegenAmountsMonster(mon apitypes.Monster) []apitypes.RegenAmount {
+func calcRegenAmountsMonster(mon *apitypes.Monster) {
 	regenRes := handlerinput.NameToNamedAPIResource(apilookups.E.StatusConditions, "regen", nil)
 	if apiresource.ResourcesContain(mon.StatusImmunities, regenRes) {
-		return nil
+		return
 	}
 
-	return calcRegenAmounts(mon.BaseStats)
+	mon.RegenAmounts = calcRegenAmounts(mon.BaseStats)
 }
 
 func calcRegenAmounts(baseStats []apitypes.BaseStat) []apitypes.RegenAmount {

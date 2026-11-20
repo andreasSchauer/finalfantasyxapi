@@ -92,7 +92,7 @@ func getAeonRelationships(r *http.Request, aeon seedtypes.Aeon, response *apityp
 func completeAeonResponse(r *http.Request, aeon *apitypes.Aeon) error {
 	var err error
 
-	*aeon, err = applyAeonStats(r, *aeon, nil)
+	err = applyAeonStats(r, aeon, nil)
 	if err != nil {
 		return err
 	}

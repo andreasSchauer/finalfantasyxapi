@@ -48,7 +48,7 @@ func applyUser[T seedtypes.Lookupable, R any, A apiresource.APIResource](r *http
 		return nil, err
 	}
 
-	battleInteractions := repl.applyBiReplacement(ability.GetBattleInteractions())
+	battleInteractions := repl.applyBiReplacement(ability)
 
 	return battleInteractions, nil
 }
@@ -157,35 +157,36 @@ func (repl unitRepl) verifyAbilityUsage(ability apitypes.UserAbility, queryName 
 	return nil
 }
 
-func (repl unitRepl) applyBiReplacement(battleInteractions []apitypes.BattleInteraction) []apitypes.BattleInteraction {
+func (repl unitRepl) applyBiReplacement(ability apitypes.UserAbility) []apitypes.BattleInteraction {
 	replVals := repl.replVals
+	battleInteractions := ability.GetBattleInteractions()
 
-	for i, battleInteraction := range battleInteractions {
-		if !battleInteraction.BasedOnUserAttack {
+	for i := range battleInteractions {
+		bi := &battleInteractions[i]
+
+		if !bi.BasedOnUserAttack {
 			continue
 		}
 
 		if replVals.Range != nil {
-			battleInteraction.Range = replVals.Range
+			bi.Range = replVals.Range
 		}
 
 		if replVals.ShatterRate != nil {
-			battleInteraction.ShatterRate = *replVals.ShatterRate
+			bi.ShatterRate = *replVals.ShatterRate
 		}
 
 		if replVals.Accuracy != nil {
-			battleInteraction.Accuracy = *replVals.Accuracy
+			bi.Accuracy = *replVals.Accuracy
 		}
 
 		if replVals.DamageConstant != nil {
-			battleInteraction.Damage.HP.DamageConstant = *replVals.DamageConstant
+			bi.Damage.HP.DamageConstant = *replVals.DamageConstant
 		}
 
 		if replVals.DamageFormula != nil {
-			battleInteraction.Damage.HP.DamageFormula = *replVals.DamageFormula
+			bi.Damage.HP.DamageFormula = *replVals.DamageFormula
 		}
-
-		battleInteractions[i] = battleInteraction
 	}
 
 	return battleInteractions

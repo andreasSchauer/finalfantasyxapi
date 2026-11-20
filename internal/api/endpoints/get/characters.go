@@ -99,13 +99,13 @@ func getCharacterRelationships(r *http.Request, char seedtypes.Character, respon
 	return g.Wait()
 }
 
-func getCharacterClstlFormula(char apitypes.Character) *string {
+func getCharacterClstlFormula(char *apitypes.Character) {
 	if char.CelestialWeapon == nil {
-		return nil
+		return
 	}
 
 	weapon, _ := lookup.GetResource(char.CelestialWeapon.Name, lookup.L.CelestialWeapons)
-	return &weapon.Formula
+	char.CelestialFormula = &weapon.Formula
 }
 
 func getCharacterModeAmts(char seedtypes.Character) []apiresource.ResourceAmount[apiresource.Named] {
@@ -142,14 +142,13 @@ func getCharModeAmount(char seedtypes.Character, id int32) (apiresource.Resource
 }
 
 func completeCharacterResponse(r *http.Request, char *apitypes.Character) error {
-	var err error
-	*char, err = applyOsgStats(r, *char)
+	err := applyOsgStats(r, char)
 	if err != nil {
 		return err
 	}
 
 	char.RegenAmounts = calcRegenAmounts(char.BaseStats)
-	char.CelestialFormula = getCharacterClstlFormula(*char)
+	getCharacterClstlFormula(char)
 
 	char.AgilityParameters, err = getUnitAgilityParams(r, char.BaseStats)
 	if err != nil {

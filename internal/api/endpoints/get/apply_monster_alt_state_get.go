@@ -13,12 +13,11 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/seeding/seedtypes"
 )
 
-func getAlteredStatesAlterations(states []apitypes.AlteredState) []apitypes.AlteredState {
-	for i := range states {
-		states[i].Alterations = getAlterations(states[i].Alts)
+func getAlteredStatesAlterations(mon *apitypes.Monster) {
+	for i := range mon.AlteredStates {
+		state := &mon.AlteredStates[i]
+		state.Alterations = getAlterations(state.Alts)
 	}
-
-	return states
 }
 
 func MonsterAlteredStates(r *http.Request, mon seedtypes.Monster) []apitypes.AlteredState {

@@ -53,11 +53,10 @@ func PlayerAbility(r *http.Request, i handlerinput.Main[seedtypes.PlayerAbility,
 		return apitypes.PlayerAbility{}, err
 	}
 	
-	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
+	response.BattleInteractions, err = applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.PlayerAbility{}, err
 	}
-	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }

@@ -12,9 +12,9 @@ import (
 	ts "github.com/andreasSchauer/finalfantasyxapi/internal/general/typestrings"
 )
 
-func applyOsgStats(r *http.Request, char apitypes.Character) (apitypes.Character, error) {
+func applyOsgStats(r *http.Request, char *apitypes.Character) error {
 	if char.IsStoryBased {
-		return char, nil
+		return nil
 	}
 
 	var statMap map[string]int32
@@ -22,10 +22,10 @@ func applyOsgStats(r *http.Request, char apitypes.Character) (apitypes.Character
 
 	sgType, err := queryParam.ParseEnum(r, enums.T.SphereGridType)
 	if errs.QueryIsEmpty(err) {
-		return char, nil
+		return nil
 	}
 	if err != nil {
-		return apitypes.Character{}, err
+		return err
 	}
 
 	switch sgType.Name {
@@ -38,5 +38,5 @@ func applyOsgStats(r *http.Request, char apitypes.Character) (apitypes.Character
 
 	char.BaseStats = th.AddToBaseStats(char.BaseStats, statMap)
 
-	return char, nil
+	return nil
 }

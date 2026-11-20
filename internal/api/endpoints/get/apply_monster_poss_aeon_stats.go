@@ -12,10 +12,10 @@ import (
 	"github.com/andreasSchauer/finalfantasyxapi/internal/lookup"
 )
 
-func applyPossessedAeonStats(r *http.Request, mon apitypes.Monster) ([]apitypes.BaseStat, error) {
-	paramYunaStats := apilookups.Q.Monsters[ts.QpnYunaStats]
-	if !slices.Contains(paramYunaStats.AllowedIDs, mon.ID) {
-		return mon.BaseStats, nil
+func applyPossessedAeonStats(r *http.Request, mon *apitypes.Monster) error {
+	qpYunaStats := apilookups.Q.Monsters[ts.QpnYunaStats]
+	if !slices.Contains(qpYunaStats.AllowedIDs, mon.ID) {
+		return nil
 	}
 
 	allowedStatIDs := []int32{1, 3, 4, 5, 6, 7, 9, 10}
@@ -27,13 +27,13 @@ func applyPossessedAeonStats(r *http.Request, mon apitypes.Monster) ([]apitypes.
 		BaseStats: th.GetAeonBaseStats(aeonLookup),
 	}
 
-	aeon, err := applyAeonStats(r, aeon, nil)
+	err := applyAeonStats(r, &aeon, nil)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	aeonStatMap := apiresource.GetResAmtTypeMap(aeon.BaseStats)
-	newBaseStats := th.ReplaceBaseStats(mon.BaseStats, aeonStatMap, allowedStatIDs)
+	mon.BaseStats = th.ReplaceBaseStats(mon.BaseStats, aeonStatMap, allowedStatIDs)
 
-	return newBaseStats, nil
+	return nil
 }

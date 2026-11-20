@@ -40,11 +40,10 @@ func MiscAbility(r *http.Request, i handlerinput.Main[seedtypes.MiscAbility, api
 		BattleInteractions: ah.ConvertObjSlice(ability.BattleInteractions, apiconvert.BattleInteraction),
 	}
 
-	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
+	response.BattleInteractions, err = applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.MiscAbility{}, err
 	}
-	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }

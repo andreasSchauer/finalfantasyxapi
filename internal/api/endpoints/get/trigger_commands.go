@@ -45,11 +45,10 @@ func TriggerCommand(r *http.Request, i handlerinput.Main[seedtypes.TriggerComman
 		return apitypes.TriggerCommand{}, err
 	}
 	
-	battleInteractions, err := applyUser(r, i, response, ts.QpnAbilityUser)
+	response.BattleInteractions, err = applyUser(r, i, response, ts.QpnAbilityUser)
 	if err != nil {
 		return apitypes.TriggerCommand{}, err
 	}
-	response.BattleInteractions = battleInteractions
 
 	return response, nil
 }
